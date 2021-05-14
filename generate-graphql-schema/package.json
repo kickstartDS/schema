@@ -14,6 +14,6 @@
     "fast-glob": "^3.2.5",
     "fs-extra": "^10.0.0",
     "graphql": "^14.7.0",
-    "jsonschema2graphql": "^1.1.1"
+    "jsonschema2graphql": "*"
   }
 }

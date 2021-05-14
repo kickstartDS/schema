@@ -5,9 +5,10 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-kickstartds-graphql\"",
+    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-kickstartds-graphql\" \"yarn watch-kickstartds-graphql\"",
     "build-jsonschema2graphql": "yarn workspace jsonschema2graphql watch",
-    "build-kickstartds-graphql": "yarn workspace generate-graphql-schema generate --watch"
+    "build-kickstartds-graphql": "yarn workspace generate-graphql-schema generate",
+    "watch-kickstartds-graphql": "yarn workspace generate-graphql-schema generate --watch"
   },
   "workspaces": [
     "generate-graphql-schema",

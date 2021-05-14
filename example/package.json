@@ -1,0 +1,18 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonas Ulrich | ruhmesmeile GmbH",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@kickstartds/base": "^1.0.0-alpha.19",
+    "@kickstartds/blog": "^1.0.0-alpha.19",
+    "@kickstartds/content": "^1.0.0-alpha.19",
+    "@kickstartds/core": "^1.0.0-alpha.14",
+    "generate-graphql-schema": "*",
+    "jsonschema2graphql": "*"
+  }
+}

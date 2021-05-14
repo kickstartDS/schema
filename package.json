@@ -1,0 +1,21 @@
+{
+  "name": "kickstartds-graphql-toolkit",
+  "private": true,
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "yarn workspace example build"
+  },
+  "workspaces": [
+    "generate-graphql-schema",
+    "jsonschema2graphql",
+    "example"
+  ],
+  "dependencies": {
+    "@kickstartds/base": "^1.0.0-alpha.19",
+    "@kickstartds/blog": "^1.0.0-alpha.19",
+    "@kickstartds/content": "^1.0.0-alpha.19",
+    "@kickstartds/core": "^1.0.0-alpha.14"
+  }
+}

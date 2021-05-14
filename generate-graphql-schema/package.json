@@ -1,0 +1,19 @@
+{
+  "name": "generate-graphql-schema",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "generate": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonas Ulrich | ruhmesmeile GmbH",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "change-case": "^4.1.2",
+    "chokidar": "^3.5.1",
+    "fast-glob": "^3.2.5",
+    "fs-extra": "^10.0.0",
+    "graphql": "^14.7.0",
+    "jsonschema2graphql": "^1.1.1"
+  }
+}

@@ -8,7 +8,8 @@ const convert = require('jsonschema2graphql').default;
 
 const createGraphQL = async (schemaPath) => {
   const basename = path.basename(schemaPath, '.json');
-  const dirname = path.dirname(schemaPath);
+  // TODO remove:
+  // const dirname = path.dirname(schemaPath);
   const schema = await fs.readJSON(schemaPath);
 
   if (!(schema.title && (schema.properties || schema.allOf))) return;
@@ -17,7 +18,7 @@ const createGraphQL = async (schemaPath) => {
   const gql = convert({ jsonSchema: schema });
   
   fs.writeFile(
-    `./${pascalCase(
+    `../dist/${pascalCase(
       basename.replace(/\.(schema|definitions)$/, '')
     )}.graphql`,
     printSchema(gql)
@@ -26,7 +27,7 @@ const createGraphQL = async (schemaPath) => {
 
 (async () => {
   const [, , param] = process.argv;
-  const schemaGlob = 'node_modules/@kickstartds/*/lib/**/*.schema.dereffed.json';
+  const schemaGlob = '../node_modules/@kickstartds/*/lib/**/*.schema.dereffed.json';
   if (param === '--watch') {
     chokidar
       .watch(schemaGlob, { ignoreInitial: true })

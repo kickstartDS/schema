@@ -5,7 +5,9 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "yarn workspace example build"
+    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-kickstartds-graphql\"",
+    "build-jsonschema2graphql": "yarn workspace jsonschema2graphql watch",
+    "build-kickstartds-graphql": "yarn workspace generate-graphql-schema generate --watch"
   },
   "workspaces": [
     "generate-graphql-schema",
@@ -16,6 +18,7 @@
     "@kickstartds/base": "^1.0.0-alpha.19",
     "@kickstartds/blog": "^1.0.0-alpha.19",
     "@kickstartds/content": "^1.0.0-alpha.19",
-    "@kickstartds/core": "^1.0.0-alpha.14"
+    "@kickstartds/core": "^1.0.0-alpha.14",
+    "concurrently": "^6.1.0"
   }
 }

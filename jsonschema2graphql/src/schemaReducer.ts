@@ -112,7 +112,11 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
     const fields = () => {
       const objectSchema: JSONSchema7 = allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
         if (!_.isUndefined(allOf.$ref)) {
-          return _.merge(finalSchema, ajv.getSchema(allOf.$ref));
+          if (allOf.$ref.indexOf('container') > -1) {
+            // console.log(knownTypes[getTypeName(allOf.$ref)]);
+            // console.log('ajv.getSchema(allOf.$ref)?.schema', ajv.getSchema(allOf.$ref)?.schema);
+          }
+          return _.merge(finalSchema, ajv.getSchema(allOf.$ref)?.schema);
         } else {
           return _.merge(finalSchema, allOf);
         }

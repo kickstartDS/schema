@@ -56,16 +56,6 @@
     simplebar "^5.0.7"
     stickybits "^3.7.0"
 
-"@kickstartds/blog@^1.0.0-alpha.19":
-  version "1.0.0-alpha.19"
-  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.0.0-alpha.19.tgz#85962f40de5ed7ce507e3cb990b0679c779b8cd4"
-  integrity sha512-BvenmWQ+Jlqh+BujbNNKI3nlPAtlEJCtZkDGyuMJyA8qwt4203QWXkTI6wGKvCIiRPXmzgdpHJJ9OWq25wA/Ug==
-  dependencies:
-    "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.0.0-alpha.19"
-    "@kickstartds/core" "^1.0.0-alpha.14"
-    date-fns "^2.19.0"
-
 "@kickstartds/content@^1.0.0-alpha.19":
   version "1.0.0-alpha.19"
   resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.0.0-alpha.19.tgz#6e547c627577027a45596c9a43c7509833911c38"

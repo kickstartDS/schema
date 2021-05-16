@@ -4,5 +4,5 @@ import uppercamelcase from 'uppercamelcase'
 
 export const getTypeName = (s: string | undefined): string => {
   if (_.isUndefined(s)) return ''
-  return uppercamelcase(path.parse(s).name)
+  return uppercamelcase(`${path.parse(s).name.replace('.schema', '').replace('.definitions', '')}Component`)
 }

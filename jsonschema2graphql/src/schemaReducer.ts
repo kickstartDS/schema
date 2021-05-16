@@ -47,6 +47,8 @@ const contentComponentInterface = new GraphQLInterfaceType({
   },
 });
 
+const allDefinitions = {};
+
 export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
   // validate against the json schema schema
   if (schema.$id && !ajv.getSchema(schema.$id)) {
@@ -63,6 +65,7 @@ export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
   for (const definedTypeName in definitions) {
     const definedSchema = definitions[definedTypeName] as JSONSchema7
     knownTypes[getTypeName(definedTypeName)] = buildType(definedTypeName, definedSchema, knownTypes, true)
+    allDefinitions[definedTypeName] = definedSchema;
   }
 
   knownTypes[typeName] = buildType(typeName, schema, knownTypes, true)
@@ -112,11 +115,13 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
     const fields = () => {
       const objectSchema: JSONSchema7 = allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
         if (!_.isUndefined(allOf.$ref)) {
-          if (allOf.$ref.indexOf('container') > -1) {
-            // console.log(knownTypes[getTypeName(allOf.$ref)]);
-            // console.log('ajv.getSchema(allOf.$ref)?.schema', ajv.getSchema(allOf.$ref)?.schema);
+          if (allOf.$ref.indexOf('definitions') > -1) {
+            const definitionName = allOf.$ref.split('/').pop() || '';
+            return _.merge(finalSchema, allDefinitions[definitionName]);
+          } else {
+            return _.merge(finalSchema, ajv.getSchema(allOf.$ref)?.schema);
           }
-          return _.merge(finalSchema, ajv.getSchema(allOf.$ref)?.schema);
+          
         } else {
           return _.merge(finalSchema, allOf);
         }

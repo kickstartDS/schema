@@ -19,7 +19,6 @@ import { getTypeName } from './getTypeName'
 import { graphqlSafeEnumKey } from './graphqlSafeEnumKey'
 import { err } from './helpers'
 import Ajv from 'ajv'
-import { pascalCase } from 'change-case';
 
 /** Maps basic JSON schema types to basic GraphQL types */
 const BASIC_TYPE_MAPPING = {

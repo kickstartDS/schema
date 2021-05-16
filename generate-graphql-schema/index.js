@@ -29,37 +29,19 @@ const addSchema = async (schemaPath) => {
   return schema;
 };
 
-/*const createGraphQL = async (schemaPath) => {
-  const basename = path.basename(schemaPath, '.json');
-  const schema = await fs.readJSON(schemaPath);
-
-  if (!(schema.title && (schema.properties || schema.allOf))) return;
-
-  schema.title += ' GraphQL';
-  const gql = convert({ jsonSchema: schema });
-
-  fs.writeFile(
-    `../dist/${pascalCase(
-      basename.replace(/\.schema$/, '')
-    )}.graphql`,
-    printSchema(gql)
-  );
-};*/
-
 (async () => {
   const [, , param] = process.argv;
   const schemaGlobs = [
     '../node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json',
   ];
   if (param === '--watch') {
-    /*chokidar
+    chokidar
       .watch(schemaGlobs, { ignoreInitial: true })
       .on('add', createGraphQL)
-      .on('change', createGraphQL);*/
+      .on('change', createGraphQL);
   } else {
     const schemaPaths = await glob(schemaGlobs);
     const schemaJsons = await Promise.all(schemaPaths.map(async (schemaPath) => addSchema(schemaPath)));
-    // await Promise.all(schemaPaths.map(async (schemaPath) => createGraphQL(schemaPath)));
 
     const pageSchema = await fs.readJSON('../example/page.schema.json');
     ajv.addSchema(pageSchema);
@@ -72,17 +54,3 @@ const addSchema = async (schemaPath) => {
     );
   }
 })();
-
-// (async () => {
-//   const [, , param] = process.argv;
-//   const schemaGlob = '../node_modules/@kickstartds/*/lib/**/*.schema.dereffed.json';
-//   if (param === '--watch') {
-//     chokidar
-//       .watch(schemaGlob, { ignoreInitial: true })
-//       .on('add', createGraphQL)
-//       .on('change', createGraphQL);
-//   } else {
-//     const schemaPaths = await glob(schemaGlob);
-//     schemaPaths.forEach(createGraphQL);
-//   }
-// })();

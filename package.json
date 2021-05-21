@@ -9,7 +9,8 @@
     "build-jsonschema2graphql": "yarn workspace jsonschema2graphql watch",
     "build-kickstartds-graphql": "yarn workspace generate-graphql-schema generate",
     "watch-kickstartds-graphql": "yarn workspace generate-graphql-schema generate --watch",
-    "graphql:generate": "yarn watch-kickstartds-graphql"
+    "graphql:generate": "yarn watch-kickstartds-graphql",
+    "generate-graphql-fragments": "yarn workspace generate-graphql-schema graphql generate-fragments"
   },
   "workspaces": [
     "generate-graphql-schema",

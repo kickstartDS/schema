@@ -1,0 +1,8 @@
+# ./.graphqlconfig.yml
+projects:
+  kickstartDS:
+    schemaPath: ../dist/page.graphql
+    extensions:
+      generate-fragments:
+        output: ../dist/page.fragments.graphql
+        generator: graphql

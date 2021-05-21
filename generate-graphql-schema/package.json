@@ -14,6 +14,8 @@
     "fast-glob": "^3.2.5",
     "fs-extra": "^10.0.0",
     "graphql": "^14.7.0",
+    "graphql-cli": "^3.0.0",
+    "graphql-cli-generate-fragments": "^1.4.1",
     "jsonschema2graphql": "*"
   }
 }

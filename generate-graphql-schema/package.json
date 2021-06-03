@@ -1,5 +1,5 @@
 {
-  "name": "generate-graphql-schema",
+  "name": "@kickstartds/generate-graphql-schema",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "fs-extra": "^10.0.0",
     "graphql": "^14.7.0",
     "graphql-cli": "^3.0.0",
-    "graphql-cli-generate-fragments": "^1.4.1",
-    "jsonschema2graphql": "*"
+    "@kickstartds/graphql-cli-generate-fragments": "*",
+    "@kickstartds/jsonschema2graphql": "*"
   }
 }

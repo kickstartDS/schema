@@ -6,13 +6,15 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-kickstartds-graphql\" \"yarn watch-kickstartds-graphql\"",
-    "build-jsonschema2graphql": "yarn workspace jsonschema2graphql watch",
-    "build-kickstartds-graphql": "yarn workspace generate-graphql-schema generate",
-    "watch-kickstartds-graphql": "yarn workspace generate-graphql-schema generate --watch",
+    "build-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql build",
+    "watch-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql watch",
+    "build-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate",
+    "watch-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate --watch",
     "graphql:generate": "yarn watch-kickstartds-graphql",
-    "generate-graphql-fragments": "yarn workspace generate-graphql-schema graphql generate-fragments"
+    "generate-graphql-fragments": "yarn workspace @kickstartds/generate-graphql-schema graphql generate-fragments"
   },
   "workspaces": [
+    "graphql-cli-generate-fragments",
     "generate-graphql-schema",
     "jsonschema2graphql",
     "example"

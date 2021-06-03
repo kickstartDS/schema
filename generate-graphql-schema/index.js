@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const glob = require('fast-glob');
 const chokidar = require('chokidar');
 const { printSchema } = require('graphql');
-const convert = require('jsonschema2graphql').default;
+const convert = require('@kickstartds/jsonschema2graphql').default;
 const Ajv = require('ajv');
 
 const ajv = new Ajv({

@@ -1,5 +1,5 @@
 {
-  "name": "jsonschema2graphql",
+  "name": "@kickstartds/jsonschema2graphql",
   "version": "1.1.1",
   "description": "Converts JSON schema to GraphQL types",
   "repository": "github:HerbCaudill/jsonschema2graphql",

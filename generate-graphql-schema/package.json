@@ -13,8 +13,8 @@
     "chokidar": "^3.5.1",
     "fast-glob": "^3.2.5",
     "fs-extra": "^10.0.0",
-    "graphql": "^14.7.0",
-    "graphql-cli": "^3.0.0",
+    "graphql": "^15.5.0",
+    "graphql-cli": "^4.1.0",
     "@kickstartds/graphql-cli-generate-fragments": "*",
     "@kickstartds/jsonschema2graphql": "*"
   }

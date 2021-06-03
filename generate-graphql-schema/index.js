@@ -18,6 +18,13 @@ ignoredFormats.forEach((ignoredFormat) =>
   ajv.addFormat(ignoredFormat, { validate: () => true })
 );
 
+// TODO this should work... but it doesn't
+/*ajv.addKeyword({
+  keyword: 'faker',
+  validate: () => true,
+  errors: false,
+})*/
+
 const addSchema = async (schemaPath) => {
   const schema = await fs.readJSON(schemaPath);
   if (!ajv.getSchema(schema.$id)) ajv.addSchema(schema);

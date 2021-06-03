@@ -40,6 +40,12 @@ ignoredFormats.forEach((ignoredFormat) =>
   ajv.addFormat(ignoredFormat, { validate: () => true })
 );
 
+ajv.addKeyword({
+  keyword: 'faker',
+  validate: () => true,
+  errors: false,
+})
+
 const contentComponentInterface = new GraphQLInterfaceType({
   name: 'ContentComponent',
   fields: {

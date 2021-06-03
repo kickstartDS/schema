@@ -78,20 +78,19 @@
     request-promise "^4.1.1"
     yargs "^8.0.2"
 
-"@kickstartds/base@^1.0.0-alpha.19":
-  version "1.0.0-alpha.19"
-  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.0.0-alpha.19.tgz#f528e82a225fe3f508df685d2b56c29bf37b186f"
-  integrity sha512-/lcMJ/oizdzrxk5PwSWfCbeRBhKnOukSNIZZXl9S+YgsZ8A146l2QArqAUI3fuEGVWqqJuUG1OLU0Orkcpkg6A==
+"@kickstartds/base@^1.0.0-alpha.23":
+  version "1.0.0-alpha.23"
+  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.0.0-alpha.23.tgz#d0d5ba595cfa537a2d1388c3b969c7d04d4d5521"
+  integrity sha512-ZA50i19JBldY9nWZDhDRzm2Dxj0wmyluy4KQLawj3xaXFkz+KzSI63gshLsjNevmspOT6q3NZfpzpuX1s47q/A==
   dependencies:
     "@babel/runtime" "^7.13.17"
     "@glidejs/glide" "git://github.com/glidejs/glide.git#master"
-    "@kickstartds/core" "^1.0.0-alpha.14"
+    "@kickstartds/core" "^1.0.0-alpha.15"
     classnames "^2.2.6"
     css-element-queries "^1.2.3"
     date-fns "^2.19.0"
     focus-visible "^5.0.2"
     formbouncerjs "^1.4.6"
-    lazysizes "^5.3.2"
     lodash-es "^4.17.21"
     objectFitPolyfill "^2.3.0"
     photoswipe "^4.1.3"
@@ -100,23 +99,23 @@
     simplebar "^5.0.7"
     stickybits "^3.7.0"
 
-"@kickstartds/content@^1.0.0-alpha.19":
-  version "1.0.0-alpha.19"
-  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.0.0-alpha.19.tgz#6e547c627577027a45596c9a43c7509833911c38"
-  integrity sha512-a269AHewGYBIPW06EDOxulIbhmWxBHDFiI+m0UGjJ4dwLSKtIMXurcqRdLhcy9iAO8c3Gu9oL2r2m0LUdqu53g==
+"@kickstartds/content@^1.0.0-alpha.25":
+  version "1.0.0-alpha.25"
+  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.0.0-alpha.25.tgz#13b6c8fa98f250f1bbdb32995892cb4097463031"
+  integrity sha512-U4YqlTLSn55TX4PDSD4+HPDuswUjBgqYVHBTs1bhtOLP1/CAWgGvI4InPRzkdFlX09eMp+kphRvDAImAmkNXHA==
   dependencies:
     "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.0.0-alpha.19"
-    "@kickstartds/core" "^1.0.0-alpha.14"
+    "@kickstartds/base" "^1.0.0-alpha.23"
+    "@kickstartds/core" "^1.0.0-alpha.15"
     classnames "^2.2.6"
     countup.js "^2.0.7"
     date-fns "^2.19.0"
     objectFitPolyfill "^2.3.0"
 
-"@kickstartds/core@^1.0.0-alpha.14":
-  version "1.0.0-alpha.14"
-  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.0.0-alpha.14.tgz#2a9ad706b30ca88c2df9d3f21f2d332573857c82"
-  integrity sha512-Hxe3zn7rYDuoZ5jsaxFU5fIfWNK9BMs22hkz/+3yu2Q9Yc1xXRbWibjqP3lGLGRVDKFFJkibtLh6B5Bg1GN3+w==
+"@kickstartds/core@^1.0.0-alpha.15":
+  version "1.0.0-alpha.15"
+  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.0.0-alpha.15.tgz#5773ef7c64d69d3d290eaed6b617ae6b95425b91"
+  integrity sha512-bEXs8DSUikmw77iJSUBiSlTDOGaiVP1XRT9gVxCk9wScVnZCLXxn21JzOKjfilYRrqFYLs3b0HtIvdRnYnvJ+w==
   dependencies:
     "@babel/runtime" "^7.13.17"
     bourbon "^7.0.0"
@@ -2728,7 +2727,7 @@ debug@^3.0.0, debug@^3.1.0:
   dependencies:
     ms "^2.1.1"
 
-debuglog@*, debuglog@^1.0.1:
+debuglog@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/debuglog/-/debuglog-1.0.1.tgz#aa24ffb9ac3df9a2351837cfb2d279360cd78492"
   integrity sha1-qiT/uaw9+aI1GDfPstJ5NgzXhJI=
@@ -4933,7 +4932,7 @@ import-local@^1.0.0:
     pkg-dir "^2.0.0"
     resolve-cwd "^2.0.0"
 
-imurmurhash@*, imurmurhash@^0.1.4:
+imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
@@ -6551,11 +6550,6 @@ lodash-es@^4.17.21:
   resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
-lodash._baseindexof@*:
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/lodash._baseindexof/-/lodash._baseindexof-3.1.0.tgz#fe52b53a1c6761e42618d654e4a25789ed61822c"
-  integrity sha1-/lK1OhxnYeQmGNZU5KJXie1hgiw=
-
 lodash._baseuniq@~4.6.0:
   version "4.6.0"
   resolved "https://registry.npmjs.org/lodash._baseuniq/-/lodash._baseuniq-4.6.0.tgz#0ebb44e456814af7905c6212fa2c9b2d51b841e8"
@@ -6564,32 +6558,10 @@ lodash._baseuniq@~4.6.0:
     lodash._createset "~4.0.0"
     lodash._root "~3.0.0"
 
-lodash._bindcallback@*:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/lodash._bindcallback/-/lodash._bindcallback-3.0.1.tgz#e531c27644cf8b57a99e17ed95b35c748789392e"
-  integrity sha1-5THCdkTPi1epnhftlbNcdIeJOS4=
-
-lodash._cacheindexof@*:
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/lodash._cacheindexof/-/lodash._cacheindexof-3.0.2.tgz#3dc69ac82498d2ee5e3ce56091bafd2adc7bde92"
-  integrity sha1-PcaayCSY0u5ePOVgkbr9Ktx73pI=
-
-lodash._createcache@*:
-  version "3.1.2"
-  resolved "https://registry.npmjs.org/lodash._createcache/-/lodash._createcache-3.1.2.tgz#56d6a064017625e79ebca6b8018e17440bdcf093"
-  integrity sha1-VtagZAF2JeeevKa4AY4XRAvc8JM=
-  dependencies:
-    lodash._getnative "^3.0.0"
-
 lodash._createset@~4.0.0:
   version "4.0.3"
   resolved "https://registry.npmjs.org/lodash._createset/-/lodash._createset-4.0.3.tgz#0f4659fbb09d75194fa9e2b88a6644d363c9fe26"
   integrity sha1-D0ZZ+7CddRlPqeK4imZE02PJ/iY=
-
-lodash._getnative@*, lodash._getnative@^3.0.0:
-  version "3.9.1"
-  resolved "https://registry.npmjs.org/lodash._getnative/-/lodash._getnative-3.9.1.tgz#570bc7dede46d61cdcde687d65d3eecbaa3aaff5"
-  integrity sha1-VwvH3t5G1hzc3mh9ZdPuy6o6r/U=
 
 lodash._root@~3.0.0:
   version "3.0.1"
@@ -6675,11 +6647,6 @@ lodash.once@^4.0.0:
   version "4.1.1"
   resolved "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
-
-lodash.restparam@*:
-  version "3.6.1"
-  resolved "https://registry.npmjs.org/lodash.restparam/-/lodash.restparam-3.6.1.tgz#936a4e309ef330a7645ed4145986c85ae5b20805"
-  integrity sha1-k2pOMJ7zMKdkXtQUWYbIWuWyCAU=
 
 lodash.set@^4.3.2:
   version "4.3.2"

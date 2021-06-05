@@ -207,7 +207,7 @@ ${fragment}`
       // field = ((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type
 
       constructorName = (ast.getType((((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value) as GraphQLNamedType).constructor.name;
-      console.log('printfield after', constructorName, fieldName, field);
+      console.log('printfield after', constructorName, fieldName);
     }
     // if (constructorName === "GraphQLList") {
     //   field =

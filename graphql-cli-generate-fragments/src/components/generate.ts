@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import * as fs from "fs-extra";
-import { GraphQLConfig, GraphQLProjectConfig } from "graphql-config";
+import { loadConfig, GraphQLConfig, GraphQLProjectConfig } from "graphql-config";
 import { get, has, merge } from "lodash";
 import * as path from "path";
 import { Arguments } from "yargs";
@@ -550,4 +550,11 @@ ${fragment}`
   private projectDisplayName = () => chalk.green(this.projectName);
 }
 
+export interface CliFlags {
+  silent?: boolean, watch?: boolean, project?: 'default' | string
+}
 
+export const generateFragments = async (cliFlags: CliFlags) => {
+  const generateFragments = new GenerateFragments(context, argv)
+  await generateFragments.handle()
+};

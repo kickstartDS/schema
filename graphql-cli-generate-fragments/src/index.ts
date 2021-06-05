@@ -1,6 +1,24 @@
-import { GenerateFragments } from './GenerateFragments'
-import { CommandBuilder } from 'yargs'
+#!/usr/bin/env node
 
+import * as yargs from 'yargs';
+export * from './components';
+export * from './components/generate';
+
+if (require.main === module) {
+  // eslint-disable-next-line no-unused-expressions
+  yargs
+    .commandDir('commands')
+    .demandCommand(1)
+    .strict()
+    .recommendCommands()
+    .help()
+    .alias('h', 'help')
+    .version()
+    .alias('v', 'version')
+    .argv;
+}
+
+/*
 const command: {
   command: string
   describe?: string
@@ -34,7 +52,7 @@ const command: {
     // },
     generator: {
       alias: 'g',
-      describe: "Generate to 'js' or 'graphq'",
+      describe: "Generate to 'js' or 'graphql'",
       type: 'string'
     },
     verbose: {
@@ -55,3 +73,4 @@ const command: {
 }
 
 export = command
+*/

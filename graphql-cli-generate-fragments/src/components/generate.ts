@@ -5,7 +5,10 @@ import {
   GraphQLFieldMap,
   parse,
   GraphQLField,
-  ObjectValueNode
+  ObjectValueNode,
+  ListTypeNode,
+  NonNullTypeNode,
+  NamedTypeNode
 } from "graphql";
 import { GraphQLSchema } from "graphql/type/schema";
 import {
@@ -184,32 +187,41 @@ ${fragment}`
 
   const printField = (
     fieldName: string,
-    field: GraphQLField<any, any>,
+    field: GraphQLField<any, any> | null,
     ast: GraphQLSchema,
     fragmentType: string,
     indent = 1
   ): any => {
-    // console.log(fieldName, field, ast, fragmentType, indent);
-    /*let constructorName =
+    let constructorName =
       field.type.constructor.name && field.type.constructor.name;
-    if (constructorName === "Object")
+    // console.log('printfield', constructorName, fieldName, field);
+
+    // TODO not sure what this one is about... no idea on how to fix the types
+    /*if (constructorName === "Object")
       constructorName =
         ((field.type).name &&
           (ast.getType(field.type.name.value) as GraphQLNamedType).constructor.name) ||
-        null;
-
+        null;*/
+    if (constructorName === "GraphQLList") console.log('printfield before', constructorName, fieldName);
     if (constructorName === "GraphQLList") {
-      field =
-        (field.astNode.type.type.type && field.astNode.type.type.type) ||
-        ((field.astNode.type.type && field.astNode.type.type) || null);
+      // field = ((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type
 
-      if (field === null) {
-        throw new Error(`Schema malformed - list`);
-      }
-      constructorName = (ast.getType(field.name.value) as GraphQLNamedType).constructor.name;
+      constructorName = (ast.getType((((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value) as GraphQLNamedType).constructor.name;
+      console.log('printfield after', constructorName, fieldName, field);
     }
+    // if (constructorName === "GraphQLList") {
+    //   field =
+    //     (field.astNode.type.type.type && field.astNode.type.type.type) ||
+    //     ((field.astNode.type.type && field.astNode.type.type) || null);
 
-    if (constructorName === "GraphQLNonNull" || field.kind === "NonNullType") {
+    //   if (field === null) {
+    //     throw new Error(`Schema malformed - list`);
+    //   }
+    //   constructorName = (ast.getType(field.name.value) as GraphQLNamedType).constructor.name;
+    // }
+
+    // if (constructorName === "GraphQLNonNull") console.log('printfield', constructorName, fieldName);
+    /*if (constructorName === "GraphQLNonNull" || field.kind === "NonNullType") {
       field = (field.astNode.type && field.astNode.type) || field.type;
       constructorName =
         (field.type.name &&
@@ -222,16 +234,19 @@ ${fragment}`
             (ast.getType(field.type.name.value) as GraphQLNamedType).constructor.name) ||
           null;
       }
-    }
+    }*/
 
-    if (
+    // if (constructorName === "GraphQLScalarType") console.log('printfield', constructorName, fieldName);
+    // if (constructorName === "GraphQLEnumType") console.log('printfield', constructorName, fieldName);
+    /*if (
       constructorName === "GraphQLScalarType" ||
       constructorName === "GraphQLEnumType"
     ) {
       return fieldName;
-    }
+    }*/
 
-    if (constructorName === "GraphQLObjectType") {
+    // if (constructorName === "GraphQLObjectType") console.log('printfield', constructorName, fieldName);
+    /*if (constructorName === "GraphQLObjectType") {
       if (fragmentType === this.fragmentType.NO_RELATIONS) return null;
       let typeName = null;
       // if(field.name !== undefined)

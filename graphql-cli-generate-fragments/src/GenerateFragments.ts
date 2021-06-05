@@ -1,27 +1,24 @@
 import chalk from "chalk";
 import * as fs from "fs-extra";
 import { GraphQLConfig, GraphQLProjectConfig } from "graphql-config";
-import { importSchema } from "graphql-import";
 import { get, has, merge } from "lodash";
 import * as path from "path";
 import { Arguments } from "yargs";
+import { loadSchemaSync } from '@graphql-tools/load';
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 
 import {
-  graphql,
   DocumentNode,
-  Kind,
-  ObjectTypeDefinitionNode,
-  OperationTypeDefinitionNode,
   GraphQLObjectType,
   GraphQLNamedType,
   GraphQLFieldMap,
-  parse
+  parse,
+  GraphQLField,
+  ObjectValueNode
 } from "graphql";
 import { GraphQLSchema } from "graphql/type/schema";
 import {
   buildASTSchema,
-  introspectionQuery,
-  printSchema
 } from "graphql/utilities";
 
 export class GenerateFragments {
@@ -74,8 +71,8 @@ export class GenerateFragments {
     if (
       this.argv.project ||
       (!this.argv.project &&
-        (has(this.project.config, "extensions.generate-fragments") ||
-          has(this.project.config, "extensions.fragments")))
+        (has(this.project, "extensions.generate-fragments") ||
+          has(this.project, "extensions.fragments")))
     ) {
       this.context.spinner.start(
         `Generating fragments for project ${this.projectDisplayName()}...`
@@ -100,13 +97,14 @@ export class GenerateFragments {
 
   private save() {
     if (this.argv.save) {
-      const configFile = path.basename(this.config.configPath);
+      const configFile = path.basename(this.config.filepath);
       this.context.spinner.start(
         `Saving configuration for project ${this.projectDisplayName()} to ${chalk.green(
           configFile
         )}...`
       );
-      this.saveConfig();
+      // TODO re-add this in a working manner
+      // this.saveConfig();
       this.context.spinner.succeed(
         `Configuration for project ${this.projectDisplayName()} saved to ${chalk.green(
           configFile
@@ -120,18 +118,24 @@ export class GenerateFragments {
     if (this.argv.project) {
       if (Array.isArray(this.argv.project)) {
         projects = {};
-        this.argv.project.map((p: string) =>
-          merge(projects, { [p]: this.config.getProjectConfig(p) })
-        );
+        console.log('Multiple projects', this.argv.project)
+        // TODO re-add this
+        // this.argv.project.map((p: string) =>
+        //   merge(projects, { [p]: this.config.getProjectConfig(p) })
+        // );
       } else {
         // Single project mode
-        projects = {
-          [this.argv.project]: this.config.getProjectConfig(this.argv.project)
-        };
+        console.log('Single project', this.argv.project);
+        // TODO re-add this
+        // projects = {
+        //   [this.argv.project]: this.config.getProjectConfig(this.argv.project)
+        // };
       }
     } else {
       // Process all projects
-      projects = this.config.getProjects();
+      console.log('Other projects');
+      // TODO re-add this
+      // projects = this.config.getProjects();
     }
 
     if (!projects) {
@@ -148,10 +152,9 @@ export class GenerateFragments {
     // TODO: This does not support custom generators
     const extension = generator.endsWith("js") ? "js" : "graphql";
     const outputPath: string = this.determineFragmentsOutputPath(extension);
-    const schema: string = this.determineInputSchema(schemaPath);
+    const schema: GraphQLSchema = loadSchemaSync(this.determineInputSchema(schemaPath), { loaders: [new GraphQLFileLoader()] }); //******************************************* */
 
-    const schemaContents: string = importSchema(schema); //******************************************* */
-    const fragments: string = this.makeFragments(schemaContents, extension);
+    const fragments: string = this.makeFragments(schema, extension);
 
     fs.writeFileSync(outputPath, fragments, { flag: "w" });
 
@@ -164,7 +167,7 @@ export class GenerateFragments {
    *
    */
 
-  private indentedLine(level) {
+  private indentedLine(level: number) {
     let line = "\n";
     for (let i = 0; i < level; i++) {
       line += "  ";
@@ -178,9 +181,8 @@ export class GenerateFragments {
     DEEP: "DeepNesting"
   };
 
-  private makeFragments(schemaContents: string, generator: string) {
-    const document: DocumentNode = parse(schemaContents, { noLocation: true });
-    const ast: GraphQLSchema = buildASTSchema(document);
+  private makeFragments(schema: GraphQLSchema, generator: string) {
+    const ast: GraphQLSchema = schema;
 
     const typeNames = Object.keys(ast.getTypeMap())
       .filter(
@@ -338,17 +340,18 @@ ${fragment}`
     return fragmentFields;
   }
   private printField(
-    fieldName,
-    field,
+    fieldName: string,
+    field: GraphQLField<any, any>,
     ast: GraphQLSchema,
-    fragmentType,
+    fragmentType: string,
     indent = 1
-  ) {
-    let constructorName =
+  ): any {
+    console.log(fieldName, field, ast, fragmentType, indent);
+    /*let constructorName =
       field.type.constructor.name && field.type.constructor.name;
     if (constructorName === "Object")
       constructorName =
-        (field.type.name &&
+        ((field.type).name &&
           (ast.getType(field.type.name.value) as GraphQLNamedType).constructor.name) ||
         null;
 
@@ -406,19 +409,22 @@ ${fragment}`
         this.indentedLine(indent) +
         "}"
       );
-    }
+    }*/
 
     return null;
   }
 
   /****************************** */
 
+  // TODO re-add this in a working manner
+  /*
   private saveConfig() {
-    if (has(this.project.config, "extensions.fragments")) {
-      delete this.project.config.extensions!.fragments;
+    if (has(this.project, "extensions.fragments")) {
+      delete this.project.extensions!.fragments;
     }
-    this.config.saveConfig(this.project.config, this.projectName);
+    this.config.saveConfig(this.project, this.projectName);
   }
+  */
 
   /**
    * Determine input schema path for binding. It uses the resulting schema from bundling (if available),
@@ -430,11 +436,11 @@ ${fragment}`
    */
   private determineInputSchema(schemaPath: string | undefined): string {
     const bundleDefined = has(
-      this.project.config,
+      this.project,
       "extensions.prepare-bundle.output"
     );
     const oldBundleDefined = has(
-      this.project.config,
+      this.project,
       "extensions.bundle.output"
     );
     // schemaPath is only set when bundle ran
@@ -442,14 +448,14 @@ ${fragment}`
       if (bundleDefined) {
         // Otherwise, use bundle output schema if defined
         schemaPath = get(
-          this.project.config,
+          this.project,
           "extensions.prepare-bundle.output"
         );
       } else if (oldBundleDefined) {
-        schemaPath = get(this.project.config, "extensions.bundle.output");
-      } else if (this.project.schemaPath) {
-        // Otherwise, use project schemaPath
-        schemaPath = this.project.schemaPath;
+        schemaPath = get(this.project, "extensions.bundle.output");
+      } else if (this.project.filepath) {
+        // Otherwise, use project filepath
+        schemaPath = this.project.filepath;
       } else {
         throw new Error(`Input schema cannot be determined.`);
       }
@@ -458,7 +464,7 @@ ${fragment}`
     console.log(schemaPath)
 
   
-    const getExtension = str => str.split('.').pop()
+    const getExtension = (str: string) => str.split('.').pop()
 
     if(getExtension(schemaPath) !== 'graphql' && getExtension(schemaPath) !== 'gql'){
       throw new Error(`Schema has an extension of '.${getExtension(schemaPath)}'
@@ -482,8 +488,8 @@ ${fragment}`
    * @returns {string} Input schema path for bundling
    */
   private determineSchemaPath(): string {
-    if (this.project.schemaPath) {
-      return this.project.schemaPath;
+    if (this.project.filepath) {
+      return this.project.filepath;
     }
     throw new Error(
       `No schemaPath defined for project '${this.projectName}' in config file.`
@@ -498,11 +504,11 @@ ${fragment}`
    */
   private determineGenerator(): string {
     if (this.argv.generator) {
-      return this.argv.generator;
+      return this.argv.generator as string;
     }
-    if (has(this.project.config, "extensions.generate-fragments.generator")) {
+    if (has(this.project, "extensions.generate-fragments.generator")) {
       return get(
-        this.project.config,
+        this.project,
         "extensions.generate-fragments.generator"
       );
     }
@@ -521,14 +527,14 @@ ${fragment}`
     let outputPath: string;
     if (this.argv.output) {
       outputPath = path.join(
-        this.argv.output,
+        this.argv.output as string,
         `${this.projectName}.fragments.${extension}`
       );
     } else if (
-      has(this.project.config, `extensions.generate-fragments.output`)
+      has(this.project, `extensions.generate-fragments.output`)
     ) {
       outputPath = get(
-        this.project.config,
+        this.project,
         `extensions.generate-fragments.output`
       );
     } else {

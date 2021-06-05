@@ -11,6 +11,7 @@
     "build-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate",
     "watch-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate --watch",
     "graphql:generate": "yarn watch-kickstartds-graphql",
+    "build-generate-graphql-fragments": "yarn workspace @kickstartds/graphql-cli-generate-fragments build",
     "generate-graphql-fragments": "yarn workspace @kickstartds/generate-graphql-schema graphql generate-fragments"
   },
   "workspaces": [

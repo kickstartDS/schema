@@ -1,16 +1,10 @@
 {
+  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
-    "preserveConstEnums": true,
+    "preserveConstEnums": false,
     "strictNullChecks": false,
     "sourceMap": true,
-    "target": "es5",
-    "outDir": "dist",
-    "moduleResolution": "node",
-    "lib": [
-      "es2017",
-      "esnext.asynciterable",
-      "dom"
-    ],
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules",
@@ -18,6 +12,5 @@
   ],
   "include": [
     "./src/**/*.ts"
-  ],
-  
+  ], 
 }

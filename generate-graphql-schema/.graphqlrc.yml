@@ -1,8 +1,8 @@
 # ./.graphqlrc.yml
-projects:
-  kickstartDS:
-    schema: '../dist/page.graphql'
-    extensions:
-      generate-fragments:
-        output: '../dist/page.fragments.graphql'
-        generator: 'graphql'
+schema: "../dist/page.graphql"
+extensions:
+  codegen:
+    generates:
+      ../dist/page.fragments.graphql:
+        plugins:
+          - "@kickstartds/graphql-cli-generate-fragments"

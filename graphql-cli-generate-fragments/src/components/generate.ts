@@ -8,6 +8,7 @@ import {
   NamedTypeNode
 } from "graphql";
 import { GraphQLSchema } from "graphql/type/schema";
+import { createHash } from "crypto";
 
 export const generate = (schema: GraphQLSchema) => {
   const indentedLine = (level: number) => {
@@ -186,6 +187,8 @@ ${fragment}`
     fragmentType: string,
     indent = 1
   ): any => {
+    // TODO this needs to be a CLI option, not hardcoded
+    const hashFields = false;
     // TODO this should *NOT* be of type `any`
     let internalField: any;
     let constructorName =
@@ -233,7 +236,11 @@ ${fragment}`
       constructorName === "GraphQLScalarType" ||
       constructorName === "GraphQLEnumType"
     ) {
-      return fieldName;
+      if (hashFields) {
+        return `${fieldName}_${createHash('md5').update(fieldName+field.description).digest("hex").substr(0, 4)}`;
+      } else {
+        return fieldName;
+      }
     }
 
     if (constructorName === "GraphQLObjectType") {

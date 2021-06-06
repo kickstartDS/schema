@@ -1,19 +1,13 @@
 import {
-  DocumentNode,
   GraphQLObjectType,
   GraphQLNamedType,
   GraphQLFieldMap,
-  parse,
   GraphQLField,
-  ObjectValueNode,
   ListTypeNode,
   NonNullTypeNode,
   NamedTypeNode
 } from "graphql";
 import { GraphQLSchema } from "graphql/type/schema";
-import {
-  buildASTSchema,
-} from "graphql/utilities";
 
 export const generate = (schema: GraphQLSchema) => {
   const indentedLine = (level: number) => {
@@ -192,82 +186,79 @@ ${fragment}`
     fragmentType: string,
     indent = 1
   ): any => {
+    // TODO this should *NOT* be of type `any`
+    let internalField: any;
     let constructorName =
       field.type.constructor.name && field.type.constructor.name;
-    // console.log('printfield', constructorName, fieldName, field);
 
-    // TODO not sure what this one is about... no idea on how to fix the types
+    // TODO not sure what this one is about... thus no idea on how to fix the types
     /*if (constructorName === "Object")
       constructorName =
         ((field.type).name &&
           (ast.getType(field.type.name.value) as GraphQLNamedType).constructor.name) ||
         null;*/
-    if (constructorName === "GraphQLList") console.log('printfield before', constructorName, fieldName);
+    
     if (constructorName === "GraphQLList") {
-      // field = ((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type
+      internalField =
+        ((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type && (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode) ||
+        ((field.astNode.type as ListTypeNode).type && ((field.astNode.type as ListTypeNode).type as NonNullTypeNode) || null);
 
-      constructorName = (ast.getType((((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value) as GraphQLNamedType).constructor.name;
-      console.log('printfield after', constructorName, fieldName);
+      if (internalField === null) {
+        throw new Error(`Schema malformed - list`);
+      }
+      constructorName = (ast.getType(internalField.name.value) as GraphQLNamedType).constructor.name;
     }
-    // if (constructorName === "GraphQLList") {
-    //   field =
-    //     (field.astNode.type.type.type && field.astNode.type.type.type) ||
-    //     ((field.astNode.type.type && field.astNode.type.type) || null);
 
-    //   if (field === null) {
-    //     throw new Error(`Schema malformed - list`);
-    //   }
-    //   constructorName = (ast.getType(field.name.value) as GraphQLNamedType).constructor.name;
-    // }
-
-    // if (constructorName === "GraphQLNonNull") console.log('printfield', constructorName, fieldName);
-    /*if (constructorName === "GraphQLNonNull" || field.kind === "NonNullType") {
-      field = (field.astNode.type && field.astNode.type) || field.type;
+    // TODO field.kind === "NonNullType" seems to not exist for our usecase
+    //if (constructorName === "GraphQLNonNull" || field.kind === "NonNullType") {
+    if (constructorName === "GraphQLNonNull") {
+      internalField = (field.astNode.type && field.astNode.type);
       constructorName =
-        (field.type.name &&
-          (ast.getType(field.type.name.value) as GraphQLNamedType).constructor.name) ||
-        null;
+      (internalField.type.name &&
+        (ast.getType(internalField.type.name.value) as GraphQLNamedType).constructor.name) ||
+      null;
       if (constructorName === null) {
-        field = (field.type && field.type) || null;
+        // TODO there are still components / fragments landing here (only lists / arrays for Slides-variants)
+        // those are not correctly handled, as they stay "null" after this
+        // other than that, this snippet doesn't seem to do anything (for us at least)
+        internalField = (internalField.type && internalField.type) || null;
         constructorName =
-          (field.type.name &&
-            (ast.getType(field.type.name.value) as GraphQLNamedType).constructor.name) ||
+          (internalField.type.name &&
+            (ast.getType(internalField.type.name.value) as GraphQLNamedType).constructor.name) ||
           null;
       }
-    }*/
+    }
 
-    // if (constructorName === "GraphQLScalarType") console.log('printfield', constructorName, fieldName);
-    // if (constructorName === "GraphQLEnumType") console.log('printfield', constructorName, fieldName);
-    /*if (
+    if (
       constructorName === "GraphQLScalarType" ||
       constructorName === "GraphQLEnumType"
     ) {
       return fieldName;
-    }*/
+    }
 
-    // if (constructorName === "GraphQLObjectType") console.log('printfield', constructorName, fieldName);
-    /*if (constructorName === "GraphQLObjectType") {
-      if (fragmentType === this.fragmentType.NO_RELATIONS) return null;
-      let typeName = null;
-      // if(field.name !== undefined)
-      typeName =
-        (field.name && field.name.value) ||
-        ((field.type.name.value && field.type.name.value) || field.type.name);
+    if (constructorName === "GraphQLObjectType") {
+      if (fragmentType === fragmentTypes.NO_RELATIONS) return null;
+      let typeName = internalField
+        ? internalField.name && internalField.name.value
+        : (field.astNode.type as NamedTypeNode).name.value;
 
       return (
         fieldName +
         " {" +
-        this.indentedLine(indent + 1) +
+        indentedLine(indent + 1) +
         "..." +
-        `${(fragmentType === this.fragmentType.DEEP &&
-          typeName + this.fragmentType.DEEP) ||
-          (fragmentType === this.fragmentType.DEFAULT &&
-          typeName + this.fragmentType.NO_RELATIONS) ||
-          typeName + this.fragmentType.DEFAULT}` +
-        this.indentedLine(indent) +
+        `${(fragmentType === fragmentTypes.DEEP &&
+          typeName + fragmentTypes.DEEP) ||
+          (fragmentType === fragmentTypes.DEFAULT &&
+          typeName + fragmentTypes.NO_RELATIONS) ||
+          typeName + fragmentTypes.DEFAULT}` +
+        indentedLine(indent) +
         "}"
       );
-    }*/
+    }
+
+    // TODO seems to be missing handling for `GraphQLUnionType`
+    // TODO doesn't handle some list / array cases (especially Slider variants of components) correctly, see `GraphQLNonNull` branch above
 
     return null;
   }

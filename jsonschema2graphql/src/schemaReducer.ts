@@ -19,6 +19,7 @@ import { getTypeName } from './getTypeName'
 import { graphqlSafeEnumKey } from './graphqlSafeEnumKey'
 import { err } from './helpers'
 import Ajv from 'ajv'
+import { createHash } from "crypto";
 
 /** Maps basic JSON schema types to basic GraphQL types */
 const BASIC_TYPE_MAPPING = {
@@ -54,6 +55,12 @@ const contentComponentInterface = new GraphQLInterfaceType({
 });
 
 const allDefinitions = {};
+const allContentComponentFieldNames: Array<string> = [];
+const dedupeFieldnames = false;
+
+const clean = (name: string): string => {
+  return name.replace(/__.*/i, '');
+};
 
 export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
   // validate against the json schema schema
@@ -74,13 +81,24 @@ export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
     allDefinitions[definedTypeName] = definedSchema;
   }
 
+  if (dedupeFieldnames) {
+    schema.properties = _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) => {
+      const unique = !allContentComponentFieldNames.includes(fieldName);
+      if (fieldName === 'ratio') console.log(fieldName, prop, allContentComponentFieldNames);
+      const uniqueName = unique ? fieldName : `${fieldName}__${createHash('md5').update(JSON.stringify(prop)).digest('hex').substr(0,4)}`;
+      allContentComponentFieldNames.push(uniqueName);
+      
+      return uniqueName;
+    });
+  }
+
   knownTypes[typeName] = buildType(typeName, schema, knownTypes, true)
   return knownTypes
 }
 
 function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTypeMap, outerRun: boolean = false): GraphQLType {
-  const addInterface = outerRun && (schema.$id?.indexOf('section.schema.json') === -1 );
-  const name = uppercamelcase(propName)
+  const contentComponent = outerRun && (schema.$id?.indexOf('section.schema.json') === -1 );
+  const name = uppercamelcase(clean(propName))
 
   // oneOf?
   if (!_.isUndefined(schema.oneOf)) {
@@ -134,7 +152,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
         }
       }, {} as JSONSchema7);
 
-      if (addInterface && objectSchema && objectSchema.properties) {
+      if (contentComponent && objectSchema && objectSchema.properties) {
         objectSchema.properties.type = {
           "type": "string",
           "title": "Internal type",
@@ -156,7 +174,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
           { _empty: { type: GraphQLString } }
     };
 
-    const interfaces = addInterface ? [contentComponentInterface] : [];
+    const interfaces = contentComponent ? [contentComponentInterface] : [];
     return new GraphQLObjectType({ name, description, fields, interfaces });
   }
 
@@ -170,7 +188,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
   else if (schema.type === 'object') {
     const description = buildDescription(schema)
 
-    if (addInterface && schema && schema.properties) {
+    if (contentComponent && schema && schema.properties) {
       schema.properties.type = {
         "type": "string",
         "title": "Internal type",
@@ -192,7 +210,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
         : // GraphQL doesn't allow types with no fields, so put a placeholder
           { _empty: { type: GraphQLString } }
 
-    const interfaces = addInterface ? [contentComponentInterface] : [];
+    const interfaces = contentComponent ? [contentComponentInterface] : [];
     return new GraphQLObjectType({ name, description, fields, interfaces })
   }
 

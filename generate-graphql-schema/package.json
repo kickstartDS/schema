@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "generate": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jonas Ulrich | ruhmesmeile GmbH",
   "license": "UNLICENSED",

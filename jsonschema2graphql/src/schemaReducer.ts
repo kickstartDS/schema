@@ -11,7 +11,7 @@ import {
   GraphQLUnionType,
   GraphQLInterfaceType,
 } from 'graphql'
-import { JSONSchema7 } from 'json-schema'
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema'
 import _ from 'lodash'
 import uppercamelcase from 'uppercamelcase'
 import { GraphQLTypeMap } from './@types'
@@ -56,11 +56,23 @@ const contentComponentInterface = new GraphQLInterfaceType({
 
 const allDefinitions = {};
 const allContentComponentFieldNames: Array<string> = [];
-const dedupeFieldnames = false;
+const dedupeFieldNames = true;
 
 const clean = (name: string): string => {
+  // return name;
   return name.replace(/__.*/i, '');
 };
+
+const dedupe = (schema: JSONSchema7): {
+    [key: string]: JSONSchema7Definition;
+  } | undefined => 
+  _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) => {
+    const unique = !allContentComponentFieldNames.includes(fieldName);
+    const uniqueName = unique ? fieldName : `${fieldName}__${createHash('md5').update(JSON.stringify(prop)).digest('hex').substr(0,4)}`;
+    allContentComponentFieldNames.push(uniqueName);
+    
+    return uniqueName;
+  });
 
 export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
   // validate against the json schema schema
@@ -77,20 +89,16 @@ export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
   const { definitions } = schema
   for (const definedTypeName in definitions) {
     const definedSchema = definitions[definedTypeName] as JSONSchema7
+
+    if (dedupeFieldNames)
+      definedSchema.properties = dedupe(definedSchema);
+
     knownTypes[getTypeName(definedTypeName)] = buildType(definedTypeName, definedSchema, knownTypes, true)
     allDefinitions[definedTypeName] = definedSchema;
   }
 
-  if (dedupeFieldnames) {
-    schema.properties = _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) => {
-      const unique = !allContentComponentFieldNames.includes(fieldName);
-      if (fieldName === 'ratio') console.log(fieldName, prop, allContentComponentFieldNames);
-      const uniqueName = unique ? fieldName : `${fieldName}__${createHash('md5').update(JSON.stringify(prop)).digest('hex').substr(0,4)}`;
-      allContentComponentFieldNames.push(uniqueName);
-      
-      return uniqueName;
-    });
-  }
+  if (dedupeFieldNames) 
+    schema.properties = dedupe(schema);
 
   knownTypes[typeName] = buildType(typeName, schema, knownTypes, true)
   return knownTypes

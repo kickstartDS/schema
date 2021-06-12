@@ -5,7 +5,8 @@ import {
   GraphQLField,
   ListTypeNode,
   NonNullTypeNode,
-  NamedTypeNode
+  NamedTypeNode,
+  GraphQLUnionType
 } from "graphql";
 import { GraphQLSchema } from "graphql/type/schema";
 
@@ -198,6 +199,7 @@ ${fragment}`
 
   const generateFragments = (type: any, ast: GraphQLSchema, fragmentType = fragmentTypes.DEFAULT) => {
     const fields: GraphQLFieldMap<any, any> = type.getFields();
+
     const fragmentFields = Object.keys(fields)
       .map(field => {
         return printField(field, fields[field], ast, fragmentType);
@@ -205,6 +207,7 @@ ${fragment}`
       // Some fields should not be printed, ie. fields with relations.
       // Remove those from the output by returning null from printField.
       .filter(field => field != null);
+      
     return fragmentFields;
   }
 
@@ -267,9 +270,15 @@ ${fragment}`
 
     if (constructorName === "GraphQLObjectType") {
       if (fragmentType === fragmentTypes.NO_RELATIONS) return null;
-      let typeName = internalField
+
+      let typeName: string = internalField
         ? internalField.name && internalField.name.value
         : (field.astNode.type as NamedTypeNode).name.value;
+
+      // TODO this should be merged with typeName definition above, make it const while at it
+      if(!typeName) {
+        typeName = (internalField.type as NamedTypeNode).name.value;
+      }
 
       return (
         fieldName +
@@ -286,7 +295,34 @@ ${fragment}`
       );
     }
 
-    // TODO seems to be missing handling for `GraphQLUnionType`
+    // TODO does this need internalField treatment like `GraphQLObjectType`? See commented code below
+    if (constructorName === "GraphQLUnionType") {
+      const unionType = (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value;
+      const unionTypes = (ast.getType(unionType) as GraphQLUnionType).getTypes();
+
+      if (fragmentType === fragmentTypes.NO_RELATIONS) return null;
+      // let typeName = internalField
+      //   ? internalField.name && internalField.name.value
+      //   : (field.astNode.type as NamedTypeNode).name.value;
+
+      return (
+        fieldName +
+        " {" +
+        unionTypes.map((typeName) => {
+          return indentedLine(indent + 1) +
+          "..." +
+          `${(fragmentType === fragmentTypes.DEEP &&
+            typeName + fragmentTypes.DEEP) ||
+            (fragmentType === fragmentTypes.DEFAULT &&
+            typeName + fragmentTypes.NO_RELATIONS) ||
+            typeName + fragmentTypes.DEFAULT}`
+        }).join() +
+        indentedLine(indent) +
+        "}"
+      );
+    }
+
+    // TODO error on `StorytellingComponentDeepNestingFragment`, `StorytellingComponentFragment`
     // TODO doesn't handle some list / array cases (especially Slider variants of components) correctly, see `GraphQLNonNull` branch above
 
     return null;

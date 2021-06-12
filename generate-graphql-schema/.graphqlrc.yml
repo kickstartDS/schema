@@ -3,6 +3,6 @@ schema: "../dist/page.graphql"
 extensions:
   codegen:
     generates:
-      ../dist/page.fragments.graphql:
+      ../dist/page.fragments.js:
         plugins:
           - "@kickstartds/graphql-cli-generate-fragments"

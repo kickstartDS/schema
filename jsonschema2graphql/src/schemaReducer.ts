@@ -68,7 +68,7 @@ const dedupe = (schema: JSONSchema7, optionalName?: string): {
   _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) => {
     const unique = !allContentComponentFieldNames.includes(fieldName);
 
-    // TODO: currently the reducer logic (especially for `allOf`, `oneOf`, `anyOf`) seems to 
+    // TODO: currently the reducer logic (especially for `allOf`, `oneOf`, `anyOf`?) seems to 
     // result in some fieldNames being deduped twice, which this fixes for now. Should be
     // done more elegantly
     if (fieldName.includes('__'))
@@ -76,8 +76,9 @@ const dedupe = (schema: JSONSchema7, optionalName?: string): {
     
     // TODO this correctly matches `ButtonComponentVariant` === `LinkButtonComponentVariant`,
     // and as such generates the same unique hash. Would need to extract a common fragment here, theoretically.
-    // added `+ schema.$id` below, to make those instances "unique" again to avoid collisions
-    // (because `ButtonComponentVariant` !== `LinkButtonComponentVariant`, and therefore conflicting types for `variant` gql field)
+    // added `optionalName` arg to hashing below, to make those instances "unique" again to avoid collisions
+    // (because `ButtonComponentVariant` !== `LinkButtonComponentVariant`, and therefore conflicting types for `variant` gql field in gql query)
+    //
     // const uniqueName = unique ? fieldName : `${fieldName}__${createHash('md5').update(JSON.stringify(prop)).digest('hex').substr(0,4)}`;
     
     const uniqueName = unique ? fieldName : `${fieldName}__${createHash('md5').update(JSON.stringify(prop) + (optionalName || '')).digest('hex').substr(0,4)}`;
@@ -141,6 +142,8 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
   }
 
   // anyOf?
+  // TODO this adds verbose `..1`, `..2`, etc (e.g. `TextMediaComponentMedia1`)
+  // try to add something more semantic here
   else if (!_.isUndefined(schema.anyOf)) {
     const description = buildDescription(schema);
 

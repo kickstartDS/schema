@@ -62,7 +62,7 @@ export function cleanFieldName(name: string): string {
   return name.replace(/__.*/i, '');
 };
 
-export function hashFieldName(fieldName: string, optionalName = ''): string {
+export function hashFieldName(fieldName: string, optionalName?: string): string {
   return `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`
 };
 
@@ -72,13 +72,12 @@ export function getSchemaName(schemaId: string | undefined): string {
 
 const dedupe = (schema: JSONSchema7, optionalName?: string): {
     [key: string]: JSONSchema7Definition;
-  } | undefined => 
+  } | undefined =>
   _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) => 
     fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
   );
 
 export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
-  // validate against the json schema schema
   if (schema.$id && !ajv.getSchema(schema.$id)) {
     ajv.addSchema(schema);
   }
@@ -88,26 +87,22 @@ export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
   if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
   const typeName = getTypeName($id);
 
-  // definitions
   const { definitions } = schema;
   for (const definedTypeName in definitions) {
     const definedSchema = definitions[definedTypeName] as JSONSchema7;
 
-    if (dedupeFieldNames)
-      definedSchema.properties = dedupe(definedSchema, getSchemaName(definedSchema.$id));
-
-    knownTypes[getTypeName(definedTypeName)] = buildType(definedTypeName, definedSchema, knownTypes, true);
+    knownTypes[getTypeName(definedTypeName)] = buildType(definedTypeName, definedSchema, knownTypes, false, schema);
     allDefinitions[definedTypeName] = definedSchema;
   }
 
   if (dedupeFieldNames) 
     schema.properties = dedupe(schema, getSchemaName(schema.$id));
 
-  knownTypes[typeName] = buildType(typeName, schema, knownTypes, true);
+  knownTypes[typeName] = buildType(typeName, schema, knownTypes, true, schema);
   return knownTypes;
 }
 
-function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTypeMap, outerRun: boolean = false): GraphQLType {
+function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTypeMap, outerRun: boolean = false, outerSchema: JSONSchema7): GraphQLType {
   const contentComponent = outerRun && (schema.$id?.indexOf('section.schema.json') === -1 );
   const name = uppercamelcase(cleanFieldName(propName));
 
@@ -123,9 +118,9 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
       
       if (outerRun && dedupeFieldNames)
-        typeSchema.properties = dedupe(typeSchema, getSchemaName(typeSchema.$id));
+        typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
       
-      return buildType(qualifiedName, typeSchema, knownTypes) as GraphQLObjectType;
+      return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
     })
     
     return new GraphQLUnionType({ name, description, types });
@@ -145,9 +140,9 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
 
       if (outerRun && dedupeFieldNames)
-        typeSchema.properties = dedupe(typeSchema, getSchemaName(typeSchema.$id));
+        typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
 
-      return buildType(qualifiedName, typeSchema, knownTypes) as GraphQLObjectType;
+      return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
     });
     
     return new GraphQLUnionType({ name, description, types });
@@ -163,7 +158,10 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
         if (!_.isUndefined(allOf.$ref)) {
           if (allOf.$ref.indexOf('definitions') > -1) {
             const definitionName = allOf.$ref.split('/').pop() || '';
-            return _.merge(finalSchema, allDefinitions[definitionName]);
+            const definition = Object.assign({}, allDefinitions[definitionName]);;
+            definition.properties = dedupe(definition, getSchemaName(outerSchema.$id));
+
+            return _.merge(finalSchema, definition);
           } else {
             return _.merge(finalSchema, ajv.getSchema(allOf.$ref)?.schema);
           }
@@ -174,7 +172,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       }, {} as JSONSchema7);
 
       if (outerRun && dedupeFieldNames)
-        objectSchema.properties = dedupe(objectSchema, getSchemaName(objectSchema.$id));
+        objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
 
       if (contentComponent && objectSchema && objectSchema.properties) {
         objectSchema.properties.type = {
@@ -187,7 +185,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       return !_.isEmpty(objectSchema.properties)
         ? _.mapValues(objectSchema.properties, (prop: JSONSchema7, fieldName: string) => {
             const qualifiedFieldName = `${name}.${fieldName}`;
-            const type = buildType(qualifiedFieldName, prop, knownTypes) as GraphQLObjectType;
+            const type = buildType(qualifiedFieldName, prop, knownTypes, false, outerSchema) as GraphQLObjectType;
             const isRequired = _.includes(objectSchema.required, fieldName);
 
             return {
@@ -225,7 +223,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       !_.isEmpty(schema.properties)
         ? _.mapValues(schema.properties, (prop: JSONSchema7, fieldName: string) => {
             const qualifiedFieldName = `${name}.${fieldName}`
-            const type = buildType(qualifiedFieldName, prop, knownTypes) as GraphQLObjectType
+            const type = buildType(qualifiedFieldName, prop, knownTypes, false, outerSchema) as GraphQLObjectType
             const isRequired = _.includes(schema.required, fieldName)
             return {
               type: isRequired ? new GraphQLNonNull(type) : type,
@@ -241,7 +239,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
 
   // array?
   else if (schema.type === 'array') {
-    const elementType = buildType(name, schema.items as JSONSchema7, knownTypes);
+    const elementType = buildType(name, schema.items as JSONSchema7, knownTypes, false, outerSchema);
     return new GraphQLList(new GraphQLNonNull(elementType));
   }
 

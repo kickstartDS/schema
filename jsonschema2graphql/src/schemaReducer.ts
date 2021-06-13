@@ -58,34 +58,24 @@ const allDefinitions = {};
 const allContentComponentFieldNames: Array<string> = [];
 const dedupeFieldNames = true;
 
-const clean = (name: string): string => {
+export function cleanFieldName(name: string): string {
   return name.replace(/__.*/i, '');
+};
+
+export function hashFieldName(fieldName: string, optionalName = ''): string {
+  return `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`
+};
+
+export function getSchemaName(schemaId: string | undefined): string {
+  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
 
 const dedupe = (schema: JSONSchema7, optionalName?: string): {
     [key: string]: JSONSchema7Definition;
   } | undefined => 
-  _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) => {
-    const unique = !allContentComponentFieldNames.includes(fieldName);
-
-    // TODO: currently the reducer logic (especially for `allOf`, `oneOf`, `anyOf`?) seems to 
-    // result in some fieldNames being deduped twice, which this fixes for now. Should be
-    // done more elegantly
-    if (fieldName.includes('__'))
-      return fieldName;
-    
-    // TODO this correctly matches `ButtonComponentVariant` === `LinkButtonComponentVariant`,
-    // and as such generates the same unique hash. Would need to extract a common fragment here, theoretically.
-    // added `optionalName` arg to hashing below, to make those instances "unique" again to avoid collisions
-    // (because `ButtonComponentVariant` !== `LinkButtonComponentVariant`, and therefore conflicting types for `variant` gql field in gql query)
-    //
-    // const uniqueName = unique ? fieldName : `${fieldName}__${createHash('md5').update(JSON.stringify(prop)).digest('hex').substr(0,4)}`;
-    
-    const uniqueName = unique ? fieldName : `${fieldName}__${createHash('md5').update(JSON.stringify(prop) + (optionalName || '')).digest('hex').substr(0,4)}`;
-    allContentComponentFieldNames.push(uniqueName);
-    
-    return uniqueName;
-  });
+  _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) => 
+    fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
+  );
 
 export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
   // validate against the json schema schema
@@ -104,14 +94,14 @@ export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
     const definedSchema = definitions[definedTypeName] as JSONSchema7;
 
     if (dedupeFieldNames)
-      definedSchema.properties = dedupe(definedSchema);
+      definedSchema.properties = dedupe(definedSchema, getSchemaName(definedSchema.$id));
 
     knownTypes[getTypeName(definedTypeName)] = buildType(definedTypeName, definedSchema, knownTypes, true);
     allDefinitions[definedTypeName] = definedSchema;
   }
 
   if (dedupeFieldNames) 
-    schema.properties = dedupe(schema);
+    schema.properties = dedupe(schema, getSchemaName(schema.$id));
 
   knownTypes[typeName] = buildType(typeName, schema, knownTypes, true);
   return knownTypes;
@@ -119,7 +109,7 @@ export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
 
 function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTypeMap, outerRun: boolean = false): GraphQLType {
   const contentComponent = outerRun && (schema.$id?.indexOf('section.schema.json') === -1 );
-  const name = uppercamelcase(clean(propName));
+  const name = uppercamelcase(cleanFieldName(propName));
 
   // oneOf?
   if (!_.isUndefined(schema.oneOf)) {
@@ -133,7 +123,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
       
       if (outerRun && dedupeFieldNames)
-        typeSchema.properties = dedupe(typeSchema);
+        typeSchema.properties = dedupe(typeSchema, getSchemaName(typeSchema.$id));
       
       return buildType(qualifiedName, typeSchema, knownTypes) as GraphQLObjectType;
     })
@@ -155,7 +145,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
 
       if (outerRun && dedupeFieldNames)
-        typeSchema.properties = dedupe(typeSchema);
+        typeSchema.properties = dedupe(typeSchema, getSchemaName(typeSchema.$id));
 
       return buildType(qualifiedName, typeSchema, knownTypes) as GraphQLObjectType;
     })
@@ -184,7 +174,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
       }, {} as JSONSchema7);
 
       if (outerRun && dedupeFieldNames)
-        objectSchema.properties = dedupe(objectSchema, schema.$id);
+        objectSchema.properties = dedupe(objectSchema, getSchemaName(objectSchema.$id));
 
       if (contentComponent && objectSchema && objectSchema.properties) {
         objectSchema.properties.type = {

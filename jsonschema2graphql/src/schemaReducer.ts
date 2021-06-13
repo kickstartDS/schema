@@ -55,7 +55,7 @@ const contentComponentInterface = new GraphQLInterfaceType({
 });
 
 const allDefinitions = {};
-const allContentComponentFieldNames: Array<string> = [];
+// TODO should be an (cli) option
 const dedupeFieldNames = true;
 
 export function cleanFieldName(name: string): string {
@@ -148,7 +148,7 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
         typeSchema.properties = dedupe(typeSchema, getSchemaName(typeSchema.$id));
 
       return buildType(qualifiedName, typeSchema, knownTypes) as GraphQLObjectType;
-    })
+    });
     
     return new GraphQLUnionType({ name, description, types });
   }

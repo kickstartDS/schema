@@ -50,13 +50,19 @@ ajv.addKeyword({
 const contentComponentInterface = new GraphQLInterfaceType({
   name: 'ContentComponent',
   fields: {
-    type: { type: GraphQLString }
+    internalType: { type: GraphQLString }
   },
 });
 
+const internalTypeDefinition: JSONSchema7Definition = {
+  "type": "string",
+  "title": "Internal type",
+  "description": "Internal type for interface resolution",
+};
+
 const allDefinitions = {};
 // TODO should be an (cli) option
-const dedupeFieldNames = true;
+const shouldDedupe = true;
 
 export function cleanFieldName(name: string): string {
   return name.replace(/__.*/i, '');
@@ -89,21 +95,26 @@ export function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
 
   const { definitions } = schema;
   for (const definedTypeName in definitions) {
-    const definedSchema = definitions[definedTypeName] as JSONSchema7;
-
-    knownTypes[getTypeName(definedTypeName)] = buildType(definedTypeName, definedSchema, knownTypes, false, schema);
-    allDefinitions[definedTypeName] = definedSchema;
+    allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
   }
 
-  if (dedupeFieldNames) 
+  if (shouldDedupe) 
     schema.properties = dedupe(schema, getSchemaName(schema.$id));
 
-  knownTypes[typeName] = buildType(typeName, schema, knownTypes, true, schema);
+  knownTypes[typeName] = buildType(typeName, schema, knownTypes, shouldDedupe, true, schema);
   return knownTypes;
 }
 
-function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTypeMap, outerRun: boolean = false, outerSchema: JSONSchema7): GraphQLType {
-  const contentComponent = outerRun && (schema.$id?.indexOf('section.schema.json') === -1 );
+function buildType(
+  propName: string,
+  schema: JSONSchema7,
+  knownTypes: GraphQLTypeMap,
+  dedupeFieldNames: boolean,
+  outerRun: boolean = false,
+  outerSchema: JSONSchema7,
+): GraphQLType {
+  const sectionComponent = (schema.$id?.includes('section.schema.json'));
+  const contentComponent = outerRun && !sectionComponent;
   const name = uppercamelcase(cleanFieldName(propName));
 
   // oneOf?
@@ -112,37 +123,38 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
 
     const cases = schema.oneOf as JSONSchema7;
     const caseKeys = Object.keys(cases);
-    const types: GraphQLObjectType[] = caseKeys.map((caseName: string) => {
-      const caseSchema = cases[caseName];
-      const qualifiedName = `${name}_${caseName}`;
+    const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
+      const caseSchema = cases[caseIndex];
       const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
+      const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
       
-      if (outerRun && dedupeFieldNames)
+      if (dedupeFieldNames)
         typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
       
-      return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
+      return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
     })
     
     return new GraphQLUnionType({ name, description, types });
   }
 
   // anyOf?
-  // TODO this adds verbose `..1`, `..2`, etc (e.g. `TextMediaComponentMedia1`)
-  // try to add something more semantic here
+  // TODO this adds e.g. `Video`, `Image` and `LightboxImage` instead of
+  // `TextMediaComponentMediaVideo`, `TextMediaComponentMediaImage` and
+  // `TextMediaComponentMediaLightboxImage` (for TextMediaComponent)
   else if (!_.isUndefined(schema.anyOf)) {
     const description = buildDescription(schema);
 
     const cases = schema.anyOf as JSONSchema7;
     const caseKeys = Object.keys(cases);
-    const types: GraphQLObjectType[] = caseKeys.map((caseName: string) => {
-      const caseSchema = cases[caseName];
-      const qualifiedName = `${name}_${caseName}`;
+    const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
+      const caseSchema = cases[caseIndex];
       const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
-
-      if (outerRun && dedupeFieldNames)
+      const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
+     
+      if (dedupeFieldNames)
         typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
 
-      return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
+      return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
     });
     
     return new GraphQLUnionType({ name, description, types });
@@ -150,55 +162,42 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
 
   // allOf?
   else if (!_.isUndefined(schema.allOf)) {
-    const description = buildDescription(schema);
-
-    const allOfs = schema.allOf as JSONSchema7[];
-    const fields = () => {
-      const objectSchema: JSONSchema7 = allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
-        if (!_.isUndefined(allOf.$ref)) {
-          if (allOf.$ref.indexOf('definitions') > -1) {
-            const definitionName = allOf.$ref.split('/').pop() || '';
-            const definition = Object.assign({}, allDefinitions[definitionName]);;
-            definition.properties = dedupe(definition, getSchemaName(outerSchema.$id));
-
-            return _.merge(finalSchema, definition);
+    const reduceSchemaAllOf = (allOfs: JSONSchema7[]): JSONSchema7 => {
+      return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
+        const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
+          if (!_.isUndefined(allOf.$ref)) {
+            if (allOf.$ref.includes('#/definitions/')) {
+              const definitionName = allOf.$ref.split('/').pop() || '';
+              const definition = _.cloneDeep(allDefinitions[definitionName]);
+              if (definition.allOf) {
+                return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf))
+              }
+              return _.merge(finalSchema, definition);
+            } else {
+              const reffedSchema = _.cloneDeep(ajv.getSchema(allOf.$ref)?.schema as JSONSchema7);
+              if (reffedSchema.allOf) {
+                return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[]))
+              }
+              return _.merge(finalSchema, reffedSchema);
+            }
           } else {
-            return _.merge(finalSchema, ajv.getSchema(allOf.$ref)?.schema);
+            return _.merge(finalSchema, allOf);
           }
-          
-        } else {
-          return _.merge(finalSchema, allOf);
-        }
-      }, {} as JSONSchema7);
-
-      if (outerRun && dedupeFieldNames)
-        objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
-
-      if (contentComponent && objectSchema && objectSchema.properties) {
-        objectSchema.properties.type = {
-          "type": "string",
-          "title": "Internal type",
-          "description": "Internal type for interface resolution",
         };
-      }
 
-      return !_.isEmpty(objectSchema.properties)
-        ? _.mapValues(objectSchema.properties, (prop: JSONSchema7, fieldName: string) => {
-            const qualifiedFieldName = `${name}.${fieldName}`;
-            const type = buildType(qualifiedFieldName, prop, knownTypes, false, outerSchema) as GraphQLObjectType;
-            const isRequired = _.includes(objectSchema.required, fieldName);
-
-            return {
-              type: isRequired ? new GraphQLNonNull(type) : type,
-              description: buildDescription(prop),
-            };
-          })
-        : // GraphQL doesn't allow types with no fields, so put a placeholder
-          { _empty: { type: GraphQLString } };
+        return mergeSchemaAllOf(allOf);
+      }, { } as JSONSchema7);
     };
 
-    const interfaces = contentComponent ? [contentComponentInterface] : [];
-    return new GraphQLObjectType({ name, description, fields, interfaces });
+    const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
+
+    if (dedupeFieldNames)
+      objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
+
+    if ((contentComponent || sectionComponent) && objectSchema && objectSchema.properties)
+      objectSchema.properties.internalType = internalTypeDefinition;
+
+    return buildType(name, objectSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
   }
 
   // not?
@@ -211,23 +210,23 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
   else if (schema.type === 'object') {
     const description = buildDescription(schema);
 
-    if (contentComponent && schema && schema.properties) {
-      schema.properties.type = {
-        "type": "string",
-        "title": "Internal type",
-        "description": "Internal type for interface resolution",
-      };
-    }
+    if ((contentComponent || sectionComponent) && schema && schema.properties)
+      schema.properties.internalType = internalTypeDefinition;
 
     const fields = () =>
       !_.isEmpty(schema.properties)
         ? _.mapValues(schema.properties, (prop: JSONSchema7, fieldName: string) => {
             const qualifiedFieldName = `${name}.${fieldName}`
-            const type = buildType(qualifiedFieldName, prop, knownTypes, false, outerSchema) as GraphQLObjectType
+            const objectSchema = _.cloneDeep(prop);
+
+            if (dedupeFieldNames)
+              objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
+
+            const type = buildType(qualifiedFieldName, objectSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType
             const isRequired = _.includes(schema.required, fieldName)
             return {
               type: isRequired ? new GraphQLNonNull(type) : type,
-              description: buildDescription(prop),
+              description: buildDescription(objectSchema),
             }
           })
         : // GraphQL doesn't allow types with no fields, so put a placeholder
@@ -239,7 +238,10 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
 
   // array?
   else if (schema.type === 'array') {
-    const elementType = buildType(name, schema.items as JSONSchema7, knownTypes, false, outerSchema);
+    const arraySchema = schema.items as JSONSchema7;
+    arraySchema.properties = dedupe(arraySchema, getSchemaName(outerSchema.$id));
+
+    const elementType = buildType(name, arraySchema, knownTypes, dedupeFieldNames, false, outerSchema);
     return new GraphQLList(new GraphQLNonNull(elementType));
   }
 
@@ -255,10 +257,25 @@ function buildType(propName: string, schema: JSONSchema7, knownTypes: GraphQLTyp
 
   // ref?
   else if (!_.isUndefined(schema.$ref)) {
-    const ref = getTypeName(schema.$ref);
-    const type = knownTypes[ref];
-    if (!type) throw err(`The referenced type ${ref} is unknown.`, name);
-    return type;
+    const ref = schema.$ref.includes('#/definitions/') && schema.$ref.includes('http')
+      ? getTypeName(schema.$ref, schema.$ref.split('#').shift())
+      : getTypeName(schema.$ref, outerSchema.$id);
+
+    if (schema.$ref.includes('#/definitions/')) {
+      const ref = schema.$ref.split('#/definitions/').pop() as string;
+      const definitions = _.cloneDeep(allDefinitions[ref]);
+
+      if (dedupeFieldNames)
+        definitions.properties = dedupe(definitions, getSchemaName(outerSchema.$id));      
+
+      return buildType(ref, definitions, knownTypes, shouldDedupe, false, schema);;
+    } else {
+      const ref = getTypeName(schema.$ref, outerSchema.$id)
+      const type = knownTypes[ref];
+
+      if (!type) throw err(`The referenced type ${ref} is unknown.`, name);
+      return type;
+    }
   }
 
   // basic?

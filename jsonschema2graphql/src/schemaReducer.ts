@@ -197,7 +197,7 @@ function buildType(
     if ((contentComponent || sectionComponent) && objectSchema && objectSchema.properties)
       objectSchema.properties.internalType = internalTypeDefinition;
 
-    return buildType(name, objectSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
+    return buildType(name, objectSchema, knownTypes, dedupeFieldNames, outerRun, outerSchema) as GraphQLObjectType;
   }
 
   // not?

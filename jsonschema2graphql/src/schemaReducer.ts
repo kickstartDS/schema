@@ -113,7 +113,7 @@ function buildType(
   outerRun: boolean = false,
   outerSchema: JSONSchema7,
 ): GraphQLType {
-  const sectionComponent = (schema.$id?.includes('section.schema.json'));
+  const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
   const contentComponent = outerRun && !sectionComponent;
   const name = uppercamelcase(cleanFieldName(propName));
 
@@ -156,7 +156,7 @@ function buildType(
 
       return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
     });
-    
+
     return new GraphQLUnionType({ name, description, types });
   }
 
@@ -194,7 +194,7 @@ function buildType(
     if (dedupeFieldNames)
       objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
 
-    if ((contentComponent || sectionComponent) && objectSchema && objectSchema.properties)
+    if (contentComponent && objectSchema && objectSchema.properties)
       objectSchema.properties.internalType = internalTypeDefinition;
 
     return buildType(name, objectSchema, knownTypes, dedupeFieldNames, outerRun, outerSchema) as GraphQLObjectType;
@@ -210,7 +210,7 @@ function buildType(
   else if (schema.type === 'object') {
     const description = buildDescription(schema);
 
-    if ((contentComponent || sectionComponent) && schema && schema.properties)
+    if (contentComponent && schema && schema.properties)
       schema.properties.internalType = internalTypeDefinition;
 
     const fields = () =>
@@ -242,7 +242,9 @@ function buildType(
     arraySchema.properties = dedupe(arraySchema, getSchemaName(outerSchema.$id));
 
     const elementType = buildType(name, arraySchema, knownTypes, dedupeFieldNames, false, outerSchema);
-    return new GraphQLList(new GraphQLNonNull(elementType));
+    return name === 'SectionComponentContent'
+      ? new GraphQLList(new GraphQLNonNull(contentComponentInterface))
+      : new GraphQLList(new GraphQLNonNull(elementType));
   }
 
   // enum?

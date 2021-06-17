@@ -6,9 +6,10 @@ import {
   ListTypeNode,
   NonNullTypeNode,
   NamedTypeNode,
-  GraphQLUnionType
+  GraphQLUnionType,
+  GraphQLInterfaceType
 } from "graphql";
-import { GraphQLSchema } from "graphql/type/schema";
+import { GraphQLSchema, InterfaceImplementations } from "graphql/type/schema";
 
 export const generate = (schema: GraphQLSchema) => {
   const indentedLine = (level: number) => {
@@ -309,6 +310,32 @@ ${fragment}`
         fieldName +
         " {" +
         unionTypes.map((typeName) => {
+          return indentedLine(indent + 1) +
+          "..." +
+          `${(fragmentType === fragmentTypes.DEEP &&
+            typeName + fragmentTypes.DEEP) ||
+            (fragmentType === fragmentTypes.DEFAULT &&
+            typeName + fragmentTypes.NO_RELATIONS) ||
+            typeName + fragmentTypes.DEFAULT}`
+        }).join() +
+        indentedLine(indent) +
+        "}"
+      );
+    }
+
+    if (constructorName === "GraphQLInterfaceType") {
+      const interfaceType = (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value;
+      const implementations = ast.getImplementations(ast.getType(interfaceType) as GraphQLInterfaceType) as InterfaceImplementations;
+
+      if (fragmentType === fragmentTypes.NO_RELATIONS) return null;
+      // // let typeName = internalField
+      // //   ? internalField.name && internalField.name.value
+      // //   : (field.astNode.type as NamedTypeNode).name.value;
+
+      return (
+        fieldName +
+        " {" +
+        implementations.objects.map((typeName) => {
           return indentedLine(indent + 1) +
           "..." +
           `${(fragmentType === fragmentTypes.DEEP &&

@@ -1,9 +1,9 @@
-const path = require('path');
 const fs = require('fs-extra');
 const glob = require('fast-glob');
 const chokidar = require('chokidar');
 const { printSchema } = require('graphql');
-const convert = require('@kickstartds/jsonschema2graphql').default;
+const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
+const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
 const Ajv = require('ajv');
 
 const ajv = new Ajv({
@@ -37,8 +37,10 @@ const addSchema = async (schemaPath) => {
   if (param === '--watch') {
     chokidar
       .watch(schemaGlob, { ignoreInitial: true })
-      .on('add', createGraphQL)
-      .on('change', createGraphQL);
+      .on('add', convertToGraphQL)
+      .on('change', convertToGraphQL)
+      .on('add', convertToNetlifyCMS)
+      .on('change', convertToNetlifyCMS);
   } else {
     const schemaPaths = await glob(schemaGlob);
     const schemaJsons = await Promise.all(schemaPaths.map(async (schemaPath) => addSchema(schemaPath)));
@@ -47,10 +49,16 @@ const addSchema = async (schemaPath) => {
     ajv.addSchema(pageSchema);
     ajv.validateSchema(pageSchema);
 
-    const gql = convert({ jsonSchema: schemaJsons });
+    const gql = convertToGraphQL({ jsonSchema: schemaJsons });
     fs.writeFile(
       `../dist/page.graphql`,
       printSchema(gql).replace(/`/g, "'")
+    );
+
+    const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons });
+    fs.writeFile(
+      `../dist/config.generated.yml`,
+      netlifyAdminConfig,
     );
   }
 })();

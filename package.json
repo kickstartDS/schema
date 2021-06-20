@@ -1,5 +1,5 @@
 {
-  "name": "kickstartds-graphql-toolkit",
+  "name": "kickstartds-schema-toolkit",
   "private": true,
   "version": "0.0.1",
   "main": "index.js",
@@ -9,22 +9,26 @@
     "build": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-generate-graphql-fragments\") && yarn build-kickstartds-graphql && yarn generate-graphql-fragments",
     "build-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql build",
     "watch-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql watch",
+    "build-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms build",
+    "watch-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms watch",
     "build-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate",
     "watch-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate --watch",
     "graphql:generate": "yarn watch-kickstartds-graphql",
     "build-generate-graphql-fragments": "yarn workspace @kickstartds/graphql-cli-generate-fragments build",
-    "generate-graphql-fragments": "yarn workspace @kickstartds/generate-graphql-schema graphql codegen"
+    "generate-graphql-fragments": "yarn workspace @kickstartds/generate-graphql-schema graphql codegen",
+    "test-jsonschema2netlifycms": "yarn build-jsonschema2netlifycms && yarn build-kickstartds-graphql"
   },
   "workspaces": [
     "graphql-cli-generate-fragments",
     "generate-graphql-schema",
     "jsonschema2graphql",
+    "jsonschema2netlifycms",
     "example"
   ],
   "dependencies": {
-    "@kickstartds/base": "^1.0.0-alpha.25",
-    "@kickstartds/content": "^1.0.0-alpha.27",
-    "@kickstartds/core": "^1.0.0-alpha.15",
+    "@kickstartds/base": "^1.0.0-alpha.28",
+    "@kickstartds/content": "^1.0.0-alpha.30",
+    "@kickstartds/core": "^1.0.0-alpha.16",
     "concurrently": "^6.1.0"
   }
 }

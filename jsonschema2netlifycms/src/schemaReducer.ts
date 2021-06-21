@@ -122,44 +122,39 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
   
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      // const reduceSchemaAllOf = (allOfs: JSONSchema7[]): JSONSchema7 => {
-      //   return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
-      //     const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
-      //       if (!_.isUndefined(allOf.$ref)) {
-      //         if (allOf.$ref.includes('#/definitions/')) {
-      //           const definitionName = allOf.$ref.split('/').pop() || '';
-      //           const definition = _.cloneDeep(allDefinitions[definitionName]);
-      //           if (definition.allOf) {
-      //             return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf))
-      //           }
-      //           return _.merge(finalSchema, definition);
-      //         } else {
-      //           const reffedSchema = _.cloneDeep(ajv.getSchema(allOf.$ref)?.schema as JSONSchema7);
-      //           if (reffedSchema.allOf) {
-      //             return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[]))
-      //           }
-      //           return _.merge(finalSchema, reffedSchema);
-      //         }
-      //       } else {
-      //         return _.merge(finalSchema, allOf);
-      //       }
-      //     };
+      const reduceSchemaAllOf = (allOfs: JSONSchema7[]): JSONSchema7 => {
+        return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
+          const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
+            if (!_.isUndefined(allOf.$ref)) {
+              if (allOf.$ref.includes('#/definitions/')) {
+                const definitionName = allOf.$ref.split('/').pop() || '';
+                const definition = _.cloneDeep(allDefinitions[definitionName]);
+                if (definition.allOf) {
+                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf))
+                }
+                return _.merge(finalSchema, definition);
+              } else {
+                const reffedSchema = _.cloneDeep(ajv.getSchema(allOf.$ref)?.schema as JSONSchema7);
+                if (reffedSchema.allOf) {
+                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[]))
+                }
+                return _.merge(finalSchema, reffedSchema);
+              }
+            } else {
+              return _.merge(finalSchema, allOf);
+            }
+          };
   
-      //     return mergeSchemaAllOf(allOf);
-      //   }, { } as JSONSchema7);
-      // };
+          return mergeSchemaAllOf(allOf);
+        }, { } as JSONSchema7);
+      };
   
-      // const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
+      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
   
       // if (contentComponent && objectSchema && objectSchema.properties)
       //   objectSchema.properties.internalType = internalTypeDefinition;
   
-      // return buildConfig(name, objectSchema, knownTypes, dedupeFieldNames, outerRun, outerSchema) as GraphQLObjectType;
-  
-      return {
-        name: 'test',
-        widget: 'list',
-      };
+      return buildConfig(name, objectSchema, contentFields, outerSchema);
     }
   
     // not?

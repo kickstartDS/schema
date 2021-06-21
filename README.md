@@ -1,1 +1,1 @@
-# kickstartDS-graphql-toolkit
+# kickstartDS-schema-toolkit

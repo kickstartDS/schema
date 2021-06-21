@@ -80,11 +80,13 @@ export function getSchemaReducer(ajv: Ajv) {
     for (const definedTypeName in definitions) {
       allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
     }
+
+    const clonedSchema = _.cloneDeep(schema);
   
     if (shouldDedupe) 
-      schema.properties = dedupe(schema, getSchemaName(schema.$id));
+      clonedSchema.properties = dedupe(clonedSchema, getSchemaName(schema.$id));
   
-    knownTypes[typeName] = buildType(typeName, schema, knownTypes, shouldDedupe, true, schema);
+    knownTypes[typeName] = buildType(typeName, clonedSchema, knownTypes, shouldDedupe, true, clonedSchema);
     return knownTypes;
   }
 
@@ -108,7 +110,7 @@ export function getSchemaReducer(ajv: Ajv) {
       const caseKeys = Object.keys(cases);
       const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
         const caseSchema = cases[caseIndex];
-        const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
+        const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
         const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
         
         if (dedupeFieldNames)
@@ -131,7 +133,7 @@ export function getSchemaReducer(ajv: Ajv) {
       const caseKeys = Object.keys(cases);
       const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
         const caseSchema = cases[caseIndex];
-        const typeSchema = (caseSchema.then || caseSchema) as JSONSchema7;
+        const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
         const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
        
         if (dedupeFieldNames)
@@ -221,7 +223,7 @@ export function getSchemaReducer(ajv: Ajv) {
   
     // array?
     else if (schema.type === 'array') {
-      const arraySchema = schema.items as JSONSchema7;
+      const arraySchema = _.cloneDeep(schema.items) as JSONSchema7;
       arraySchema.properties = dedupe(arraySchema, getSchemaName(outerSchema.$id));
   
       const elementType = buildType(name, arraySchema, knownTypes, dedupeFieldNames, false, outerSchema);

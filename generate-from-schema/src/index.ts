@@ -25,7 +25,7 @@ ignoredFormats.forEach((ignoredFormat) =>
   errors: false,
 })*/
 
-const addSchema = async (schemaPath) => {
+const addSchema = async (schemaPath: string) => {
   const schema = await fs.readJSON(schemaPath);
   if (!ajv.getSchema(schema.$id)) ajv.addSchema(schema);
   return schema;
@@ -43,19 +43,19 @@ const addSchema = async (schemaPath) => {
       .on('change', convertToNetlifyCMS);
   } else {
     const schemaPaths = await glob(schemaGlob);
-    const schemaJsons = await Promise.all(schemaPaths.map(async (schemaPath) => addSchema(schemaPath)));
+    const schemaJsons = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchema(schemaPath)));
 
     const pageSchema = await fs.readJSON('../example/page.schema.json');
     ajv.addSchema(pageSchema);
     ajv.validateSchema(pageSchema);
 
-    const gql = convertToGraphQL({ jsonSchema: schemaJsons });
+    const gql = convertToGraphQL({ jsonSchema: schemaJsons, ajv });
     fs.writeFile(
       `../dist/page.graphql`,
       printSchema(gql).replace(/`/g, "'")
     );
 
-    const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons });
+    const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons, ajv });
     fs.writeFile(
       `../dist/config.generated.yml`,
       netlifyAdminConfig,

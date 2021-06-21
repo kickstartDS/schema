@@ -5,22 +5,22 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-kickstartds-graphql\" \"yarn watch-kickstartds-graphql\"",
-    "build": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-generate-graphql-fragments\") && yarn build-kickstartds-graphql && yarn generate-graphql-fragments",
+    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-generate-from-schema\" \"yarn watch-schemas\"",
+    "build": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-generate-graphql-fragments\" \"yarn build-generate-from-schema\") && yarn compile-schemas",
     "build-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql build",
     "watch-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql watch",
     "build-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms build",
     "watch-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms watch",
-    "build-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate",
-    "watch-kickstartds-graphql": "yarn workspace @kickstartds/generate-graphql-schema generate --watch",
-    "graphql:generate": "yarn watch-kickstartds-graphql",
     "build-generate-graphql-fragments": "yarn workspace @kickstartds/graphql-cli-generate-fragments build",
-    "generate-graphql-fragments": "yarn workspace @kickstartds/generate-graphql-schema graphql codegen",
-    "test-jsonschema2netlifycms": "yarn build-jsonschema2netlifycms && yarn build-kickstartds-graphql"
+    "build-generate-from-schema": "yarn workspace @kickstartds/generate-from-schema build",
+    "compile-schemas": "yarn workspace @kickstartds/generate-from-schema generate && yarn generate-graphql-fragments",
+    "watch-schemas": "yarn workspace @kickstartds/generate-from-schema generate --watch",
+    "generate-graphql-fragments": "yarn workspace @kickstartds/generate-from-schema graphql codegen",
+    "test-jsonschema2netlifycms": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2netlifycms\" \"yarn build-generate-from-schema\") && yarn compile-schemas"
   },
   "workspaces": [
     "graphql-cli-generate-fragments",
-    "generate-graphql-schema",
+    "generate-from-schema",
     "jsonschema2graphql",
     "jsonschema2netlifycms",
     "example"

@@ -1,24 +1,26 @@
 import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
-import Ajv from 'ajv';
 import { NetlifyCmsField } from './@types';
+import Ajv from 'ajv';
 
 interface TypeMapping {
   boolean: string;
   string: string;
+  integer: string;
   array: string;
   object: string;
 }
 
-const widgetMapping = (property: JSONSchema7) : string => {
-  const mapping: TypeMapping = {
-    boolean: 'boolean',
-    string: 'string',
-    array: 'list',
-    object: 'object',
-  };
+const mapping: TypeMapping = {
+  boolean: 'boolean',
+  string: 'string',
+  integer: 'number',
+  array: 'list',
+  object: 'object',
+};
 
+const widgetMapping = (property: JSONSchema7) : string => {
   if (property.type === 'string' && property.enum && property.enum.length) {
     return 'select';
   }
@@ -42,46 +44,46 @@ const widgetMapping = (property: JSONSchema7) : string => {
   return mapping[property.type as JSONSchema7TypeName];
 };
 
-const ajv = new Ajv({
-  removeAdditional: true,
-  validateSchema: true,
-  schemaId: '$id',
-  allErrors: true,
-});
-
-const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id'];
-ignoredFormats.forEach((ignoredFormat) =>
-  ajv.addFormat(ignoredFormat, { validate: () => true })
-);
-
-ajv.addKeyword({
-  keyword: 'faker',
-  validate: () => true,
-  errors: false,
-});
-
 const allDefinitions = {};
+
+function toPascalCase(text: string): string {
+  return text.replace(/(^\w|-\w)/g, clearAndUpper);
+}
+
+function clearAndUpper(text: string): string {
+  return text.replace(/-/, " ").toUpperCase();
+}
 
 export function getSchemaName(schemaId: string | undefined): string {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
 
-export function schemaReducer(contentFields: NetlifyCmsField[], schema: JSONSchema7): NetlifyCmsField[] {
+export function schemaReducer(ajv: Ajv, schema: JSONSchema7): Ajv {
   if (schema.$id && !ajv.getSchema(schema.$id)) {
     ajv.addSchema(schema);
   }
   ajv.validateSchema(schema);
 
-  const $id = schema.$id
-  if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
-  const typeName = getSchemaName($id);
+  return ajv;
+}
 
-  const { definitions } = schema;
-  for (const definedTypeName in definitions) {
-    allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
-  }
-
-  contentFields.push(buildConfig(typeName, schema, contentFields, true, schema));
+export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsField[] {
+  const contentFields: NetlifyCmsField[] = [];
+  
+  schemas.forEach((schema) => {
+    const $id = schema.$id
+    if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
+    const typeName = getSchemaName($id);
+  
+    const { definitions } = schema;
+    for (const definedTypeName in definitions) {
+      allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
+    }
+  
+    contentFields.push(buildConfig(typeName, schema, contentFields, true, schema));
+  });
+  
+  
   return contentFields;
 }
 
@@ -198,26 +200,25 @@ function buildConfig(
     // if (contentComponent && schema && schema.properties)
     //   schema.properties.internalType = internalTypeDefinition;
 
-    const fields = () =>
+    const fields = (): NetlifyCmsField[] =>
       !_.isEmpty(schema.properties)
-        ? _.mapValues(schema.properties, (prop: JSONSchema7, fieldName: string) => {
+        ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
             const qualifiedFieldName = `${name}.${fieldName}`
             const objectSchema = _.cloneDeep(prop);
 
             const type = buildConfig(qualifiedFieldName, objectSchema, contentFields, false, outerSchema);
-            const isRequired = _.includes(schema.required, fieldName)
-            return {
-              type: isRequired ? { required: true, ...type } : type,
-              description: buildDescription(objectSchema),
-            }
+            return type;
           })
-        : {};
+        : [];
 
     // return new GraphQLObjectType({ name, description, fields, interfaces });
 
     return {
+      label: toPascalCase(name),
       name,
+      hint: description,
       widget: widgetMapping(schema),
+      fields: fields(),
     };
     // return { name, description, fields };
   }
@@ -279,15 +280,29 @@ function buildConfig(
   }
 
   // basic?
-  // else if (BASIC_TYPE_MAPPING[schema.type as string]) {
-  //   return BASIC_TYPE_MAPPING[schema.type as string];
-  // }
+  else if (mapping[schema.type as string]) {
+    const description = buildDescription(schema);
+    const widget = mapping[schema.type as string];
+
+    const basicField: NetlifyCmsField = {
+      label: toPascalCase(name),
+      name,
+      hint: description,
+      widget,
+    };
+
+    if (widget === 'number')
+      basicField.valueType = 'int';
+
+    return basicField;
+  }
 
   // ¯\_(ツ)_/¯
   else throw err(`The type ${schema.type} on property ${name} is unknown.`);
 }
 
 function buildDescription(d: any): string | undefined {
-  if (d.title && d.description) return `${d.title}: ${d.description}`;
-  return d.title || d.description || undefined;
+  // if (d.title && d.description) return `${d.title}: ${d.description}`;
+  // return d.title || d.description || undefined;
+  return d.description || d.title || undefined;
 }

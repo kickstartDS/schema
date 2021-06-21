@@ -12,6 +12,6 @@
     "@kickstartds/base": "^1.0.0-alpha.28",
     "@kickstartds/content": "^1.0.0-alpha.30",
     "@kickstartds/core": "^1.0.0-alpha.16",
-    "@kickstartds/generate-graphql-schema": "*"
+    "@kickstartds/generate-from-schema": "*"
   }
 }

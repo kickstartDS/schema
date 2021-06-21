@@ -58,15 +58,6 @@ export function getSchemaName(schemaId: string | undefined): string {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
 
-export function schemaReducer(ajv: Ajv, schema: JSONSchema7): Ajv {
-  if (schema.$id && !ajv.getSchema(schema.$id)) {
-    ajv.addSchema(schema);
-  }
-  ajv.validateSchema(schema);
-
-  return ajv;
-}
-
 export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsField[] {
   const contentFields: NetlifyCmsField[] = [];
   

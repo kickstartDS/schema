@@ -1,8 +1,7 @@
 import { JSONSchema7 } from 'json-schema';
 import { dump } from 'js-yaml';
-import Ajv from 'ajv';
 
-import { schemaReducer, configGenerator } from './schemaReducer'
+import { configGenerator } from './schemaReducer'
 import { ConvertParams, NetlifyCmsConfig, NetlifyCmsCollection, NetlifyCmsField } from './@types'
 
 function createConfig(contentFields: NetlifyCmsField[]): NetlifyCmsConfig {

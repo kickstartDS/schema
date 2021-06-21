@@ -1,3 +1,5 @@
+
+
 const fs = require('fs-extra');
 const glob = require('fast-glob');
 const chokidar = require('chokidar');
@@ -18,12 +20,11 @@ ignoredFormats.forEach((ignoredFormat) =>
   ajv.addFormat(ignoredFormat, { validate: () => true })
 );
 
-// TODO this should work... but it doesn't
-/*ajv.addKeyword({
-  keyword: 'faker',
+ajv.addKeyword('faker', {
+  type: 'string',
   validate: () => true,
   errors: false,
-})*/
+})
 
 const addSchema = async (schemaPath: string) => {
   const schema = await fs.readJSON(schemaPath);

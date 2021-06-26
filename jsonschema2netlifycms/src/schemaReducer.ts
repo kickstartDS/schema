@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import { JSONSchema7, JSONSchema7TypeName, JSONSchema7Definition } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
@@ -74,7 +74,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
     outerSchema: JSONSchema7,
   ): NetlifyCmsField {
     const name = propName;
-  
+
     // oneOf?
     // TODO we don't have an active case for this, try a best effort implementation
     if (!_.isUndefined(schema.oneOf)) {
@@ -169,6 +169,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       const fields = (): NetlifyCmsField[] =>
         !_.isEmpty(schema.properties)
           ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
+              // TODO inline those two into .map call
               const objectSchema = _.cloneDeep(prop);
               return buildConfig(fieldName, objectSchema, contentFields, outerSchema);
             })
@@ -185,18 +186,61 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
   
     // array?
     else if (schema.type === 'array') {
-      const arraySchema = schema.items as JSONSchema7;
-      const fieldConfig: NetlifyCmsField = buildConfig(name, arraySchema, contentFields, outerSchema);
-      const config: NetlifyCmsField = {
-        label: toPascalCase(name),
-        name,
-        widget: 'list',
-      };
+      let fieldConfig: NetlifyCmsField;
+      
+      // anyOf -> convert all items
+      if(schema.items && (schema.items as JSONSchema7).anyOf) {
+        const arraySchemas = (schema.items as JSONSchema7).anyOf as JSONSchema7[];
+        const isRefArray = arraySchemas.every((schema) => schema.$ref);
+        const isObjectArray = arraySchemas.every((schema) => (typeof schema === 'object'));
 
-      if (fieldConfig && fieldConfig.fields)
-        config.fields = fieldConfig.fields;
+        if (isRefArray) {
+          const fieldConfigs = arraySchemas.map((arraySchema) => {
+            const resolvedSchema = ajv.getSchema(arraySchema.$ref as string)?.schema as JSONSchema7;
+            return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, resolvedSchema);
+          });
+          return {
+            name,
+            widget: 'select',
+            types: fieldConfigs
+          };
+        } else if (isObjectArray) {
+          const fieldConfigs = arraySchemas.map((arraySchema) => {
+            // TODO inline this into .map function call
+            return buildConfig('test', arraySchema, contentFields, outerSchema);
+          });
+          return {
+            name,
+            widget: 'select',
+            types: []
+          };
+        } else {
+          // This needs to be expanded upon as we use additional features in our JSON schema
+          throw err(`Incompatible anyOf declaration for array with type ${schema.type} on property ${name}.`);
+        }
+      } else if (schema.items && (schema.items as JSONSchema7).oneOf) {
+        const arraySchema = schema.items as JSONSchema7;
+        fieldConfig = buildConfig(name, arraySchema, contentFields, outerSchema);
+        return {
+          name: 'oneOfarray',
+          widget: 'select',
+          field: fieldConfig
+        };
+      } else {
+        const arraySchema = schema.items as JSONSchema7;
+        const fieldConfig = buildConfig(name, arraySchema, contentFields, outerSchema);
 
-      return config;
+        const config: NetlifyCmsField = {
+          label: toPascalCase(name),
+          name,
+          widget: 'list',
+        };
+  
+        if (fieldConfig && fieldConfig.fields)
+          config.fields = fieldConfig.fields;
+  
+        return config;
+      }
     }
   
     // enum?
@@ -233,7 +277,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
 
         const reffedSchema = ajv.getSchema(reffedSchemaId as string)?.schema as JSONSchema7;
         const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : '' as JSONSchema7
-
+        
         return buildConfig(reffedPropertyName as string, reffedProperty, contentFields, outerSchema);
       } else {
         const reffedSchema = ajv.getSchema(schema.$ref as string)?.schema as JSONSchema7;
@@ -272,13 +316,20 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
     }
   });
 
-  schemas.forEach((schema) => {
-    const $id = schema.$id
-    if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
-    const typeName = getSchemaName($id);
-    contentFields.push(buildConfig(typeName, schema, contentFields, schema));
-  });
-  
+  const pageSchema = schemas.find((schema) => schema.$id?.includes('page.schema.json')) as JSONSchema7;
+
+  const $id = pageSchema.$id
+  if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
+  const typeName = getSchemaName($id);
+  contentFields.push(buildConfig(typeName, pageSchema, contentFields, pageSchema));
+
+  // schemas.forEach((schema) => {
+  //   const $id = schema.$id
+  //   if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
+  //   const typeName = getSchemaName($id);
+  //   contentFields.push(buildConfig(typeName, schema, contentFields, schema));
+  // });
+
   return contentFields;
 }
 

@@ -1,5 +1,3 @@
-
-
 const fs = require('fs-extra');
 const glob = require('fast-glob');
 const chokidar = require('chokidar');
@@ -56,6 +54,7 @@ const addSchema = async (schemaPath: string) => {
       printSchema(gql).replace(/`/g, "'")
     );
 
+    schemaJsons.push(pageSchema);
     const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons, ajv });
     fs.writeFile(
       `../dist/config.generated.yml`,

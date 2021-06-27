@@ -18,6 +18,11 @@
       "description": "Choose a layout for the page",
       "default": "default"
     },
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "Title for the page"
+    },
     "sections": {
       "type": "array",
       "title": "Sections",

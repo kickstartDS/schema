@@ -54,7 +54,7 @@ contentFields from page.schema.json seems wrong / incomplete
     folder: 'content',
     create: true,
     delete: true,
-    identifier_field: 'id',
+    identifier_field: 'title',
     extension: 'md',
     slug: 'page/{{slug}}',
     fields: contentFields,

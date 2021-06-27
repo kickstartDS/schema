@@ -21,6 +21,8 @@ import { err } from './helpers';
 import Ajv from 'ajv';
 import { createHash } from "crypto";
 
+const typeResolutionField = 'type';
+
 /** Maps basic JSON schema types to basic GraphQL types */
 const BASIC_TYPE_MAPPING = {
   string: GraphQLString,
@@ -32,7 +34,7 @@ const BASIC_TYPE_MAPPING = {
 const contentComponentInterface = new GraphQLInterfaceType({
   name: 'ContentComponent',
   fields: {
-    internalType: { type: GraphQLString }
+    type: { type: GraphQLString }
   },
 });
 
@@ -180,7 +182,7 @@ export function getSchemaReducer(ajv: Ajv) {
         objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
   
       if (contentComponent && objectSchema && objectSchema.properties)
-        objectSchema.properties.internalType = internalTypeDefinition;
+        objectSchema.properties[typeResolutionField] = internalTypeDefinition;
   
       return buildType(name, objectSchema, knownTypes, dedupeFieldNames, outerRun, outerSchema) as GraphQLObjectType;
     }
@@ -196,7 +198,7 @@ export function getSchemaReducer(ajv: Ajv) {
       const description = buildDescription(schema);
   
       if (contentComponent && schema && schema.properties)
-        schema.properties.internalType = internalTypeDefinition;
+        schema.properties[typeResolutionField] = internalTypeDefinition;
   
       const fields = () =>
         !_.isEmpty(schema.properties)

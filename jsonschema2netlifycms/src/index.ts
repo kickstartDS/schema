@@ -41,6 +41,8 @@ Re-check .yml before:
         types:
 
 contentFields from page.schema.json seems wrong / incomplete
+
+-> also need to re-check widget generation for `id`-field 
 */
 
   // TODO re-introduce `...defaultMetaFields` -> SEO
@@ -52,7 +54,7 @@ contentFields from page.schema.json seems wrong / incomplete
     folder: 'content',
     create: true,
     delete: true,
-    identifier_field: 'Id',
+    identifier_field: 'id',
     extension: 'md',
     slug: 'page/{{slug}}',
     fields: contentFields,

@@ -191,13 +191,13 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
           // only hit for `text-media > media`
           const fieldConfigs = arraySchemas.map((arraySchema) => {
             // TODO inline this into .map function call
-            return buildConfig('test', arraySchema, contentFields, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+            return buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
           });
 
           const field: NetlifyCmsField = {
             name,
             widget: 'list',
-            types: []
+            types: fieldConfigs,
           };
 
           if (outerSchema.default)

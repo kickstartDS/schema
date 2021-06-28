@@ -52,10 +52,10 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - generate-from-schema/dist
-            - graphql-cli-generate-fragments/dist
-            - jsonschema2graphql/build
-            - jsonschema2netlifycms/build
+            - generate-from-schema
+            - graphql-cli-generate-fragments
+            - jsonschema2graphql
+            - jsonschema2netlifycms
 
   release:
     <<: *defaults

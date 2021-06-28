@@ -13,7 +13,6 @@
   "files": ["dist"],
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
-    "directory": "dist",
     "access": "restricted"
   },
   "scripts": {

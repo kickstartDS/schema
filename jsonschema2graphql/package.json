@@ -24,7 +24,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "del build",
-    "prepublishOnly": "run-s clean build test",
     "reset": "git clean -dfx && git reset --hard && yarn install",
     "test": "jest",
     "watch": "run-s clean build && run-p \"build -- -w\" \"test --watch\""

@@ -1,0 +1,15 @@
+{
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "version": {
+      "message": "chore: new release",
+      "no-private": true
+    },
+    "publish": {
+      "verifyAccess": false,
+      "registry": "https://npm.pkg.github.com"
+    }
+  }
+}

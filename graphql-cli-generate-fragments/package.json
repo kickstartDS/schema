@@ -12,9 +12,13 @@
     "input": "./src/index.ts"
   },
   "publishConfig": {
+    "registry": "https://registry.npmjs.org",
     "directory": "dist",
-    "access": "public"
+    "access": "restricted"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc -d",

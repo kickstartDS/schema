@@ -10,9 +10,11 @@
   "buildOptions": {
     "input": "./src/index.ts"
   },
+  "files": ["dist"],
   "publishConfig": {
+    "registry": "https://registry.npmjs.org",
     "directory": "dist",
-    "access": "public"
+    "access": "restricted"
   },
   "scripts": {
     "build": "tsc -d",

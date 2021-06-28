@@ -19,6 +19,9 @@
   ],
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "trash build",
@@ -88,5 +91,9 @@
     "semi": false,
     "singleQuote": true,
     "trailingComma": "es5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "restricted"
   }
 }

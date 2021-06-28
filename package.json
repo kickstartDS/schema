@@ -36,5 +36,9 @@
     "@auto-it/released": "^10.29.3",
     "auto": "^10.29.3",
     "lerna": "^4.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "restricted"
   }
 }

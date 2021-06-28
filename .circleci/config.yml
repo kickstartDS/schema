@@ -73,6 +73,6 @@ workflows:
       - build
 
       - release:
-         context: kickstartDS-schema-toolkit
+         context: kickstartDS
          requires:
            - build

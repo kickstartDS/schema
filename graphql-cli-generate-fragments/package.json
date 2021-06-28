@@ -20,7 +20,6 @@
     "dist"
   ],
   "scripts": {
-    "prepublish": "npm run build",
     "build": "tsc -d",
     "pretest": "npm run build",
     "lint": "eslint -c .eslintrc.js --ext .ts src",

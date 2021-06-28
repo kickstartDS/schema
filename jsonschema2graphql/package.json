@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "clean": "trash build",
+    "clean": "del build",
     "prepublishOnly": "run-s clean build test",
     "reset": "git clean -dfx && git reset --hard && yarn install",
     "test": "jest",
@@ -51,6 +51,7 @@
     "@types/ramda": "^0.27.40",
     "@types/uppercamelcase": "^3.0.0",
     "babel-jest": "^27.0.2",
+    "del-cli": "^4.0.0",
     "fs-extra": "^10.0.0",
     "gh-pages": "^3.2.0",
     "jest": "27.0.4",
@@ -60,7 +61,6 @@
     "opn-cli": "^5.0.0",
     "prettier": "^2.3.0",
     "tmp-promise": "^3.0.2",
-    "trash-cli": "^4.0.0",
     "ts-jest": "27.0.2",
     "typescript": "^4.3.2"
   },

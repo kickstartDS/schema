@@ -1,3 +1,45 @@
+# v1.1.2 (Mon Jun 28 2021)
+
+#### 🐛 Bug Fix
+
+- build: add auto release [#1](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/1) ([@lmestel](https://github.com/lmestel))
+- build: set up private npm packages ([@lmestel](https://github.com/lmestel))
+
+#### ⚠️ Pushed to `master`
+
+- ci: remove `prepublishOnly` hook ([@lmestel](https://github.com/lmestel))
+- build: replace trash-cli with del-cli ([@lmestel](https://github.com/lmestel))
+- feat(netlify-cms): makes conversion compatible with gatsby theme ([@julrich](https://github.com/julrich))
+- fix: always clone schema before transforming ([@julrich](https://github.com/julrich))
+- chore: remove last remaining bit of js ([@julrich](https://github.com/julrich))
+- chore: rename / re-arrange some stuff ([@julrich](https://github.com/julrich))
+- feat: clean up section and content element schema relations ([@julrich](https://github.com/julrich))
+- fix: detect missing content components ([@julrich](https://github.com/julrich))
+- fix: almost there, much better generated types ([@julrich](https://github.com/julrich))
+- fix: fix unique fieldName generation ([@julrich](https://github.com/julrich))
+- chore: remove unused variable ([@julrich](https://github.com/julrich))
+- fix: suffix all fields on content components ([@julrich](https://github.com/julrich))
+- chore: add a few more comments ([@julrich](https://github.com/julrich))
+- feat: compatibility with direct usage in gatsby ([@julrich](https://github.com/julrich))
+- feat: dedupe fieldNames in content component types ([@julrich](https://github.com/julrich))
+- feat: move field-collision solution ([@julrich](https://github.com/julrich))
+- feat: clean up schema ([@julrich](https://github.com/julrich))
+- fix: add "faker" keyword to ajv ([@julrich](https://github.com/julrich))
+- chore(dependencies): update and harmonize all deps ([@julrich](https://github.com/julrich))
+- feat: add fork of graphql-cli-generate-fragments ([@julrich](https://github.com/julrich))
+- fix: fix reducer ([@julrich](https://github.com/julrich))
+- fix: patch up some more ([@julrich](https://github.com/julrich))
+- fix: more minor cleanup ([@julrich](https://github.com/julrich))
+- feat: almost have this converting something meaningful ([@julrich](https://github.com/julrich))
+- feat: initial commit ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # Change Log
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.

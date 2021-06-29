@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/graphql-cli-generate-fragments",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Plugin for graphql-cli to generate fragments",
   "main": "dist/index.js",
   "module": "dist/index.js",

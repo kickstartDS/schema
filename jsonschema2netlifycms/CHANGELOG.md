@@ -1,3 +1,15 @@
+# v1.0.2 (Tue Jun 29 2021)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of https://github.com/kickstartDS/kickstartDS-schema-toolkit ([@lmestel](https://github.com/lmestel))
+
+#### Authors: 1
+
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v1.0.1 (Mon Jun 28 2021)
 
 #### 🐛 Bug Fix

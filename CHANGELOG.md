@@ -1,3 +1,16 @@
+# (Tue Jun 29 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@0.0.3`, `@kickstartds/graphql-cli-generate-fragments@1.4.3`, `@kickstartds/jsonschema2graphql@1.1.3`, `@kickstartds/jsonschema2netlifycms@1.0.2`
+  - Merge branch 'master' of https://github.com/kickstartDS/kickstartDS-schema-toolkit ([@lmestel](https://github.com/lmestel))
+
+#### Authors: 1
+
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # (Mon Jun 28 2021)
 
 #### 🐛 Bug Fix

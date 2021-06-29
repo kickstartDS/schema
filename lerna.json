@@ -8,8 +8,7 @@
       "no-private": true
     },
     "publish": {
-      "verifyAccess": false,
-      "registry": "https://npm.pkg.github.com"
+      "verifyAccess": false
     }
   }
 }

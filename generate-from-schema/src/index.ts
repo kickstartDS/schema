@@ -68,7 +68,8 @@ const addSchema = async (schemaPath: string) => {
 
 (async () => {
   const [, , param] = process.argv;
-  const schemaGlob = `node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
+  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
+  const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
   if (param === '--watch') {
     chokidar
       .watch(schemaGlob, { ignoreInitial: true })

@@ -1,8 +1,8 @@
 # ./.graphqlrc.yml
-schema: "../dist/page.graphql"
+schema: "./dist/page.graphql"
 extensions:
   codegen:
     generates:
-      ../dist/page.fragments.js:
+      ./dist/page.fragments.js:
         plugins:
           - "@kickstartds/graphql-cli-generate-fragments"

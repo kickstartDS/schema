@@ -22,7 +22,43 @@ ajv.addKeyword('faker', {
   type: 'string',
   validate: () => true,
   errors: false,
-})
+});
+
+const pageSchema = {
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "http://frontend.ruhmesmeile.com/page.schema.json",
+  title: "Page",
+  description: "Abstracts a page concept into JSON schema",
+  type: "object",
+  required: ["id", "layout"],
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Id for the page",
+      format: "id"
+    },
+    layout: {
+      type: "string",
+      title: "Layout",
+      description: "Choose a layout for the page",
+      default: "default"
+    },
+    title: {
+      type: "string",
+      title: "Title",
+      description: "Title for the page"
+    },
+    sections: {
+      type: "array",
+      title: "Sections",
+      description: "Collection of sections making up the content of the page",
+      items: {
+        $ref: "http://frontend.ruhmesmeile.com/base/base/section.schema.json"
+      }
+    }
+  }
+};
 
 const addSchema = async (schemaPath: string) => {
   const schema = await fs.readJSON(schemaPath);
@@ -32,7 +68,8 @@ const addSchema = async (schemaPath: string) => {
 
 (async () => {
   const [, , param] = process.argv;
-  const schemaGlob = '../node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json';
+  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
+  const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
   if (param === '--watch') {
     chokidar
       .watch(schemaGlob, { ignoreInitial: true })
@@ -44,20 +81,19 @@ const addSchema = async (schemaPath: string) => {
     const schemaPaths = await glob(schemaGlob);
     const schemaJsons = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchema(schemaPath)));
 
-    const pageSchema = await fs.readJSON('../example/page.schema.json');
     ajv.addSchema(pageSchema);
     ajv.validateSchema(pageSchema);
 
     const gql = convertToGraphQL({ jsonSchema: schemaJsons, ajv });
     fs.writeFile(
-      `../dist/page.graphql`,
+      `dist/page.graphql`,
       printSchema(gql).replace(/`/g, "'")
     );
 
     schemaJsons.push(pageSchema);
     const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons, ajv });
     fs.writeFile(
-      `../dist/config.generated.yml`,
+      `dist/config.generated.yml`,
       netlifyAdminConfig,
     );
   }

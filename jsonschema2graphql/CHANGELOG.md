@@ -1,3 +1,19 @@
+# v1.2.0 (Wed Jun 30 2021)
+
+#### 🚀 Enhancement
+
+- Make the different commands useful when used as dependency [#2](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/2) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: update ts build configs ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.1.3 (Tue Jun 29 2021)
 
 #### ⚠️ Pushed to `master`

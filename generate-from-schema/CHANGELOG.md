@@ -1,3 +1,21 @@
+# v0.1.0 (Wed Jun 30 2021)
+
+#### 🚀 Enhancement
+
+- Make the different commands useful when used as dependency [#2](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/2) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: use local dist paths throughout ([@julrich](https://github.com/julrich))
+- fix: path handling improved ([@julrich](https://github.com/julrich))
+- fix: update paths used by cli ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.0.3 (Tue Jun 29 2021)
 
 #### ⚠️ Pushed to `master`

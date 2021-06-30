@@ -1,3 +1,16 @@
+# (Wed Jun 30 2021)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@0.1.0`, `@kickstartds/jsonschema2graphql@1.2.0`, `@kickstartds/jsonschema2netlifycms@1.1.0`
+  - Make the different commands useful when used as dependency [#2](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/2) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Tue Jun 29 2021)
 
 #### ⚠️ Pushed to `master`

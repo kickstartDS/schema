@@ -30,7 +30,7 @@ const pageSchema = {
   title: "Page",
   description: "Abstracts a page concept into JSON schema",
   type: "object",
-  required: ["id", "layout", "slug"],
+  required: ["id", "layout", "title", "slug"],
   properties: {
     id: {
       type: "string",

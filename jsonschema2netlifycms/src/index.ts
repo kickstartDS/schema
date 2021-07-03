@@ -50,7 +50,7 @@ function createConfig(
     folder: 'content',
     create: true,
     delete: true,
-    identifier_field: 'slug',
+    identifier_field: 'title',
     extension: 'md',
     slug: '{{fields.slug}}',
     fields: contentFields,

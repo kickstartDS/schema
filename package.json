@@ -26,9 +26,9 @@
     "example"
   ],
   "dependencies": {
-    "@kickstartds/base": "^1.0.0-alpha.28",
-    "@kickstartds/content": "^1.0.0-alpha.30",
-    "@kickstartds/core": "^1.0.0-alpha.16",
+    "@kickstartds/base": "^1.0.0",
+    "@kickstartds/content": "^1.0.0",
+    "@kickstartds/core": "^1.0.0",
     "concurrently": "^6.1.0"
   },
   "devDependencies": {

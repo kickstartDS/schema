@@ -91,9 +91,9 @@ const addSchema = async (schemaPath: string) => {
     );
 
     schemaJsons.push(pageSchema);
-    const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons, ajv });
+    const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons, ajv, configLocation: 'static/admin/config.yml' });
     fs.writeFile(
-      `dist/config.generated.yml`,
+      `dist/config.yml`,
       netlifyAdminConfig,
     );
   }

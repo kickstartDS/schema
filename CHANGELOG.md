@@ -1,3 +1,16 @@
+# (Sat Jul 03 2021)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@0.2.0`, `@kickstartds/jsonschema2netlifycms@1.2.0`
+  - feature: upgrade kickstartDS, read existing netlify cfg [#3](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/3) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Wed Jun 30 2021)
 
 #### 🚀 Enhancement

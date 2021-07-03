@@ -1,3 +1,20 @@
+# v1.2.0 (Sat Jul 03 2021)
+
+#### 🚀 Enhancement
+
+- feature: upgrade kickstartDS, read existing netlify cfg [#3](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/3) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: always write fields in netlify config ([@julrich](https://github.com/julrich))
+- feat: upgrade kickstartDS, read existing netlify cfg ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.1.0 (Wed Jun 30 2021)
 
 #### 🚀 Enhancement

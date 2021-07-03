@@ -52,7 +52,7 @@ function createConfig(
     delete: true,
     identifier_field: 'title',
     extension: 'md',
-    slug: '{{slug}}',
+    slug: '{{fields.slug}}',
     fields: contentFields,
   }
 

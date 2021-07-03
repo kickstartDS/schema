@@ -30,7 +30,7 @@ const pageSchema = {
   title: "Page",
   description: "Abstracts a page concept into JSON schema",
   type: "object",
-  required: ["id", "layout"],
+  required: ["id", "layout", "title", "slug"],
   properties: {
     id: {
       type: "string",
@@ -48,6 +48,11 @@ const pageSchema = {
       type: "string",
       title: "Title",
       description: "Title for the page"
+    },
+    slug: {
+      type: "string",
+      title: "Slug",
+      description: "URL slug for the page"
     },
     sections: {
       type: "array",

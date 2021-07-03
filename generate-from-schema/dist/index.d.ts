@@ -32,6 +32,11 @@ declare const pageSchema: {
             title: string;
             description: string;
         };
+        slug: {
+            type: string;
+            title: string;
+            description: string;
+        };
         sections: {
             type: string;
             title: string;

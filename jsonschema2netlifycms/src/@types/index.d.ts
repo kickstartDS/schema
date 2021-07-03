@@ -5,6 +5,7 @@ declare namespace jsonschema2netlifycms {
   export interface ConvertParams {
     jsonSchema: JSONSchema7 | JSONSchema7[] | string | string[]
     ajv: Ajv
+    configLocation?: string
   }
 
   // See https://www.marcveens.nl/netlify-cms-generate-config-yml

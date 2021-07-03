@@ -64,10 +64,11 @@ function createConfig(
     (collection) => collection.name === collectionName
   );
   if (pagesCollection) {
-    throw new Error(`Already a collection named "${collectionName}" defined!`);
-  } 
+    pagesCollection.fields = contentFields;
+  } else {
+    baseConfig.collections.push(pages);
+  }
   
-  baseConfig.collections.push(pages);
   return baseConfig;
 }
 

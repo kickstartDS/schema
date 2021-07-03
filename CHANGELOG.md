@@ -1,5 +1,18 @@
 # (Sat Jul 03 2021)
 
+#### 🐛 Bug Fix
+
+- `@kickstartds/generate-from-schema@0.2.1`, `@kickstartds/jsonschema2netlifycms@1.2.1`
+  - fix: add slug field to page schema json [#4](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/4) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Sat Jul 03 2021)
+
 #### 🚀 Enhancement
 
 - `@kickstartds/generate-from-schema@0.2.0`, `@kickstartds/jsonschema2netlifycms@1.2.0`

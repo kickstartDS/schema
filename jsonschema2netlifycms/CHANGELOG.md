@@ -1,3 +1,18 @@
+# v1.2.1 (Sat Jul 03 2021)
+
+#### 🐛 Bug Fix
+
+- fix: add slug field to page schema json [#4](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/4) ([@julrich](https://github.com/julrich))
+- fix: make title required ([@julrich](https://github.com/julrich))
+- fix: dodge naming conflict for slug field ([@julrich](https://github.com/julrich))
+- chore(types): update types ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.2.0 (Sat Jul 03 2021)
 
 #### 🚀 Enhancement

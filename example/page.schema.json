@@ -4,7 +4,7 @@
   "title": "Page",
   "description": "Abstracts a page concept into JSON schema",
   "type": "object",
-  "required": ["id", "layout"],
+  "required": ["id", "layout", "slug"],
   "properties": {
     "id": {
       "type": "string",
@@ -22,6 +22,11 @@
       "type": "string",
       "title": "Title",
       "description": "Title for the page"
+    },
+    "slug": {
+      "type": "string",
+      "title": "Title",
+      "description": "Slug for the page",
     },
     "sections": {
       "type": "array",

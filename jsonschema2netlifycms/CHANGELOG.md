@@ -1,3 +1,15 @@
+# v1.2.2 (Sun Jul 04 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: set required field on page fields correctly ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.2.1 (Sat Jul 03 2021)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,16 @@
+# (Sun Jul 04 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2netlifycms@1.2.2`
+  - fix: set required field on page fields correctly ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sat Jul 03 2021)
 
 #### 🐛 Bug Fix

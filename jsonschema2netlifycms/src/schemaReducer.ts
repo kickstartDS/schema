@@ -342,7 +342,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       if (description)
         field.hint = description;
 
-      field.required = schema.required?.includes(name) || false;
+      field.required = outerSchema.required?.includes(name) || false;
   
       return field;
     }

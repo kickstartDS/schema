@@ -140,7 +140,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
       const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
       
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'link-button') {
+      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'link-button' && name !== 'section') {
         field.fields.push(getInternalTypeDefinition(name));
       }
 

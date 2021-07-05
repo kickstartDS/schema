@@ -39,6 +39,9 @@
     "auto": "^10.29.3",
     "lerna": "^4.0.0"
   },
+  "resolutions": {
+    "graphql": "15.5.1"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "restricted"

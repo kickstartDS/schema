@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7TypeName, JSONSchema7Definition } from 'json-schema';
+import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
@@ -6,12 +6,6 @@ import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
 
 const typeResolutionField = 'type';
-
-const internalTypeDefinition: JSONSchema7Definition = {
-  "type": "string",
-  "title": "Internal type",
-  "description": "Internal type for interface resolution",
-};
 
 interface TypeMapping {
   boolean: string;
@@ -31,7 +25,7 @@ const mapping: TypeMapping = {
 
 const getInternalTypeDefinition = (type: string): NetlifyCmsField => {
   return {
-    name: 'type',
+    name: typeResolutionField,
     widget: 'hidden',
     description: 'Internal type for interface resolution',
     default: type,
@@ -144,7 +138,13 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       };
   
       const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
-      return buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+      const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+      
+      if ((contentComponent || sectionComponent) && field && field.fields) {
+        field.fields.push(getInternalTypeDefinition(name));
+      }
+
+      return field
     }
   
     // not?
@@ -160,9 +160,11 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       const fields = (): NetlifyCmsField[] =>
         !_.isEmpty(schema.properties)
           ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
-              // TODO inline those two into .map call
               const objectSchema = _.cloneDeep(prop);
-              return buildConfig(fieldName, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+              const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
+              const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
+
+              return buildConfig(fieldName, objectSchema, contentFields, isOuterRun, schemaOuter);
             })
           : [];
 
@@ -173,9 +175,10 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
         fields: fields(),
       };
 
-      if ((contentComponent || sectionComponent) && field && field.fields)
+      if ((contentComponent || sectionComponent) && field && field.fields) {
         field.fields.push(getInternalTypeDefinition(name));
-
+      }
+        
       if (schema.default)
         field.default = schema.default as string;
 
@@ -250,7 +253,16 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       } else {
         const description = buildDescription(outerSchema);
         const arraySchema = schema.items as JSONSchema7;
-        const fieldConfig = buildConfig(name, arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+        const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
+        const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
+
+        let fieldConfig;
+        if (arraySchema.$ref) {
+          const resolvedSchema = ajv.getSchema(arraySchema.$ref as string)?.schema as JSONSchema7;
+          fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter);
+        } else {
+          fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter);
+        }
 
         const field: NetlifyCmsField = {
           label: toPascalCase(name),

@@ -1,3 +1,20 @@
+# v1.2.3 (Mon Jul 05 2021)
+
+#### 🐛 Bug Fix
+
+- fix/types in netlify cms config [#5](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/5) ([@julrich](https://github.com/julrich))
+- fix: re-add type on link-button ([@julrich](https://github.com/julrich))
+- fix: remove yet another duplicate type definition ([@julrich](https://github.com/julrich))
+- fix: remove type on link-button, too ([@julrich](https://github.com/julrich))
+- fix: don't add type on button, for now ([@julrich](https://github.com/julrich))
+- fix: add types to nested content components for netlify cms ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.2.2 (Sun Jul 04 2021)
 
 #### ⚠️ Pushed to `master`

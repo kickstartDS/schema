@@ -1,3 +1,20 @@
+# (Mon Jul 05 2021)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/jsonschema2netlifycms@1.2.3`
+  - fix/types in netlify cms config [#5](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/5) ([@julrich](https://github.com/julrich))
+
+#### ⚠️ Pushed to `master`
+
+- chore(dependencies): update kickstartds modules ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Jul 04 2021)
 
 #### ⚠️ Pushed to `master`

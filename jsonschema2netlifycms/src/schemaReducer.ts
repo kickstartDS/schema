@@ -140,7 +140,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
       const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
       
-      if ((contentComponent || sectionComponent) && field && field.fields) {
+      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button') {
         field.fields.push(getInternalTypeDefinition(name));
       }
 
@@ -223,11 +223,9 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
           return field;
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
-          // only hit for `text-media > media`
-          const fieldConfigs = arraySchemas.map((arraySchema) => {
-            // TODO inline this into .map function call
-            return buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
-          });
+          const fieldConfigs = arraySchemas.map((arraySchema) =>
+            buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema)
+          );
 
           const field: NetlifyCmsField = {
             name,

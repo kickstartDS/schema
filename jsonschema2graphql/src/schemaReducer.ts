@@ -10,11 +10,6 @@ import {
   GraphQLType,
   GraphQLUnionType,
   GraphQLInterfaceType,
-  GraphQLScalarType,
-  print,
-  printType,
-  printSchema,
-  InterfaceTypeDefinitionNode,
 } from 'graphql';
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import _ from 'lodash';
@@ -280,11 +275,6 @@ export function getSchemaReducer(ajv: Ajv) {
 
     // image source?
     else if (gatsbyImages && schema.type as string === 'string' && schema.format === 'image') {
-      console.log(name, BASIC_TYPE_MAPPING[schema.type as string]);
-      gatsbyFileInterface.extensions = {
-        'fileByRelativePath': true
-      }
-      console.log('gatsbyFileInterface', print(gatsbyFileInterface.astNode as InterfaceTypeDefinitionNode));
       return gatsbyFileInterface;
     }
   

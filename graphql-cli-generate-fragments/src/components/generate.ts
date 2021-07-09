@@ -324,6 +324,23 @@ ${fragment}`
     }
 
     if (constructorName === "GraphQLInterfaceType") {
+      let typeName = internalField
+        ? internalField.name && internalField.name.value
+        : (field.astNode.type as NamedTypeNode).name.value;
+
+      if (typeName === 'File') {
+        return `
+${fieldName} {
+  childImageSharp {
+    gatsbyImageData(
+      width: 400
+    )
+  }
+}`;
+      }
+    }
+
+    if (constructorName === "GraphQLInterfaceType") {
       const interfaceType = (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value;
       const implementations = ast.getImplementations(ast.getType(interfaceType) as GraphQLInterfaceType) as InterfaceImplementations;
 

@@ -6,3 +6,6 @@ extensions:
       ./dist/page.fragments.js:
         plugins:
           - "@kickstartds/graphql-cli-generate-fragments"
+      ./dist/page.gatsby.graphql:
+        plugins:
+          - "@kickstartds/graphql-cli-add-gatsby-directives"

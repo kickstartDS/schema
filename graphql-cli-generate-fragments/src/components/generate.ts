@@ -330,13 +330,13 @@ ${fragment}`
 
       if (typeName === 'File') {
         return `
-${fieldName} {
-  childImageSharp {
-    gatsbyImageData(
-      width: 400
-    )
-  }
-}`;
+  ${fieldName} {
+    childImageSharp {
+      gatsbyImageData(
+        width: 400
+      )
+    }
+  }`;
       }
     }
 

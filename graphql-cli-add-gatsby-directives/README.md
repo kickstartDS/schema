@@ -2,6 +2,7 @@
 
 Add directives for Gatsby support
 
+
 ## Installation
 
 ```npm i -g graphql-cli graphql-cli-add-gatsby-fragments```

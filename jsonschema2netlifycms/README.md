@@ -2,6 +2,7 @@
 
 This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Netlify CMS admin config.yml]().
 
+
 ## Installation
 
 Install with yarn:

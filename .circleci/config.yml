@@ -54,6 +54,7 @@ jobs:
           paths:
             - generate-from-schema
             - graphql-cli-generate-fragments
+            - graphql-cli-add-gatsby-directives
             - jsonschema2graphql
             - jsonschema2netlifycms
 

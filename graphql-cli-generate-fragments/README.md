@@ -2,6 +2,7 @@
 
 Generates GraphQL fragments for each type in the project schema.
 
+
 ## Installation
 
 ```npm i -g graphql-cli graphql-cli-generate-fragments```

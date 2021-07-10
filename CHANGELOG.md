@@ -1,5 +1,18 @@
 # (Sat Jul 10 2021)
 
+#### 🐛 Bug Fix
+
+- `@kickstartds/generate-from-schema@0.3.1`, `@kickstartds/graphql-cli-add-gatsby-directives@1.1.1`, `@kickstartds/graphql-cli-generate-fragments@1.5.1`, `@kickstartds/jsonschema2graphql@1.3.1`, `@kickstartds/jsonschema2netlifycms@1.2.4`
+  - fix: wasn't building yet [#7](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/7) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Sat Jul 10 2021)
+
 #### 🚀 Enhancement
 
 - `@kickstartds/generate-from-schema@0.3.0`, `@kickstartds/graphql-cli-add-gatsby-directives@1.1.0`, `@kickstartds/graphql-cli-generate-fragments@1.5.0`, `@kickstartds/jsonschema2graphql@1.3.0`

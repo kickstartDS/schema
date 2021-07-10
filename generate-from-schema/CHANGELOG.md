@@ -1,3 +1,16 @@
+# v0.3.1 (Sat Jul 10 2021)
+
+#### 🐛 Bug Fix
+
+- fix: wasn't building yet [#7](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/7) ([@julrich](https://github.com/julrich))
+- fix: wasn't building yet ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.3.0 (Sat Jul 10 2021)
 
 #### 🚀 Enhancement

@@ -1,3 +1,20 @@
+# v1.3.0 (Sat Jul 10 2021)
+
+#### 🚀 Enhancement
+
+- feature/add gatsby image support [#6](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/6) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- feature: add initial GraphQL image support ([@julrich](https://github.com/julrich))
+- fix: update info in jsonschema2graphql ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.2.0 (Wed Jun 30 2021)
 
 #### 🚀 Enhancement

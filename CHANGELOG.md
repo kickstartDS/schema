@@ -1,3 +1,16 @@
+# (Sat Jul 10 2021)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@0.3.0`, `@kickstartds/graphql-cli-add-gatsby-directives@1.1.0`, `@kickstartds/graphql-cli-generate-fragments@1.5.0`, `@kickstartds/jsonschema2graphql@1.3.0`
+  - feature/add gatsby image support [#6](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/6) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Mon Jul 05 2021)
 
 #### 🐛 Bug Fix

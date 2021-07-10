@@ -38,6 +38,11 @@ const contentComponentInterface = new GraphQLInterfaceType({
   },
 });
 
+const gatsbyFileInterface = new GraphQLInterfaceType({
+  name: 'File',
+  fields: {}
+});
+
 const internalTypeDefinition: JSONSchema7Definition = {
   "type": "string",
   "title": "Internal type",
@@ -45,8 +50,9 @@ const internalTypeDefinition: JSONSchema7Definition = {
 };
 
 const allDefinitions = {};
-// TODO should be an (cli) option
+// TODO these should be (cli) options
 const shouldDedupe = true;
+const gatsbyImages = true;
 
 export function cleanFieldName(name: string): string {
   return name.replace(/__.*/i, '');
@@ -265,6 +271,11 @@ export function getSchemaReducer(ajv: Ajv) {
         if (!type) throw err(`The referenced type ${ref} is unknown.`, name);
         return type;
       }
+    }
+
+    // image source?
+    else if (gatsbyImages && schema.type as string === 'string' && schema.format === 'image') {
+      return gatsbyFileInterface;
     }
   
     // basic?

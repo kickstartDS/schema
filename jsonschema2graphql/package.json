@@ -2,16 +2,10 @@
   "name": "@kickstartds/jsonschema2graphql",
   "version": "1.2.0",
   "description": "Converts JSON schema to GraphQL types",
-  "repository": "github:HerbCaudill/jsonschema2graphql",
-  "homepage": "https://github.com/HerbCaudill/jsonschema2graphql#readme",
-  "bugs": {
-    "url": "https://github.com/HerbCaudill/jsonschema2graphql/issues"
-  },
   "author": {
-    "name": "Herb Caudill",
-    "email": "herb@devresults.com"
+    "name": "Jonas Ulrich",
+    "email": "jonas.ulrich@ruhmesmeile.com"
   },
-  "license": "MIT",
   "keywords": [
     "json-schema",
     "graphql"

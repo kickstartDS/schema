@@ -18,12 +18,6 @@ ignoredFormats.forEach((ignoredFormat) =>
   ajv.addFormat(ignoredFormat, { validate: () => true })
 );
 
-// ajv.addKeyword('faker', {
-//   type: 'string',
-//   validate: () => true,
-//   errors: false,
-// });
-
 ajv.addKeyword({
   keyword: "faker",
   schemaType: "string",

@@ -21,6 +21,5 @@ const addFileDirectives = (schema: GraphQLSchema) => {
   return newSchema;
 };
 
-export const augment = (schema: GraphQLSchema) => {
-  return printSchemaWithDirectives(addFileDirectives(schema));
-};
+export const augment = (schema: GraphQLSchema) =>
+  printSchemaWithDirectives(addFileDirectives(schema));

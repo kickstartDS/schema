@@ -13,16 +13,22 @@ const ajv = new Ajv({
   allErrors: true
 });
 
-const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id'];
+const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email'];
 ignoredFormats.forEach((ignoredFormat) =>
   ajv.addFormat(ignoredFormat, { validate: () => true })
 );
 
-ajv.addKeyword('faker', {
-  type: 'string',
+// ajv.addKeyword('faker', {
+//   type: 'string',
+//   validate: () => true,
+//   errors: false,
+// });
+
+ajv.addKeyword({
+  keyword: "faker",
+  schemaType: "string",
   validate: () => true,
-  errors: false,
-});
+})
 
 const pageSchema = {
   $schema: "http://json-schema.org/draft-07/schema#",

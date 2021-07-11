@@ -1,3 +1,16 @@
+# v1.1.2 (Sun Jul 11 2021)
+
+#### 🐛 Bug Fix
+
+- fix: remove unused types in gatsby [#8](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/8) ([@julrich](https://github.com/julrich))
+- fix: interface File, and schema query removed ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.1.1 (Sat Jul 10 2021)
 
 #### 🐛 Bug Fix

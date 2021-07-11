@@ -1,3 +1,16 @@
+# (Sun Jul 11 2021)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/graphql-cli-add-gatsby-directives@1.1.2`
+  - fix: remove unused types in gatsby [#8](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/8) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sat Jul 10 2021)
 
 #### 🐛 Bug Fix

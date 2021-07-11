@@ -1,5 +1,19 @@
 # (Sun Jul 11 2021)
 
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@0.3.3`
+  - chore: remove commented, old code ([@julrich](https://github.com/julrich))
+  - fix: update and fix ajv ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Sun Jul 11 2021)
+
 #### 🐛 Bug Fix
 
 - `@kickstartds/graphql-cli-add-gatsby-directives@1.1.2`

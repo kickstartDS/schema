@@ -332,9 +332,7 @@ ${fragment}`
         return `
   ${fieldName} {
     childImageSharp {
-      gatsbyImageData(
-        width: 400
-      )
+      gatsbyImageData
     }
   }`;
       }

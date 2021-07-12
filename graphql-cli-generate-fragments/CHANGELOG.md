@@ -1,3 +1,16 @@
+# v1.5.2 (Mon Jul 12 2021)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: remove limit on image width for now ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.1 (Sat Jul 10 2021)
 
 #### 🐛 Bug Fix

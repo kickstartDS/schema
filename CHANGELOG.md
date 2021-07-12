@@ -1,3 +1,22 @@
+# (Mon Jul 12 2021)
+
+#### 🐛 Bug Fix
+
+- fix: trigger release for image change [#11](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/11) ([@julrich](https://github.com/julrich))
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@0.3.4`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- `@kickstartds/graphql-cli-generate-fragments@1.5.2`
+  - fix: remove limit on image width for now ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Jul 11 2021)
 
 #### ⚠️ Pushed to `master`

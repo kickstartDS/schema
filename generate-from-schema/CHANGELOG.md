@@ -1,3 +1,16 @@
+# v0.3.3 (Sun Jul 11 2021)
+
+#### ⚠️ Pushed to `master`
+
+- chore: remove commented, old code ([@julrich](https://github.com/julrich))
+- fix: update and fix ajv ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.3.1 (Sat Jul 10 2021)
 
 #### 🐛 Bug Fix

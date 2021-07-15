@@ -173,6 +173,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
         name,
         widget: widgetMapping(schema),
         fields: fields(),
+        collapsed: true,
       };
 
       if ((contentComponent || sectionComponent) && field && field.fields) {

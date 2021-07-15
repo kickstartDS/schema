@@ -1,5 +1,18 @@
 # (Thu Jul 15 2021)
 
+#### 🐛 Bug Fix
+
+- `@kickstartds/jsonschema2netlifycms@1.3.1`
+  - fix(netlify-cms): fix unsafe enum default keys [#14](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/14) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Thu Jul 15 2021)
+
 #### 🚀 Enhancement
 
 - `@kickstartds/jsonschema2netlifycms@1.3.0`

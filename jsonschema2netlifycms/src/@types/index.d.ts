@@ -59,6 +59,7 @@ declare namespace jsonschema2netlifycms {
     description?: string
     widget: WidgetType
     default?: string | string[] | number
+    collapsed?: boolean
     required?: boolean
     hint?: string
     pattern?: string

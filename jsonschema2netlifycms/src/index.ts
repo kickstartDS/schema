@@ -59,12 +59,42 @@ function createConfig(
   if (!baseConfig.collections) {
     baseConfig.collections = [];
   }
+
+  const sortable = (field: NetlifyCmsField) => field.widget === 'object' || field.widget === 'list';
+  const sortFields = (contentFieldA: NetlifyCmsField, contentFieldB: NetlifyCmsField) => {
+    if (sortable(contentFieldA) && sortable(contentFieldB)) {
+      return contentFieldA.name > contentFieldB.name ? 1 : -1;
+    } else if (sortable(contentFieldA) && !sortable(contentFieldB)) {
+      return 1;
+    } else if (!sortable(contentFieldA) && sortable(contentFieldB)) {
+      return -1;
+    } else {
+      return contentFieldA.name > contentFieldB.name ? 1 : -1;
+    }
+  };
+  const sortFieldsDeep = (fields: NetlifyCmsField[]) => {
+    const sortedFields = fields.sort(sortFields);
+
+    sortedFields.forEach((sortedField) => {
+      if (sortedField.widget === 'list' && sortedField.types) {
+        sortedField.types = sortFieldsDeep(sortedField.types);
+      } else if (sortedField.widget === 'list' && sortedField.fields) {
+        sortedField.fields = sortFieldsDeep(sortedField.fields);
+      } else if (sortedField.widget === 'object' && sortedField.fields) {
+        sortedField.fields = sortFieldsDeep(sortedField.fields);
+      }
+    });
+
+    return sortedFields;
+  };
+
+  const sortedFields = sortFieldsDeep(contentFields);
   
   let pagesCollection = baseConfig.collections.find(
     (collection) => collection.name === collectionName
   );
   if (pagesCollection) {
-    pagesCollection.fields = contentFields;
+    pagesCollection.fields = sortedFields;
   } else {
     baseConfig.collections.push(pages);
   }

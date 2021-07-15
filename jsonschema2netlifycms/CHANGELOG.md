@@ -1,3 +1,19 @@
+# v1.3.0 (Thu Jul 15 2021)
+
+#### 🚀 Enhancement
+
+- feature(netlify-cms): collapse objects, sort fields [#13](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/13) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- feature(netlify-cms): collapse objects, sort fields ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.2.4 (Sat Jul 10 2021)
 
 #### 🐛 Bug Fix

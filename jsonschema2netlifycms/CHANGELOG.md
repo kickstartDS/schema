@@ -1,3 +1,15 @@
+# v1.3.2 (Thu Jul 15 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: update kickstartDS deps, more sorting ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.3.1 (Thu Jul 15 2021)
 
 #### 🐛 Bug Fix

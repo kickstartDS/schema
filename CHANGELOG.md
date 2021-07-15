@@ -1,5 +1,18 @@
 # (Thu Jul 15 2021)
 
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2netlifycms@1.3.2`
+  - fix: update kickstartDS deps, more sorting ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Thu Jul 15 2021)
+
 #### 🐛 Bug Fix
 
 - `@kickstartds/jsonschema2netlifycms@1.3.1`

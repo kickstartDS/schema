@@ -61,9 +61,18 @@ function createConfig(
   }
 
   const sortable = (field: NetlifyCmsField) => field.widget === 'object' || field.widget === 'list';
+  
   const sortFields = (contentFieldA: NetlifyCmsField, contentFieldB: NetlifyCmsField) => {
     if (sortable(contentFieldA) && sortable(contentFieldB)) {
-      return contentFieldA.name > contentFieldB.name ? 1 : -1;
+      if (contentFieldA.widget === 'object' && contentFieldB.widget ==='object') {
+        return contentFieldA.name > contentFieldB.name ? 1 : -1;
+      } else if (contentFieldA.widget === 'object' && contentFieldB.widget === 'list') {
+        return -1;
+      } else if (contentFieldA.widget === 'list' && contentFieldB.widget ==='object') {
+        return 1;
+      } else {
+        return contentFieldA.name > contentFieldB.name ? 1 : -1;
+      }
     } else if (sortable(contentFieldA) && !sortable(contentFieldB)) {
       return 1;
     } else if (!sortable(contentFieldA) && sortable(contentFieldB)) {
@@ -72,6 +81,7 @@ function createConfig(
       return contentFieldA.name > contentFieldB.name ? 1 : -1;
     }
   };
+
   const sortFieldsDeep = (fields: NetlifyCmsField[]) => {
     const sortedFields = fields.sort(sortFields);
 

@@ -303,7 +303,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
       }
 
       if (schema.default)
-        field.default = schema.default as string;
+        field.default = safeEnumKey(schema.default as string);
 
       if (description)
         field.hint = description;

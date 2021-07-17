@@ -131,9 +131,6 @@ export function getSchemaReducer(ajv: Ajv) {
     }
   
     // anyOf?
-    // TODO this adds e.g. `Video`, `Image` and `LightboxImage` instead of
-    // `TextMediaComponentMediaVideo`, `TextMediaComponentMediaImage` and
-    // `TextMediaComponentMediaLightboxImage` (for TextMediaComponent)
     else if (!_.isUndefined(schema.anyOf)) {
       const description = buildDescription(schema);
   

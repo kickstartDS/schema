@@ -1,3 +1,15 @@
+# v1.5.3 (Sat Jul 17 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix(fragments): add missing publicURL to image fragment ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.2 (Mon Jul 12 2021)
 
 #### ⚠️ Pushed to `master`

@@ -1,5 +1,18 @@
 # (Sat Jul 17 2021)
 
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/graphql-cli-generate-fragments@1.5.3`
+  - fix(fragments): add missing publicURL to image fragment ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Sat Jul 17 2021)
+
 #### 🚀 Enhancement
 
 - `@kickstartds/jsonschema2graphql@1.4.0`, `@kickstartds/jsonschema2netlifycms@1.4.0`

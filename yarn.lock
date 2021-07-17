@@ -1250,14 +1250,14 @@
   resolved "https://registry.npmjs.org/@juggle/resize-observer/-/resize-observer-3.3.1.tgz#b50a781709c81e10701004214340f25475a171a0"
   integrity sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==
 
-"@kickstartds/base@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.1.1.tgz#5faa5d97462b03dbba6bfb8ae7cc25cae1f27643"
-  integrity sha512-dMgiKnpcRpZ0Hrk4v7UgjdwyL3/AO13q76MmhtKUapkn9vssoQ7/qmhUJygjuZ8RDdxftA58f99ki++8JY57Zg==
+"@kickstartds/base@1.2.0-canary.163.1302.0":
+  version "1.2.0-canary.163.1302.0"
+  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.2.0-canary.163.1302.0.tgz#62f59c1f7ebee52507d52652ffefd83987e3ebe8"
+  integrity sha512-1wM08QmxLV8A4EPGkBxC3wzIqdwH+gQMEetDLve4ztBStTAcuWslad6V8aHMsQVUh2OfwqZrSpVjuGrb9yyfcg==
   dependencies:
     "@babel/runtime" "^7.13.17"
     "@glidejs/glide" "git://github.com/glidejs/glide.git#master"
-    "@kickstartds/core" "^1.1.1"
+    "@kickstartds/core" "1.2.0-canary.163.1302.0"
     classnames "^2.2.6"
     css-element-queries "^1.2.3"
     date-fns "^2.19.0"
@@ -1271,96 +1271,33 @@
     simplebar "^5.0.7"
     stickybits "^3.7.0"
 
-"@kickstartds/base@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.1.2.tgz#1c07e781bb04c1e10f6490b052c5e07162d789a9"
-  integrity sha512-xTFzpDV0ZQ7Kb54QT/Aow1Dk+/V85NiTIocpg2yuFzmWC3KjXZSa8Nq7krgvw4cyWRQx59rgOf6CDklojn3+Gg==
+"@kickstartds/blog@1.2.0-canary.163.1302.0":
+  version "1.2.0-canary.163.1302.0"
+  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.2.0-canary.163.1302.0.tgz#99ebdd2f1431da1803f8222dfca3cb41bf31d7d0"
+  integrity sha512-75CRr6AATw7ZutPlu6IvsLDNHDo6WhqeI79OGKdjJ43mTCwDYSE5nUbwb49Jr/1Oyo10z2BIsNxpiknmYRbn/w==
   dependencies:
     "@babel/runtime" "^7.13.17"
-    "@glidejs/glide" "git://github.com/glidejs/glide.git#master"
-    "@kickstartds/core" "^1.1.2"
-    classnames "^2.2.6"
-    css-element-queries "^1.2.3"
-    date-fns "^2.19.0"
-    focus-visible "^5.0.2"
-    formbouncerjs "^1.4.6"
-    lodash-es "^4.17.21"
-    objectFitPolyfill "^2.3.0"
-    photoswipe "^4.1.3"
-    pikaday "^1.8.0"
-    react-markdown "^5.0.3"
-    simplebar "^5.3.5"
-    stickybits "^3.7.0"
-
-"@kickstartds/blog@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.1.2.tgz#94bb71e68d0a40bb5f4bb2f6f5b9d5f1f80a1c2a"
-  integrity sha512-pHedhQbUjavd8tM4K9ru+dBi9menzTCmbucla2xeZn4EYqZVTQYhPWpgqzmA0dkvWOJ/9wDfhNIG6TtsgWUrUA==
-  dependencies:
-    "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.1.1"
-    "@kickstartds/core" "^1.1.1"
+    "@kickstartds/base" "1.2.0-canary.163.1302.0"
+    "@kickstartds/core" "1.2.0-canary.163.1302.0"
     date-fns "^2.19.0"
 
-"@kickstartds/blog@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.1.3.tgz#d83e1fc94309260142f6aa2df96514c0319f2f12"
-  integrity sha512-hlk2V6UAw3H402F+O25yLfMcTx9ThM4efuIP6IcBPuHMsKzytD7F8U6SwWSwrPiXn0mPSR+5bAW2TsLguFslig==
+"@kickstartds/content@1.2.0-canary.163.1302.0":
+  version "1.2.0-canary.163.1302.0"
+  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.2.0-canary.163.1302.0.tgz#c34ec9bab8cec11062a934bfe2110eb4885353fa"
+  integrity sha512-kCxDpIl0niNPTazFVbdcifwR5dlbnNUbXC2vdcnHdteloE0mj6CZgm8WtF+gsxmciXhWAnX7Ag1n9pfyoV/Uwg==
   dependencies:
     "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.1.2"
-    "@kickstartds/core" "^1.1.2"
-    date-fns "^2.19.0"
-
-"@kickstartds/content@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.1.1.tgz#471dcc226bf11b1feb71d69c655ed5dc5cd25070"
-  integrity sha512-15aJWwR2Q/SXrJ4rlWNnAnYSwlOo1sn/e7BMDgbjivdCBqF+yB+lNoLr97cVEN/jZRtTrbDe9msCdTNxy15Xew==
-  dependencies:
-    "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.1.1"
-    "@kickstartds/core" "^1.1.1"
+    "@kickstartds/base" "1.2.0-canary.163.1302.0"
+    "@kickstartds/core" "1.2.0-canary.163.1302.0"
     classnames "^2.2.6"
     countup.js "^2.0.7"
     date-fns "^2.19.0"
     objectFitPolyfill "^2.3.0"
 
-"@kickstartds/content@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.1.2.tgz#d48b4da140793a754407881b22d4fe615af53ff1"
-  integrity sha512-H3LBC7WbdWypTFH+66CMk8cN/okrku3khpjiAHVCtTlgtgMvfL6gkoAT1+Dp6x/EHLEyauPMuObiYmRywLEK1A==
-  dependencies:
-    "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.1.2"
-    "@kickstartds/core" "^1.1.2"
-    classnames "^2.2.6"
-    countup.js "^2.0.7"
-    date-fns "^2.19.0"
-    objectFitPolyfill "^2.3.0"
-
-"@kickstartds/core@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.1.1.tgz#d4338b73d89b6077f1e9027667b5e22673ec737c"
-  integrity sha512-xpfm2q/EVj+FC2EKeft1fRH/Ej6uAy0ubv0P8bIkhte1Jb5pLQ/et4m9BQIV+7WkiDEkWR++n17zok+e9U0O1A==
-  dependencies:
-    "@babel/runtime" "^7.13.17"
-    bourbon "^7.0.0"
-    del "^6.0.0"
-    dependency-graph "^0.11.0"
-    esbuild "^0.12.14"
-    fast-glob "^3.2.6"
-    fs-extra "^10.0.0"
-    htm "^3.0.4"
-    lazysizes "^5.3.2"
-    lodash-es "^4.17.21"
-    pubsub-js "^1.9.3"
-    sass "^1.32.8"
-    vhtml "^2.2.0"
-
-"@kickstartds/core@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.1.2.tgz#952bce9f3fe051d74699024e86ed9687944136bc"
-  integrity sha512-l8CbcX/7I4yQ/lHr0DKkRNGEncn52/Pr+z36fzSlFHJShll996qggklISXOAC/I4/yuqu2LlgnZZ/zKyW/a/kQ==
+"@kickstartds/core@1.2.0-canary.163.1302.0":
+  version "1.2.0-canary.163.1302.0"
+  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.2.0-canary.163.1302.0.tgz#626996d64d2ccb60c51eee595a1909d0f256f67c"
+  integrity sha512-ZI4OGxg1gJzBXuFdLpyyFAF8M6b1uXmm7LhQTaiXxlL9jAIlQyVldF327vKwL6z5zrecc8/U7R1su+bQUmnKmw==
   dependencies:
     "@babel/runtime" "^7.13.17"
     bourbon "^7.0.0"
@@ -1376,24 +1313,14 @@
     sass "^1.35.2"
     vhtml "^2.2.0"
 
-"@kickstartds/form@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.1.2.tgz#26abcbf91ef46ca1dbb8300f6f571748aa3a94e7"
-  integrity sha512-9+E7Lcd91CDhEAWNg+PWZOi1OJIO9Qsz5vd4TbEi+yb8TTShyH753TM6V0K1JRSUt557+bKyoCLGHiiLnGsYpQ==
+"@kickstartds/form@1.2.0-canary.163.1302.0":
+  version "1.2.0-canary.163.1302.0"
+  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.2.0-canary.163.1302.0.tgz#4a3f331e243a80dfae1e32c83e590f828b027a31"
+  integrity sha512-SJsSn+z6Q0eda6lhly117U9+BvAv9LZfIilhoVrL3XK4QST4bhMSbMwuAi7i7Ocevr2JDYI5+AX/NiOfIyoZoA==
   dependencies:
     "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.1.1"
-    "@kickstartds/core" "^1.1.1"
-    classnames "^2.2.6"
-
-"@kickstartds/form@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.1.3.tgz#c53c4cd65560570b6147e8b9244ea8c9df7dbc16"
-  integrity sha512-DqA+IImok2zdgUq3C0O/sy0OuVw1OkBU8P68xTUmDZBWzYyIFLkKAWjqwZzpGNaBI+0oeuwrGi8GszKcFXjnNw==
-  dependencies:
-    "@babel/runtime" "^7.13.17"
-    "@kickstartds/base" "^1.1.2"
-    "@kickstartds/core" "^1.1.2"
+    "@kickstartds/base" "1.2.0-canary.163.1302.0"
+    "@kickstartds/core" "1.2.0-canary.163.1302.0"
     classnames "^2.2.6"
 
 "@kwsites/file-exists@^1.1.1":
@@ -4973,11 +4900,6 @@ es6-promise@^3.2.1:
   resolved "https://registry.npmjs.org/es6-promise/-/es6-promise-3.3.1.tgz#a08cdde84ccdbf34d027a1451bc91d4bcd28a613"
   integrity sha1-oIzd6EzNvzTQJ6FFG8kdS80ophM=
 
-esbuild@^0.12.14:
-  version "0.12.14"
-  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.12.14.tgz#43157dbd0b36d939247d4eb4909a4886ac40f82e"
-  integrity sha512-z8p+6FGiplR7a3pPonXREbm+8IeXjBGvDpVidZmGB/AJMsJSfGCU+n7KOMCazA9AwvagadRWBhiKorC0w9WJvw==
-
 esbuild@^0.12.15:
   version "0.12.15"
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.12.15.tgz#9d99cf39aeb2188265c5983e983e236829f08af0"
@@ -5261,7 +5183,7 @@ fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
-fast-glob@^3.1.1, fast-glob@^3.2.5, fast-glob@^3.2.6:
+fast-glob@^3.1.1, fast-glob@^3.2.5:
   version "3.2.6"
   resolved "https://registry.npmjs.org/fast-glob/-/fast-glob-3.2.6.tgz#434dd9529845176ea049acc9343e8282765c6e1a"
   integrity sha512-GnLuqj/pvQ7pX8/L4J84nijv6sAnlwvSDpMkJi9i7nPmPxGtRPkBSStfvDW5l6nMdX9VWe+pkKWFTgD+vF2QSQ==
@@ -6186,11 +6108,6 @@ hosted-git-info@^4.0.0, hosted-git-info@^4.0.1, hosted-git-info@^4.0.2:
   integrity sha512-c9OGXbZ3guC/xOlCg1Ci/VgWlwsqDv1yMQL1CWqXDL0hDjXuNcq0zuR4xqPSuasI3kqFDhqSyTjREz5gzq0fXg==
   dependencies:
     lru-cache "^6.0.0"
-
-htm@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.npmjs.org/htm/-/htm-3.0.4.tgz#c90c891645d2d792bdb9f8c867964b18e3503718"
-  integrity sha512-VRdvxX3tmrXuT/Ovt59NMp/ORMFi4bceFMDjos1PV4E0mV+5votuID8R60egR9A4U8nLt238R/snlJGz3UYiTQ==
 
 htm@^3.1.0:
   version "3.1.0"
@@ -10913,13 +10830,6 @@ sanitize-filename@^1.6.1:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
-sass@^1.32.8:
-  version "1.35.1"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.35.1.tgz#90ecf774dfe68f07b6193077e3b42fb154b9e1cd"
-  integrity sha512-oCisuQJstxMcacOPmxLNiLlj4cUyN2+8xJnG7VanRoh2GOLr9RqkvI4AxA4a6LHVg/rsu+PmxXeGhrdSF9jCiQ==
-  dependencies:
-    chokidar ">=3.0.0 <4.0.0"
-
 sass@^1.35.2:
   version "1.35.2"
   resolved "https://registry.npmjs.org/sass/-/sass-1.35.2.tgz#b732314fcdaf7ef8d0f1698698adc378043cb821"
@@ -11177,18 +11087,6 @@ simplebar@^5.0.7:
   version "5.3.4"
   resolved "https://registry.npmjs.org/simplebar/-/simplebar-5.3.4.tgz#7de8d4a07ed3c6612644f4dbc04a8427fdf038ef"
   integrity sha512-2mCaVdiroCKmXuD+Qfy+QSE32m5BMuZ4ssHvRD1QEPYH95Re/kox7j/Wy0Hje8Uo7LY7O6JK3XSNJmesGlsP8Q==
-  dependencies:
-    "@juggle/resize-observer" "^3.3.1"
-    can-use-dom "^0.1.0"
-    core-js "^3.0.1"
-    lodash.debounce "^4.0.8"
-    lodash.memoize "^4.1.2"
-    lodash.throttle "^4.1.1"
-
-simplebar@^5.3.5:
-  version "5.3.5"
-  resolved "https://registry.npmjs.org/simplebar/-/simplebar-5.3.5.tgz#799d14cdc8bb8ed245789745b9f3741d05403944"
-  integrity sha512-mcTlXEiva8pSMdNEzeV3C1KyBHk7Sn2Pe46U1Uwo53dCuQqdJIK0bEJrIPs8W4/RqJquKIsC8Y1h7+aqOl8ccA==
   dependencies:
     "@juggle/resize-observer" "^3.3.1"
     can-use-dom "^0.1.0"

@@ -334,6 +334,7 @@ ${fragment}`
     childImageSharp {
       gatsbyImageData
     }
+    publicURL
   }`;
       }
     }

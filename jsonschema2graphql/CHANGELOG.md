@@ -1,3 +1,19 @@
+# v1.4.0 (Sat Jul 17 2021)
+
+#### 🚀 Enhancement
+
+- feature(netlify-cms): support overwritten defaults [#15](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/15) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- feature(netlify-cms): support overwritten defaults ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.3.1 (Sat Jul 10 2021)
 
 #### 🐛 Bug Fix

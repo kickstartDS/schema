@@ -1,3 +1,16 @@
+# (Sat Jul 17 2021)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/jsonschema2graphql@1.4.0`, `@kickstartds/jsonschema2netlifycms@1.4.0`
+  - feature(netlify-cms): support overwritten defaults [#15](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/15) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Thu Jul 15 2021)
 
 #### ⚠️ Pushed to `master`

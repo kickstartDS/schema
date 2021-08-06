@@ -10,11 +10,11 @@
   "author": "Jonas Ulrich | ruhmesmeile GmbH",
   "license": "UNLICENSED",
   "dependencies": {
-    "@kickstartds/base": "1.2.0-canary.163.1302.0",
-    "@kickstartds/blog": "1.2.0-canary.163.1302.0",
-    "@kickstartds/content": "1.2.0-canary.163.1302.0",
-    "@kickstartds/core": "1.2.0-canary.163.1302.0",
-    "@kickstartds/form": "1.2.0-canary.163.1302.0",
+    "@kickstartds/base": "^1.2.0",
+    "@kickstartds/blog": "^1.2.0",
+    "@kickstartds/content": "^1.2.0",
+    "@kickstartds/core": "^1.2.0",
+    "@kickstartds/form": "^1.2.0",
     "@kickstartds/generate-from-schema": "^0.5.1"
   }
 }

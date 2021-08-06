@@ -50,6 +50,7 @@ const internalTypeDefinition: JSONSchema7Definition = {
 };
 
 const allDefinitions = {};
+const allDefinitionTypes = {};
 // TODO these should be (cli) options
 const shouldDedupe = true;
 const gatsbyImages = true;
@@ -249,10 +250,6 @@ export function getSchemaReducer(ajv: Ajv) {
   
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      const ref = schema.$ref.includes('#/definitions/') && schema.$ref.includes('http')
-        ? getTypeName(schema.$ref, schema.$ref.split('#').shift())
-        : getTypeName(schema.$ref, outerSchema.$id);
-  
       if (schema.$ref.includes('#/definitions/')) {
         const ref = schema.$ref.split('#/definitions/').pop() as string;
         const definitions = _.cloneDeep(allDefinitions[ref]);
@@ -260,7 +257,11 @@ export function getSchemaReducer(ajv: Ajv) {
         if (dedupeFieldNames)
           definitions.properties = dedupe(definitions, getSchemaName(outerSchema.$id));      
   
-        return buildType(ref, definitions, knownTypes, shouldDedupe, false, schema);;
+        if (!allDefinitionTypes[ref]) {
+          allDefinitionTypes[ref] = buildType(ref, definitions, knownTypes, shouldDedupe, false, schema);
+        }
+
+        return allDefinitionTypes[ref];
       } else {
         const ref = getTypeName(schema.$ref, outerSchema.$id)
         const type = knownTypes[ref];

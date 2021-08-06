@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import { JSONSchema7, JSONSchema7TypeName, JSONSchema7Definition } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
@@ -327,8 +327,8 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
           : schema.$ref.split('/').pop();
 
         const reffedSchema = ajv.getSchema(reffedSchemaId as string)?.schema as JSONSchema7;
-        const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : '' as JSONSchema7
-        
+        const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : allDefinitions[reffedPropertyName as string] as JSONSchema7;
+
         return buildConfig(reffedPropertyName as string, reffedProperty, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
       } else {
         const reffedSchema = ajv.getSchema(schema.$ref as string)?.schema as JSONSchema7;

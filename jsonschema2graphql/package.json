@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2graphql",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Converts JSON schema to GraphQL types",
   "author": {
     "name": "Jonas Ulrich",

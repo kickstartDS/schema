@@ -1,3 +1,15 @@
+# v1.5.4 (Sat Aug 07 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: update to fixed kickstartDS deps, fix bugs ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.3 (Sat Jul 17 2021)
 
 #### ⚠️ Pushed to `master`

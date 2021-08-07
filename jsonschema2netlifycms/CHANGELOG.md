@@ -1,3 +1,15 @@
+# v1.4.1 (Sat Aug 07 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: update kickstartDS, fix first few bugs ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.4.0 (Sat Jul 17 2021)
 
 #### 🚀 Enhancement

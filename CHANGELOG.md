@@ -1,3 +1,18 @@
+# (Sat Aug 07 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/graphql-cli-generate-fragments@1.5.4`
+  - fix: update to fixed kickstartDS deps, fix bugs ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@1.4.1`, `@kickstartds/jsonschema2netlifycms@1.4.1`
+  - fix: update kickstartDS, fix first few bugs ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sat Jul 17 2021)
 
 #### ⚠️ Pushed to `master`

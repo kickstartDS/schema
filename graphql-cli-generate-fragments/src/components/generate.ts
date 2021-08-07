@@ -232,9 +232,13 @@ ${fragment}`
         null;*/
     
     if (constructorName === "GraphQLList") {
-      internalField =
-        ((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type && (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode) ||
-        ((field.astNode.type as ListTypeNode).type && ((field.astNode.type as ListTypeNode).type as NonNullTypeNode) || null);
+      if (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type.kind === 'ListType') { // List of lists-case
+        internalField = ((((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode;
+      } else { // List-case
+        internalField =
+          ((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type && (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode) ||
+          ((field.astNode.type as ListTypeNode).type && ((field.astNode.type as ListTypeNode).type as NonNullTypeNode) || null);
+      }
 
       if (internalField === null) {
         throw new Error(`Schema malformed - list`);

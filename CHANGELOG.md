@@ -1,3 +1,16 @@
+# (Sun Aug 08 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/graphql-cli-add-gatsby-directives@1.1.3`
+  - fix: use @link instead of @fileByRelativePath ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sat Aug 07 2021)
 
 #### ⚠️ Pushed to `master`

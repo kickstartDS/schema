@@ -8,7 +8,7 @@ const addFileDirectives = (schema: GraphQLSchema) => {
         const newFieldConfig = { ...fieldConfig };
         newFieldConfig.extensions = {
           directives: {
-            fileByRelativePath: ''
+            link: { from: `${fieldConfig.astNode.name.value}___NODE` }
           }
         }
         return newFieldConfig;

@@ -179,7 +179,7 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
         collapsed: true,
       };
 
-      if ((contentComponent || sectionComponent) && field && field.fields) {
+      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button') {
         field.fields.push(getInternalTypeDefinition(name));
       }
         

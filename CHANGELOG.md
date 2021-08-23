@@ -1,3 +1,16 @@
+# (Mon Aug 23 2021)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/jsonschema2netlifycms@1.4.2`
+  - fix: duplicate type field for `Button` in Netlify CMS `config.yml` [#17](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/17) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Aug 08 2021)
 
 #### ⚠️ Pushed to `master`

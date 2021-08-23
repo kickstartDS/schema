@@ -1,3 +1,16 @@
+# v1.4.2 (Mon Aug 23 2021)
+
+#### 🐛 Bug Fix
+
+- fix: duplicate type field for `Button` in Netlify CMS `config.yml` [#17](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/17) ([@julrich](https://github.com/julrich))
+- fix: update kds, attempt button fix ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.4.1 (Sat Aug 07 2021)
 
 #### ⚠️ Pushed to `master`

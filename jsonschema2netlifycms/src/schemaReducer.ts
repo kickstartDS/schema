@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7TypeName, JSONSchema7Definition } from 'json-schema';
+import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
@@ -64,7 +64,7 @@ const widgetMapping = (property: JSONSchema7) : string => {
   return mapping[property.type as JSONSchema7TypeName];
 };
 
-const allDefinitions = {};
+let allDefinitions: JSONSchema7[];
 
 function toPascalCase(text: string): string {
   return text.replace(/(^\w|-\w)/g, clearAndUpper);
@@ -84,7 +84,9 @@ export function getSchemaName(schemaId: string | undefined): string {
 // * hint -> may be affected by the same challenge as `required`
 // note: throws err(..) with minimal logging for (currently) unsupported
 // (and unutilized) JSON Schema features
-export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsField[] {
+export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): NetlifyCmsField[] {
+  allDefinitions = definitions;
+  
   function buildConfig(
     propName: string,
     schema: JSONSchema7,
@@ -366,14 +368,6 @@ export function configGenerator(ajv: Ajv, schemas: JSONSchema7[]): NetlifyCmsFie
   }
 
   const contentFields: NetlifyCmsField[] = [];
-  
-  schemas.forEach((schema) => {
-    const { definitions } = schema;
-    for (const definedTypeName in definitions) {
-      allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
-    }
-  });
-
   const pageSchema = schemas.find((schema) => schema.$id?.includes('page.schema.json')) as JSONSchema7;
 
   const $id = pageSchema.$id

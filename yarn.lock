@@ -1264,10 +1264,10 @@
   resolved "https://registry.npmjs.org/@juggle/resize-observer/-/resize-observer-3.3.1.tgz#b50a781709c81e10701004214340f25475a171a0"
   integrity sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==
 
-"@kickstartds/base@1.3.1-next.4", "@kickstartds/base@^1.3.1-next.4":
-  version "1.3.1-next.4"
-  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.3.1-next.4.tgz#43c48e87d78ba9b83c913541bd88862c94622989"
-  integrity sha512-Nb+N6R4tj7IBRfoATtzIwiDJkV80IE7lHcqhDXZUYhPoiRVxTw89OElIetZr7s94sgjMehIxpEsK+NOD010rpQ==
+"@kickstartds/base@1.3.1-next.6":
+  version "1.3.1-next.6"
+  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.3.1-next.6.tgz#b60020a23fc7da3d8fda513e6c61cdd0095c7fd7"
+  integrity sha512-1jU7w7Se3z/Y19WfXQG5GHfGQxCvowVPhOH4zDGHXmXMgDeOcwyq0IWNmTIKnlvcUikh7dSn5tRGRfKRLC/qEQ==
   dependencies:
     "@babel/runtime" "^7.15.3"
     "@glidejs/glide" "git://github.com/glidejs/glide.git#master"
@@ -1285,47 +1285,111 @@
     simplebar "^5.3.5"
     stickybits "^3.7.0"
 
-"@kickstartds/blog@1.3.1-next.4":
-  version "1.3.1-next.4"
-  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.3.1-next.4.tgz#4c644dfae81579bbc853aa23099a102f229d6868"
-  integrity sha512-WhXjo+az5svwA1fd1gcWRxEwMViW4xcl5xUWWnqCnzmmM0ZE0JOkqJSqZbny+8yx+CLoxlSDHVU6/2sdMXZrYg==
+"@kickstartds/base@1.3.1-next.7", "@kickstartds/base@^1.3.1-next.6", "@kickstartds/base@^1.3.1-next.7":
+  version "1.3.1-next.7"
+  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.3.1-next.7.tgz#dfde51449eb80c03cabf58eeb9d15c8fa8359ed2"
+  integrity sha512-BUyv5Doh+kN7G0H1A3AbzE2nJpyF2rviiwXkQICO9oif0y8cqJiY+sAbehPoUyfOvLCwAXXfgb+fXkGTVdYffA==
   dependencies:
     "@babel/runtime" "^7.15.3"
-    "@kickstartds/base" "^1.3.1-next.4"
+    "@glidejs/glide" "git://github.com/glidejs/glide.git#master"
+    "@kickstartds/core" "^1.3.1-next.3"
+    classnames "^2.2.6"
+    css-element-queries "^1.2.3"
+    date-fns "^2.23.0"
+    focus-visible "^5.0.2"
+    formbouncerjs "^1.4.6"
+    lodash-es "^4.17.21"
+    objectFitPolyfill "^2.3.0"
+    photoswipe "^4.1.3"
+    pikaday "^1.8.0"
+    react-markdown "^7.0.0"
+    simplebar "^5.3.5"
+    stickybits "^3.7.0"
+
+"@kickstartds/blog@1.3.1-next.6":
+  version "1.3.1-next.6"
+  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.3.1-next.6.tgz#663be5cce5ab27056cac742a20c5eca29b19e599"
+  integrity sha512-blR0iolg2ZTHnbVat4Sf0H+pqz8NDD7znsU/6ik6sxwDA3uVCm7YjJ3oMGq+5vQXR7vu+/GPLnAH07xsDTr/Sw==
+  dependencies:
+    "@babel/runtime" "^7.15.3"
+    "@kickstartds/base" "^1.3.1-next.6"
     "@kickstartds/core" "^1.2.0"
     classnames "^2.2.6"
     date-fns "^2.23.0"
 
-"@kickstartds/content@1.3.1-next.5":
-  version "1.3.1-next.5"
-  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.3.1-next.5.tgz#ba77fd776e2efd52c5e9d4b74643ec53984d170a"
-  integrity sha512-+GUCfxhSGNf9UaDJkPXgBagitJyC1YzhAlZ5lnOu+8kkE6e9SucYK+mc1Nh7QRScaslb6+PpoUj/rCZXYOaCCg==
+"@kickstartds/blog@1.3.1-next.7":
+  version "1.3.1-next.7"
+  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.3.1-next.7.tgz#6cc506fd7cbd3ceab224df389556f51d4967400e"
+  integrity sha512-Vr4V+ejVSAHkBiPWAiJ3+AvFXTZsyt6dbWxOIxuoyRbRiidjTwQiHTFwLfmxGA8IakxoTNUZ08owuhBwniDeOg==
   dependencies:
     "@babel/runtime" "^7.15.3"
-    "@kickstartds/base" "^1.3.1-next.4"
+    "@kickstartds/base" "^1.3.1-next.7"
+    "@kickstartds/core" "^1.3.1-next.3"
+    classnames "^2.2.6"
+    date-fns "^2.23.0"
+
+"@kickstartds/content@1.3.1-next.7":
+  version "1.3.1-next.7"
+  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.3.1-next.7.tgz#819b3fd4ae2afd8917395f835f1329ebb524b3ac"
+  integrity sha512-46hqDwYl+pnWZM3/orUiGl0q+kMHIGJDUWMdsdyLsEEA6U4L3Xm5p33V6dIqlydH9besH4nzHtaygY4NwI42Yg==
+  dependencies:
+    "@babel/runtime" "^7.15.3"
+    "@kickstartds/base" "^1.3.1-next.6"
     "@kickstartds/core" "^1.2.0"
     classnames "^2.2.6"
     countup.js "^2.0.8"
     date-fns "^2.23.0"
     objectFitPolyfill "^2.3.0"
 
-"@kickstartds/core@1.3.1-next.1":
-  version "1.3.1-next.1"
-  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.3.1-next.1.tgz#2f07115c7b93c562e864c09d79f2e12623adc997"
-  integrity sha512-b/5xa+N/XFtFOXBuzgIVacuiruOt2ohSeKQcIOhVIq4jy3UG/9RmHCxZ7qGujB5NSz2CD0Mz3PgsTZLJpCEJrg==
+"@kickstartds/content@1.3.1-next.8":
+  version "1.3.1-next.8"
+  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.3.1-next.8.tgz#7baf3b723dd9aa39a255c3ae014b8457f8a454c1"
+  integrity sha512-ZE41Xf6kVXTbTbmRRZeQcQAKcgTunyIgFZjhmhNWoC+ZuRSqQmTYR2cxoSYphv48ILkiSNUXwvydHOq+q0w1Ew==
+  dependencies:
+    "@babel/runtime" "^7.15.3"
+    "@kickstartds/base" "^1.3.1-next.7"
+    "@kickstartds/core" "^1.3.1-next.3"
+    classnames "^2.2.6"
+    countup.js "^2.0.8"
+    date-fns "^2.23.0"
+    objectFitPolyfill "^2.3.0"
+
+"@kickstartds/core@1.3.1-next.2":
+  version "1.3.1-next.2"
+  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.3.1-next.2.tgz#ab49735427677fafac5b5064dcb6d323366acf27"
+  integrity sha512-aFZ8uRBQqNwVtASjz6A0wGqvMSYNvoRXcuDmMbuGh0VZoeblGvv/GvRuyBiVVkVnA81cuQnj66LW6OdOn2IY5A==
   dependencies:
     "@babel/runtime" "^7.15.3"
     bourbon "^7.0.0"
     del "^6.0.0"
     dependency-graph "^0.11.0"
-    esbuild "^0.12.21"
+    esbuild "^0.12.22"
     fast-glob "^3.2.7"
     fs-extra "^10.0.0"
     htm "^3.1.0"
     lazysizes "^5.3.2"
     lodash-es "^4.17.21"
     pubsub-js "^1.9.3"
-    sass "^1.38.0"
+    sass "^1.38.1"
+    vhtml "^2.2.0"
+
+"@kickstartds/core@1.3.1-next.3", "@kickstartds/core@^1.3.1-next.3":
+  version "1.3.1-next.3"
+  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.3.1-next.3.tgz#a5c57cf11e5e5de8b29396f21613710ebafd6b6c"
+  integrity sha512-DIcVm4v0jss3srB9PvyShuNfbm8QkePBuLei9x6cc1xVSGK3fuA9amJGSMtcY/oAJ/HN+VZlV8mAcKVSfmWO2A==
+  dependencies:
+    "@babel/runtime" "^7.15.3"
+    bourbon "^7.0.0"
+    del "^6.0.0"
+    dependency-graph "^0.11.0"
+    esbuild "^0.12.22"
+    fast-glob "^3.2.7"
+    fs-extra "^10.0.0"
+    htm "^3.1.0"
+    lazysizes "^5.3.2"
+    lodash-es "^4.17.21"
+    pubsub-js "^1.9.3"
+    sass "^1.38.1"
     vhtml "^2.2.0"
 
 "@kickstartds/core@^1.2.0":
@@ -1347,14 +1411,36 @@
     sass "^1.37.5"
     vhtml "^2.2.0"
 
-"@kickstartds/form@1.3.1-next.4":
-  version "1.3.1-next.4"
-  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.3.1-next.4.tgz#c152cf9a18a8f4512b52163c740d0a998197929f"
-  integrity sha512-BR0cJcrAEp3ZErqJqDrUHsczdkefWsbQoi5wcF8qvnJX2kGL7WsPo6tJVAKUKEvHCoPuQNZoeZ/2+kKZ7CoCIA==
+"@kickstartds/design-system@^1.0.47":
+  version "1.0.47"
+  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-1.0.47.tgz#c5a68a487385dab114bad36309cd96cd5d36f8ee"
+  integrity sha512-hQUZsTg5z7Vf6NgwRtlE7lK4k/iiqpnbvcpnyzhOIftu/K6XFbBFoLRiZ9UQaJErzXVT0Z0kf0iJbKv8LOLj3Q==
+  dependencies:
+    "@kickstartds/base" "1.3.1-next.6"
+    "@kickstartds/blog" "1.3.1-next.6"
+    "@kickstartds/content" "1.3.1-next.7"
+    "@kickstartds/core" "1.3.1-next.2"
+    "@kickstartds/form" "1.3.1-next.6"
+    classnames "^2.3.1"
+
+"@kickstartds/form@1.3.1-next.6":
+  version "1.3.1-next.6"
+  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.3.1-next.6.tgz#a854778451babfe29ea1826578a9cc6a2392f945"
+  integrity sha512-YSgfqnAUZU9+ecByb954pZSs2wy9MViT1Jz9iagqo+C5u2INIds7Vt25yvreeRTXDPMCXmSedIHg9tpIXeAIIQ==
   dependencies:
     "@babel/runtime" "^7.15.3"
-    "@kickstartds/base" "^1.3.1-next.4"
+    "@kickstartds/base" "^1.3.1-next.6"
     "@kickstartds/core" "^1.2.0"
+    classnames "^2.2.6"
+
+"@kickstartds/form@1.3.1-next.7":
+  version "1.3.1-next.7"
+  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.3.1-next.7.tgz#39a4a1c7386434ac1a2fb1f470e84e83b66bec15"
+  integrity sha512-Z1OkcjglCTM7EhQqSaX5N41fCIaasHbq/pme30/gvRaKj0ABhFFqlPX1S5Fdwe86TgNS4ErpcX8g53Om0xPdkQ==
+  dependencies:
+    "@babel/runtime" "^7.15.3"
+    "@kickstartds/base" "^1.3.1-next.7"
+    "@kickstartds/core" "^1.3.1-next.3"
     classnames "^2.2.6"
 
 "@kwsites/file-exists@^1.1.1":
@@ -3836,7 +3922,7 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.npmjs.org/cjs-module-lexer/-/cjs-module-lexer-1.2.1.tgz#2fd46d9906a126965aa541345c499aaa18e8cd73"
   integrity sha512-jVamGdJPDeuQilKhvVn1h3knuMOZzr8QDnpk+M9aMlCaMkTDd6fBWPhiDqFvFZ07pL0liqabAiuy8SY4jGHeaw==
 
-classnames@^2.2.6:
+classnames@^2.2.6, classnames@^2.3.1:
   version "2.3.1"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
   integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
@@ -4931,10 +5017,10 @@ esbuild@^0.12.18:
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.12.18.tgz#e5db16372188c2b4d395f7f55fdade27f6a119fa"
   integrity sha512-arWhBQSy+oiBAp8VRRCFvAU+3jyf0gGacABLO3haMHboXCDjzq4WUqyQklst2XRuFS8MXgap+9uvODqj9Iygpg==
 
-esbuild@^0.12.21:
-  version "0.12.22"
-  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.12.22.tgz#6031a1257b8d0307d306bed673b79c3668607f51"
-  integrity sha512-yWCr9RoFehpqoe/+MwZXJpYOEIt7KOEvNnjIeMZpMSyQt+KCBASM3y7yViiN5dJRphf1wGdUz1+M4rTtWd/ulA==
+esbuild@^0.12.22:
+  version "0.12.24"
+  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.12.24.tgz#21966fad25a80f368ed308101e88102bce0dc68f"
+  integrity sha512-C0ibY+HsXzYB6L/pLWEiWjMpghKsIc58Q5yumARwBQsHl9DXPakW+5NI/Y9w4YXiz0PEP6XTGTT/OV4Nnsmb4A==
 
 escalade@^3.0.2, escalade@^3.1.1:
   version "3.1.1"
@@ -11077,10 +11163,10 @@ sass@^1.37.5:
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
 
-sass@^1.38.0:
-  version "1.38.0"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.38.0.tgz#2f3e60a1efdcdc910586fa79dc89d3399a145b4f"
-  integrity sha512-WBccZeMigAGKoI+NgD7Adh0ab1HUq+6BmyBUEaGxtErbUtWUevEbdgo5EZiJQofLUGcKtlNaO2IdN73AHEua5g==
+sass@^1.38.1:
+  version "1.38.2"
+  resolved "https://registry.npmjs.org/sass/-/sass-1.38.2.tgz#970045d9966180002a8c8f3820fc114cddb42822"
+  integrity sha512-Bz1fG6qiyF0FX6m/I+VxtdVKz1Dfmg/e9kfDy2PhWOkq3T384q2KxwIfP0fXpeI+EyyETdOauH+cRHQDFASllA==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
 

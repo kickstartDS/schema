@@ -49,7 +49,7 @@ const internalTypeDefinition: JSONSchema7Definition = {
   "description": "Internal type for interface resolution",
 };
 
-const allDefinitions = {};
+let allDefinitions: JSONSchema7[];
 const allDefinitionTypes = {};
 // TODO these should be (cli) options
 const shouldDedupe = true;
@@ -74,22 +74,14 @@ const dedupe = (schema: JSONSchema7, optionalName?: string): {
     fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
   );
 
-export function getSchemaReducer(ajv: Ajv) {
+export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
+  allDefinitions = definitions;
+
   function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
-    if (schema.$id && !ajv.getSchema(schema.$id)) {
-      ajv.addSchema(schema);
-    }
-    ajv.validateSchema(schema);
-  
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
-    const typeName = getTypeName($id);
-  
-    const { definitions } = schema;
-    for (const definedTypeName in definitions) {
-      allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
-    }
 
+    const typeName = getTypeName($id);
     const clonedSchema = _.cloneDeep(schema);
   
     if (shouldDedupe) 

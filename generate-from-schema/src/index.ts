@@ -5,6 +5,8 @@ const { printSchema } = require('graphql');
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
 const Ajv = require('ajv');
+import { JSONSchema7 } from 'json-schema';
+const path = require('path');
 
 const ajv = new Ajv({
   removeAdditional: true,
@@ -24,7 +26,7 @@ ajv.addKeyword({
   validate: () => true,
 })
 
-const pageSchema = {
+const pageSchema: JSONSchema7 = {
   $schema: "http://json-schema.org/draft-07/schema#",
   $id: "http://frontend.ruhmesmeile.com/page.schema.json",
   title: "Page",
@@ -75,6 +77,8 @@ const addSchema = async (schemaPath: string) => {
   const [, , param] = process.argv;
   const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
   const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
+  const customGlob = `${pathPrefix}node_modules/**/dist/**/*.(schema|definitions).json`;
+
   if (param === '--watch') {
     chokidar
       .watch(schemaGlob, { ignoreInitial: true })
@@ -83,20 +87,58 @@ const addSchema = async (schemaPath: string) => {
       .on('add', convertToNetlifyCMS)
       .on('change', convertToNetlifyCMS);
   } else {
+    const allDefinitions: { [key: string]: JSONSchema7 } = {};
     const schemaPaths = await glob(schemaGlob);
-    const schemaJsons = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchema(schemaPath)));
+    const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchema(schemaPath)));
+
+    schemaJsons.forEach((schemaJson) => {
+      const { definitions } = schemaJson;
+      for (const definedTypeName in definitions) {
+        allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
+      }
+    });
+
+    const customPaths = await glob(customGlob);
+    if (customPaths.length) {
+      const customJsons: JSONSchema7[] = await Promise.all(customPaths.map(async (customPath: string) => addSchema(customPath)));  
+      const sectionSchema = customJsons.find((customJson) => customJson.$id?.includes('section.schema.json')) as JSONSchema7;
+
+      if (sectionSchema)
+        ((pageSchema.properties.sections as JSONSchema7).items as JSONSchema7).$ref = sectionSchema.$id;
+
+      customJsons.forEach((customJson) => {
+        const { definitions } = customJson;
+        for (const definedTypeName in definitions) {
+          allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
+        }
+
+        schemaJsons.forEach((schemaJson, index) => {
+          if (path.basename(customJson.$id) === path.basename(schemaJson.$id))
+            schemaJsons[index] = customJson;
+        }); 
+      });
+    }
 
     ajv.addSchema(pageSchema);
     ajv.validateSchema(pageSchema);
 
-    const gql = convertToGraphQL({ jsonSchema: schemaJsons, ajv });
+    const gql = convertToGraphQL({
+      jsonSchema: schemaJsons,
+      definitions: allDefinitions,
+      ajv
+    });
     fs.writeFile(
       `dist/page.graphql`,
       printSchema(gql).replace(/`/g, "'")
     );
 
     schemaJsons.push(pageSchema);
-    const netlifyAdminConfig = convertToNetlifyCMS({ jsonSchema: schemaJsons, ajv, configLocation: 'static/admin/config.yml' });
+    const netlifyAdminConfig = convertToNetlifyCMS({
+      jsonSchema: schemaJsons,
+      definitions: allDefinitions,
+      ajv,
+      configLocation: 'static/admin/config.yml'
+    });
     fs.writeFile(
       `dist/config.yml`,
       netlifyAdminConfig,

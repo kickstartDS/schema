@@ -116,10 +116,10 @@ function createConfig(
  * @param jsonSchema - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  */
-export default function convert({ jsonSchema, ajv, configLocation }: ConvertParams): string {
+export default function convert({ jsonSchema, definitions, ajv, configLocation }: ConvertParams): string {
   // coerce input to array of schema objects
   const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
-  const contentFields = configGenerator(ajv, schemaArray);
+  const contentFields = configGenerator(ajv, definitions, schemaArray);
 
   const baseConfig = configLocation && existsSync(configLocation) ? yamlLoad(readFileSync(configLocation, 'utf-8')) as NetlifyCmsConfig : defaultConfig;
 

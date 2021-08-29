@@ -1,9 +1,9 @@
-import { GraphQLSchema } from 'graphql'
-import { JSONSchema7 } from 'json-schema'
+import { GraphQLSchema } from 'graphql';
+import { JSONSchema7 } from 'json-schema';
 
-import { DEFAULT_ENTRY_POINTS } from './helpers'
-import { getSchemaReducer } from './schemaReducer'
-import { ConvertParams, GraphQLTypeMap } from './@types'
+import { DEFAULT_ENTRY_POINTS } from './helpers';
+import { getSchemaReducer } from './schemaReducer';
+import { ConvertParams, GraphQLTypeMap } from './@types';
 
 /**
  * @param jsonSchema - An individual schema or an array of schemas, provided
@@ -26,10 +26,10 @@ import { ConvertParams, GraphQLTypeMap } from './@types'
  * a Map of types and returns Query, Mutation (optional), and Subscription (optional)
  * blocks. Each block consists of a hash of `GraphQLFieldConfig`s.
  */
-export default function convert({ jsonSchema, entryPoints = DEFAULT_ENTRY_POINTS, ajv }: ConvertParams): GraphQLSchema {
+export default function convert({ jsonSchema, definitions, entryPoints = DEFAULT_ENTRY_POINTS, ajv }: ConvertParams): GraphQLSchema {
   // coerce input to array of schema objects
   const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema)
-  const schemaReducer = getSchemaReducer(ajv);
+  const schemaReducer = getSchemaReducer(ajv, definitions);
 
   const types: GraphQLTypeMap = schemaArray.reduce(schemaReducer, {})
 

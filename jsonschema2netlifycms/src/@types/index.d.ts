@@ -4,6 +4,7 @@ import Ajv from 'ajv/dist/core'
 declare namespace jsonschema2netlifycms {
   export interface ConvertParams {
     jsonSchema: JSONSchema7 | JSONSchema7[] | string | string[]
+    definitions: JSONSchema7[]
     ajv: Ajv
     configLocation?: string
   }

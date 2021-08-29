@@ -1,3 +1,19 @@
+# v1.5.0 (Sun Aug 29 2021)
+
+#### 🚀 Enhancement
+
+- feat: add basic support to overwrite a schema [#19](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/19) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- feat: add basic support to overwrite a schema ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.4.2 (Mon Aug 23 2021)
 
 #### 🐛 Bug Fix

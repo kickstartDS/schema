@@ -1,3 +1,16 @@
+# (Sun Aug 29 2021)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@0.6.0`, `@kickstartds/jsonschema2graphql@1.5.0`, `@kickstartds/jsonschema2netlifycms@1.5.0`
+  - feat: add basic support to overwrite a schema [#19](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/19) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Mon Aug 23 2021)
 
 #### 🐛 Bug Fix

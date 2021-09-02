@@ -1,3 +1,16 @@
+# v1.5.3 (Thu Sep 02 2021)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: handling of reffed schemas in section ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.2 (Thu Sep 02 2021)
 
 #### ⚠️ Pushed to `master`

@@ -1,3 +1,15 @@
+# v1.5.1 (Thu Sep 02 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: merging in GraphQL generation for layered schemas ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.0 (Sun Aug 29 2021)
 
 #### 🚀 Enhancement

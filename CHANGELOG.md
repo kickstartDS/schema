@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/jsonschema2graphql@1.5.1`
+  - fix: merging in GraphQL generation for layered schemas ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Thu Sep 02 2021)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/jsonschema2netlifycms@1.5.4`
   - fix: duplicate type on headline in section ([@julrich](https://github.com/julrich))
 

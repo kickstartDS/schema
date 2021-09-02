@@ -159,7 +159,9 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId);
       
       if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
-        field.fields.push(getInternalTypeDefinition(name));
+        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
+          field.fields.push(getInternalTypeDefinition(name));
+        }
       }
 
       return field
@@ -194,8 +196,10 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         collapsed: true,
       };
 
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button') {
-        field.fields.push(getInternalTypeDefinition(name));
+      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
+        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
+          field.fields.push(getInternalTypeDefinition(name));
+        }
       }
         
       if (schema.default)

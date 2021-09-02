@@ -81,7 +81,7 @@ function getLayeredRefId(ajv: Ajv, refId: string, reffingSchemaId: string): stri
   const component = path.basename(refId);
   const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('frontend.ruhmesmeile.com'))
 
-  return layeredComponent.length > 0 && reffingSchemaId.includes('frontend.ruhmesmeile.com')
+  return layeredComponent.length > 0 && (reffingSchemaId.includes('frontend.ruhmesmeile.com') || (!refId.includes('section.schema.json') && reffingSchemaId.includes('section.schema.json')))
     ? layeredComponent[0]
     : refId;
 }

@@ -20,6 +20,7 @@ import { graphqlSafeEnumKey } from './graphqlSafeEnumKey';
 import { err } from './helpers';
 import Ajv from 'ajv';
 import { createHash } from "crypto";
+import * as path from 'path';
 
 const typeResolutionField = 'type';
 
@@ -66,6 +67,17 @@ export function hashFieldName(fieldName: string, optionalName?: string): string 
 export function getSchemaName(schemaId: string | undefined): string {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
+
+function getLayeredRefId(ajv: Ajv, refId: string, reffingSchemaId: string): string {
+  if (!refId.includes('frontend.ruhmesmeile.com')) return refId;
+
+  const component = path.basename(refId);
+  const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('frontend.ruhmesmeile.com'))
+
+  return layeredComponent.length > 0 && reffingSchemaId.includes('frontend.ruhmesmeile.com')
+    ? layeredComponent[0]
+    : refId;
+}
 
 const dedupe = (schema: JSONSchema7, optionalName?: string): {
     [key: string]: JSONSchema7Definition;
@@ -145,7 +157,7 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
   
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      const reduceSchemaAllOf = (allOfs: JSONSchema7[]): JSONSchema7 => {
+      const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
         return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
           const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
             if (!_.isUndefined(allOf.$ref)) {
@@ -153,13 +165,13 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
                 const definitionName = allOf.$ref.split('/').pop() || '';
                 const definition = _.cloneDeep(allDefinitions[definitionName]);
                 if (definition.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf))
+                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf, outerComponentSchemaId))
                 }
                 return _.merge(finalSchema, definition);
               } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(allOf.$ref)?.schema as JSONSchema7);
+                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId))?.schema as JSONSchema7);
                 if (reffedSchema.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[]))
+                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
                 }
                 return _.merge(finalSchema, reffedSchema);
               }
@@ -172,7 +184,7 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
         }, { } as JSONSchema7);
       };
   
-      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
+      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], outerSchema.$id as string);
   
       if (dedupeFieldNames)
         objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));

@@ -4,6 +4,7 @@ import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
+import * as path from 'path';
 
 const typeResolutionField = 'type';
 
@@ -74,6 +75,17 @@ function clearAndUpper(text: string): string {
   return text.replace(/-/, " ").toUpperCase();
 }
 
+function getLayeredRefId(ajv: Ajv, refId: string, reffingSchemaId: string): string {
+  if (!refId.includes('frontend.ruhmesmeile.com')) return refId;
+
+  const component = path.basename(refId);
+  const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('frontend.ruhmesmeile.com'))
+
+  return layeredComponent.length > 0 && reffingSchemaId.includes('frontend.ruhmesmeile.com')
+    ? layeredComponent[0]
+    : refId;
+}
+
 export function getSchemaName(schemaId: string | undefined): string {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
@@ -93,6 +105,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     contentFields: NetlifyCmsField[],
     outerRun: boolean = false,
     outerSchema: JSONSchema7,
+    componentSchemaId: string = '',
   ): NetlifyCmsField {
     const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
     const contentComponent = outerRun && !sectionComponent;
@@ -112,7 +125,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
   
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      const reduceSchemaAllOf = (allOfs: JSONSchema7[]): JSONSchema7 => {
+      const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
         return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
           const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
             if (!_.isUndefined(allOf.$ref)) {
@@ -120,13 +133,13 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
                 const definitionName = allOf.$ref.split('/').pop() || '';
                 const definition = _.cloneDeep(allDefinitions[definitionName]);
                 if (definition.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf))
+                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf, outerComponentSchemaId))
                 }
                 return _.merge(finalSchema, definition);
               } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(allOf.$ref)?.schema as JSONSchema7);
+                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId))?.schema as JSONSchema7);
                 if (reffedSchema.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[]))
+                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
                 }
                 return _.merge(finalSchema, reffedSchema);
               }
@@ -139,11 +152,11 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         }, { } as JSONSchema7);
       };
   
-      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
+      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], componentSchemaId);
       if (schema.properties)
         objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
 
-      const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+      const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId);
       
       if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
         field.fields.push(getInternalTypeDefinition(name));
@@ -169,7 +182,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
               const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
               const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
-              return buildConfig(fieldName, objectSchema, contentFields, isOuterRun, schemaOuter);
+              return buildConfig(fieldName, objectSchema, contentFields, isOuterRun, schemaOuter, objectSchema.$id || componentSchemaId);
             })
           : [];
 
@@ -208,8 +221,8 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           // only hit for `page > content`
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
-            const resolvedSchema = ajv.getSchema(arraySchema.$ref as string)?.schema as JSONSchema7;
-            return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema);
+            const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+            return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
           });
 
           const field: NetlifyCmsField = {
@@ -230,7 +243,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) =>
-            buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema)
+            buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId)
           );
 
           const field: NetlifyCmsField = {
@@ -262,10 +275,10 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
         let fieldConfig;
         if (arraySchema.$ref) {
-          const resolvedSchema = ajv.getSchema(arraySchema.$ref as string)?.schema as JSONSchema7;
-          fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter);
+          const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+          fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId);
         } else {
-          fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter);
+          fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
         }
 
         const field: NetlifyCmsField = {
@@ -328,13 +341,13 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           ? schema.$ref.split('#').pop()?.split('/').pop()
           : schema.$ref.split('/').pop();
 
-        const reffedSchema = ajv.getSchema(reffedSchemaId as string)?.schema as JSONSchema7;
+        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId))?.schema as JSONSchema7;
         const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : allDefinitions[reffedPropertyName as string] as JSONSchema7;
 
-        return buildConfig(reffedPropertyName as string, reffedProperty, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+        return buildConfig(reffedPropertyName as string, reffedProperty, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId);
       } else {
-        const reffedSchema = ajv.getSchema(schema.$ref as string)?.schema as JSONSchema7;
-        return buildConfig(name, reffedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema);
+        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, schema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+        return buildConfig(name, reffedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
       }
     }
   
@@ -373,7 +386,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
   const $id = pageSchema.$id
   if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
   const typeName = getSchemaName($id);
-  contentFields.push(buildConfig(typeName, pageSchema, contentFields, true, pageSchema));
+  contentFields.push(buildConfig(typeName, pageSchema, contentFields, true, pageSchema, pageSchema.$id));
 
   return contentFields;
 }

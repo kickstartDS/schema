@@ -1,3 +1,16 @@
+# (Thu Sep 02 2021)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/generate-from-schema@0.6.1`, `@kickstartds/jsonschema2netlifycms@1.5.1`
+  - fix/support overwritten component schemas [#21](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/21) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Aug 29 2021)
 
 #### 🚀 Enhancement

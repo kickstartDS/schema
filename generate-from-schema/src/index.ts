@@ -5,8 +5,9 @@ const { printSchema } = require('graphql');
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
 const Ajv = require('ajv');
-import { JSONSchema7 } from 'json-schema';
 const path = require('path');
+// TODO I hate that require / import usage is mixed here -_-
+import { JSONSchema7 } from 'json-schema';
 
 const ajv = new Ajv({
   removeAdditional: true,

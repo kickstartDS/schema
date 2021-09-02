@@ -1,3 +1,16 @@
+# v0.6.2 (Thu Sep 02 2021)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: internal version requirements ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.6.1 (Thu Sep 02 2021)
 
 #### 🐛 Bug Fix

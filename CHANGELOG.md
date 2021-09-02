@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/jsonschema2netlifycms@1.5.4`
+  - fix: duplicate type on headline in section ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Thu Sep 02 2021)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/generate-from-schema@0.6.3`, `@kickstartds/jsonschema2netlifycms@1.5.3`
   - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
 - `@kickstartds/jsonschema2netlifycms@1.5.3`

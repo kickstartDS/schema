@@ -1,3 +1,15 @@
+# v1.5.4 (Thu Sep 02 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: duplicate type on headline in section ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.3 (Thu Sep 02 2021)
 
 #### ⚠️ Pushed to `master`

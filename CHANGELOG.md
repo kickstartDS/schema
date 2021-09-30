@@ -1,3 +1,18 @@
+# (Thu Sep 30 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: update dependencies ([@julrich](https://github.com/julrich))
+- chore: update kds dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/generate-from-schema@0.6.6`
+  - fix: rewrite type attributes to typeProp ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Thu Sep 02 2021)
 
 #### ⚠️ Pushed to `master`

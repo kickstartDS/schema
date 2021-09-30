@@ -1,3 +1,15 @@
+# v0.6.6 (Thu Sep 30 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: rewrite type attributes to typeProp ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.6.3 (Thu Sep 02 2021)
 
 #### ⚠️ Pushed to `master`

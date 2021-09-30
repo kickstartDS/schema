@@ -69,9 +69,11 @@ const pageSchema: JSONSchema7 = {
 };
 
 const addSchema = async (schemaPath: string) => {
-  const schema = await fs.readJSON(schemaPath);
-  if (!ajv.getSchema(schema.$id)) ajv.addSchema(schema);
-  return schema;
+  const schema = await fs.readFile(schemaPath, 'utf-8');
+  const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
+
+  if (!ajv.getSchema(schemaJson.$id)) ajv.addSchema(schemaJson);
+  return schemaJson;
 };
 
 (async () => {

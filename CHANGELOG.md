@@ -1,3 +1,16 @@
+# (Tue Oct 05 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@0.6.7`
+  - feat: add description and keywords to page schema ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Thu Sep 30 2021)
 
 #### ⚠️ Pushed to `master`

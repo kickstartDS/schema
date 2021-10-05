@@ -1,3 +1,15 @@
+# v0.6.7 (Tue Oct 05 2021)
+
+#### ⚠️ Pushed to `master`
+
+- feat: add description and keywords to page schema ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.6.6 (Thu Sep 30 2021)
 
 #### ⚠️ Pushed to `master`

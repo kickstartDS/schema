@@ -2,6 +2,20 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/generate-from-schema@0.6.8`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+  - feat: add image to page schema, too ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Tue Oct 05 2021)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/generate-from-schema@0.6.7`
   - feat: add description and keywords to page schema ([@julrich](https://github.com/julrich))
 

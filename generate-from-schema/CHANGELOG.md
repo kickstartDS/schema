@@ -1,3 +1,16 @@
+# v0.6.8 (Tue Oct 05 2021)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- feat: add image to page schema, too ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.6.7 (Tue Oct 05 2021)
 
 #### ⚠️ Pushed to `master`

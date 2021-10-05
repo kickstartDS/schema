@@ -52,6 +52,16 @@ const pageSchema: JSONSchema7 = {
       title: "Title",
       description: "Title for the page"
     },
+    description: {
+      type: "string",
+      title: "Description",
+      description: "Description for the page"
+    },
+    keywords: {
+      type: "string",
+      title: "Keywords",
+      description: "Keywords for the page"
+    },
     slug: {
       type: "string",
       title: "Slug",

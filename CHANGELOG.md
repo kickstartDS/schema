@@ -1,3 +1,16 @@
+# (Wed Oct 06 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@0.6.9`
+  - feat: add cardImage to page schema ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Tue Oct 05 2021)
 
 #### ⚠️ Pushed to `master`

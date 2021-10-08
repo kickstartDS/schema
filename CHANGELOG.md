@@ -1,3 +1,16 @@
+# (Fri Oct 08 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@0.6.10`
+  - feature: add `updated` and `created` date-time to page ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Wed Oct 06 2021)
 
 #### ⚠️ Pushed to `master`

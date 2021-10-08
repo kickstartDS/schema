@@ -1,3 +1,15 @@
+# v0.6.10 (Fri Oct 08 2021)
+
+#### ⚠️ Pushed to `master`
+
+- feature: add `updated` and `created` date-time to page ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.6.9 (Wed Oct 06 2021)
 
 #### ⚠️ Pushed to `master`

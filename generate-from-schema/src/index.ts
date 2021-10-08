@@ -84,6 +84,18 @@ const pageSchema: JSONSchema7 = {
       items: {
         $ref: "http://frontend.ruhmesmeile.com/base/base/section.schema.json"
       }
+    },
+    updated: {
+      type: "string",
+      title: "Updated",
+      description: "Last update date for content",
+      format: "date-time"
+    },
+    created: {
+      type: "string",
+      title: "Created",
+      description: "Creation date for content",
+      format: "date-time"
     }
   }
 };

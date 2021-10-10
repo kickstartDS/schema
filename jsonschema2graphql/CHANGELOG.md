@@ -1,3 +1,15 @@
+# v1.5.3 (Sun Oct 10 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: bug in hashing with ___NODE ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.2 (Sun Oct 10 2021)
 
 #### ⚠️ Pushed to `master`

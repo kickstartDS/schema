@@ -1,3 +1,15 @@
+# v1.5.4 (Sun Oct 10 2021)
+
+#### ⚠️ Pushed to `master`
+
+- feature: move more hashing logic into schema tools ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.3 (Sun Oct 10 2021)
 
 #### ⚠️ Pushed to `master`

@@ -60,7 +60,7 @@ export function cleanFieldName(name: string): string {
   return name.replace(/__.*/i, '');
 };
 
-export function cleanObjectKeys(obj: Record<string, any>) {
+export function cleanObjectKeys(obj: Record<string, any>): Record<string, any> {
   const cleanedObject = {};
 
   Object.keys(obj).forEach((property) => {

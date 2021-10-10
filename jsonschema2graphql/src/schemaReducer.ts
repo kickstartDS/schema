@@ -62,7 +62,7 @@ export function cleanFieldName(name: string): string {
 
 export function hashFieldName(fieldName: string, optionalName?: string): string {
   return fieldName.includes('___NODE')
-    ? `${fieldName.replace('___NODE', '')}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}___NODE`
+    ? `${fieldName.replace('___NODE', '')}__${createHash('md5').update(fieldName.replace('___NODE', '') + (optionalName || '')).digest('hex').substr(0,4)}___NODE`
     : `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`;
 };
 

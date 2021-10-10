@@ -55,7 +55,7 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
       } else if (typeof obj[property] === 'object') {
         // TODO re-simplify this... only needed because of inconsistent hashing on sub-types / link-button
         const outer = outerComponent === 'section' ? obj[property][typeResolutionField] : outerComponent;
-        if (outer === 'storytelling' && property === 'link') {
+        if ((outer === 'storytelling' && property === 'link') || (outer === 'count-up' && property === 'link')) {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
         } else if (outer === 'storytelling' && property === 'headline') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'headline');

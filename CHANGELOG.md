@@ -1,3 +1,16 @@
+# (Sun Oct 10 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@1.5.2`
+  - fix: keep ___NODE in correct place when hashing field names ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Fri Oct 08 2021)
 
 #### ⚠️ Pushed to `master`

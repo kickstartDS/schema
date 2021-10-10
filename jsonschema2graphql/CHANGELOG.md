@@ -1,3 +1,15 @@
+# v1.5.2 (Sun Oct 10 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: keep ___NODE in correct place when hashing field names ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.1 (Thu Sep 02 2021)
 
 #### ⚠️ Pushed to `master`

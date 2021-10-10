@@ -61,7 +61,9 @@ export function cleanFieldName(name: string): string {
 };
 
 export function hashFieldName(fieldName: string, optionalName?: string): string {
-  return `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`
+  return fieldName.includes('___NODE')
+    ? `${fieldName.replace('___NODE', '')}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}___NODE`
+    : `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`;
 };
 
 export function getSchemaName(schemaId: string | undefined): string {

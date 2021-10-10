@@ -1,3 +1,15 @@
+# v1.5.6 (Sun Oct 10 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: some more refactoring ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.5 (Sun Oct 10 2021)
 
 #### ⚠️ Pushed to `master`

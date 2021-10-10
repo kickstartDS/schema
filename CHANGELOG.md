@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/jsonschema2graphql@1.5.5`
+  - fix: missed one return type ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Sun Oct 10 2021)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/jsonschema2graphql@1.5.4`
   - feature: move more hashing logic into schema tools ([@julrich](https://github.com/julrich))
 

@@ -21,7 +21,8 @@ import { err } from './helpers';
 import Ajv from 'ajv';
 import * as path from 'path';
 
-import { hashFieldName, cleanFieldName } from './helpers'
+import { hashFieldName } from './helpers';
+import { cleanFieldName } from './dehashing';
 
 const typeResolutionField = 'type';
 

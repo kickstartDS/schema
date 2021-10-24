@@ -138,11 +138,14 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
       const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
         const caseSchema = cases[caseIndex];
         const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
-        const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
-       
+        const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || typeSchema.title?.replace(uppercamelcase(getSchemaName(outerSchema.$id)), '') || caseIndex}Wrapper`;
+
         if (dedupeFieldNames)
           typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
-  
+
+        if (typeSchema && typeSchema.properties)
+          typeSchema.properties[typeResolutionField] = internalTypeDefinition;
+
         return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
       });
   

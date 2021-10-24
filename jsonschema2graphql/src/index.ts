@@ -28,25 +28,25 @@ import { ConvertParams, GraphQLTypeMap } from './@types';
  */
 export default function convert({ jsonSchema, definitions, entryPoints = DEFAULT_ENTRY_POINTS, ajv }: ConvertParams): GraphQLSchema {
   // coerce input to array of schema objects
-  const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema)
+  const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
   const schemaReducer = getSchemaReducer(ajv, definitions);
 
-  const types: GraphQLTypeMap = schemaArray.reduce(schemaReducer, {})
+  const types: GraphQLTypeMap = schemaArray.reduce(schemaReducer, {});
 
   return new GraphQLSchema({
     ...types,
     ...entryPoints(types),
-  })
+  });
 }
 
 function toArray(x: JSONSchema7 | JSONSchema7[] | string | string[]): any[] {
   return x instanceof Array
     ? x // already array
-    : [x] // single item -> array
+    : [x]; // single item -> array
 }
 
 function toSchema(x: JSONSchema7 | string): JSONSchema7 {
   return x instanceof Object
     ? x // already object
-    : JSON.parse(x) // string -> object
+    : JSON.parse(x); // string -> object
 }

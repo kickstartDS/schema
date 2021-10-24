@@ -41,6 +41,13 @@ const contentComponentInterface = new GraphQLInterfaceType({
   },
 });
 
+const textMediaComponentInterface = new GraphQLInterfaceType({
+  name: 'TextMediaComponentMedia', // TextMediaComponentMedia
+  fields: {
+    type: { type: GraphQLString }
+  },
+})
+
 const gatsbyFileInterface = new GraphQLInterfaceType({
   name: 'File',
   fields: {}
@@ -138,13 +145,10 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
       const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
         const caseSchema = cases[caseIndex];
         const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
-        const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || typeSchema.title?.replace(uppercamelcase(getSchemaName(outerSchema.$id)), '') || caseIndex}Wrapper`;
+        const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
 
         if (dedupeFieldNames)
           typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
-
-        if (typeSchema && typeSchema.properties)
-          typeSchema.properties[typeResolutionField] = internalTypeDefinition;
 
         return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
       });
@@ -224,7 +228,12 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
           : // GraphQL doesn't allow types with no fields, so put a placeholder
             { _empty: { type: GraphQLString } };
   
-      const interfaces = contentComponent ? [contentComponentInterface] : [];
+      const interfaces = contentComponent
+        ? outerSchema.$id?.includes('.interface')
+          ? [textMediaComponentInterface]
+          : [contentComponentInterface]
+        : [];
+
       return new GraphQLObjectType({ name, description, fields, interfaces });
     }
   
@@ -232,7 +241,19 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
     else if (schema.type === 'array') {
       const arraySchema = _.cloneDeep(schema.items) as JSONSchema7;
       arraySchema.properties = dedupe(arraySchema, getSchemaName(outerSchema.$id));
-  
+      
+      if (arraySchema.anyOf && name !== 'SectionComponentContent') {
+        return new GraphQLList(textMediaComponentInterface);
+
+        // TODO: repurpose this to generalize again:
+        // return new GraphQLList(new GraphQLInterfaceType({
+        //   name: `${uppercamelcase(cleanFieldName(propName))}`,
+        //   fields: {
+        //     type: { type: GraphQLString }
+        //   },
+        // }));
+      }
+
       const elementType = buildType(name, arraySchema, knownTypes, dedupeFieldNames, false, outerSchema);
       return name === 'SectionComponentContent'
         ? new GraphQLList(new GraphQLNonNull(contentComponentInterface))

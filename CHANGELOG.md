@@ -1,3 +1,16 @@
+# (Sun Oct 24 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@1.5.9`
+  - fix: naming in anyOf, add type ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Oct 10 2021)
 
 #### ⚠️ Pushed to `master`

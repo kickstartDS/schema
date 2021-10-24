@@ -1,3 +1,15 @@
+# v1.5.9 (Sun Oct 24 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: naming in anyOf, add type ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.8 (Sun Oct 10 2021)
 
 #### ⚠️ Pushed to `master`

@@ -232,7 +232,9 @@ ${fragment}`
         null;*/
     
     if (constructorName === "GraphQLList") {
-      if (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type.kind === 'ListType') { // List of lists-case
+      if ((field.astNode.type as ListTypeNode).type.kind === 'NamedType') {
+        internalField = (field.astNode.type as ListTypeNode).type as NamedTypeNode;
+      } else if (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type.kind === 'ListType') { // List of lists-case
         internalField = ((((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode;
       } else { // List-case
         internalField =
@@ -344,7 +346,8 @@ ${fragment}`
     }
 
     if (constructorName === "GraphQLInterfaceType") {
-      const interfaceType = (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value;
+      const interfaceType = (field.astNode.type as ListTypeNode).type.kind === "NamedType" && ((field.astNode.type as ListTypeNode).type as NamedTypeNode).name.value ||
+        (((field.astNode.type as ListTypeNode).type as NonNullTypeNode).type as NamedTypeNode).name.value;
       const implementations = ast.getImplementations(ast.getType(interfaceType) as GraphQLInterfaceType) as InterfaceImplementations;
 
       if (fragmentType === fragmentTypes.NO_RELATIONS) return null;

@@ -1,3 +1,15 @@
+# v1.6.1 (Mon Oct 25 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: more hashing combos ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.0 (Mon Oct 25 2021)
 
 #### 🚀 Enhancement

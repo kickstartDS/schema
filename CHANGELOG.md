@@ -3,6 +3,20 @@
 #### ⚠️ Pushed to `master`
 
 - fix: update dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@1.6.1`
+  - fix: more hashing combos ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Mon Oct 25 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: update dependencies ([@julrich](https://github.com/julrich))
 
 #### Authors: 1
 

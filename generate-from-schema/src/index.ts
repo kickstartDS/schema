@@ -7,6 +7,7 @@ const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').defaul
 const Ajv = require('ajv');
 const path = require('path');
 // TODO I hate that require / import usage is mixed here -_-
+import traverse from 'json-schema-traverse';
 import { JSONSchema7 } from 'json-schema';
 
 const ajv = new Ajv({
@@ -100,12 +101,17 @@ const pageSchema: JSONSchema7 = {
   }
 };
 
-const addSchema = async (schemaPath: string) => {
+const addSchemaPath = async (schemaPath: string) => {
   const schema = await fs.readFile(schemaPath, 'utf-8');
   const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
 
   if (!ajv.getSchema(schemaJson.$id)) ajv.addSchema(schemaJson);
   return schemaJson;
+};
+
+const addSchemaObject = (schemaObject: JSONSchema7) => {
+  if (!ajv.getSchema(schemaObject.$id)) ajv.addSchema(schemaObject);
+  return schemaObject;
 };
 
 (async () => {
@@ -124,18 +130,38 @@ const addSchema = async (schemaPath: string) => {
   } else {
     const allDefinitions: { [key: string]: JSONSchema7 } = {};
     const schemaPaths = await glob(schemaGlob);
-    const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchema(schemaPath)));
+    const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchemaPath(schemaPath)));
+    const schemaAnyOfs: JSONSchema7[] = [];
 
     schemaJsons.forEach((schemaJson) => {
       const { definitions } = schemaJson;
       for (const definedTypeName in definitions) {
         allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
       }
+
+      if (schemaJson.$id.includes('text-media')) {
+        traverse(schemaJson, { cb: (schema, pointer, rootSchema) => {
+          if (schema.items && schema.items.anyOf && rootSchema.$id.includes('text-media')) {
+            schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
+              const schemaName = `http://frontend.ruhmesmeile.com/base/molecules/text-media-component-media-${anyOf.title.replace('TextMedia', '').toLowerCase()}.interface.json`;
+              schemaAnyOfs.push({
+                $id: schemaName,
+                $schema: "http://json-schema.org/draft-07/schema#",
+                ...anyOf,
+                definitions: schemaJson.definitions
+              })
+              return { $ref: schemaName };
+            });
+          }
+        }});
+      }
     });
+
+    schemaAnyOfs.forEach((schemaAnyOf) => addSchemaObject(schemaAnyOf));
 
     const customPaths = await glob(customGlob);
     if (customPaths.length) {
-      const customJsons: JSONSchema7[] = await Promise.all(customPaths.map(async (customPath: string) => addSchema(customPath)));  
+      const customJsons: JSONSchema7[] = await Promise.all(customPaths.map(async (customPath: string) => addSchemaPath(customPath)));  
       const sectionSchema = customJsons.find((customJson) => customJson.$id?.includes('section.schema.json')) as JSONSchema7;
 
       if (sectionSchema)
@@ -158,7 +184,7 @@ const addSchema = async (schemaPath: string) => {
     ajv.validateSchema(pageSchema);
 
     const gql = convertToGraphQL({
-      jsonSchema: schemaJsons,
+      jsonSchema: [...schemaJsons, ...schemaAnyOfs],
       definitions: allDefinitions,
       ajv
     });

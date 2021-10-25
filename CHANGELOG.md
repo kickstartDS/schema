@@ -1,3 +1,16 @@
+# (Mon Oct 25 2021)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@0.7.0`, `@kickstartds/graphql-cli-generate-fragments@1.6.0`, `@kickstartds/jsonschema2graphql@1.6.0`
+  - feature: add generalized support for `items.anyOf` [#22](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/22) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Oct 24 2021)
 
 #### ⚠️ Pushed to `master`

@@ -1,3 +1,19 @@
+# v1.6.0 (Mon Oct 25 2021)
+
+#### 🚀 Enhancement
+
+- feature: add generalized support for `items.anyOf` [#22](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/22) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- feature: add initial support for anyOf ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.9 (Sun Oct 24 2021)
 
 #### ⚠️ Pushed to `master`

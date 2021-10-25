@@ -1,5 +1,17 @@
 # (Mon Oct 25 2021)
 
+#### ⚠️ Pushed to `master`
+
+- fix: update dependencies ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Mon Oct 25 2021)
+
 #### 🚀 Enhancement
 
 - `@kickstartds/generate-from-schema@0.7.0`, `@kickstartds/graphql-cli-generate-fragments@1.6.0`, `@kickstartds/jsonschema2graphql@1.6.0`

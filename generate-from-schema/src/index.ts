@@ -8,6 +8,7 @@ const Ajv = require('ajv');
 const path = require('path');
 // TODO I hate that require / import usage is mixed here -_-
 import traverse from 'json-schema-traverse';
+import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7 } from 'json-schema';
 
 const ajv = new Ajv({
@@ -142,8 +143,9 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
       if (schemaJson.$id.includes('text-media')) {
         traverse(schemaJson, { cb: (schema, pointer, rootSchema) => {
           if (schema.items && schema.items.anyOf && rootSchema.$id.includes('text-media')) {
+            const componentName = uppercamelcase(path.basename(rootSchema.$id).split('.')[0]);
             schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
-              const schemaName = `http://frontend.ruhmesmeile.com/base/molecules/text-media-component-media-${anyOf.title.replace('TextMedia', '').toLowerCase()}.interface.json`;
+              const schemaName = `http://frontend.ruhmesmeile.com/base/molecules/text-media/media-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
               schemaAnyOfs.push({
                 $id: schemaName,
                 $schema: "http://json-schema.org/draft-07/schema#",

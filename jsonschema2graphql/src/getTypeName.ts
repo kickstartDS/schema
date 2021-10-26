@@ -11,6 +11,6 @@ export const getTypeName = (s: string | undefined, outerSchemaId?: string): stri
       ? uppercamelcase(`${path.parse(outerSchemaId || '').name.replace('.schema', '').replace('.definitions', '')}Component-${path.parse(s).name}`)
       : uppercamelcase(`${path.parse(outerSchemaId || '').name.replace('.schema', '').replace('.definitions', '')}Component-${path.parse(s).name}`)
     : s.includes('interface')
-      ? uppercamelcase(`${path.parse(s).name.replace('.interface', '')}`)
+      ? uppercamelcase(`${path.parse(s).name.replace('.interface', '')}Component`)
       : uppercamelcase(`${path.parse(s).name.replace('.schema', '').replace('.definitions', '')}Component`);
 }

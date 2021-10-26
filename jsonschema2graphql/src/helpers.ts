@@ -7,7 +7,6 @@ import { EntryPointBuilder } from './@types'
 
 const typeResolutionField = 'type';
 
-/** This generates the default `Query` block of the schema. */
 export const DEFAULT_ENTRY_POINTS: EntryPointBuilder = types => ({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -41,7 +40,9 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
     } else {
       if (Array.isArray(obj[property])) {
         hashedObj[hashFieldName(property, outerComponent)] = obj[property].map((item: Record<string, any>) => {
-          // TODO re-simplify this... only needed because of inconsistent hashing on sub-types / picture
+          // TODO re-simplify this... only needed because of inconsistent hashing on sub-types
+          // the main incompatibility lies with `dedupe` in `schemaReducer.js`, which handles
+          // sub-types a bit differently
           if (outerComponent === 'logo-tiles') {
             return hashObjectKeys(item, 'picture');
           } else if (outerComponent === 'quotes-slider') {
@@ -55,7 +56,9 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           }
         });
       } else if (typeof obj[property] === 'object') {
-        // TODO re-simplify this... only needed because of inconsistent hashing on sub-types / link-button
+        // TODO re-simplify this... only needed because of inconsistent hashing on sub-types
+        // the main incompatibility lies with `dedupe` in `schemaReducer.js`, which handles
+        // sub-types a bit differently
         const outer = outerComponent === 'section' ? obj[property][typeResolutionField] : outerComponent;
         if ((outer === 'storytelling' && property === 'link') || (outer === 'count-up' && property === 'link')) {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
@@ -67,6 +70,7 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], outer);
         }
       } else {
+        // TODO ideally, section handling should come naturally, too. Explicit handling should not be needed!
         hashedObj[hashFieldName(property, outerComponent === 'section' ? 'section' : outerComponent)] = obj[property];
       }
     }

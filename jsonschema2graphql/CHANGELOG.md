@@ -1,3 +1,15 @@
+# v1.6.3 (Tue Oct 26 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hashing for newly named anyOf schemas ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.2 (Tue Oct 26 2021)
 
 #### ⚠️ Pushed to `master`

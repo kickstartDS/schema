@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/jsonschema2graphql@1.6.3`
+  - fix: hashing for newly named anyOf schemas ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Tue Oct 26 2021)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/generate-from-schema@0.7.2`, `@kickstartds/jsonschema2graphql@1.6.2`
   - fix: improve anyOf schema naming ([@julrich](https://github.com/julrich))
 

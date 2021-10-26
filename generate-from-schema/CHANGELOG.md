@@ -1,3 +1,15 @@
+# v0.7.2 (Tue Oct 26 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: improve anyOf schema naming ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.7.0 (Mon Oct 25 2021)
 
 #### 🚀 Enhancement

@@ -50,7 +50,7 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           } else if (outerComponent === 'post-head' && property === 'categories') {
             return hashObjectKeys(item, 'tag-label');
           } else if (outerComponent === 'text-media' && property === 'media') {
-            return hashObjectKeys(item, 'text-media-component-media-image'); // TODO this id should ideally be simpler!
+            return hashObjectKeys(item, 'media-image'); // TODO this also needs to handle `media-video` and other permutations
           } else {
             return hashObjectKeys(item, outerComponent === 'section' ? item[typeResolutionField] : outerComponent);
           }
@@ -64,7 +64,7 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
         } else if (outer === 'storytelling' && property === 'headline') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'headline');
-        } else if (outer === 'text-media-component-media-image' && property === 'image') {
+        } else if (outer === 'media-image' && property === 'image') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'picture');
         } else {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], outer);

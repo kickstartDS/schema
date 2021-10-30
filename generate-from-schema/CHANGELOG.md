@@ -1,3 +1,15 @@
+# v0.7.4 (Sat Oct 30 2021)
+
+#### ⚠️ Pushed to `master`
+
+- feature: load custom jsons that are not overrides, too ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.7.2 (Tue Oct 26 2021)
 
 #### ⚠️ Pushed to `master`

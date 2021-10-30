@@ -1,3 +1,17 @@
+# (Sat Oct 30 2021)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/generate-from-schema@0.7.4`
+  - feature: load custom jsons that are not overrides, too ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Tue Oct 26 2021)
 
 #### ⚠️ Pushed to `master`

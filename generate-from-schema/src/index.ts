@@ -133,6 +133,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
     const schemaPaths = await glob(schemaGlob);
     const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchemaPath(schemaPath)));
     const schemaAnyOfs: JSONSchema7[] = [];
+    const customSchemaJsons: JSONSchema7[] = [];
 
     schemaJsons.forEach((schemaJson) => {
       const { definitions } = schemaJson;
@@ -171,14 +172,22 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
 
       customJsons.forEach((customJson) => {
         const { definitions } = customJson;
+        let newCustomJson = true;
+
         for (const definedTypeName in definitions) {
           allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
         }
 
         schemaJsons.forEach((schemaJson, index) => {
-          if (path.basename(customJson.$id) === path.basename(schemaJson.$id))
+          if (path.basename(customJson.$id) === path.basename(schemaJson.$id)) {
+            newCustomJson = false;
             schemaJsons[index] = customJson;
-        }); 
+          }
+        });
+
+        if (newCustomJson) {
+          customSchemaJsons.push(customJson);
+        }
       });
     }
 
@@ -186,7 +195,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
     ajv.validateSchema(pageSchema);
 
     const gql = convertToGraphQL({
-      jsonSchema: [...schemaJsons, ...schemaAnyOfs],
+      jsonSchema: [...schemaJsons, ...schemaAnyOfs, ...customSchemaJsons],
       definitions: allDefinitions,
       ajv
     });

@@ -1,3 +1,15 @@
+# v0.7.5 (Sat Oct 30 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: clean up anyOf splitting behaviour ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.7.4 (Sat Oct 30 2021)
 
 #### ⚠️ Pushed to `master`

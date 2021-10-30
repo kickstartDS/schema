@@ -102,6 +102,32 @@ const pageSchema: JSONSchema7 = {
   }
 };
 
+const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[]) => {
+  traverse(schemaJson, {
+    cb: (schema, pointer, rootSchema) => {
+      if (schema.items && schema.items.anyOf) {
+        const componentPath = rootSchema.$id.split('/');
+        const componentType = path.basename(rootSchema.$id).split('.')[0];
+        const componentName = uppercamelcase(componentType);
+
+        schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
+          if (anyOf.$ref)
+            return anyOf;
+
+          const schemaName = `http://frontend.ruhmesmeile.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
+          schemaAnyOfs.push({
+            $id: schemaName,
+            $schema: "http://json-schema.org/draft-07/schema#",
+            ...anyOf,
+            definitions: schemaJson.definitions
+          });
+          return { $ref: schemaName };
+        });
+      }
+    }
+  });
+}
+
 const addSchemaPath = async (schemaPath: string) => {
   const schema = await fs.readFile(schemaPath, 'utf-8');
   const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
@@ -141,23 +167,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
         allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
       }
 
-      if (schemaJson.$id.includes('text-media')) {
-        traverse(schemaJson, { cb: (schema, pointer, rootSchema) => {
-          if (schema.items && schema.items.anyOf && rootSchema.$id.includes('text-media')) {
-            const componentName = uppercamelcase(path.basename(rootSchema.$id).split('.')[0]);
-            schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
-              const schemaName = `http://frontend.ruhmesmeile.com/base/molecules/text-media/media-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
-              schemaAnyOfs.push({
-                $id: schemaName,
-                $schema: "http://json-schema.org/draft-07/schema#",
-                ...anyOf,
-                definitions: schemaJson.definitions
-              })
-              return { $ref: schemaName };
-            });
-          }
-        }});
-      }
+      addExplicitAnyOfs(schemaJson, schemaAnyOfs);
     });
 
     schemaAnyOfs.forEach((schemaAnyOf) => addSchemaObject(schemaAnyOf));

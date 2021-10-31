@@ -38,7 +38,9 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
     if (property === typeResolutionField) {
       hashedObj[typeResolutionField] = obj[typeResolutionField];
     } else {
-      if (Array.isArray(obj[property])) {
+      if (Array.isArray(obj[property]) && obj[property].length > 0 && (typeof obj[property][0] === 'string' || obj[property][0] instanceof String)) {
+        hashedObj[hashFieldName(property, outerComponent)] = obj[property];
+      } else if (Array.isArray(obj[property]) && obj[property].length > 0) {
         hashedObj[hashFieldName(property, outerComponent)] = obj[property].map((item: Record<string, any>) => {
           // TODO re-simplify this... only needed because of inconsistent hashing on sub-types
           // the main incompatibility lies with `dedupe` in `schemaReducer.js`, which handles

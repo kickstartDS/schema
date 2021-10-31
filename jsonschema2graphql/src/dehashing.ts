@@ -10,10 +10,15 @@ export function cleanObjectKeys(obj: Record<string, any>): Record<string, any> {
   Object.keys(obj).forEach((property) => {
     if (property !== typeResolutionField) {
       if (Array.isArray(obj[property])) {
+
         if (obj[property].length > 0) {
-          cleanedObject[cleanFieldName(property)] = obj[property].map((item: Record<string, any>) => {
-            return cleanObjectKeys(item);
-          });
+          if (typeof obj[property][0] === 'string' || obj[property][0] instanceof String) {
+            cleanedObject[cleanFieldName(property)] = obj[property];
+          } else {
+            cleanedObject[cleanFieldName(property)] = obj[property].map((item: Record<string, any>) => {
+              return cleanObjectKeys(item);
+            });
+          }
         }
       } else if (typeof obj[property] === 'object') {
         if (obj[property] !== null) {

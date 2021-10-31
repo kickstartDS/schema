@@ -29,6 +29,8 @@ ajv.addKeyword({
   validate: () => true,
 })
 
+// TODO move this to `kickstartDS` itself, should also not be a duplicate of
+// original `section.schema.json` items for components
 const pageSchema: JSONSchema7 = {
   $schema: "http://json-schema.org/draft-07/schema#",
   $id: "http://frontend.ruhmesmeile.com/page.schema.json",
@@ -82,9 +84,72 @@ const pageSchema: JSONSchema7 = {
     sections: {
       type: "array",
       title: "Sections",
-      description: "Collection of sections making up the content of the page",
+      description: "Collection of sections to render on the page",
       items: {
         $ref: "http://frontend.ruhmesmeile.com/base/base/section.schema.json"
+      }
+    },
+    components: {
+      type: "array",
+      title: "Components",
+      description: "Collection of components to render on the page",
+      items: {
+        "anyOf": [
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/link-button.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/toggle.definitions.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/button.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/tag-label.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/quote.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual-slider.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/contact.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/storytelling.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/collapsible-box.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/count-up.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/content-box.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/text-media.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/teaser-box.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/logo-tiles.schema.json"
+          },
+          {
+            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/teaser-row.schema.json"
+          }
+        ]
       }
     },
     updated: {

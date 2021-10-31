@@ -1,3 +1,15 @@
+# v1.6.5 (Sun Oct 31 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: more hashing (cta, glossary) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.4 (Sun Oct 31 2021)
 
 #### ⚠️ Pushed to `master`

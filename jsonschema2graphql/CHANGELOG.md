@@ -1,3 +1,15 @@
+# v1.6.4 (Sun Oct 31 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hashing / dehashing of simple string arrays ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.3 (Tue Oct 26 2021)
 
 #### ⚠️ Pushed to `master`

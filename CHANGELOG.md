@@ -1,3 +1,16 @@
+# (Sun Oct 31 2021)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@1.6.4`
+  - fix: hashing / dehashing of simple string arrays ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sat Oct 30 2021)
 
 #### ⚠️ Pushed to `master`

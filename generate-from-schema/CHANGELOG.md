@@ -1,3 +1,15 @@
+# v0.7.7 (Sun Oct 31 2021)
+
+#### ⚠️ Pushed to `master`
+
+- feature: add components to page schema ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.7.5 (Sat Oct 30 2021)
 
 #### ⚠️ Pushed to `master`

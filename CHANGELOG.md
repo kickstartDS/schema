@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/generate-from-schema@0.7.7`
+  - feature: add components to page schema ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Sun Oct 31 2021)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/jsonschema2graphql@1.6.4`
   - fix: hashing / dehashing of simple string arrays ([@julrich](https://github.com/julrich))
 

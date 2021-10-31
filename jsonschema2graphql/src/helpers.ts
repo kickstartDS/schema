@@ -66,6 +66,10 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
         } else if (outer === 'storytelling' && property === 'headline') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'headline');
+        } else if (outer === 'glossary' && property === 'cta') {
+          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'cta');
+        } else if (outer === 'cta' && property === 'button') {
+          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
         } else if (outer === 'media-image' && property === 'image') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'picture');
         } else {

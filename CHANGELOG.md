@@ -2,6 +2,20 @@
 
 #### ⚠️ Pushed to `master`
 
+- fix: update kDS dependencies again ([@julrich](https://github.com/julrich))
+- `@kickstartds/generate-from-schema@0.7.10`, `@kickstartds/jsonschema2graphql@1.6.7`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Tue Nov 09 2021)
+
+#### ⚠️ Pushed to `master`
+
 - fix: update kDS dependencies ([@julrich](https://github.com/julrich))
 - `@kickstartds/jsonschema2graphql@1.6.6`
   - fix: hashing of image in contact component ([@julrich](https://github.com/julrich))

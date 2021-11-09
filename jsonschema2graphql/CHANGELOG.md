@@ -1,3 +1,15 @@
+# v1.6.6 (Tue Nov 09 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hashing of image in contact component ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.5 (Sun Oct 31 2021)
 
 #### ⚠️ Pushed to `master`

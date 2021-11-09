@@ -70,6 +70,8 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'cta');
         } else if (outer === 'cta' && property === 'button') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
+        } else if (outer === 'link-button' && property === 'icon') {
+          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'icon');
         } else if (outer === 'media-image' && property === 'image') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'picture');
         } else if (outer === 'contact' && property === 'image') {

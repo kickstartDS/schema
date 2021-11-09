@@ -1320,10 +1320,10 @@
     sass "^1.43.4"
     vhtml "^2.2.0"
 
-"@kickstartds/design-system@^1.10.13":
-  version "1.10.13"
-  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-1.10.13.tgz#1b20bdef62a056617a3bab86ea038b02a430c728"
-  integrity sha512-Tpu4xKX4yzgoupGHBgn6Ri7X/6Jd/JiMJkuBCXxnVUscLF9L+G3wM3fcaBkTt3ybvM8lvbHp9XmcA2XD7Dpi4Q==
+"@kickstartds/design-system@^1.10.14":
+  version "1.10.14"
+  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-1.10.14.tgz#832efd4de1504b43e6320b182f6fff97f3488b6b"
+  integrity sha512-Wplpb7gr2DgkUFKHFwbp9WreRQ1qO7hv77gGGOhtKzx31XRHw4R7qfTg+m/QNXz05lRf7CxZiKKPAizqWkdbeQ==
   dependencies:
     "@kickstartds/base" "^1.5.1"
     "@kickstartds/blog" "^1.5.1"

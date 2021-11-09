@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "0.7.10",
+  "version": "0.7.11",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -16,6 +16,6 @@
     "@kickstartds/core": "^1.5.0",
     "@kickstartds/design-system": "^1.10.13",
     "@kickstartds/form": "^1.5.1",
-    "@kickstartds/generate-from-schema": "^0.7.9"
+    "@kickstartds/generate-from-schema": "^0.7.10"
   }
 }

@@ -1,3 +1,17 @@
+# (Tue Nov 09 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: update kDS dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@1.6.6`
+  - fix: hashing of image in contact component ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Oct 31 2021)
 
 #### ⚠️ Pushed to `master`

@@ -1,3 +1,15 @@
+# v1.6.8 (Tue Nov 09 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: icon hashing ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.7 (Tue Nov 09 2021)
 
 #### ⚠️ Pushed to `master`

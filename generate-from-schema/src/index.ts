@@ -4,6 +4,7 @@ const chokidar = require('chokidar');
 const { printSchema } = require('graphql');
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
+const convertToSanity = require('@kickstartds/jsonschema2sanity').default;
 const Ajv = require('ajv');
 const path = require('path');
 // TODO I hate that require / import usage is mixed here -_-
@@ -272,23 +273,61 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
     const gql = convertToGraphQL({
       jsonSchema: [...schemaJsons, ...schemaAnyOfs, ...customSchemaJsons],
       definitions: allDefinitions,
-      ajv
+      ajv,
     });
     fs.writeFile(
       `dist/page.graphql`,
-      printSchema(gql).replace(/`/g, "'")
+      printSchema(gql).replace(/`/g, "'"),
     );
 
-    schemaJsons.push(pageSchema);
     const netlifyAdminConfig = convertToNetlifyCMS({
-      jsonSchema: schemaJsons,
+      jsonSchema: [...schemaJsons, pageSchema],
       definitions: allDefinitions,
       ajv,
-      configLocation: 'static/admin/config.yml'
+      configLocation: 'static/admin/config.yml',
     });
     fs.writeFile(
       `dist/config.yml`,
       netlifyAdminConfig,
     );
+
+    const sanitySchemas = [
+      'http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json',
+      'http://frontend.ruhmesmeile.com/base/atoms/link-button.schema.json',
+      'http://frontend.ruhmesmeile.com/base/atoms/toggle.definitions.json',
+      'http://frontend.ruhmesmeile.com/base/atoms/button.schema.json',
+      'http://frontend.ruhmesmeile.com/base/atoms/tag-label.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/quote.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/visual-slider.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/contact.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/storytelling.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/collapsible-box.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/count-up.schema.json',
+      'http://frontend.ruhmesmeile.com/base/molecules/content-box.schema.json',
+      'http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json',
+      'http://frontend.ruhmesmeile.com/base/molecules/text-media.schema.json',
+      'http://frontend.ruhmesmeile.com/base/molecules/teaser-box.schema.json',
+      'http://frontend.ruhmesmeile.com/content/molecules/logo-tiles.schema.json',
+      'http://frontend.ruhmesmeile.com/base/molecules/teaser-row.schema.json',
+    ];
+
+    const sanityObjectFields: Record<string, string> = convertToSanity({
+      jsonSchema: [...schemaJsons.filter((schemaJson) => sanitySchemas.includes(schemaJson.$id))],
+      definitions: allDefinitions,
+      ajv,
+      configLocation: 'static/admin/config.yml',
+    });
+
+    if (!fs.existsSync('dist/sanity')){
+      fs.mkdirSync('dist/sanity');
+    }
+
+    for (const key in sanityObjectFields) {
+      fs.writeFile(
+        `dist/sanity/${key}.js`,
+        sanityObjectFields[key],
+      );
+    };
   }
 })();

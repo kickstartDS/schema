@@ -5,12 +5,14 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-generate-from-schema\" \"yarn watch-schemas\"",
-    "build": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-generate-graphql-fragments\" \"yarn build-add-gatsby-directives\" \"yarn build-generate-from-schema\") && yarn compile-schemas",
+    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-jsonschema2sanity\" \"yarn build-generate-from-schema\" \"yarn watch-schemas\"",
+    "build": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-jsonschema2sanity\" \"yarn build-generate-graphql-fragments\" \"yarn build-add-gatsby-directives\" \"yarn build-generate-from-schema\") && yarn compile-schemas",
     "build-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql build",
     "watch-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql watch",
     "build-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms build",
     "watch-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms watch",
+    "build-jsonschema2sanity": "yarn workspace @kickstartds/jsonschema2sanity build",
+    "watch-jsonschema2sanity": "yarn workspace @kickstartds/jsonschema2sanity watch",
     "build-generate-graphql-fragments": "yarn workspace @kickstartds/graphql-cli-generate-fragments build",
     "build-add-gatsby-directives": "yarn workspace @kickstartds/graphql-cli-add-gatsby-directives build",
     "build-generate-from-schema": "yarn workspace @kickstartds/generate-from-schema build",
@@ -25,6 +27,7 @@
     "generate-from-schema",
     "jsonschema2graphql",
     "jsonschema2netlifycms",
+    "jsonschema2sanity",
     "example"
   ],
   "dependencies": {

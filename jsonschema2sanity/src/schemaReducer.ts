@@ -2,7 +2,7 @@ import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { safeEnumKey } from './safeEnumKey';
-import { ObjectField } from './@types';
+import { Field, ObjectField, ArrayField, StringField } from './@types';
 import Ajv from 'ajv';
 import * as path from 'path';
 
@@ -27,15 +27,26 @@ const mapping: TypeMapping = {
 const getInternalTypeDefinition = (type: string): any => {
   return {
     name: typeResolutionField,
-    widget: 'hidden',
+    type: 'string',
+    hidden: true,
     description: 'Internal type for interface resolution',
     default: type,
   }
 }
 
-const widgetMapping = (property: JSONSchema7) : string => {
+const widgetMapping = (property: JSONSchema7, name: string) : Field => {
+  // const field: Field = {
+  //   name,
+  //   type: widget,
+  //   title: toPascalCase(name),
+  // };
+
   if (property.type === 'string' && property.enum && property.enum.length) {
-    return 'select';
+    return {
+      name,
+      type: 'string',
+      title: toPascalCase(name)
+    };
   }
 
   if (
@@ -43,7 +54,11 @@ const widgetMapping = (property: JSONSchema7) : string => {
     property.format &&
     property.format === 'markdown'
   ) {
-    return 'markdown';
+    return {
+      name,
+      type: 'text',
+      title: toPascalCase(name)
+    };
   }
 
   if (
@@ -51,7 +66,11 @@ const widgetMapping = (property: JSONSchema7) : string => {
     property.format &&
     property.format === 'image'
   ) {
-    return 'image';
+    return {
+      name,
+      type: 'image',
+      title: toPascalCase(name)
+    };
   }
 
   if (
@@ -59,10 +78,18 @@ const widgetMapping = (property: JSONSchema7) : string => {
     property.format &&
     property.format === 'id'
   ) {
-    return 'id';
+    return {
+      name,
+      type: 'string',
+      title: toPascalCase(name)
+    };
   }
 
-  return mapping[property.type as JSONSchema7TypeName];
+  return {
+    name,
+    type: mapping[property.type as JSONSchema7TypeName],
+    title: toPascalCase(name)
+  };
 };
 
 let allDefinitions: JSONSchema7[];
@@ -90,17 +117,17 @@ export function getSchemaName(schemaId: string | undefined): string {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
 
-export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): ObjectField[] {
+export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): Field[] {
   allDefinitions = definitions;
   
   function buildConfig(
     propName: string,
     schema: JSONSchema7,
-    objectFields: ObjectField[],
+    objectFields: Field[],
     outerRun: boolean = false,
     outerSchema: JSONSchema7,
     componentSchemaId: string = '',
-  ): ObjectField {
+  ): Field {
     const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
     const contentComponent = outerRun && !sectionComponent;
     const name = propName;
@@ -150,7 +177,7 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       if (schema.properties)
         objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
 
-      const field: ObjectField = buildConfig(name, objectSchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId);
+      const field: ObjectField = buildConfig(name, objectSchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId) as ObjectField;
       
       // TODO re-check button exemption, type clash was resolved! Pretty sure that's the reason for the exclusion
       if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
@@ -172,7 +199,7 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
 
-      const fields = (): ObjectField[] =>
+      const fields = (): Field[] =>
         !_.isEmpty(schema.properties)
           ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
               const objectSchema = _.cloneDeep(prop);
@@ -197,13 +224,14 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         }
       }
         
-      // TODO re-check if this can go anywhere where it makes sense for Sanity
-      // if (schema.default)
-      //   field.default = schema.default as string;
+      if (schema.default)
+        field.initialValue = schema.default as string;
 
-      // if (description)
-      //   field.hint = description;
+      if (description)
+        field.description = description;
 
+      // TODO this is a function in Sanity, needs to be added:
+      // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
       // field.required = schema.required?.includes(name) || false;
   
       return field;
@@ -225,20 +253,21 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
             return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
           });
 
-          const field: ObjectField = {
+          const field: ArrayField = {
             name,
-            type: 'object',
+            type: 'array',
             title: toPascalCase(name),
-            fields: fieldConfigs
+            of: fieldConfigs
           };
 
-          // TODO re-check if this can go anywhere where it makes sense for Sanity
-          // if (outerSchema.default)
-          //   field.default = schema.default as string;
+          if (outerSchema.default)
+            field.initialValue = schema.default as string;
           
-          // if (description)
-          //   field.hint = description;
+          if (description)
+            field.description = description;
     
+          // TODO this is a function in Sanity, needs to be added:
+          // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
           // field.required = outerSchema.required?.includes(name) || false;
           
           return field;
@@ -248,20 +277,21 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
             buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId)
           );
 
-          const field: ObjectField = {
+          const field: ArrayField = {
             name,
-            type: 'object',
+            type: 'array',
             title: toPascalCase(name),
-            fields: fieldConfigs,
+            of: fieldConfigs,
           };
 
-          // TODO re-check if this can go anywhere where it makes sense for Sanity
-          // if (outerSchema.default)
-          //   field.default = schema.default as string;
+          if (outerSchema.default)
+            field.initialValue = schema.default as string;
           
-          // if (description)
-          //   field.hint = description;
-    
+          if (description)
+            field.description = description;
+  
+          // TODO this is a function in Sanity, needs to be added:
+          // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
           // field.required = outerSchema.required?.includes(name) || false;
 
           return field;
@@ -285,24 +315,25 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           fieldConfig = buildConfig(name, arraySchema, objectFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
         }
 
-        const field: ObjectField = {
+        const field: ArrayField = {
           name,
-          type: 'object',
+          type: 'array',
           title: toPascalCase(name),
-          fields: [],
+          of: [],
         };
 
-        // TODO re-check if this can go anywhere where it makes sense for Sanity
-        // if (outerSchema.default)
-        //   field.default = schema.default as string;
+        if (outerSchema.default)
+          field.initialValue = schema.default as string;
       
-        // if (description)
-        //   field.hint = description;
+        if (description)
+          field.description = description;
 
+        // TODO this is a function in Sanity, needs to be added:
+        // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
         // field.required = outerSchema.required?.includes(name) || false;
   
-        if (fieldConfig && fieldConfig.fields)
-          field.fields = fieldConfig.fields;
+        if (fieldConfig && fieldConfig.type === 'object' && (fieldConfig as ObjectField).fields)
+          field.of = (fieldConfig as ObjectField).fields;
   
         return field;
       }
@@ -312,27 +343,30 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
       const description = buildDescription(schema);
-      const options: { label: string, value: string }[] = schema.enum.map((value) => {
+      const options: { title: string, value: string }[] = schema.enum.map((value) => {
         return {
-          label: value as string,
+          title: value as string,
           value: safeEnumKey(value as string),
         };
       });
 
-      const field: ObjectField = {
+      const field: StringField = {
         name,
-        type: 'object',
+        type: 'string',
         title: toPascalCase(name),
-        fields: [],
+        options: {
+          list: options
+        },
       };
 
-      // TODO re-check if this can go anywhere where it makes sense for Sanity
-      // if (schema.default)
-      //   field.default = safeEnumKey(schema.default as string);
+      if (schema.default)
+        field.initialValue = safeEnumKey(schema.default as string);
 
-      // if (description)
-      //   field.hint = description;
+      if (description)
+        field.description = description;
 
+      // TODO this is a function in Sanity, needs to be added:
+      // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
       // field.required = schema.required?.includes(name) || false;
   
       return field;
@@ -359,27 +393,22 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     }
   
     // basic?
-    else if (widgetMapping(schema)) {
+    else if (widgetMapping(schema, name)) {
       const description = buildDescription(schema);
-      const widget = widgetMapping(schema);
+      const field = widgetMapping(schema, name);
   
-      const field: ObjectField = {
-        name,
-        type: 'object',
-        title: toPascalCase(name),
-        fields: [],
-      };
-  
-      // TODO re-check if this can go anywhere where it makes sense for Sanity
+      // TODO re-check this
       // if (widget === 'number')
       //   field.valueType = 'int';
 
-      // if (schema.default)
-      //   field.default = schema.default as string;
+      if (schema.default)
+        field.initialValue = schema.default as string;
 
-      // if (description)
-      //   field.hint = description;
+      if (description)
+        field.description = description;
 
+      // TODO this is a function in Sanity, needs to be added:
+      // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
       // field.required = outerSchema.required?.includes(name) || false;
   
       return field;
@@ -389,14 +418,14 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   }
 
-  const objectFields: ObjectField[] = schemas.map((schema) => {
+  const sanityFields: Field[] = schemas.map((schema) => {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
     const typeName = getSchemaName($id);
-    return buildConfig(typeName, schema, objectFields, true, schema, schema.$id);
+    return buildConfig(typeName, schema, sanityFields, true, schema, schema.$id);
   });
 
-  return objectFields;
+  return sanityFields;
 }
 
 function buildDescription(d: any): string | undefined {

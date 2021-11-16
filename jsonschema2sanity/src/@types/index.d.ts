@@ -41,7 +41,7 @@ declare namespace jsonschema2sanity {
     description?: string;
     hidden?: boolean;
     readOnly?: boolean;
-    defaultValue?: any;
+    initialValue?: any;
     inputComponent?: ElementType;
   };
   

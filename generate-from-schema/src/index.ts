@@ -312,8 +312,15 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
       'http://frontend.ruhmesmeile.com/base/molecules/teaser-row.schema.json',
     ];
 
+    const headlineSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/headline.sanity.schema.json`);
+    ajv.validateSchema(headlineSanitySchema);
+    
+    const visualSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/visual.sanity.schema.json`);
+    ajv.validateSchema(visualSanitySchema);
+
     const sanityObjectFields: Record<string, string> = convertToSanity({
-      jsonSchema: [...schemaJsons.filter((schemaJson) => sanitySchemas.includes(schemaJson.$id))],
+      jsonSchema: [headlineSanitySchema, visualSanitySchema],
+      // jsonSchema: [...schemaJsons.filter((schemaJson) => sanitySchemas.includes(schemaJson.$id))],
       definitions: allDefinitions,
       ajv,
       configLocation: 'static/admin/config.yml',

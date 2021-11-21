@@ -2,9 +2,10 @@ import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { safeEnumKey } from './safeEnumKey';
-import { Field, ObjectField, ArrayField, StringField } from './@types';
+import { Field, ObjectField, ArrayField, StringField, Preview } from './@types';
 import Ajv from 'ajv';
 import * as path from 'path';
+import jsonPointer from 'json-pointer';
 
 const typeResolutionField = 'type';
 
@@ -29,8 +30,9 @@ const getInternalTypeDefinition = (type: string): any => {
     name: typeResolutionField,
     type: 'string',
     hidden: true,
+    readOnly: true,
     description: 'Internal type for interface resolution',
-    default: type,
+    initialValue: type,
   }
 }
 
@@ -56,7 +58,8 @@ const widgetMapping = (property: JSONSchema7, name: string) : Field => {
   ) {
     return {
       name,
-      type: 'text',
+      type: 'array',
+      of: [{ type: "block" }],
       title: toPascalCase(name)
     };
   }
@@ -69,6 +72,9 @@ const widgetMapping = (property: JSONSchema7, name: string) : Field => {
     return {
       name,
       type: 'image',
+      options: {
+        hotspot: true,
+      },
       title: toPascalCase(name)
     };
   }
@@ -83,6 +89,17 @@ const widgetMapping = (property: JSONSchema7, name: string) : Field => {
       type: 'string',
       title: toPascalCase(name)
     };
+  }
+
+  if (property.const) {
+    return {
+      name,
+      type: 'string',
+      title: toPascalCase(name),
+      initialValue: property.const,
+      hidden: true,
+      readOnly: true,
+    }
   }
 
   return {
@@ -224,8 +241,9 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         }
       }
         
-      if (schema.default)
-        field.initialValue = schema.default as string;
+      // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
+      // if (schema.default)
+      //   field.initialValue = schema.default as string;
 
       if (description)
         field.description = description;
@@ -260,8 +278,9 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
             of: fieldConfigs
           };
 
-          if (outerSchema.default)
-            field.initialValue = schema.default as string;
+          // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
+          // if (outerSchema.default)
+          //   field.initialValue = schema.default as string;
           
           if (description)
             field.description = description;
@@ -284,8 +303,9 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
             of: fieldConfigs,
           };
 
-          if (outerSchema.default)
-            field.initialValue = schema.default as string;
+          // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
+          // if (outerSchema.default)
+          //   field.initialValue = schema.default as string;
           
           if (description)
             field.description = description;
@@ -322,8 +342,9 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           of: [],
         };
 
-        if (outerSchema.default)
-          field.initialValue = schema.default as string;
+        // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
+        // if (outerSchema.default)
+        //   field.initialValue = schema.default as string;
       
         if (description)
           field.description = description;
@@ -359,8 +380,9 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         },
       };
 
-      if (schema.default)
-        field.initialValue = safeEnumKey(schema.default as string);
+      // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
+      // if (schema.default)
+      //   field.initialValue = safeEnumKey(schema.default as string);
 
       if (description)
         field.description = description;
@@ -374,7 +396,7 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
   
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      if (schema.$ref.includes('#/definitions/')) {
+      if (schema.$ref.includes('#/definitions/') || schema.$ref.includes('#/properties/')) {
         const reffedSchemaId = schema.$ref.includes('http')
           ? schema.$ref.split('#').shift()
           : outerSchema.$id;
@@ -383,7 +405,9 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           : schema.$ref.split('/').pop();
 
         const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId))?.schema as JSONSchema7;
-        const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : allDefinitions[reffedPropertyName as string] as JSONSchema7;
+        const reffedProperty = jsonPointer.has(reffedSchema, schema.$ref.split('#').pop() as string)
+          ? jsonPointer.get(reffedSchema, schema.$ref.split('#').pop() as string)
+          : allDefinitions[reffedPropertyName as string] as JSONSchema7;
 
         return buildConfig(reffedPropertyName as string, reffedProperty, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId);
       } else {
@@ -401,8 +425,9 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       // if (widget === 'number')
       //   field.valueType = 'int';
 
-      if (schema.default)
-        field.initialValue = schema.default as string;
+      // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
+      // if (schema.default)
+      //   field.initialValue = schema.default as string;
 
       if (description)
         field.description = description;
@@ -422,7 +447,17 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
     const typeName = getSchemaName($id);
-    return buildConfig(typeName, schema, sanityFields, true, schema, schema.$id);
+
+    let preview = {};
+    if (schema.properties?.preview) {
+      preview = (schema.properties.preview as JSONSchema7).const as any;
+      delete schema.properties.preview;
+    }
+
+    return {
+      ...buildConfig(typeName, schema, sanityFields, true, schema, schema.$id),
+      preview,
+    };
   });
 
   return sanityFields;

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://sanity.kickstartds.com/visual.schema.json",
+  "title": "Sanity Visual",
+  "description": "Visual for use in Sanity CMS",
+  "type": "object",
+  "properties": {
+    "headline": {
+      "$ref": "http://sanity.kickstartds.com/headline.schema.json"
+    },
+    "text": {
+      "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/text"
+    },
+    "link": {
+      "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/link"
+    },
+    "horizontal": {
+      "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/horizontal"
+    },
+    "vertical": {
+      "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/vertical"
+    },
+    "image": {
+      "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/media/properties/image/properties/srcDesktop"
+    },
+    "backgroundColor": {
+      "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/backgroundColor"
+    },
+    "preview": {
+      "const": {
+        "select": {
+          "title": "headline.content",
+          "subtitle": "text",
+          "media": "srcDesktop"
+        }
+      }
+    }
+  }
+}

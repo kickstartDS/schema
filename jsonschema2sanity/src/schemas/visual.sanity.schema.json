@@ -9,7 +9,7 @@
       "type": "object",
       "properties": {
         "headline": {
-          "$ref": "http://frontend.ruhmesmeile.com/base/molecules/visual.schema.json#/properties/box/properties/headline/properties/content"
+          "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/headline/properties/content"
         },
         "text": {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/text"

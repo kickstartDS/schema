@@ -136,7 +136,7 @@ export function getSchemaName(schemaId: string | undefined): string {
 
 export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): Field[] {
   allDefinitions = definitions;
-  
+
   function buildConfig(
     propName: string,
     schema: JSONSchema7,
@@ -154,25 +154,25 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       console.log('schema with oneOf', schema);
       throw err(`The type oneOf on property ${name} is not supported.`);
     }
-  
+
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
       console.log('schema with anyOf', schema);
       throw err(`The type anyOf on property ${name} is not supported. This should've been compiled in the processing step before this one!`);
     }
-  
+
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
       console.log('schema with allOf', schema);
       throw err(`The type allOf on property ${name} is not supported. This should've been compiled in the processing step before this one!`);
     }
-  
+
     // not?
     else if (!_.isUndefined(schema.not)) {
       console.log('schema with not', schema);
       throw err(`The type not on property ${name} is not supported.`);
     }
-  
+
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
@@ -201,7 +201,7 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           field.fields.push(getInternalTypeDefinition(name));
         }
       }
-        
+
       // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
       // if (schema.default)
       //   field.initialValue = schema.default as string;
@@ -212,10 +212,10 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       // TODO this is a function in Sanity, needs to be added:
       // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
       // field.required = schema.required?.includes(name) || false;
-  
+
       return field;
     }
-  
+
     // array?
     else if (schema.type === 'array') {
       // anyOf -> convert all items
@@ -242,14 +242,14 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
           // if (outerSchema.default)
           //   field.initialValue = schema.default as string;
-          
+
           if (description)
             field.description = description;
-    
+
           // TODO this is a function in Sanity, needs to be added:
           // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
           // field.required = outerSchema.required?.includes(name) || false;
-          
+
           return field;
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
@@ -267,10 +267,10 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
           // if (outerSchema.default)
           //   field.initialValue = schema.default as string;
-          
+
           if (description)
             field.description = description;
-  
+
           // TODO this is a function in Sanity, needs to be added:
           // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
           // field.required = outerSchema.required?.includes(name) || false;
@@ -306,21 +306,21 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
         // if (outerSchema.default)
         //   field.initialValue = schema.default as string;
-      
+
         if (description)
           field.description = description;
 
         // TODO this is a function in Sanity, needs to be added:
         // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
         // field.required = outerSchema.required?.includes(name) || false;
-  
+
         if (fieldConfig && fieldConfig.type === 'object' && (fieldConfig as ObjectField).fields)
           field.of = (fieldConfig as ObjectField).fields;
-  
+
         return field;
       }
     }
-  
+
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
@@ -351,13 +351,13 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       // TODO this is a function in Sanity, needs to be added:
       // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
       // field.required = schema.required?.includes(name) || false;
-  
+
       return field;
     }
-  
+
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      if (schema.$ref.includes('#/definitions/') || schema.$ref.includes('#/properties/')) {
+      if (schema.$ref.includes('#/definitions/')) {
         const reffedSchemaId = schema.$ref.includes('http')
           ? schema.$ref.split('#').shift()
           : outerSchema.$id;
@@ -376,12 +376,12 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         return buildConfig(name, reffedSchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
       }
     }
-  
+
     // basic?
     else if (widgetMapping(schema, name)) {
       const description = buildDescription(schema);
       const field = widgetMapping(schema, name);
-  
+
       // TODO re-check this
       // if (widget === 'number')
       //   field.valueType = 'int';
@@ -396,10 +396,10 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       // TODO this is a function in Sanity, needs to be added:
       // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
       // field.required = outerSchema.required?.includes(name) || false;
-  
+
       return field;
     }
-  
+
     // ¯\_(ツ)_/¯
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   }

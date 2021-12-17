@@ -11,7 +11,7 @@ const merge = require('deepmerge');
 // TODO I hate that require / import usage is mixed here -_-
 import traverse from 'json-schema-traverse';
 import uppercamelcase from 'uppercamelcase';
-import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
 const ajv = new Ajv({
   removeAdditional: true,
@@ -197,36 +197,66 @@ const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[])
   });
 }
 
+// TODO: find a better domain name for "virtual" schemas
+const allOfSchemaDomain = "http://dereffed-allof.com";
 const addExplicitAllOfs = (schemaJson: JSONSchema7, schemaAllOfs: JSONSchema7[]) => {
   traverse(schemaJson, {
     cb: (schema: JSONSchema7, pointer, rootSchema) => {
       if (schema.allOf) {
-        let refSchemaId;
-        const merged = schema.allOf.reduce((mergedSchema, allOf) => {
-          const ref = (allOf as JSONSchema7).$ref;
-          const componentPath = rootSchema.$id.split('/');
-          const componentType = path.basename(rootSchema.$id).split('.')[0];
-          const componentName = uppercamelcase(componentType);
-          console.log('paths', mergedSchema, allOf, componentPath, componentType, componentName, pointer.split('/').pop(), );
-          const schemaName = `http://frontend.ruhmesmeile.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}.schema.json`;
+        const merged = (schema.allOf as JSONSchema7[]).reduceRight(
+          (mergedSchema, allOfEntry) => {
+            const refId = allOfEntry.$ref;
 
-          if (ref) {
-            if (ref.includes('#/definitions/')) {
-              const definitionName = ref.split('/').pop() || '';
-              console.log('definitionName', definitionName, allDefinitions[definitionName]);
-              return merge.all([mergedSchema, allDefinitions[definitionName], { $id: rootSchema.$id }]);
+            if (refId) {
+              if (refId.includes("#/definitions/")) {
+                const definitionName = refId.split("/").pop() || "";
+                // console.log('definitionName', definitionName, allDefinitions[definitionName]);
+                return merge.all([
+                  mergedSchema,
+                  allDefinitions[definitionName],
+                  { $id: rootSchema.$id },
+                ]);
+              } else {
+                const componentType = path
+                  .basename(rootSchema.$id)
+                  .split(".")[0];
+                const reffedName = schema.$id
+                  ? componentType
+                  : `${componentType}-${pointer
+                      .split("/properties/")
+                      .flatMap((p) => p.split("/"))
+                      .filter(Boolean)
+                      .join("-")}`;
+
+                const reffedSchema = ajv.getSchema(refId).schema;
+
+                return merge.all([
+                  mergedSchema,
+                  reffedSchema,
+                  {
+                    $id: `${allOfSchemaDomain}/${componentType}/${reffedName}.schema.json`,
+                  },
+                ]);
+              }
             } else {
-              const reffedSchema = ajv.getSchema(ref).schema;
-              refSchemaId = reffedSchema.$id;
-              delete reffedSchema.$id;
-              return merge.all([mergedSchema, reffedSchema, { $id: schemaName }]);
+              return merge(mergedSchema, allOfEntry);
             }
-          } else {
-            return merge(mergedSchema, allOf);
-          }
-        }, {} as JSONSchema7);
+          },
+          {}
+        );
 
-        console.log(refSchemaId, merged);
+        if (merged.$id?.startsWith(allOfSchemaDomain)) {
+          delete schema.allOf;
+
+          // assign `title`, `description` etc to merged
+          Object.assign(merged, schema);
+          schemaAllOfs.push(merged);
+
+          // TODO: instead of `Object.assign(schema, merged)` reference `merged` via `$ref`:
+          // `schema.$ref = merged.$id;` should do the job, but then deep schema resolving doesn't work :/
+          // (e.g. for http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/headline/properties/content)
+          Object.assign(schema, merged);
+        }
       }
     },
   });
@@ -279,7 +309,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
 
     const customPaths = await glob(customGlob);
     if (customPaths.length) {
-      const customJsons: JSONSchema7[] = await Promise.all(customPaths.map(async (customPath: string) => addSchemaPath(customPath)));  
+      const customJsons: JSONSchema7[] = await Promise.all(customPaths.map(async (customPath: string) => addSchemaPath(customPath)));
       const sectionSchema = customJsons.find((customJson) => customJson.$id?.includes('section.schema.json')) as JSONSchema7;
 
       if (sectionSchema)
@@ -359,7 +389,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
 
     const headlineSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/headline.sanity.schema.json`);
     ajv.validateSchema(headlineSanitySchema);
-    
+
     const visualSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/visual.sanity.schema.json`);
     ajv.validateSchema(visualSanitySchema);
 

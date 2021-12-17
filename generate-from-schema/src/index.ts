@@ -7,10 +7,11 @@ const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').defaul
 const convertToSanity = require('@kickstartds/jsonschema2sanity').default;
 const Ajv = require('ajv');
 const path = require('path');
+const merge = require('deepmerge');
 // TODO I hate that require / import usage is mixed here -_-
 import traverse from 'json-schema-traverse';
 import uppercamelcase from 'uppercamelcase';
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 
 const ajv = new Ajv({
   removeAdditional: true,
@@ -18,6 +19,8 @@ const ajv = new Ajv({
   schemaId: '$id',
   allErrors: true
 });
+
+const allDefinitions: { [key: string]: JSONSchema7 } = {};
 
 const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email'];
 ignoredFormats.forEach((ignoredFormat) =>
@@ -190,7 +193,42 @@ const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[])
           return { $ref: schemaName };
         });
       }
-    }
+    },
+  });
+}
+
+const addExplicitAllOfs = (schemaJson: JSONSchema7, schemaAllOfs: JSONSchema7[]) => {
+  traverse(schemaJson, {
+    cb: (schema: JSONSchema7, pointer, rootSchema) => {
+      if (schema.allOf) {
+        let refSchemaId;
+        const merged = schema.allOf.reduce((mergedSchema, allOf) => {
+          const ref = (allOf as JSONSchema7).$ref;
+          const componentPath = rootSchema.$id.split('/');
+          const componentType = path.basename(rootSchema.$id).split('.')[0];
+          const componentName = uppercamelcase(componentType);
+          console.log('paths', mergedSchema, allOf, componentPath, componentType, componentName, pointer.split('/').pop(), );
+          const schemaName = `http://frontend.ruhmesmeile.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}.schema.json`;
+
+          if (ref) {
+            if (ref.includes('#/definitions/')) {
+              const definitionName = ref.split('/').pop() || '';
+              console.log('definitionName', definitionName, allDefinitions[definitionName]);
+              return merge.all([mergedSchema, allDefinitions[definitionName], { $id: rootSchema.$id }]);
+            } else {
+              const reffedSchema = ajv.getSchema(ref).schema;
+              refSchemaId = reffedSchema.$id;
+              delete reffedSchema.$id;
+              return merge.all([mergedSchema, reffedSchema, { $id: schemaName }]);
+            }
+          } else {
+            return merge(mergedSchema, allOf);
+          }
+        }, {} as JSONSchema7);
+
+        console.log(refSchemaId, merged);
+      }
+    },
   });
 }
 
@@ -221,10 +259,10 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
       .on('add', convertToNetlifyCMS)
       .on('change', convertToNetlifyCMS);
   } else {
-    const allDefinitions: { [key: string]: JSONSchema7 } = {};
     const schemaPaths = await glob(schemaGlob);
     const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchemaPath(schemaPath)));
     const schemaAnyOfs: JSONSchema7[] = [];
+    const schemaAllOfs: JSONSchema7[] = [];
     const customSchemaJsons: JSONSchema7[] = [];
 
     schemaJsons.forEach((schemaJson) => {
@@ -235,6 +273,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
 
       addExplicitAnyOfs(schemaJson, schemaAnyOfs);
     });
+
 
     schemaAnyOfs.forEach((schemaAnyOf) => addSchemaObject(schemaAnyOf));
 
@@ -290,6 +329,12 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
       `dist/config.yml`,
       netlifyAdminConfig,
     );
+
+    schemaJsons.forEach((schemaJson) => {
+      addExplicitAllOfs(schemaJson, schemaAllOfs);
+    });
+
+    schemaAllOfs.forEach((schemaAllOf) => addSchemaObject(schemaAllOf));
 
     const sanitySchemas = [
       'http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json',

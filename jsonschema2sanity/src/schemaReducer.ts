@@ -158,52 +158,13 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
       console.log('schema with anyOf', schema);
-      throw err(`The type anyOf on property ${name} is not supported.`);
+      throw err(`The type anyOf on property ${name} is not supported. This should've been compiled in the processing step before this one!`);
     }
   
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
-        return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
-          const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
-            if (!_.isUndefined(allOf.$ref)) {
-              if (allOf.$ref.includes('#/definitions/')) {
-                const definitionName = allOf.$ref.split('/').pop() || '';
-                const definition = _.cloneDeep(allDefinitions[definitionName]);
-                if (definition.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf, outerComponentSchemaId))
-                }
-                return _.merge(finalSchema, definition);
-              } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId))?.schema as JSONSchema7);
-                if (reffedSchema.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
-                }
-                return _.merge(finalSchema, reffedSchema);
-              }
-            } else {
-              return _.merge(finalSchema, allOf);
-            }
-          };
-  
-          return mergeSchemaAllOf(allOf);
-        }, { } as JSONSchema7);
-      };
-  
-      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], componentSchemaId);
-      if (schema.properties)
-        objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
-
-      const field: ObjectField = buildConfig(name, objectSchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId) as ObjectField;
-      
-      // TODO re-check button exemption, type clash was resolved! Pretty sure that's the reason for the exclusion
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
-        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
-        }
-      }
-
-      return field
+      console.log('schema with allOf', schema);
+      throw err(`The type allOf on property ${name} is not supported. This should've been compiled in the processing step before this one!`);
     }
   
     // not?

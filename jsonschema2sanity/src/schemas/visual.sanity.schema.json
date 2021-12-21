@@ -6,48 +6,39 @@
   "type": "object",
   "properties": {
     "fields": {
-      "type": "object",
-      "properties": {
-        "headline": {
+      "type": "array",
+      "items": [
+        {
+          "title": "Headline",
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/headline/properties/content"
         },
-        "text": {
+        {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/text"
         },
-        "link": {
+        {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/link"
         },
-        "horizontal": {
+        {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/horizontal"
         },
-        "vertical": {
+        {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/vertical"
         },
-        "image": {
+        {
+          "title": "Image",
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/media/properties/image/properties/srcDesktop"
         },
-        "backgroundColor": {
+        {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/backgroundColor"
         }
-      }
-    },
-    "pointers": {
-      "const": {
-        "headline": "#/headline/content",
-        "text": "#/properties/text",
-        "link": "#/properties/link",
-        "horizontal": "#/properties/horizontal",
-        "vertical": "#/properties/vertical",
-        "image": "#/properties/image",
-        "backgroundColor": "#/properties/backgroundColor"
-      }
+      ]
     },
     "preview": {
       "const": {
         "select": {
-          "title": "headline.content",
-          "subtitle": "text",
-          "media": "srcDesktop"
+          "title": "box_headline_content",
+          "subtitle": "box_text",
+          "media": "media_image_srcDesktop"
         }
       }
     }

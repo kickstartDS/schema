@@ -7,19 +7,20 @@ declare namespace jsonschema2graphql {
     [name: string]: GraphQLType
   }
 
-  export type EntryPointBuilder = (
-    types: GraphQLTypeMap
-  ) => {
+  export type EntryPointBuilder = (types: GraphQLTypeMap) => {
     query: GraphQLObjectType
     mutation?: GraphQLObjectType
     subscription?: GraphQLObjectType
   }
+
+  export type GetSchema = (id: string) => JSONSchema7
 
   export interface ConvertParams {
     jsonSchema: JSONSchema7 | JSONSchema7[] | string | string[]
     definitions: JSONSchema7[]
     entryPoints?: EntryPointBuilder
     ajv: Ajv
+    getSchema: GetSchema
   }
 }
 

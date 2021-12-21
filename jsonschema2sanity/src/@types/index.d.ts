@@ -5,10 +5,13 @@ import { JSONSchema7 } from 'json-schema'
 import Ajv from 'ajv/dist/core'
 
 declare namespace jsonschema2sanity {
+  export type GetSchema = (id: string) => JSONSchema7
+
   export interface ConvertParams {
     jsonSchema: JSONSchema7 | JSONSchema7[] | string | string[]
     definitions: JSONSchema7[]
     ajv: Ajv
+    getSchema: GetSchema
   }
 
   // See https://github.com/sanity-io/sanity/issues/1857#issuecomment-905384304
@@ -17,9 +20,9 @@ declare namespace jsonschema2sanity {
     path: string[];
     document: { [key: string]: any };
   };
-  
+
   type CustomRuleCallback = (field: any, meta: Meta) => true | string | Promise<true | string>;
-  
+
   export type RuleType = {
     required: () => RuleType;
     custom: (cb: CustomRuleCallback) => RuleType;
@@ -31,9 +34,9 @@ declare namespace jsonschema2sanity {
     integer: () => RuleType;
     precision: (limit: number) => RuleType;
   };
-  
+
   type Validation = (rule: RuleType) => RuleType | RuleType[];
-  
+
   export type CommonFieldProps = {
     title?: string;
     fieldset?: string;
@@ -44,7 +47,7 @@ declare namespace jsonschema2sanity {
     initialValue?: any;
     inputComponent?: ElementType;
   };
-  
+
   export type StringField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'string';
@@ -55,7 +58,7 @@ declare namespace jsonschema2sanity {
         }
       | never;
   };
-  
+
   export type NumberField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'number';
@@ -63,13 +66,13 @@ declare namespace jsonschema2sanity {
       list: { title: string; value: string }[] | string[];
     };
   };
-  
+
   export type TextField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'text';
     rows?: number;
   };
-  
+
   export type BooleanField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'boolean';
@@ -77,7 +80,7 @@ declare namespace jsonschema2sanity {
       layout?: 'switch' | 'checkbox';
     };
   };
-  
+
   export type DateField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'date';
@@ -85,7 +88,7 @@ declare namespace jsonschema2sanity {
       dateFormat?: string;
     };
   };
-  
+
   export type SlugField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'slug';
@@ -93,12 +96,12 @@ declare namespace jsonschema2sanity {
       source?: string;
     };
   };
-  
+
   export type UrlField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'url';
   };
-  
+
   export type BlockField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'block';
@@ -125,22 +128,22 @@ declare namespace jsonschema2sanity {
     of?: ArrayOf[];
     icon?: ElementType;
   };
-  
+
   type ArrayOf = ObjectField | ReferenceField | ImageField | { type: string } | BlockField;
-  
+
   export type ArrayField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'array';
     of: ArrayOf[];
   };
-  
+
   type FilterFunctionResult = { filter: string; filterParams?: string };
   type FilterFunction = (args: {
     document: { [key: string]: any };
     parentPath: string[];
     parent: Record<string, unknown>[];
   }) => FilterFunctionResult;
-  
+
   type ReferenceField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'reference';
@@ -150,7 +153,7 @@ declare namespace jsonschema2sanity {
       filterParams?: { [key: string]: string };
     };
   };
-  
+
   type ImageField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'image';
@@ -158,20 +161,20 @@ declare namespace jsonschema2sanity {
       hotspot?: boolean;
     };
   };
-  
+
   type FileField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'file';
   };
-  
+
   export type CustomField<Name extends string = string> = CommonFieldProps & {
     name: Name;
     type: 'money' | 'color' | 'icon' | 'iconPicker' | 'blockContent' | 'metadata';
     options?: Record<string, any>;
   };
-  
+
   export type FieldCollection<T extends string> = Array<Field<T>>;
-  
+
   export type Field<Name extends string = string> =
     | StringField<Name>
     | NumberField<Name>
@@ -187,7 +190,7 @@ declare namespace jsonschema2sanity {
     | ObjectField<any, Name>
     | BlockField<Name>
     | CustomField<Name>;
-  
+
   type Preview = {
     select?: { [key: string]: string };
     prepare?: (selection: {
@@ -199,13 +202,13 @@ declare namespace jsonschema2sanity {
     };
     component?: React.VFC;
   };
-  
+
   type Fieldset = {
     name: string;
     title: string;
     options?: { collapsible: boolean; collapsed?: boolean; columns?: number };
   };
-  
+
   type StringKeyof<T> = Extract<keyof T, string>;
 
   export type ObjectField<Schema extends any = any, Name extends string = string> = CommonFieldProps & {
@@ -219,7 +222,7 @@ declare namespace jsonschema2sanity {
     description?: string;
     options?: { collapsible?: boolean; collapsed?: boolean };
   };
-  
+
   export type Document<T extends Record<string, any>> = {
     type: 'document';
     name: string;
@@ -235,11 +238,11 @@ declare namespace jsonschema2sanity {
       by: { field: string; direction: string }[];
     }[];
   };
-  
+
   export type PreviewProps<T extends Record<string, any>> = {
     value: T;
   };
-  
+
   export type Body2TextProps = { children: React.FunctionComponent<any> };
 }
 

@@ -9,6 +9,7 @@ const Ajv = require('ajv');
 const path = require('path');
 const merge = require('deepmerge');
 // TODO I hate that require / import usage is mixed here -_-
+import { createGetSchema } from './helper';
 import traverse from 'json-schema-traverse';
 import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7 } from 'json-schema';
@@ -19,6 +20,7 @@ const ajv = new Ajv({
   schemaId: '$id',
   allErrors: true
 });
+const getSchema = createGetSchema(ajv);
 
 const allDefinitions: { [key: string]: JSONSchema7 } = {};
 
@@ -199,7 +201,7 @@ const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[])
 
 // TODO: find a better domain name for "virtual" schemas
 const allOfSchemaDomain = "http://dereffed-allof.com";
-const addExplicitAllOfs = (schemaJson: JSONSchema7, schemaAllOfs: JSONSchema7[]) => {
+const addExplicitAllOfs = (schemaJson: JSONSchema7) => {
   traverse(schemaJson, {
     cb: (schema: JSONSchema7, pointer, rootSchema) => {
       if (schema.allOf) {
@@ -220,15 +222,16 @@ const addExplicitAllOfs = (schemaJson: JSONSchema7, schemaAllOfs: JSONSchema7[])
                 const componentType = path
                   .basename(rootSchema.$id)
                   .split(".")[0];
+                const [, hashPath] = refId.split("#");
                 const reffedName = schema.$id
                   ? componentType
-                  : `${componentType}-${pointer
+                  : `${componentType}-${(hashPath || pointer)
                       .split("/properties/")
                       .flatMap((p) => p.split("/"))
                       .filter(Boolean)
                       .join("-")}`;
 
-                const reffedSchema = ajv.getSchema(refId).schema;
+                const reffedSchema = getSchema(refId);
 
                 return merge.all([
                   mergedSchema,
@@ -248,31 +251,29 @@ const addExplicitAllOfs = (schemaJson: JSONSchema7, schemaAllOfs: JSONSchema7[])
         if (merged.$id?.startsWith(allOfSchemaDomain)) {
           delete schema.allOf;
 
-          // assign `title`, `description` etc to merged
-          Object.assign(merged, schema);
-          schemaAllOfs.push(merged);
+          // assign `title` & `description` to merged
+          merged.title = schema.title || merged.title;
+          merged.description = schema.description || merged.description;
 
-          // TODO: instead of `Object.assign(schema, merged)` reference `merged` via `$ref`:
-          // `schema.$ref = merged.$id;` should do the job, but then deep schema resolving doesn't work :/
-          // (e.g. for http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/headline/properties/content)
-          Object.assign(schema, merged);
+          addSchemaObject(merged);
+
+          schema.$ref = merged.$id;
         }
       }
     },
   });
 }
 
+const addSchemaObject = (schemaObject: JSONSchema7) => {
+  if (!ajv.getSchema(schemaObject.$id)) ajv.addSchema(schemaObject);
+  return schemaObject;
+};
+
 const addSchemaPath = async (schemaPath: string) => {
   const schema = await fs.readFile(schemaPath, 'utf-8');
   const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
 
-  if (!ajv.getSchema(schemaJson.$id)) ajv.addSchema(schemaJson);
-  return schemaJson;
-};
-
-const addSchemaObject = (schemaObject: JSONSchema7) => {
-  if (!ajv.getSchema(schemaObject.$id)) ajv.addSchema(schemaObject);
-  return schemaObject;
+  return addSchemaObject(schemaJson);
 };
 
 (async () => {
@@ -292,7 +293,6 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
     const schemaPaths = await glob(schemaGlob);
     const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchemaPath(schemaPath)));
     const schemaAnyOfs: JSONSchema7[] = [];
-    const schemaAllOfs: JSONSchema7[] = [];
     const customSchemaJsons: JSONSchema7[] = [];
 
     schemaJsons.forEach((schemaJson) => {
@@ -303,7 +303,6 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
 
       addExplicitAnyOfs(schemaJson, schemaAnyOfs);
     });
-
 
     schemaAnyOfs.forEach((schemaAnyOf) => addSchemaObject(schemaAnyOf));
 
@@ -343,6 +342,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
       jsonSchema: [...schemaJsons, ...schemaAnyOfs, ...customSchemaJsons],
       definitions: allDefinitions,
       ajv,
+      getSchema,
     });
     fs.writeFile(
       `dist/page.graphql`,
@@ -354,17 +354,14 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
       definitions: allDefinitions,
       ajv,
       configLocation: 'static/admin/config.yml',
+      getSchema,
     });
     fs.writeFile(
       `dist/config.yml`,
       netlifyAdminConfig,
     );
 
-    schemaJsons.forEach((schemaJson) => {
-      addExplicitAllOfs(schemaJson, schemaAllOfs);
-    });
-
-    schemaAllOfs.forEach((schemaAllOf) => addSchemaObject(schemaAllOf));
+    schemaJsons.forEach(addExplicitAllOfs);
 
     const sanitySchemas = [
       'http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json',
@@ -389,9 +386,11 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
 
     const headlineSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/headline.sanity.schema.json`);
     ajv.validateSchema(headlineSanitySchema);
+    addExplicitAllOfs(headlineSanitySchema);
 
     const visualSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/visual.sanity.schema.json`);
     ajv.validateSchema(visualSanitySchema);
+    addExplicitAllOfs(visualSanitySchema);
 
     const sanityObjectFields: Record<string, string> = convertToSanity({
       jsonSchema: [headlineSanitySchema, visualSanitySchema],
@@ -399,6 +398,7 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
       definitions: allDefinitions,
       ajv,
       configLocation: 'static/admin/config.yml',
+      getSchema,
     });
 
     if (!fs.existsSync('dist/sanity')){

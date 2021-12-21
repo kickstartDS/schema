@@ -2,11 +2,14 @@ import { JSONSchema7 } from 'json-schema'
 import Ajv from 'ajv/dist/core'
 
 declare namespace jsonschema2netlifycms {
+  export type GetSchema = (id: string) => JSONSchema7
+
   export interface ConvertParams {
     jsonSchema: JSONSchema7 | JSONSchema7[] | string | string[]
     definitions: JSONSchema7[]
     ajv: Ajv
     configLocation?: string
+    getSchema: GetSchema
   }
 
   // See https://www.marcveens.nl/netlify-cms-generate-config-yml

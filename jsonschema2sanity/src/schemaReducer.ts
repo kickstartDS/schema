@@ -2,12 +2,10 @@ import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { safeEnumKey } from './safeEnumKey';
-import { Field, ObjectField, ArrayField, StringField, Preview } from './@types';
+import { Field, ObjectField, ArrayField, StringField, GetSchema } from './@types';
 import Ajv from 'ajv';
 import * as path from 'path';
 import jsonPointer from 'json-pointer';
-
-const typeResolutionField = 'type';
 
 interface TypeMapping {
   boolean: string;
@@ -15,6 +13,14 @@ interface TypeMapping {
   integer: string;
   array: string;
   object: string;
+}
+
+interface SanityJSONSchema extends JSONSchema7 {
+  $id: string;
+  properties: {
+    fields: JSONSchema7;
+    preview?: JSONSchema7;
+  }
 }
 
 const mapping: TypeMapping = {
@@ -25,29 +31,29 @@ const mapping: TypeMapping = {
   object: 'object',
 };
 
-const getInternalTypeDefinition = (type: string): any => {
-  return {
-    name: typeResolutionField,
-    type: 'string',
-    hidden: true,
-    readOnly: true,
-    description: 'Internal type for interface resolution',
-    initialValue: type,
-  }
-}
-
-const widgetMapping = (property: JSONSchema7, name: string) : Field => {
+const widgetMapping = (property: JSONSchema7, name: string, title: string): Field => {
   // const field: Field = {
   //   name,
   //   type: widget,
   //   title: toPascalCase(name),
   // };
 
+  if (property.const) {
+    return {
+      name,
+      type: 'string',
+      title,
+      initialValue: property.const,
+      hidden: true,
+      readOnly: true,
+    }
+  }
+
   if (property.type === 'string' && property.enum && property.enum.length) {
     return {
       name,
       type: 'string',
-      title: toPascalCase(name)
+      title,
     };
   }
 
@@ -60,7 +66,7 @@ const widgetMapping = (property: JSONSchema7, name: string) : Field => {
       name,
       type: 'array',
       of: [{ type: "block" }],
-      title: toPascalCase(name)
+      title,
     };
   }
 
@@ -75,7 +81,7 @@ const widgetMapping = (property: JSONSchema7, name: string) : Field => {
       options: {
         hotspot: true,
       },
-      title: toPascalCase(name)
+      title,
     };
   }
 
@@ -87,32 +93,21 @@ const widgetMapping = (property: JSONSchema7, name: string) : Field => {
     return {
       name,
       type: 'string',
-      title: toPascalCase(name)
+      title,
     };
-  }
-
-  if (property.const) {
-    return {
-      name,
-      type: 'string',
-      title: toPascalCase(name),
-      initialValue: property.const,
-      hidden: true,
-      readOnly: true,
-    }
   }
 
   return {
     name,
     type: mapping[property.type as JSONSchema7TypeName],
-    title: toPascalCase(name)
+    title,
   };
 };
 
 let allDefinitions: JSONSchema7[];
 
 function toPascalCase(text: string): string {
-  return text.replace(/(^\w|-\w)/g, clearAndUpper);
+  return text && text.replace(/(^\w|-\w)/g, clearAndUpper)
 }
 
 function clearAndUpper(text: string): string {
@@ -131,23 +126,29 @@ function getLayeredRefId(ajv: Ajv, refId: string, reffingSchemaId: string): stri
 }
 
 export function getSchemaName(schemaId: string | undefined): string {
-  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
+  const basename = (schemaId && schemaId.split('/').pop()?.split('.').shift()) || ''
+  const trace = basename.split('-')
+  if (trace.length > 1) {
+    // handle "virtual" schema ids
+    // e.g. `visual-box-headline.schema.json` will be converted to `box_headline`
+    return trace.slice(1).join('_')
+  } else {
+    return trace[0]
+  }
 };
 
-export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): Field[] {
+export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[], getSchema: GetSchema): Field[] {
   allDefinitions = definitions;
 
   function buildConfig(
-    propName: string,
     schema: JSONSchema7,
-    objectFields: Field[],
-    outerRun: boolean = false,
     outerSchema: JSONSchema7,
     componentSchemaId: string = '',
+    propPath: string[] = [],
+    expandPropPath = true,
   ): Field {
-    const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
-    const contentComponent = outerRun && !sectionComponent;
-    const name = propName;
+    const name = propPath.join('_');
+    const title = schema.title || toPascalCase(propPath[propPath.length - 1])
 
     // oneOf?
     if (!_.isUndefined(schema.oneOf)) {
@@ -175,39 +176,27 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
     // object?
     else if (schema.type === 'object') {
-      const description = buildDescription(schema);
-
       const fields = (): Field[] =>
         !_.isEmpty(schema.properties)
           ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
               const objectSchema = _.cloneDeep(prop);
-              const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
               const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
-              return buildConfig(fieldName, objectSchema, objectFields, isOuterRun, schemaOuter, objectSchema.$id || componentSchemaId);
+              return buildConfig(objectSchema, schemaOuter, objectSchema.$id || componentSchemaId, propPath.concat(fieldName), false);
             })
-          : [];
+          : []
 
       const field: ObjectField = {
         name,
         type: 'object',
-        title: toPascalCase(name),
+        title,
+        description: buildDescription(schema),
         fields: fields(),
-      };
-
-      // TODO re-check button exemption, type clash was resolved! Pretty sure that's the reason for the exclusion
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
-        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
-        }
       }
 
       // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
       // if (schema.default)
       //   field.initialValue = schema.default as string;
-
-      if (description)
-        field.description = description;
 
       // TODO this is a function in Sanity, needs to be added:
       // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
@@ -226,16 +215,16 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
         if (isRefArray) {
           // only hit for `page > content`
-          const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
-            const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-            return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
+            const resolvedSchema = getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId));
+            return buildConfig(resolvedSchema, resolvedSchema, resolvedSchema.$id || componentSchemaId, propPath);
           });
 
           const field: ArrayField = {
             name,
             type: 'array',
-            title: toPascalCase(name),
+            title,
+            description: buildDescription(outerSchema),
             of: fieldConfigs
           };
 
@@ -243,33 +232,27 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           // if (outerSchema.default)
           //   field.initialValue = schema.default as string;
 
-          if (description)
-            field.description = description;
-
           // TODO this is a function in Sanity, needs to be added:
           // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
           // field.required = outerSchema.required?.includes(name) || false;
 
           return field;
         } else if (isObjectArray) {
-          const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) =>
-            buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId)
+            buildConfig(arraySchema, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId, propPath)
           );
 
           const field: ArrayField = {
             name,
             type: 'array',
-            title: toPascalCase(name),
+            title,
+            description: buildDescription(outerSchema),
             of: fieldConfigs,
           };
 
           // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
           // if (outerSchema.default)
           //   field.initialValue = schema.default as string;
-
-          if (description)
-            field.description = description;
 
           // TODO this is a function in Sanity, needs to be added:
           // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
@@ -283,32 +266,28 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         console.log('schema with array items using oneOf', schema);
         throw err(`The type oneOf on array items of property ${name} is not supported.`);
       } else {
-        const description = buildDescription(outerSchema);
         const arraySchema = schema.items as JSONSchema7;
-        const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
         const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
         let fieldConfig;
         if (arraySchema.$ref) {
-          const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-          fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, objectFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId);
+          const resolvedSchema = getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId));
+          fieldConfig = buildConfig(resolvedSchema, schemaOuter, resolvedSchema.$id || componentSchemaId);
         } else {
-          fieldConfig = buildConfig(name, arraySchema, objectFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
+          fieldConfig = buildConfig(arraySchema, schemaOuter, arraySchema.$id || componentSchemaId);
         }
 
         const field: ArrayField = {
           name,
           type: 'array',
-          title: toPascalCase(name),
+          title,
+          description: buildDescription(outerSchema),
           of: [],
         };
 
         // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
         // if (outerSchema.default)
         //   field.initialValue = schema.default as string;
-
-        if (description)
-          field.description = description;
 
         // TODO this is a function in Sanity, needs to be added:
         // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
@@ -324,7 +303,6 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
-      const description = buildDescription(schema);
       const options: { title: string, value: string }[] = schema.enum.map((value) => {
         return {
           title: value as string,
@@ -335,18 +313,22 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       const field: StringField = {
         name,
         type: 'string',
-        title: toPascalCase(name),
+        title,
+        description: buildDescription(schema),
         options: {
           list: options
         },
       };
 
+      if (schema.const) {
+        field.initialValue = schema.const;
+        field.hidden = true;
+        field.readOnly = true;
+      }
+
       // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
       // if (schema.default)
       //   field.initialValue = safeEnumKey(schema.default as string);
-
-      if (description)
-        field.description = description;
 
       // TODO this is a function in Sanity, needs to be added:
       // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
@@ -357,30 +339,38 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      if (schema.$ref.includes('#/definitions/')) {
-        const reffedSchemaId = schema.$ref.includes('http')
-          ? schema.$ref.split('#').shift()
-          : outerSchema.$id;
-        const reffedPropertyName = schema.$ref.includes('http')
-          ? schema.$ref.split('#').pop()?.split('/').pop()
-          : schema.$ref.split('/').pop();
+      const reffedPropertyName = schema.$ref.includes('http')
+        ? schema.$ref.split('#').pop()?.split('/').pop()
+        : schema.$ref.split('/').pop();
 
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId))?.schema as JSONSchema7;
+      if (schema.$ref.includes('#/definitions/')) {
+        const reffedSchemaId = schema.$ref.includes('http') ? schema.$ref.split('#').shift() : outerSchema.$id;
+
+        const reffedSchema = getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId));
         const reffedProperty = jsonPointer.has(reffedSchema, schema.$ref.split('#').pop() as string)
           ? jsonPointer.get(reffedSchema, schema.$ref.split('#').pop() as string)
           : allDefinitions[reffedPropertyName as string] as JSONSchema7;
 
-        return buildConfig(reffedPropertyName as string, reffedProperty, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId);
+        const [, hashPath] = schema.$ref.split('#/definitions/');
+        const trail = hashPath ? hashPath.split('/properties/').filter(Boolean) : [];
+        trail.pop()
+
+        return buildConfig(reffedProperty, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId, propPath.concat(trail));
       } else {
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, schema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-        return buildConfig(name, reffedSchema, objectFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
+        const [, hashPath] = schema.$ref.split('#');
+        const trail = expandPropPath
+          ? hashPath ? hashPath.split('/properties/').filter(Boolean) : [getSchemaName(schema.$ref)]
+          : [];
+
+        const reffedSchema = getSchema(getLayeredRefId(ajv, schema.$ref, componentSchemaId))
+        return buildConfig(reffedSchema, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId, propPath.concat(trail));
       }
     }
 
     // basic?
-    else if (widgetMapping(schema, name)) {
-      const description = buildDescription(schema);
-      const field = widgetMapping(schema, name);
+    else if (widgetMapping(schema, name, title)) {
+      const field = widgetMapping(schema, name, title);
+      field.description = buildDescription(schema)
 
       // TODO re-check this
       // if (widget === 'number')
@@ -389,9 +379,6 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       // TODO this needs to be refined (probably add explicitly in Sanity schema layering)
       // if (schema.default)
       //   field.initialValue = schema.default as string;
-
-      if (description)
-        field.description = description;
 
       // TODO this is a function in Sanity, needs to be added:
       // e.g. https://www.sanity.io/docs/string-type#required()-f5fd99d2b4c6
@@ -404,24 +391,22 @@ export function schemaGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   }
 
-  const sanityFields: Field[] = schemas.map((schema) => {
-    const $id = schema.$id
-    if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
-    const typeName = getSchemaName($id);
-
-    let preview = {};
-    if (schema.properties?.preview) {
-      preview = (schema.properties.preview as JSONSchema7).const as any;
-      delete schema.properties.preview;
-    }
+  return schemas.map((schema: SanityJSONSchema) => {
+    const name = getSchemaName(schema.$id);
+    const title = toPascalCase(name);
+    const fieldItems = (schema.properties.fields?.items as JSONSchema7[]) || [];
+    schema.properties.fields.minItems = schema.properties.fields.maxItems = fieldItems.length;
 
     return {
-      ...buildConfig(typeName, schema, sanityFields, true, schema, schema.$id),
-      preview,
-    };
-  });
-
-  return sanityFields;
+      name,
+      title,
+      type: 'object',
+      fields: fieldItems.map((fieldSchema) =>
+        buildConfig(fieldSchema, schema, fieldSchema.$id || schema.$id)
+      ),
+      preview: schema.properties.preview?.const,
+    } as Field<string>;
+  })
 }
 
 function buildDescription(d: any): string | undefined {

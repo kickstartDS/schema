@@ -1,7 +1,7 @@
 import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
-import { NetlifyCmsField } from './@types';
+import { GetSchema, NetlifyCmsField } from './@types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
 import * as path from 'path';
@@ -96,9 +96,9 @@ export function getSchemaName(schemaId: string | undefined): string {
 // * hint -> may be affected by the same challenge as `required`
 // note: throws err(..) with minimal logging for (currently) unsupported
 // (and unutilized) JSON Schema features
-export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): NetlifyCmsField[] {
+export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[], getSchema: GetSchema): NetlifyCmsField[] {
   allDefinitions = definitions;
-  
+
   function buildConfig(
     propName: string,
     schema: JSONSchema7,
@@ -116,13 +116,13 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       console.log('schema with oneOf', schema);
       throw err(`The type oneOf on property ${name} is not supported.`);
     }
-  
+
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
       console.log('schema with anyOf', schema);
       throw err(`The type anyOf on property ${name} is not supported.`);
     }
-  
+
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
       const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
@@ -137,7 +137,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
                 }
                 return _.merge(finalSchema, definition);
               } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId))?.schema as JSONSchema7);
+                const reffedSchema = _.cloneDeep(getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId)));
                 if (reffedSchema.allOf) {
                   return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
                 }
@@ -147,17 +147,17 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
               return _.merge(finalSchema, allOf);
             }
           };
-  
+
           return mergeSchemaAllOf(allOf);
         }, { } as JSONSchema7);
       };
-  
+
       const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], componentSchemaId);
       if (schema.properties)
         objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
 
       const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId);
-      
+
       // TODO re-check button exemption, type clash was resolved! Pretty sure that's the reason for the exclusion
       if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
         if (!Object.values(field.fields).find((field) => field.name === 'type')) {
@@ -167,13 +167,13 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
       return field
     }
-  
+
     // not?
     else if (!_.isUndefined(schema.not)) {
       console.log('schema with not', schema);
       throw err(`The type not on property ${name} is not supported.`);
     }
-  
+
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
@@ -203,7 +203,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           field.fields.push(getInternalTypeDefinition(name));
         }
       }
-        
+
       if (schema.default)
         field.default = schema.default as string;
 
@@ -211,10 +211,10 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         field.hint = description;
 
       field.required = schema.required?.includes(name) || false;
-  
+
       return field;
     }
-  
+
     // array?
     else if (schema.type === 'array') {
       // anyOf -> convert all items
@@ -227,7 +227,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           // only hit for `page > content`
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
-            const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+            const resolvedSchema = getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId));
             return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
           });
 
@@ -239,12 +239,12 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
           if (outerSchema.default)
             field.default = schema.default as string;
-          
+
           if (description)
             field.hint = description;
-    
+
           field.required = outerSchema.required?.includes(name) || false;
-          
+
           return field;
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
@@ -260,10 +260,10 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
           if (outerSchema.default)
             field.default = schema.default as string;
-          
+
           if (description)
             field.hint = description;
-    
+
           field.required = outerSchema.required?.includes(name) || false;
 
           return field;
@@ -281,7 +281,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
         let fieldConfig;
         if (arraySchema.$ref) {
-          const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+          const resolvedSchema = getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId));
           fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId);
         } else {
           fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
@@ -295,19 +295,19 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
         if (outerSchema.default)
           field.default = schema.default as string;
-      
+
         if (description)
           field.hint = description;
 
         field.required = outerSchema.required?.includes(name) || false;
-  
+
         if (fieldConfig && fieldConfig.fields)
           field.fields = fieldConfig.fields;
-  
+
         return field;
       }
     }
-  
+
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
@@ -333,10 +333,10 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         field.hint = description;
 
       field.required = schema.required?.includes(name) || false;
-  
+
       return field;
     }
-  
+
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
       if (schema.$ref.includes('#/definitions/')) {
@@ -347,27 +347,27 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           ? schema.$ref.split('#').pop()?.split('/').pop()
           : schema.$ref.split('/').pop();
 
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId))?.schema as JSONSchema7;
+        const reffedSchema = getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId));
         const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : allDefinitions[reffedPropertyName as string] as JSONSchema7;
 
         return buildConfig(reffedPropertyName as string, reffedProperty, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId);
       } else {
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, schema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+        const reffedSchema = getSchema(getLayeredRefId(ajv, schema.$ref as string, componentSchemaId));
         return buildConfig(name, reffedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
       }
     }
-  
+
     // basic?
     else if (widgetMapping(schema)) {
       const description = buildDescription(schema);
       const widget = widgetMapping(schema);
-  
+
       const field: NetlifyCmsField = {
         label: toPascalCase(name),
         name,
         widget,
       };
-  
+
       if (widget === 'number')
         field.valueType = 'int';
 
@@ -378,10 +378,10 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         field.hint = description;
 
       field.required = outerSchema.required?.includes(name) || false;
-  
+
       return field;
     }
-  
+
     // ¯\_(ツ)_/¯
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   }

@@ -6,33 +6,28 @@
   "type": "object",
   "properties": {
     "fields": {
-      "type": "object",
-      "properties": {
-        "level": { 
+      "type": "array",
+      "items": [
+        {
           "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json#/properties/level"
         },
-        "styleAs": { 
-          "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json#/properties/styleAs"
+        {
+          "allOf": [
+            {
+              "const": "left"
+            },
+            {
+              "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json#/properties/align"
+            }
+          ]
         },
-        "align": {
-          "const": "left"
-        },
-        "content": { 
+        {
           "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json#/properties/content"
         },
-        "subheadline": { 
+        {
           "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json#/properties/subheadline"
         }
-      }
-    },
-    "pointers": {
-      "const": {
-        "level": "#/properties/level",
-        "styleAs": "#/properties/styleAs",
-        "align": "#/properties/align",
-        "content": "#/properties/content",
-        "subheadline": "#/properties/subheadline"
-      }
+      ]
     },
     "preview": {
       "const": {

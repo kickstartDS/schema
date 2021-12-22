@@ -13,6 +13,10 @@
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/headline/properties/content"
         },
         {
+          "title": "Enable Box",
+          "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/enabled"
+        },
+        {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/box/properties/text"
         },
         {
@@ -26,7 +30,17 @@
         },
         {
           "title": "Image",
-          "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/media/properties/image/properties/srcDesktop"
+          "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/media/properties/image/properties/src"
+        },
+        {
+          "allOf": [
+            {
+              "const": "image"
+            },
+            {
+              "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/media/properties/mode"
+            }
+          ]
         },
         {
           "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json#/properties/backgroundColor"

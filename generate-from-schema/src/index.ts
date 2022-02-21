@@ -102,9 +102,6 @@ const pageSchema: JSONSchema7 = {
             "$ref": "http://frontend.ruhmesmeile.com/base/atoms/link-button.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/toggle.definitions.json"
-          },
-          {
             "$ref": "http://frontend.ruhmesmeile.com/base/atoms/button.schema.json"
           },
           {

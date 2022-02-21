@@ -1,3 +1,17 @@
+# (Mon Feb 21 2022)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update kickstartds module dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/generate-from-schema@0.7.12`
+  - fix: remove toggle for now, is unused and makes trouble ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Tue Nov 09 2021)
 
 #### ⚠️ Pushed to `master`

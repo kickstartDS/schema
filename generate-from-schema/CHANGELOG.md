@@ -1,3 +1,15 @@
+# v0.7.12 (Mon Feb 21 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: remove toggle for now, is unused and makes trouble ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v0.7.10 (Tue Nov 09 2021)
 
 #### ⚠️ Pushed to `master`

@@ -1,3 +1,15 @@
+# v1.6.10 (Tue Mar 01 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: no need to hash headline in storytelling anymore ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.9 (Tue Mar 01 2022)
 
 #### ⚠️ Pushed to `master`

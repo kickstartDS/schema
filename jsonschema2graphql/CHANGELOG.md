@@ -1,3 +1,16 @@
+# v1.6.9 (Tue Mar 01 2022)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: fix post-meta fields in hashing ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.8 (Tue Nov 09 2021)
 
 #### ⚠️ Pushed to `master`

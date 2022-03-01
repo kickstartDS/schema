@@ -64,8 +64,6 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
         const outer = outerComponent === 'section' ? obj[property][typeResolutionField] : outerComponent;
         if ((outer === 'storytelling' && property === 'link') || (outer === 'count-up' && property === 'link')) {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
-        } else if (outer === 'storytelling' && property === 'headline') {
-          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'headline');
         } else if (outer === 'glossary' && property === 'cta') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'cta');
         } else if (outer === 'cta' && property === 'button') {

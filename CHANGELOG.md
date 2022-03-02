@@ -1,3 +1,19 @@
+# (Wed Mar 02 2022)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/generate-from-schema@0.7.15`, `@kickstartds/jsonschema2graphql@1.6.11`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@1.6.11`
+  - fix: no need to hash headline in storytelling anymore ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Tue Mar 01 2022)
 
 #### ⚠️ Pushed to `master`

@@ -1,3 +1,20 @@
+# v0.7.15 (Wed Mar 02 2022)
+
+#### 🐛 Bug Fix
+
+- Bump independent versions \[skip ci\] (lukas.mestel@kickstartds.com)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel (lukas.mestel@kickstartds.com)
+
+---
+
 # v0.7.12 (Mon Feb 21 2022)
 
 #### ⚠️ Pushed to `master`

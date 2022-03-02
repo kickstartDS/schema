@@ -1,3 +1,22 @@
+# v1.6.11 (Wed Mar 02 2022)
+
+#### 🐛 Bug Fix
+
+- Bump independent versions \[skip ci\] (lukas.mestel@kickstartds.com)
+- Update CHANGELOG.md \[skip ci\] (lukas.mestel@kickstartds.com)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: no need to hash headline in storytelling anymore ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel (lukas.mestel@kickstartds.com)
+
+---
+
 # v1.6.10 (Tue Mar 01 2022)
 
 #### ⚠️ Pushed to `master`

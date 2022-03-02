@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/jsonschema2graphql@1.6.12`
+  - fix: hash link in cta, instead of button ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Mar 02 2022)
+
+#### ⚠️ Pushed to `master`
+
 - chore: update dependencies ([@julrich](https://github.com/julrich))
 - `@kickstartds/generate-from-schema@0.7.15`, `@kickstartds/jsonschema2graphql@1.6.11`
   - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))

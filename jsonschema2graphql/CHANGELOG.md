@@ -1,3 +1,15 @@
+# v1.6.12 (Wed Mar 02 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hash link in cta, instead of button ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.11 (Wed Mar 02 2022)
 
 #### 🐛 Bug Fix

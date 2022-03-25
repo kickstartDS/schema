@@ -4,6 +4,7 @@ const chokidar = require('chokidar');
 const { printSchema } = require('graphql');
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
+const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
 const Ajv = require('ajv');
 const path = require('path');
 // TODO I hate that require / import usage is mixed here -_-
@@ -286,6 +287,17 @@ const addSchemaObject = (schemaObject: JSONSchema7) => {
     fs.writeFile(
       `dist/config.yml`,
       netlifyAdminConfig,
+    );
+
+    const tinacmsAdminConfig = convertToTinaCMS({
+      jsonSchema: schemaJsons,
+      definitions: allDefinitions,
+      ajv,
+      configLocation: 'static/.tina/schema.json'
+    });
+    fs.writeFile(
+      `dist/tina.json`,
+      tinacmsAdminConfig,
     );
   }
 })();

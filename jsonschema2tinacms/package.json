@@ -1,0 +1,99 @@
+{
+  "name": "@kickstartds/jsonschema2tinacms",
+  "version": "1.0.0",
+  "description": "Converts JSON schema to Tina CMS admin config",
+  "repository": "github:kickstartDS/jsonschema2tinacms",
+  "homepage": "https://github.com/kickstartDS/jsonschema2tinacms#readme",
+  "bugs": {
+    "url": "https://github.com/kickstartDS/jsonschema2tinacms/issues"
+  },
+  "author": {
+    "name": "Jonas Ulrich",
+    "email": "jonas.ulrich@kickstartds.com"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "json-schema",
+    "tina-cms",
+    "tinacms"
+  ],
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "del build",
+    "reset": "git clean -dfx && git reset --hard && yarn install",
+    "test": "jest",
+    "watch": "run-s clean build && run-p \"build -- -w\" \"test --watch\""
+  },
+  "engines": {
+    "node": ">=8.9"
+  },
+  "dependencies": {
+    "ajv": "^8.5.0",
+    "camelcase": "^6.2.0",
+    "lodash": "^4.17.21",
+    "netlify-cms-core": "^2.40.12",
+    "ramda": "^0.27.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.11",
+    "@types/gh-pages": "^3.0.0",
+    "@types/json-schema": "^7.0.7",
+    "@types/lodash": "^4.14.170",
+    "@types/node": "^14.17.1",
+    "@types/pluralize": "^0.0.29",
+    "@types/ramda": "^0.27.40",
+    "@types/uppercamelcase": "^3.0.0",
+    "babel-jest": "^27.0.2",
+    "del-cli": "^4.0.0",
+    "fs-extra": "^10.0.0",
+    "gh-pages": "^3.2.0",
+    "jest": "27.0.4",
+    "jest-diff": "^27.0.2",
+    "jest-matcher-utils": "^27.0.2",
+    "npm-run-all": "^4.1.5",
+    "opn-cli": "^5.0.0",
+    "prettier": "^2.3.0",
+    "tmp-promise": "^3.0.2",
+    "ts-jest": "27.0.2",
+    "tinacms": "^0.66.9",
+    "typescript": "^4.3.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/test"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/?(*.)test.ts"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "setupTestFrameworkScriptFile": "<rootDir>/test/matchers/index.ts",
+    "verbose": true
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "restricted"
+  }
+}

@@ -1,6 +1,6 @@
 # JSON Schema to Tina CMS admin config(.json) converter
 
-This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Netlify CMS admin config.yml]().
+This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Tina CMS admin config.yml]().
 
 
 ## Installation
@@ -11,7 +11,7 @@ Install with yarn:
 yarn add jsonschema2tinacms
 ```
 
-## Usage (TODO Fix, usage differs for Netlify CMS)
+## Usage (TODO Fix, usage differs for Tina CMS)
 
 You can convert a schema expressed as an object literal:
 

@@ -1,1 +1,1 @@
-export {};
+export declare const getSchemasHelper: any;

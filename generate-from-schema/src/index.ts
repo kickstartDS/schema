@@ -202,3 +202,5 @@ const pageSchema: JSONSchema7 = {
     );
   }
 })();
+
+export const getSchemasHelper = getSchemas;

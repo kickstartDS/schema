@@ -4,7 +4,6 @@
 
 This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [GraphQL schema]().
 
-
 ## Installation
 
 Install with yarn:

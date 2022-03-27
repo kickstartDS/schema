@@ -21,7 +21,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
     return {
       label: propertyName,
       list: true,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       options: property.enum.map((value) => value as string) || [],
       type: 'string',
     };
@@ -34,7 +34,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
   ) {
     return {
       label: propertyName,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       type: 'rich-text',
     };
   }
@@ -46,7 +46,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
   ) {
     return {
       label: propertyName,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       type: 'image',
     };
   }
@@ -58,7 +58,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
   ) {
     return {
       label: propertyName,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       type: 'string',
       ui: {
         dateFormat: 'YYYY MM DD',
@@ -73,7 +73,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
   ) {
     return {
       label: propertyName,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       type: 'string',
       list: false,
     };
@@ -82,7 +82,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
   if (property.type === 'string') {
     return {
       label: propertyName,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       type: 'string',
       list: false,
     };
@@ -91,7 +91,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
   if (property.type === 'integer' || property.type === 'number') {
     return {
       label: propertyName,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       type: 'number',
     };
   }
@@ -99,7 +99,7 @@ const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldI
   if (property.type === 'boolean') {
     return {
       label: propertyName,
-      name: propertyName,
+      name: propertyName.replace('-', '_'),
       type: 'boolean',
     }
   }
@@ -235,7 +235,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       const field: ObjectType<false> = {
         label: toPascalCase(name),
         type: 'object',
-        name,
+        name: name.replace('-', '_'),
         fields: fields(),
       };
 
@@ -266,7 +266,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           });
 
           const field: ObjectType<false> = {
-            name,
+            name: name.replace('-', '_'),
             list: true,
             type: 'object',
             label: name,
@@ -282,7 +282,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
           );
 
           const field: ObjectType<false> = {
-            name,
+            name: name.replace('-', '_'),
             list: true,
             type: 'object',
             label: name,
@@ -337,7 +337,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
       const field: TinaFieldInner<false> = {
         label: toPascalCase(name),
-        name,
+        name: name.replace('-', '_'),
         type: 'string',
         options: schema.enum.map((value) => value as string) || [],
         list: false,

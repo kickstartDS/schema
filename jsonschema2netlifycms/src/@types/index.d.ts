@@ -7,6 +7,7 @@ declare namespace jsonschema2netlifycms {
     definitions: JSONSchema7[]
     ajv: Ajv
     configLocation?: string
+    collectionName?: string
   }
 
   // See https://www.marcveens.nl/netlify-cms-generate-config-yml

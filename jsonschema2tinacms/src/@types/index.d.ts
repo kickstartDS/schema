@@ -7,6 +7,7 @@ declare namespace jsonschema2tinacms {
     definitions: JSONSchema7[]
     ajv: Ajv
     configLocation?: string
+    collectionName?: string
   }
 }
 

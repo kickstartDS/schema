@@ -126,7 +126,6 @@ export const getSchemas = async (schemaGlob: string, customGlob: string, pageSch
   ajv.addSchema(pageSchema);
   ajv.validateSchema(pageSchema);
 
-
   return Promise.resolve({
     allDefinitions,
     schemaJsons,

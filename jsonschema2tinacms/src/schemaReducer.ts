@@ -379,6 +379,7 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
   }
 
   const contentFields: TinaFieldInner<false>[] = [];
+  // TODO don't hardcode page schema here
   const pageSchema = schemas.find((schema) => schema.$id?.includes('page.schema.json')) as JSONSchema7;
 
   const $id = pageSchema.$id

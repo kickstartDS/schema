@@ -32,7 +32,8 @@
     "lodash": "^4.17.21",
     "pluralize": "^8.0.0",
     "ramda": "^0.27.1",
-    "uppercamelcase": "^3.0.0"
+    "uppercamelcase": "^3.0.0",
+    "@kickstartds/jsonschema-utils": "^1.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",

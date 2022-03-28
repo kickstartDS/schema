@@ -5,11 +5,10 @@ const { printSchema } = require('graphql');
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
 const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
+const { getSchemas } = require('@kickstartds/jsonschema-utils/dist/helpers');
 
 // TODO I hate that require / import usage is mixed here -_-
 import { JSONSchema7 } from 'json-schema';
-
-const { getSchemas } = require('./helpers');
 
 // TODO move this to `kickstartDS` itself, should also not be a duplicate of
 // original `section.schema.json` items for components

@@ -1,10 +1,10 @@
-import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
 import { TinaFieldInner, ObjectType, Template,  } from 'tinacms/dist/types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import { getLayeredRefId } from '@kickstartds/generate-from-schema/dist/helpers';
+import { getLayeredRefId } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 const typeResolutionField = 'type';
 

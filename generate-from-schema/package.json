@@ -29,6 +29,7 @@
     "@graphql-codegen/cli": "^1.21.5",
     "@kickstartds/graphql-cli-add-gatsby-directives": "*",
     "@kickstartds/graphql-cli-generate-fragments": "^1.6.0",
+    "@kickstartds/jsonschema-utils": "^1.0.0",
     "@kickstartds/jsonschema2graphql": "^1.6.12",
     "@kickstartds/jsonschema2netlifycms": "^1.5.4",
     "@kickstartds/jsonschema2tinacms": "^1.0.0",

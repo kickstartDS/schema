@@ -4,7 +4,7 @@ import { err } from './helpers';
 import { TinaFieldInner, ObjectType, Template,  } from 'tinacms/dist/types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import * as path from 'path';
+import { getLayeredRefId } from '@kickstartds/generate-from-schema/dist/helpers';
 
 const typeResolutionField = 'type';
 
@@ -116,17 +116,6 @@ function toPascalCase(text: string): string {
 
 function clearAndUpper(text: string): string {
   return text.replace(/-/, " ").toUpperCase();
-}
-
-function getLayeredRefId(ajv: Ajv, refId: string, reffingSchemaId: string): string {
-  if (!refId.includes('frontend.ruhmesmeile.com')) return refId;
-
-  const component = path.basename(refId);
-  const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('frontend.ruhmesmeile.com'))
-
-  return layeredComponent.length > 0 && (reffingSchemaId.includes('frontend.ruhmesmeile.com') || (!refId.includes('section.schema.json') && reffingSchemaId.includes('section.schema.json')))
-    ? layeredComponent[0]
-    : refId;
 }
 
 export function getSchemaName(schemaId: string | undefined): string {

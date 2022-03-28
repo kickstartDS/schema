@@ -39,7 +39,7 @@ const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[])
           if (anyOf.$ref)
             return anyOf;
 
-          const schemaName = `http://frontend.ruhmesmeile.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
+          const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
           schemaAnyOfs.push({
             $id: schemaName,
             $schema: "http://json-schema.org/draft-07/schema#",
@@ -133,4 +133,15 @@ export const getSchemas = async (schemaGlob: string, customGlob: string, pageSch
     customSchemaJsons,
     ajv,
   });
+};
+
+export const getLayeredRefId = (ajv: Ajv, refId: string, reffingSchemaId: string): string => {
+  if (!refId.includes('schema.kickstartds.com')) return refId;
+
+  const component = path.basename(refId);
+  const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('schema.kickstartds.com'))
+
+  return layeredComponent.length > 0 && (reffingSchemaId.includes('schema.kickstartds.com') || (!refId.includes('section.schema.json') && reffingSchemaId.includes('section.schema.json')))
+    ? layeredComponent[0]
+    : refId;
 };

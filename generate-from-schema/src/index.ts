@@ -15,7 +15,7 @@ const { getSchemas } = require('./helpers');
 // original `section.schema.json` items for components
 const pageSchema: JSONSchema7 = {
   $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "http://frontend.ruhmesmeile.com/page.schema.json",
+  $id: "http://schema.kickstartds.com/page.schema.json",
   title: "Page",
   description: "Abstracts a page concept into JSON schema",
   type: "object",
@@ -68,7 +68,7 @@ const pageSchema: JSONSchema7 = {
       title: "Sections",
       description: "Collection of sections to render on the page",
       items: {
-        $ref: "http://frontend.ruhmesmeile.com/base/base/section.schema.json"
+        $ref: "http://schema.kickstartds.com/base/base/section.schema.json"
       }
     },
     components: {
@@ -78,55 +78,55 @@ const pageSchema: JSONSchema7 = {
       items: {
         "anyOf": [
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/organisms/quotes-slider.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/link-button.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/atoms/link-button.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/button.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/atoms/button.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/tag-label.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/atoms/tag-label.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/visual.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/quote.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/quote.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual-slider.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/visual-slider.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/contact.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/contact.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/storytelling.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/storytelling.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/collapsible-box.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/collapsible-box.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/count-up.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/count-up.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/content-box.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/molecules/content-box.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/molecules/headline.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/text-media.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/molecules/text-media.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/teaser-box.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/molecules/teaser-box.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/logo-tiles.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/molecules/logo-tiles.schema.json"
           },
           {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/teaser-row.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/molecules/teaser-row.schema.json"
           }
         ]
       }

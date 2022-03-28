@@ -145,3 +145,7 @@ export const getLayeredRefId = (ajv: Ajv, refId: string, reffingSchemaId: string
     ? layeredComponent[0]
     : refId;
 };
+
+export const getSchemaName = (schemaId: string | undefined): string => {
+  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
+};

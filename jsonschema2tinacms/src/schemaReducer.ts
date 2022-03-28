@@ -4,7 +4,7 @@ import { err } from './helpers';
 import { TinaFieldInner, ObjectType, Template,  } from 'tinacms/dist/types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import { getLayeredRefId } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getLayeredRefId, getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 const typeResolutionField = 'type';
 
@@ -117,10 +117,6 @@ function toPascalCase(text: string): string {
 function clearAndUpper(text: string): string {
   return text.replace(/-/, " ").toUpperCase();
 }
-
-export function getSchemaName(schemaId: string | undefined): string {
-  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
-};
 
 // TODO check the following NetlifyCmsField properties for all elements:
 // * required -> this is not functional yet... needs to be evaluated intelligently,

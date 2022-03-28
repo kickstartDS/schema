@@ -19,7 +19,7 @@ import { getTypeName } from './getTypeName';
 import { graphqlSafeEnumKey } from './graphqlSafeEnumKey';
 import { err } from './helpers';
 import Ajv from 'ajv';
-import { getLayeredRefId } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getLayeredRefId, getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 import { hashFieldName } from './helpers';
 import { cleanFieldName } from './dehashing';
@@ -64,10 +64,6 @@ const allDefinitionTypes = {};
 // TODO these should be (cli) options
 const shouldDedupe = true;
 const gatsbyImages = true;
-
-export function getSchemaName(schemaId: string | undefined): string {
-  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
-};
 
 const dedupe = (schema: JSONSchema7, optionalName?: string): {
     [key: string]: JSONSchema7Definition;

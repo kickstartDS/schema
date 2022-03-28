@@ -12,6 +12,7 @@ import { JSONSchema7 } from 'json-schema';
 
 // TODO move this to `kickstartDS` itself, should also not be a duplicate of
 // original `section.schema.json` items for components
+// additionally this shouldn't hard-code the assumption of `page.schema.json` as $id
 const pageSchema: JSONSchema7 = {
   $schema: "http://json-schema.org/draft-07/schema#",
   $id: "http://schema.kickstartds.com/page.schema.json",

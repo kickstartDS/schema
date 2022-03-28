@@ -58,6 +58,7 @@ jobs:
             - jsonschema2graphql
             - jsonschema2netlifycms
             - jsonschema2tinacms
+            - jsonschema-utils
 
   release:
     <<: *defaults

@@ -19,7 +19,7 @@ import { getTypeName } from './getTypeName';
 import { graphqlSafeEnumKey } from './graphqlSafeEnumKey';
 import { err } from './helpers';
 import Ajv from 'ajv';
-import { getLayeredRefId } from '@kickstartds/generate-from-schema/dist/helpers';
+import { getLayeredRefId } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 import { hashFieldName } from './helpers';
 import { cleanFieldName } from './dehashing';

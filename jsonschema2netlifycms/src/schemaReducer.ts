@@ -4,7 +4,7 @@ import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import { getLayeredRefId } from '@kickstartds/generate-from-schema/dist/helpers';
+import { getLayeredRefId } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 const typeResolutionField = 'type';
 

@@ -51,7 +51,7 @@ export const getSchemas = async (schemaGlob: string, customGlob: string, pageSch
     allErrors: true
   });
 
-  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email'];
+  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email', 'html'];
   ignoredFormats.forEach((ignoredFormat) =>
     ajv.addFormat(ignoredFormat, { validate: () => true })
   );
@@ -61,7 +61,7 @@ export const getSchemas = async (schemaGlob: string, customGlob: string, pageSch
     schemaType: "string",
     validate: () => true,
   });
-  
+
   const addSchemaPath = async (schemaPath: string) => {
     const schema = await fs.readFile(schemaPath, 'utf-8');
     const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));

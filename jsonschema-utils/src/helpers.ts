@@ -9,24 +9,6 @@ import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 
-const ajv = new AjvConstructor({
-  removeAdditional: true,
-  validateSchema: true,
-  schemaId: '$id',
-  allErrors: true
-});
-
-const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email'];
-ignoredFormats.forEach((ignoredFormat) =>
-  ajv.addFormat(ignoredFormat, { validate: () => true })
-);
-
-ajv.addKeyword({
-  keyword: "faker",
-  schemaType: "string",
-  validate: () => true,
-});
-
 const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[]) => {
   traverse(schemaJson, {
     cb: (schema, pointer, rootSchema) => {
@@ -53,19 +35,6 @@ const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[])
   });
 }
 
-const addSchemaPath = async (schemaPath: string) => {
-  const schema = await fs.readFile(schemaPath, 'utf-8');
-  const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
-
-  if (!ajv.getSchema(schemaJson.$id)) ajv.addSchema(schemaJson);
-  return schemaJson;
-};
-
-const addSchemaObject = (schemaObject: JSONSchema7) => {
-  if (!ajv.getSchema(schemaObject.$id)) ajv.addSchema(schemaObject);
-  return schemaObject;
-};
-
 interface SchemaReturns {
   allDefinitions: { [key: string]: JSONSchema7 },
   schemaJsons: JSONSchema7[],
@@ -75,6 +44,37 @@ interface SchemaReturns {
 };
 
 export const getSchemas = async (schemaGlob: string, customGlob: string, pageSchema: JSONSchema7): Promise<SchemaReturns> => {
+  const ajv = new AjvConstructor({
+    removeAdditional: true,
+    validateSchema: true,
+    schemaId: '$id',
+    allErrors: true
+  });
+
+  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email'];
+  ignoredFormats.forEach((ignoredFormat) =>
+    ajv.addFormat(ignoredFormat, { validate: () => true })
+  );
+
+  ajv.addKeyword({
+    keyword: "faker",
+    schemaType: "string",
+    validate: () => true,
+  });
+  
+  const addSchemaPath = async (schemaPath: string) => {
+    const schema = await fs.readFile(schemaPath, 'utf-8');
+    const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
+  
+    if (!ajv.getSchema(schemaJson.$id)) ajv.addSchema(schemaJson);
+    return schemaJson;
+  };
+  
+  const addSchemaObject = (schemaObject: JSONSchema7) => {
+    if (!ajv.getSchema(schemaObject.$id)) ajv.addSchema(schemaObject);
+    return schemaObject;
+  };
+
   const schemaPaths = await glob(schemaGlob);
 
   const allDefinitions: { [key: string]: JSONSchema7 } = {};

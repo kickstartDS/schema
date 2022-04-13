@@ -39,6 +39,8 @@ export function cleanObjectKeys(obj: Record<string, any>): Record<string, any> {
           // we can't have custom handling per property here. At least in the long run!
           if (cleanFieldName(property) === 'variant') {
             cleanedObject[cleanFieldName(property)] = obj[property].replace('_', '-');
+          } else if (cleanFieldName(property) === 'background') {
+            cleanedObject[cleanFieldName(property)] = obj[property].replace('_', '-');
           } else if (cleanFieldName(property) === 'ratio') {
             cleanedObject[cleanFieldName(property)] = obj[property].replace('VALUE_', '').replace('_', ':');
           } else if (cleanFieldName(property) === 'pattern') {

@@ -1,5 +1,18 @@
 # (Wed Apr 13 2022)
 
+#### 🚀 Enhancement
+
+- `@kickstartds/jsonschema-utils@2.1.0`
+  - feature: add helper for enum merging [#35](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/35) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Apr 13 2022)
+
 #### 💥 Breaking Change
 
 - `@kickstartds/generate-from-schema@2.0.0`, `@kickstartds/jsonschema-utils@2.0.0`, `@kickstartds/jsonschema2graphql@2.0.0`, `@kickstartds/jsonschema2netlifycms@2.0.0`, `@kickstartds/jsonschema2tinacms@2.0.0`

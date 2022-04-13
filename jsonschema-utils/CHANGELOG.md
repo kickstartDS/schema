@@ -1,3 +1,20 @@
+# v2.1.0 (Wed Apr 13 2022)
+
+#### 🚀 Enhancement
+
+- feature: add helper for enum merging [#35](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/35) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- feature: correctly pre-merge anyOfs for enums ([@julrich](https://github.com/julrich))
+- feature: add helper for enum merging ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.0.0 (Wed Apr 13 2022)
 
 #### 💥 Breaking Change

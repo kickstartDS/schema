@@ -1,3 +1,24 @@
+# v2.0.0 (Wed Apr 13 2022)
+
+#### 💥 Breaking Change
+
+- Add `Tina CMS` as a conversion target for our `JSON Schema` [#33](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/33) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: tina typename ([@julrich](https://github.com/julrich))
+- fix: de-duplicate getSchemaName and move to exported helpers ([@julrich](https://github.com/julrich))
+- fix: move imports to new package ([@julrich](https://github.com/julrich))
+- feature: refactor helpers into their own module ([@julrich](https://github.com/julrich))
+- feature: extract layered ref helper, fix base schema name ([@julrich](https://github.com/julrich))
+- chore: trigger jsonschema2graphql rebuild ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.12 (Wed Mar 02 2022)
 
 #### ⚠️ Pushed to `master`

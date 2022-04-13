@@ -1,3 +1,25 @@
+# v2.0.0 (Wed Apr 13 2022)
+
+#### 💥 Breaking Change
+
+- Add `Tina CMS` as a conversion target for our `JSON Schema` [#33](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/33) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: de-duplicate getSchemaName and move to exported helpers ([@julrich](https://github.com/julrich))
+- fix: move imports to new package ([@julrich](https://github.com/julrich))
+- feature: refactor helpers into their own module ([@julrich](https://github.com/julrich))
+- feature: extract layered ref helper, fix base schema name ([@julrich](https://github.com/julrich))
+- fix: use collection name in netlify cms file ([@julrich](https://github.com/julrich))
+- fix: make collection names more configurable ([@julrich](https://github.com/julrich))
+- chore: add comments ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.5.4 (Thu Sep 02 2021)
 
 #### ⚠️ Pushed to `master`

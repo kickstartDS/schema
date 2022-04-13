@@ -35,7 +35,7 @@ export const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSch
   });
 }
 
-export const mergeAnyOfEnums = (schema: JSONSchema7) => {
+export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv) => {
   traverse(schema, {
     cb: (subSchema, pointer, rootSchema) => {
       const propertyName = pointer.split('/').pop();
@@ -43,22 +43,25 @@ export const mergeAnyOfEnums = (schema: JSONSchema7) => {
       if (
         subSchema.anyOf &&
         subSchema.anyOf.length === 2 &&
-        subSchema.anyOf.every((anyOf: JSONSchema7) => anyOf.type === 'string' && anyOf.enum) &&
+        subSchema.anyOf.every((anyOf: JSONSchema7) => (anyOf.type === 'string' && anyOf.enum) || (anyOf.$ref && anyOf.$ref.includes(`properties/${propertyName}`))) &&
         rootSchema.allOf &&
         rootSchema.allOf.length === 2 &&
-        rootSchema.allOf.some((allOf: JSONSchema7) => (allOf.properties[propertyName] as JSONSchema7)?.type === 'string')
+        rootSchema.allOf.some((allOf: JSONSchema7) => allOf.properties && (allOf.properties[propertyName] as JSONSchema7)?.anyOf)
       ) {
         subSchema.type = subSchema.anyOf[0].type;
         subSchema.default = subSchema.anyOf[0].default;
         subSchema.enum = subSchema.anyOf.reduce((enumValues: [string], anyOf: JSONSchema7) => {
-          anyOf.enum.forEach((value) => {
+          const values = anyOf.enum || (anyOf.$ref && (ajv.getSchema(anyOf.$ref).schema as JSONSchema7).enum);
+          values.forEach((value) => {
             if (!enumValues.includes(value as string)) enumValues.push(value as string);
           });
-
           return enumValues;
         }, []);
 
-        delete rootSchema.allOf[rootSchema.allOf.findIndex((allOf: JSONSchema7) => (allOf.properties[propertyName] as JSONSchema7)?.type === 'string')].properties[propertyName];
+        if (rootSchema.allOf.some((allOf: JSONSchema7) => allOf.$ref)) {
+          delete (ajv.getSchema(rootSchema.allOf.find((allOf: JSONSchema7) => allOf.$ref).$ref).schema as JSONSchema7).properties[propertyName];
+        }
+        
         delete subSchema.anyOf;
       }
     },
@@ -135,6 +138,9 @@ export const getSchemas = async (schemaGlob: string, customGlob: string, pageSch
     customJsons.forEach((customJson) => {
       const { definitions } = customJson;
       let newCustomJson = true;
+
+      mergeAnyOfEnums(customJson, ajv);
+      addExplicitAnyOfs(customJson, schemaAnyOfs);
 
       for (const definedTypeName in definitions) {
         allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;

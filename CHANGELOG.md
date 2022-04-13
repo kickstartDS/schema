@@ -1,5 +1,25 @@
 # (Wed Apr 13 2022)
 
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@2.1.1`, `@kickstartds/jsonschema-utils@2.1.1`, `@kickstartds/jsonschema2graphql@2.1.1`, `@kickstartds/jsonschema2netlifycms@2.1.1`, `@kickstartds/jsonschema2tinacms@2.1.1`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@2.1.1`
+  - fix: dehashing of backgrounds with dashes ([@julrich](https://github.com/julrich))
+
+#### 🔩 Dependency Updates
+
+- chore(deps): bump minimist from 1.2.5 to 1.2.6 [#34](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Apr 13 2022)
+
 #### 🚀 Enhancement
 
 - `@kickstartds/jsonschema-utils@2.1.0`

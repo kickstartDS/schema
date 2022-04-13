@@ -1,32 +1,31 @@
 {
-    "name": "@kickstartds/jsonschema-utils",
-    "version": "1.0.0",
-    "main": "dist/index.js",
-    "module": "dist/index.js",
-    "typings": "dist/index.d.ts",
-    "typescript": {
-      "definition": "dist/index.d.ts"
-    },
-    "buildOptions": {
-      "input": "./src/index.ts"
-    },
-    "files": [
-      "dist"
-    ],
-    "publishConfig": {
-      "registry": "https://registry.npmjs.org",
-      "access": "restricted"
-    },
-    "scripts": {
-      "build": "tsc -d",
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "Jonas Ulrich | ruhmesmeile GmbH",
-    "license": "UNLICENSED",
-    "dependencies": {
-      "ajv": "^8.5.0",
-      "fast-glob": "^3.2.5",
-      "fs-extra": "^10.0.0"
-    }
+  "name": "@kickstartds/jsonschema-utils",
+  "version": "2.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "restricted"
+  },
+  "scripts": {
+    "build": "tsc -d",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonas Ulrich | ruhmesmeile GmbH",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ajv": "^8.5.0",
+    "fast-glob": "^3.2.5",
+    "fs-extra": "^10.0.0"
   }
-  
+}

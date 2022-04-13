@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2tinacms",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Converts JSON schema to Tina CMS admin config",
   "repository": "github:kickstartDS/jsonschema2tinacms",
   "homepage": "https://github.com/kickstartDS/jsonschema2tinacms#readme",
@@ -33,11 +33,11 @@
     "node": ">=8.9"
   },
   "dependencies": {
+    "@kickstartds/jsonschema-utils": "^2.0.0",
     "ajv": "^8.5.0",
     "camelcase": "^6.2.0",
     "lodash": "^4.17.21",
-    "ramda": "^0.27.1",
-    "@kickstartds/jsonschema-utils": "^1.0.0"
+    "ramda": "^0.27.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
@@ -58,9 +58,9 @@
     "npm-run-all": "^4.1.5",
     "opn-cli": "^5.0.0",
     "prettier": "^2.3.0",
+    "tinacms": "^0.66.9",
     "tmp-promise": "^3.0.2",
     "ts-jest": "27.0.2",
-    "tinacms": "^0.66.9",
     "typescript": "^4.3.2"
   },
   "jest": {

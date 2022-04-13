@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2graphql",
-  "version": "1.6.12",
+  "version": "2.0.0",
   "description": "Converts JSON schema to GraphQL types",
   "author": {
     "name": "Jonas Ulrich",
@@ -26,14 +26,14 @@
     "node": ">=8.9"
   },
   "dependencies": {
+    "@kickstartds/jsonschema-utils": "^2.0.0",
     "ajv": "^8.5.0",
     "camelcase": "^6.2.0",
     "graphql": "^15.5.0",
     "lodash": "^4.17.21",
     "pluralize": "^8.0.0",
     "ramda": "^0.27.1",
-    "uppercamelcase": "^3.0.0",
-    "@kickstartds/jsonschema-utils": "^1.0.0"
+    "uppercamelcase": "^3.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",

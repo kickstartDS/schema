@@ -9,7 +9,7 @@ import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 
-const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[]) => {
+export const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[]) => {
   traverse(schemaJson, {
     cb: (schema, pointer, rootSchema) => {
       if (schema.items && schema.items.anyOf) {
@@ -34,6 +34,36 @@ const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[])
     }
   });
 }
+
+export const mergeAnyOfEnums = (schema: JSONSchema7) => {
+  traverse(schema, {
+    cb: (subSchema, pointer, rootSchema) => {
+      const propertyName = pointer.split('/').pop();
+
+      if (
+        subSchema.anyOf &&
+        subSchema.anyOf.length === 2 &&
+        subSchema.anyOf.every((anyOf: JSONSchema7) => anyOf.type === 'string' && anyOf.enum) &&
+        rootSchema.allOf &&
+        rootSchema.allOf.length === 2 &&
+        rootSchema.allOf.some((allOf: JSONSchema7) => (allOf.properties[propertyName] as JSONSchema7)?.type === 'string')
+      ) {
+        subSchema.type = subSchema.anyOf[0].type;
+        subSchema.default = subSchema.anyOf[0].default;
+        subSchema.enum = subSchema.anyOf.reduce((enumValues: [string], anyOf: JSONSchema7) => {
+          anyOf.enum.forEach((value) => {
+            if (!enumValues.includes(value as string)) enumValues.push(value as string);
+          });
+
+          return enumValues;
+        }, []);
+
+        delete rootSchema.allOf[rootSchema.allOf.findIndex((allOf: JSONSchema7) => (allOf.properties[propertyName] as JSONSchema7)?.type === 'string')].properties[propertyName];
+        delete subSchema.anyOf;
+      }
+    },
+  });
+};
 
 interface SchemaReturns {
   allDefinitions: { [key: string]: JSONSchema7 },

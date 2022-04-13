@@ -1,14 +1,21 @@
 {
-  "name": "@kickstartds/jsonschema2graphql",
-  "version": "1.6.12",
-  "description": "Converts JSON schema to GraphQL types",
+  "name": "@kickstartds/jsonschema2tinacms",
+  "version": "1.0.0",
+  "description": "Converts JSON schema to Tina CMS admin config",
+  "repository": "github:kickstartDS/jsonschema2tinacms",
+  "homepage": "https://github.com/kickstartDS/jsonschema2tinacms#readme",
+  "bugs": {
+    "url": "https://github.com/kickstartDS/jsonschema2tinacms/issues"
+  },
   "author": {
     "name": "Jonas Ulrich",
-    "email": "jonas.ulrich@ruhmesmeile.com"
+    "email": "jonas.ulrich@kickstartds.com"
   },
+  "license": "UNLICENSED",
   "keywords": [
     "json-schema",
-    "graphql"
+    "tina-cms",
+    "tinacms"
   ],
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -28,11 +35,8 @@
   "dependencies": {
     "ajv": "^8.5.0",
     "camelcase": "^6.2.0",
-    "graphql": "^15.5.0",
     "lodash": "^4.17.21",
-    "pluralize": "^8.0.0",
     "ramda": "^0.27.1",
-    "uppercamelcase": "^3.0.0",
     "@kickstartds/jsonschema-utils": "^1.0.0"
   },
   "devDependencies": {
@@ -56,6 +60,7 @@
     "prettier": "^2.3.0",
     "tmp-promise": "^3.0.2",
     "ts-jest": "27.0.2",
+    "tinacms": "^0.66.9",
     "typescript": "^4.3.2"
   },
   "jest": {

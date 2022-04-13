@@ -1,41 +1,30 @@
-import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
-import { NetlifyCmsField } from './@types';
+import { TinaFieldInner, ObjectType, Template,  } from 'tinacms/dist/types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
 import { getLayeredRefId, getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 const typeResolutionField = 'type';
 
-interface TypeMapping {
-  boolean: string;
-  string: string;
-  integer: string;
-  array: string;
-  object: string;
-}
-
-const mapping: TypeMapping = {
-  boolean: 'boolean',
-  string: 'string',
-  integer: 'number',
-  array: 'list',
-  object: 'object',
-};
-
-const getInternalTypeDefinition = (type: string): NetlifyCmsField => {
+const getInternalTypeDefinition = (type: string): TinaFieldInner<false> => {
   return {
     name: typeResolutionField,
-    widget: 'hidden',
     description: 'Internal type for interface resolution',
-    default: type,
+    type: 'string',
   }
 }
 
-const widgetMapping = (property: JSONSchema7) : string => {
+const scalarMapping = (property: JSONSchema7, propertyName: string) : TinaFieldInner<false> => {
   if (property.type === 'string' && property.enum && property.enum.length) {
-    return 'select';
+    return {
+      label: propertyName,
+      list: true,
+      name: propertyName.replace('-', '_'),
+      options: property.enum.map((value) => value as string) || [],
+      type: 'string',
+    };
   }
 
   if (
@@ -43,7 +32,11 @@ const widgetMapping = (property: JSONSchema7) : string => {
     property.format &&
     property.format === 'markdown'
   ) {
-    return 'markdown';
+    return {
+      label: propertyName,
+      name: propertyName.replace('-', '_'),
+      type: 'rich-text',
+    };
   }
 
   if (
@@ -51,7 +44,26 @@ const widgetMapping = (property: JSONSchema7) : string => {
     property.format &&
     property.format === 'image'
   ) {
-    return 'image';
+    return {
+      label: propertyName,
+      name: propertyName.replace('-', '_'),
+      type: 'image',
+    };
+  }
+
+  if (
+    property.type === 'string' &&
+    property.format &&
+    property.format === 'date'
+  ) {
+    return {
+      label: propertyName,
+      name: propertyName.replace('-', '_'),
+      type: 'string',
+      ui: {
+        dateFormat: 'YYYY MM DD',
+      }
+    };
   }
 
   if (
@@ -59,10 +71,41 @@ const widgetMapping = (property: JSONSchema7) : string => {
     property.format &&
     property.format === 'id'
   ) {
-    return 'id';
+    return {
+      label: propertyName,
+      name: propertyName.replace('-', '_'),
+      type: 'string',
+      list: false,
+    };
   }
 
-  return mapping[property.type as JSONSchema7TypeName];
+  if (property.type === 'string') {
+    return {
+      label: propertyName,
+      name: propertyName.replace('-', '_'),
+      type: 'string',
+      list: false,
+    };
+  }
+
+  if (property.type === 'integer' || property.type === 'number') {
+    return {
+      label: propertyName,
+      name: propertyName.replace('-', '_'),
+      type: 'number',
+    };
+  }
+
+  if (property.type === 'boolean') {
+    return {
+      label: propertyName,
+      name: propertyName.replace('-', '_'),
+      type: 'boolean',
+    }
+  }
+
+  console.log('unsupported property in scalarMapping', property);
+  throw err(`The property property ${JSON.stringify(property, null, 2)} is not supported.`);
 };
 
 let allDefinitions: JSONSchema7[];
@@ -81,17 +124,17 @@ function clearAndUpper(text: string): string {
 // * hint -> may be affected by the same challenge as `required`
 // note: throws err(..) with minimal logging for (currently) unsupported
 // (and unutilized) JSON Schema features
-export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): NetlifyCmsField[] {
+export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): TinaFieldInner<false>[] {
   allDefinitions = definitions;
   
   function buildConfig(
     propName: string,
     schema: JSONSchema7,
-    contentFields: NetlifyCmsField[],
+    contentFields: TinaFieldInner<false>[],
     outerRun: boolean = false,
     outerSchema: JSONSchema7,
     componentSchemaId: string = '',
-  ): NetlifyCmsField {
+  ): TinaFieldInner<false> {
     const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
     const contentComponent = outerRun && !sectionComponent;
     const name = propName;
@@ -141,11 +184,11 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       if (schema.properties)
         objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
 
-      const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId);
+      const field: ObjectType<false> = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId) as ObjectType<false>;
       
       if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
         if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
+          (field.fields as TinaFieldInner<false>[]).push(getInternalTypeDefinition(name));
         }
       }
 
@@ -160,9 +203,10 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
   
     // object?
     else if (schema.type === 'object') {
-      const description = buildDescription(schema);
+      // TODO re-add description, add defaults
+      // const description = buildDescription(schema);
 
-      const fields = (): NetlifyCmsField[] =>
+      const fields = (): TinaFieldInner<false>[] =>
         !_.isEmpty(schema.properties)
           ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
               const objectSchema = _.cloneDeep(prop);
@@ -173,28 +217,19 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
             })
           : [];
 
-      const field: NetlifyCmsField = {
+      const field: ObjectType<false> = {
         label: toPascalCase(name),
-        name,
-        widget: widgetMapping(schema),
+        type: 'object',
+        name: name.replace('-', '_'),
         fields: fields(),
-        collapsed: true,
       };
 
       if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
         if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
+          (field.fields as TinaFieldInner<false>[]).push(getInternalTypeDefinition(name));
         }
       }
         
-      if (schema.default)
-        field.default = schema.default as string;
-
-      if (description)
-        field.hint = description;
-
-      field.required = schema.required?.includes(name) || false;
-  
       return field;
     }
   
@@ -208,46 +243,36 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
 
         if (isRefArray) {
           // only hit for `page > content`
-          const description = buildDescription(outerSchema);
+          // TODO re-add description, add defaults
+          // const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
             const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-            return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
+            return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId) as Template<false>;
           });
 
-          const field: NetlifyCmsField = {
-            name,
-            widget: 'list',
-            types: fieldConfigs
+          const field: ObjectType<false> = {
+            name: name.replace('-', '_'),
+            list: true,
+            type: 'object',
+            label: name,
+            templates: fieldConfigs
           };
 
-          if (outerSchema.default)
-            field.default = schema.default as string;
-          
-          if (description)
-            field.hint = description;
-    
-          field.required = outerSchema.required?.includes(name) || false;
-          
           return field;
         } else if (isObjectArray) {
-          const description = buildDescription(outerSchema);
+          // TODO re-add description, add defaults
+          // const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) =>
-            buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId)
+            buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId)  as Template<false>
           );
 
-          const field: NetlifyCmsField = {
-            name,
-            widget: 'list',
-            types: fieldConfigs,
+          const field: ObjectType<false> = {
+            name: name.replace('-', '_'),
+            list: true,
+            type: 'object',
+            label: name,
+            templates: fieldConfigs,
           };
-
-          if (outerSchema.default)
-            field.default = schema.default as string;
-          
-          if (description)
-            field.hint = description;
-    
-          field.required = outerSchema.required?.includes(name) || false;
 
           return field;
         } else {
@@ -257,7 +282,8 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         console.log('schema with array items using oneOf', schema);
         throw err(`The type oneOf on array items of property ${name} is not supported.`);
       } else {
-        const description = buildDescription(outerSchema);
+        // TODO re-add description, add defaults
+        // const description = buildDescription(outerSchema);
         const arraySchema = schema.items as JSONSchema7;
         const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
         const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
@@ -265,28 +291,19 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         let fieldConfig;
         if (arraySchema.$ref) {
           const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-          fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId);
+          fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId) as ObjectType<false>;
         } else {
-          fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
+          fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId) as ObjectType<false>;
         }
 
-        const field: NetlifyCmsField = {
+        const field: ObjectType<false> = {
           label: toPascalCase(name),
           name,
-          widget: 'list',
+          list: true,
+          type: 'object',
+          fields: fieldConfig && fieldConfig.fields || [],
         };
 
-        if (outerSchema.default)
-          field.default = schema.default as string;
-      
-        if (description)
-          field.hint = description;
-
-        field.required = outerSchema.required?.includes(name) || false;
-  
-        if (fieldConfig && fieldConfig.fields)
-          field.fields = fieldConfig.fields;
-  
         return field;
       }
     }
@@ -294,7 +311,8 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
-      const description = buildDescription(schema);
+      // TODO re-add description, add defaults
+      // const description = buildDescription(schema);
       const options: { label: string, value: string }[] = schema.enum.map((value) => {
         return {
           label: value as string,
@@ -302,21 +320,14 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         };
       });
 
-      const field: NetlifyCmsField = {
+      const field: TinaFieldInner<false> = {
         label: toPascalCase(name),
-        name,
-        widget: 'select',
-        options,
+        name: name.replace('-', '_'),
+        type: 'string',
+        options: schema.enum.map((value) => value as string) || [],
+        list: false,
       }
 
-      if (schema.default)
-        field.default = safeEnumKey(schema.default as string);
-
-      if (description)
-        field.hint = description;
-
-      field.required = schema.required?.includes(name) || false;
-  
       return field;
     }
   
@@ -341,35 +352,18 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
     }
   
     // basic?
-    else if (widgetMapping(schema)) {
-      const description = buildDescription(schema);
-      const widget = widgetMapping(schema);
+    else if (scalarMapping(schema, name)) {
+      // TODO re-add description, add defaults
+      // const description = buildDescription(schema);
   
-      const field: NetlifyCmsField = {
-        label: toPascalCase(name),
-        name,
-        widget,
-      };
-  
-      if (widget === 'number')
-        field.valueType = 'int';
-
-      if (schema.default)
-        field.default = schema.default as string;
-
-      if (description)
-        field.hint = description;
-
-      field.required = outerSchema.required?.includes(name) || false;
-  
-      return field;
+      return scalarMapping(schema, name);
     }
   
     // ¯\_(ツ)_/¯
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   }
 
-  const contentFields: NetlifyCmsField[] = [];
+  const contentFields: TinaFieldInner<false>[] = [];
   // TODO don't hardcode page schema here
   const pageSchema = schemas.find((schema) => schema.$id?.includes('page.schema.json')) as JSONSchema7;
 

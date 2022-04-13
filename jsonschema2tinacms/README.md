@@ -1,24 +1,23 @@
-![logo](./img/logo.png)
+# JSON Schema to Tina CMS admin config(.json) converter
 
-# JSON Schema to GraphQL converter
+This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Tina CMS admin config.yml]().
 
-This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [GraphQL schema]().
 
 ## Installation
 
 Install with yarn:
 
 ```
-yarn add jsonschema2graphql
+yarn add jsonschema2tinacms
 ```
 
-## Usage
+## Usage (TODO Fix, usage differs for Tina CMS)
 
 You can convert a schema expressed as an object literal:
 
 ```js
 import { printSchema } from 'graphql'
-import convert from 'jsonschema2graphql'
+import convert from 'jsonschema2tinacms'
 
 const jsonSchema = {
   $id: '#/person',

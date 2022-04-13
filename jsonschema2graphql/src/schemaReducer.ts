@@ -19,7 +19,7 @@ import { getTypeName } from './getTypeName';
 import { graphqlSafeEnumKey } from './graphqlSafeEnumKey';
 import { err } from './helpers';
 import Ajv from 'ajv';
-import * as path from 'path';
+import { getLayeredRefId, getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 import { hashFieldName } from './helpers';
 import { cleanFieldName } from './dehashing';
@@ -64,21 +64,6 @@ const allDefinitionTypes = {};
 // TODO these should be (cli) options
 const shouldDedupe = true;
 const gatsbyImages = true;
-
-export function getSchemaName(schemaId: string | undefined): string {
-  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
-};
-
-function getLayeredRefId(ajv: Ajv, refId: string, reffingSchemaId: string): string {
-  if (!refId.includes('frontend.ruhmesmeile.com')) return refId;
-
-  const component = path.basename(refId);
-  const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('frontend.ruhmesmeile.com'))
-
-  return layeredComponent.length > 0 && reffingSchemaId.includes('frontend.ruhmesmeile.com')
-    ? layeredComponent[0]
-    : refId;
-}
 
 const dedupe = (schema: JSONSchema7, optionalName?: string): {
     [key: string]: JSONSchema7Definition;

@@ -37,7 +37,8 @@
     "camelcase": "^6.2.0",
     "lodash": "^4.17.21",
     "netlify-cms-core": "^2.40.12",
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.1",
+    "@kickstartds/jsonschema-utils": "^1.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",

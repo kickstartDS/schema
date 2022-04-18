@@ -5,6 +5,7 @@ const { printSchema } = require('graphql');
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
 const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
+const convertToBuilderIO = require('@kickstartds/jsonschema2builderio').default;
 const { getSchemas } = require('@kickstartds/jsonschema-utils/dist/helpers');
 
 // TODO I hate that require / import usage is mixed here -_-
@@ -199,6 +200,17 @@ const pageSchema: JSONSchema7 = {
     fs.writeFile(
       `dist/tina.json`,
       tinacmsAdminConfig,
+    );
+
+    const builderioInputsConfig = convertToBuilderIO({
+      jsonSchema: schemaJsons,
+      definitions: allDefinitions,
+      ajv,
+      configLocation: 'static/.builderio/builder.inputs.json'
+    });
+    fs.writeFile(
+      `dist/builder.inputs.json`,
+      builderioInputsConfig,
     );
   }
 })();

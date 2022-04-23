@@ -1,7 +1,7 @@
 import { JSONSchema7 } from 'json-schema';
 import { readFileSync, existsSync } from 'fs-extra';
 
-import { Component, Builder } from '@builder.io/sdk/dist/src/builder.class';
+import { Component } from '@builder.io/sdk/dist/src/builder.class';
 
 import { configGenerator } from './schemaReducer'
 import { ConvertParams } from './@types'

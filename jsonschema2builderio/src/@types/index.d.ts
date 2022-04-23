@@ -1,5 +1,6 @@
-import { JSONSchema7 } from 'json-schema'
-import Ajv from 'ajv/dist/core'
+import { JSONSchema7 } from 'json-schema';
+import Ajv from 'ajv/dist/core';
+import { Component } from '@builder.io/sdk/dist/src/builder.class';
 
 declare namespace jsonschema2builderio {
   export interface ConvertParams {
@@ -8,6 +9,10 @@ declare namespace jsonschema2builderio {
     ajv: Ajv
     configLocation?: string
     collectionName?: string
+  }
+
+  export interface ComponentsCollection {
+    components: Component[]
   }
 }
 

@@ -185,3 +185,11 @@ export const getLayeredRefId = (ajv: Ajv, refId: string, reffingSchemaId: string
 export const getSchemaName = (schemaId: string | undefined): string => {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
+
+export const toArray = (x: JSONSchema7 | JSONSchema7[] | string | string[]): any[]  =>
+  x instanceof Array ? x : [x];
+
+export const toSchema = (x: JSONSchema7 | string): JSONSchema7 =>
+  x instanceof Object ? x : JSON.parse(x);
+
+export const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1);

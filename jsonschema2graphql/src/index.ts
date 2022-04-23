@@ -1,10 +1,20 @@
-import { GraphQLSchema } from 'graphql';
 import { JSONSchema7 } from 'json-schema';
+// TODO doesn't use `fs-extra`... why is that?
 
-import { DEFAULT_ENTRY_POINTS } from './helpers';
-import { getSchemaReducer } from './schemaReducer';
-import { ConvertParams, GraphQLTypeMap } from './@types';
+import { getSchemaReducer } from './schemaReducer'; // TODO this one differs, but shouldn't?
+import { ConvertParams } from './@types';
+import { toArray, toSchema } from '@kickstartds/jsonschema-utils/dist/helpers';
 
+
+
+// import needed types to type the result
+import { GraphQLTypeMap } from './@types';
+import { GraphQLSchema } from 'graphql';
+
+// import locally needed utils
+import { DEFAULT_ENTRY_POINTS } from './helpers'; // TODO check this, needed?
+
+// TODO correct parameter documentation
 /**
  * @param jsonSchema - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
@@ -26,7 +36,12 @@ import { ConvertParams, GraphQLTypeMap } from './@types';
  * a Map of types and returns Query, Mutation (optional), and Subscription (optional)
  * blocks. Each block consists of a hash of `GraphQLFieldConfig`s.
  */
-export default function convert({ jsonSchema, definitions, entryPoints = DEFAULT_ENTRY_POINTS, ajv }: ConvertParams): GraphQLSchema {
+export default function convert({
+  jsonSchema,
+  definitions,
+  ajv,
+  entryPoints = DEFAULT_ENTRY_POINTS,
+}: ConvertParams): GraphQLSchema {
   // coerce input to array of schema objects
   const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
   const schemaReducer = getSchemaReducer(ajv, definitions);
@@ -39,14 +54,6 @@ export default function convert({ jsonSchema, definitions, entryPoints = DEFAULT
   });
 }
 
-function toArray(x: JSONSchema7 | JSONSchema7[] | string | string[]): any[] {
-  return x instanceof Array
-    ? x // already array
-    : [x]; // single item -> array
-}
-
-function toSchema(x: JSONSchema7 | string): JSONSchema7 {
-  return x instanceof Object
-    ? x // already object
-    : JSON.parse(x); // string -> object
-}
+export function createConfig() {
+  
+};

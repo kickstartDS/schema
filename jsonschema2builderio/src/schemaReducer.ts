@@ -155,7 +155,7 @@ function clearAndUpper(text: string): string {
   return text.replace(/-/, " ").toUpperCase();
 }
 
-export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): Input[] {
+export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): Input[] {
   allDefinitions = definitions;
   
   function buildConfig(

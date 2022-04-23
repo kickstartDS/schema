@@ -124,7 +124,7 @@ function clearAndUpper(text: string): string {
 // * hint -> may be affected by the same challenge as `required`
 // note: throws err(..) with minimal logging for (currently) unsupported
 // (and unutilized) JSON Schema features
-export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): TinaFieldInner<false>[] {
+export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): TinaFieldInner<false>[] {
   allDefinitions = definitions;
   
   function buildConfig(

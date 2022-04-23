@@ -13,7 +13,6 @@ import {
   load as yamlLoad
 } from 'js-yaml';
 import { readFileSync, existsSync } from 'fs-extra';
-import { NetlifyCmsConfig } from '@kickstartds/jsonschema2netlifycms';
 
 // TODO I hate that require / import usage is mixed here -_-
 import { JSONSchema7 } from 'json-schema';
@@ -189,7 +188,7 @@ const pageSchema: JSONSchema7 = {
     schemaJsons.push(pageSchema);
 
     const configLocation = 'static/admin/config.yml';
-    const config = configLocation && existsSync(configLocation) && yamlLoad(readFileSync(configLocation, 'utf-8')) as NetlifyCmsConfig;
+    const config = configLocation && existsSync(configLocation) && yamlLoad(readFileSync(configLocation, 'utf-8'));
 
     const netlifyCmsFields = convertToNetlifyCMS({
       jsonSchema: schemaJsons,

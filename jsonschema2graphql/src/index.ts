@@ -42,12 +42,10 @@ export default function convert({
   ajv,
   entryPoints = DEFAULT_ENTRY_POINTS,
 }: ConvertParams): GraphQLSchema {
-  // coerce input to array of schema objects
   const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
   const schemaReducer = getSchemaReducer(ajv, definitions);
 
-  const types: GraphQLTypeMap = schemaArray.reduce(schemaReducer, {});
-
+  const types = schemaArray.reduce(schemaReducer, {});
   return new GraphQLSchema({
     ...types,
     ...entryPoints(types),

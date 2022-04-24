@@ -85,55 +85,55 @@ const pageSchema: JSONSchema7 = {
       items: {
         "anyOf": [
           {
-            "$ref": "http://schema.kickstartds.com/content/organisms/quotes-slider.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/quotes-slider.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/atoms/link-button.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/link-button.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/atoms/button.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/button.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/atoms/tag-label.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/tag-label.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/visual.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/visual.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/quote.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/quote.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/visual-slider.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/visual-slider.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/contact.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/contact.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/storytelling.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/storytelling.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/collapsible-box.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/collapsible-box.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/count-up.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/count-up.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/molecules/content-box.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/content-box.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/molecules/headline.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/headline.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/molecules/text-media.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/text-media.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/molecules/teaser-box.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/teaser-box.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/content/molecules/logo-tiles.schema.json"
+            "$ref": "http://schema.kickstartds.com/content/logo-tiles.schema.json"
           },
           {
-            "$ref": "http://schema.kickstartds.com/base/molecules/teaser-row.schema.json"
+            "$ref": "http://schema.kickstartds.com/base/teaser-row.schema.json"
           }
         ]
       }

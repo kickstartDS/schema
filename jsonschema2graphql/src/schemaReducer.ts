@@ -75,7 +75,7 @@ const dedupe = (schema: JSONSchema7, optionalName?: string): {
 export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
   allDefinitions = definitions;
 
-  function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
+  function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7): GraphQLTypeMap {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 

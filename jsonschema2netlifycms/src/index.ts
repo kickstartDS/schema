@@ -4,7 +4,6 @@ import { getSchemaReducer } from './schemaReducer';
 import { ConvertParams, NetlifyCmsField, NetlifyCmsConfig } from './@types';
 import { toArray, toSchema } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-import { config } from './schemaReducer';
 import { createConfig } from './createConfig';
 
 // import needed types to type the result
@@ -25,4 +24,4 @@ export default function convert({
   return schemaArray.reduce(schemaReducer, []);
 }
 
-export { NetlifyCmsConfig, config, createConfig };
+export { NetlifyCmsConfig, createConfig };

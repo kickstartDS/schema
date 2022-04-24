@@ -20,13 +20,9 @@ export default function convert({
   ajv,
 }: ConvertParams): NetlifyCmsField[] {
   const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
-
   const schemaReducer = getSchemaReducer(ajv, definitions);
-  const types = schemaArray.reduce(schemaReducer, []);
 
-  return types;
-  // const contentFields = config(ajv, definitions, schemaArray);
-  // return contentFields[0].fields as NetlifyCmsField[];
+  return schemaArray.reduce(schemaReducer, []);
 }
 
 export { NetlifyCmsConfig, config, createConfig };

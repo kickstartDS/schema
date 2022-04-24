@@ -9,8 +9,17 @@ import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 
-export const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[]) => {
-  traverse(schemaJson, {
+export interface SchemaReturns {
+  definitions: { [key: string]: JSONSchema7 }
+  jsonSchemas: JSONSchema7[]
+  kdsSchemas: JSONSchema7[]
+  schemaAnyOfs: JSONSchema7[]
+};
+
+export const addExplicitAnyOfs = (jsonSchema: JSONSchema7): JSONSchema7[] => {
+  const schemaAnyOfs: JSONSchema7[] = [];
+
+  traverse(jsonSchema, {
     cb: (schema, pointer, rootSchema) => {
       if (schema.items && schema.items.anyOf) {
         const componentPath = rootSchema.$id.split('/');
@@ -18,24 +27,25 @@ export const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSch
         const componentName = uppercamelcase(componentType);
 
         schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
-          if (anyOf.$ref)
-            return anyOf;
+          if (anyOf.$ref) return anyOf;
 
           const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
           schemaAnyOfs.push({
             $id: schemaName,
             $schema: "http://json-schema.org/draft-07/schema#",
             ...anyOf,
-            definitions: schemaJson.definitions
+            definitions: jsonSchema.definitions
           });
           return { $ref: schemaName };
         });
       }
     }
   });
+
+  return schemaAnyOfs;
 }
 
-export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv) => {
+export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 => {
   traverse(schema, {
     cb: (subSchema, pointer, rootSchema) => {
       const propertyName = pointer.split('/').pop();
@@ -66,17 +76,11 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv) => {
       }
     },
   });
+
+  return schema;
 };
 
-interface SchemaReturns {
-  allDefinitions: { [key: string]: JSONSchema7 },
-  schemaJsons: JSONSchema7[],
-  schemaAnyOfs: JSONSchema7[],
-  customSchemaJsons: JSONSchema7[],
-  ajv: Ajv,
-};
-
-export const getSchemas = async (schemaGlob: string, customGlob: string, pageSchema: JSONSchema7): Promise<SchemaReturns> => {
+export const getSchemaRegistry = (): Ajv => {
   const ajv = new AjvConstructor({
     removeAdditional: true,
     validateSchema: true,
@@ -95,83 +99,58 @@ export const getSchemas = async (schemaGlob: string, customGlob: string, pageSch
     validate: () => true,
   });
 
-  const addSchemaPath = async (schemaPath: string) => {
-    const schema = await fs.readFile(schemaPath, 'utf-8');
-    const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
-  
-    if (!ajv.getSchema(schemaJson.$id)) ajv.addSchema(schemaJson);
-    return schemaJson;
-  };
-  
-  const addSchemaObject = (schemaObject: JSONSchema7) => {
-    if (!ajv.getSchema(schemaObject.$id)) ajv.addSchema(schemaObject);
-    return schemaObject;
-  };
+  return ajv;
+};
 
-  const schemaPaths = await glob(schemaGlob);
+export const addJsonSchema = (jsonSchema: JSONSchema7, ajv: Ajv) => {
+  if (!ajv.getSchema(jsonSchema.$id)) ajv.addSchema(jsonSchema);
+  return jsonSchema;
+};
+
+// TODO eventually get rid of that `type` hack, if possible
+export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =>
+  fs.readFile(schemaPath, 'utf-8').then((schema: string) =>
+    JSON.parse(schema.replace(/"type": {/g, '"typeProp": {')) as JSONSchema7);
+
+export const getSchemasForGlob = async (schemaGlob: string): Promise<JSONSchema7[]> => 
+  glob(schemaGlob).then((schemaPaths: string[]) =>
+    Promise.all(schemaPaths.map(async (schemaPath: string) => loadSchemaPath(schemaPath))));
+
+export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv): Promise<SchemaReturns> => 
+  processSchemas(await getSchemasForGlob(schemaGlob), ajv);
+
+export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Promise<SchemaReturns> => {
+  // TODO this should go (`pathPrefix` / environment dependent paths)
+  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
+  const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
+  const kdsSchemas = await getSchemasForGlob(schemaGlob);
 
   const allDefinitions: { [key: string]: JSONSchema7 } = {};
-    
-  const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchemaPath(schemaPath)));
   const schemaAnyOfs: JSONSchema7[] = [];
-  const customSchemaJsons: JSONSchema7[] = [];
 
-  schemaJsons.forEach((schemaJson) => {
-    const { definitions } = schemaJson;
+  [...jsonSchemas, ...kdsSchemas].forEach((jsonSchema) => {
+    const { definitions } = jsonSchema;
     for (const definedTypeName in definitions) {
       allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
     }
 
-    addExplicitAnyOfs(schemaJson, schemaAnyOfs);
+    addJsonSchema(jsonSchema, ajv);
   });
 
-  schemaAnyOfs.forEach((schemaAnyOf) => addSchemaObject(schemaAnyOf));
+  [...jsonSchemas, ...kdsSchemas].forEach((jsonSchema) => {
+    schemaAnyOfs.push(...addExplicitAnyOfs(mergeAnyOfEnums(jsonSchema, ajv)));
+  });
+  schemaAnyOfs.forEach((schemaAnyOf) => addJsonSchema(schemaAnyOf, ajv));
 
-  const customPaths = await glob(customGlob);
-  if (customPaths.length) {
-    const customJsons: JSONSchema7[] = await Promise.all(customPaths.map(async (customPath: string) => addSchemaPath(customPath)));  
-    const sectionSchema = customJsons.find((customJson) => customJson.$id?.includes('section.schema.json')) as JSONSchema7;
-
-    if (sectionSchema)
-      ((pageSchema.properties.sections as JSONSchema7).items as JSONSchema7).$ref = sectionSchema.$id;
-
-    customJsons.forEach((customJson) => {
-      const { definitions } = customJson;
-      let newCustomJson = true;
-
-      mergeAnyOfEnums(customJson, ajv);
-      addExplicitAnyOfs(customJson, schemaAnyOfs);
-
-      for (const definedTypeName in definitions) {
-        allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
-      }
-
-      schemaJsons.forEach((schemaJson, index) => {
-        if (path.basename(customJson.$id) === path.basename(schemaJson.$id)) {
-          newCustomJson = false;
-          schemaJsons[index] = customJson;
-        }
-      });
-
-      if (newCustomJson) {
-        customSchemaJsons.push(customJson);
-      }
-    });
-  }
-
-  ajv.addSchema(pageSchema);
-  ajv.validateSchema(pageSchema);
-
-  return Promise.resolve({
-    allDefinitions,
-    schemaJsons,
+  return {
+    definitions: allDefinitions,
+    jsonSchemas,
+    kdsSchemas,
     schemaAnyOfs,
-    customSchemaJsons,
-    ajv,
-  });
+  };
 };
 
-export const getLayeredRefId = (ajv: Ajv, refId: string, reffingSchemaId: string): string => {
+export const getLayeredRefId = (refId: string, reffingSchemaId: string, ajv: Ajv): string => {
   if (!refId.includes('schema.kickstartds.com')) return refId;
 
   const component = path.basename(refId);

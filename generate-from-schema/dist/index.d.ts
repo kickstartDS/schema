@@ -1,1 +1,2 @@
-export declare const getSchemasHelper: any;
+export declare const processSchemaGlobHelper: any;
+export declare const getSchemaRegistryHelper: any;

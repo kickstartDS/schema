@@ -165,7 +165,7 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
                 }
                 return _.merge(finalSchema, definition);
               } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId))?.schema as JSONSchema7);
+                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(allOf.$ref as string, outerComponentSchemaId, ajv))?.schema as JSONSchema7);
                 if (reffedSchema.allOf) {
                   return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
                 }
@@ -246,7 +246,7 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
           // TODO re-add description, add defaults
           // const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
-            const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+            const resolvedSchema = ajv.getSchema(getLayeredRefId(arraySchema.$ref as string, componentSchemaId, ajv))?.schema as JSONSchema7;
             return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId) as Template<false>;
           });
 
@@ -290,7 +290,7 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
 
         let fieldConfig;
         if (arraySchema.$ref) {
-          const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+          const resolvedSchema = ajv.getSchema(getLayeredRefId(arraySchema.$ref as string, componentSchemaId, ajv))?.schema as JSONSchema7;
           fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId) as ObjectType<false>;
         } else {
           fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId) as ObjectType<false>;
@@ -341,12 +341,12 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
           ? schema.$ref.split('#').pop()?.split('/').pop()
           : schema.$ref.split('/').pop();
 
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId))?.schema as JSONSchema7;
+        const reffedSchema = ajv.getSchema(getLayeredRefId(reffedSchemaId as string, componentSchemaId, ajv))?.schema as JSONSchema7;
         const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : allDefinitions[reffedPropertyName as string] as JSONSchema7;
 
         return buildConfig(reffedPropertyName as string, reffedProperty, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId);
       } else {
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, schema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
+        const reffedSchema = ajv.getSchema(getLayeredRefId(schema.$ref as string, componentSchemaId, ajv))?.schema as JSONSchema7;
         return buildConfig(name, reffedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
       }
     }

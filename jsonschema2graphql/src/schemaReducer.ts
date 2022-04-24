@@ -155,7 +155,7 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
                 }
                 return _.merge(finalSchema, definition);
               } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId))?.schema as JSONSchema7);
+                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(allOf.$ref as string, outerComponentSchemaId, ajv))?.schema as JSONSchema7);
                 if (reffedSchema.allOf) {
                   return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
                 }

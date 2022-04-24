@@ -4,7 +4,7 @@ import { Component } from '@builder.io/sdk/dist/src/builder.class';
 
 declare namespace jsonschema2builderio {
   export interface ConvertParams {
-    jsonSchema: JSONSchema7 | JSONSchema7[] | string | string[]
+    jsonSchemas: JSONSchema7 | JSONSchema7[] | string | string[]
     definitions: JSONSchema7[]
     ajv: Ajv
     configLocation?: string

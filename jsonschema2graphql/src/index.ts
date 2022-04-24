@@ -16,7 +16,7 @@ import { DEFAULT_ENTRY_POINTS } from './helpers'; // TODO check this, needed?
 
 // TODO correct parameter documentation
 /**
- * @param jsonSchema - An individual schema or an array of schemas, provided
+ * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  *
  * @param entryPoints - By default, each type gets a query field that returns
@@ -37,12 +37,12 @@ import { DEFAULT_ENTRY_POINTS } from './helpers'; // TODO check this, needed?
  * blocks. Each block consists of a hash of `GraphQLFieldConfig`s.
  */
 export default function convert({
-  jsonSchema,
+  jsonSchemas,
   definitions,
   ajv,
   entryPoints = DEFAULT_ENTRY_POINTS,
 }: ConvertParams): GraphQLSchema {
-  const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
+  const schemaArray: JSONSchema7[] = toArray(jsonSchemas).map(toSchema);
   const schemaReducer = getSchemaReducer(ajv, definitions);
 
   const types = schemaArray.reduce(schemaReducer, {});

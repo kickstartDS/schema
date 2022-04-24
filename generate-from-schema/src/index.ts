@@ -177,7 +177,7 @@ const pageSchema: JSONSchema7 = {
     } = await processSchemaGlob(customGlob, ajv);
 
     const gql = convertToGraphQL({
-      jsonSchema: [...kdsSchemas, ...jsonSchemas, ...schemaAnyOfs],
+      jsonSchemas: [...kdsSchemas, ...jsonSchemas, ...schemaAnyOfs],
       definitions,
       ajv,
     });
@@ -190,7 +190,7 @@ const pageSchema: JSONSchema7 = {
     const config = configLocation && existsSync(configLocation) && yamlLoad(readFileSync(configLocation, 'utf-8'));
 
     const netlifyCmsFields = convertToNetlifyCMS({
-      jsonSchema: jsonSchemas,
+      jsonSchemas,
       definitions,
       ajv,
     });
@@ -203,7 +203,7 @@ const pageSchema: JSONSchema7 = {
 
     // TODO re-activate (needs to be realigned to refactoring)
     // const tinacmsAdminConfig = convertToTinaCMS({
-    //   jsonSchema: schemaJsons,
+    //   jsonSchemas: jsonSchemas,
     //   definitions,
     //   ajv,
     //   configLocation: 'static/.tina/schema.json'
@@ -215,7 +215,7 @@ const pageSchema: JSONSchema7 = {
 
     // TODO re-activate (needs to be realigned to refactoring)
     // const builderioInputsConfig = convertToBuilderIO({
-    //   jsonSchema: schemaJsons,
+    //   jsonSchemas: jsonSchemas,
     //   definitions,
     //   ajv,
     //   configLocation: 'static/.builderio/builder.inputs.json'

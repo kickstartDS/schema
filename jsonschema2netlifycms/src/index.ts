@@ -10,15 +10,15 @@ import { createConfig } from './createConfig';
 
 // TODO correct parameter documentation
 /**
- * @param jsonSchema - An individual schema or an array of schemas, provided
+ * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  */
 export default function convert({
-  jsonSchema,
+  jsonSchemas,
   definitions,
   ajv,
 }: ConvertParams): NetlifyCmsField[] {
-  const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
+  const schemaArray: JSONSchema7[] = toArray(jsonSchemas).map(toSchema);
   const schemaReducer = getSchemaReducer(ajv, definitions);
 
   return schemaArray.reduce(schemaReducer, []);

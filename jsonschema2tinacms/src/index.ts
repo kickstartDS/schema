@@ -19,17 +19,17 @@ const defaultConfig: TinaCloudSchema<false> = {
 
 // TODO correct parameter documentation
 /**
- * @param jsonSchema - An individual schema or an array of schemas, provided
+ * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  */
 export default function convert({
-  jsonSchema,
+  jsonSchemas,
   definitions,
   ajv,
   configLocation,
   collectionName = 'pages'
 }: ConvertParams): string {
-  const schemaArray: JSONSchema7[] = toArray(jsonSchema).map(toSchema);
+  const schemaArray: JSONSchema7[] = toArray(jsonSchemas).map(toSchema);
   const contentFields = config(ajv, definitions, schemaArray);
 
   const baseConfig = configLocation && existsSync(configLocation) ? JSON.parse(readFileSync(configLocation, 'utf-8')) as TinaCloudSchema<false> : defaultConfig;

@@ -1635,14 +1635,14 @@
   resolved "https://registry.npmjs.org/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
-"@kickstartds/base@1.6.0-canary.999.4212.0":
-  version "1.6.0-canary.999.4212.0"
-  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.6.0-canary.999.4212.0.tgz#b808c539ba18adce477ef1a2c9a197a5339d6e68"
-  integrity sha512-Eit7/TowsHYRUZQoF8ScwRiJO7PnAlZcuEroIr88yNqfVJ3K/3s4iFgeiS4nYZqd65KOAZ31SeWdzdfIbzPOhw==
+"@kickstartds/base@2.0.0-canary.922.4260.0":
+  version "2.0.0-canary.922.4260.0"
+  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-2.0.0-canary.922.4260.0.tgz#dc026358fbe4a627b0f5b0cc57890364390d8fcc"
+  integrity sha512-/zEdmWKN6V3Gogw82YroOqkAl6HMk+88S8D7DHJjZA7KB+vej2hwAkDbO96XkWgw9tXrpoIPQWypJmwyVzxZcA==
   dependencies:
     "@babel/runtime" "^7.17.8"
     "@glidejs/glide" "^3.5.2"
-    "@kickstartds/core" "1.6.0-canary.999.4212.0"
+    "@kickstartds/core" "2.0.0-canary.922.4260.0"
     classnames "^2.2.6"
     date-fns "^2.28.0"
     focus-visible "^5.0.2"
@@ -1651,72 +1651,33 @@
     react-markdown "^8.0.2"
     vhtml "^2.2.0"
 
-"@kickstartds/base@^1.6.0-next.14":
-  version "1.6.0-next.14"
-  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-1.6.0-next.14.tgz#87cc64825b87bd02502b8d15a22dc5931492b288"
-  integrity sha512-5VLcf6mR1VAifIgEdpr7RhkmSRu2YAv3PKpjzRZGTSmv95I0y7gUgV1bnL4Z5q6g7d17wMhi99v76sUnS3YyFw==
+"@kickstartds/blog@2.0.0-canary.922.4260.0":
+  version "2.0.0-canary.922.4260.0"
+  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-2.0.0-canary.922.4260.0.tgz#b33efb7e16c6e08d51f19266ea7fd4a53ee159bf"
+  integrity sha512-CpV/nIf1iKT1fWbN8qhxL4Z1HVlW5ObiQeQTgMheoSAw/REHPtmUk1kvNDHy8TJlLTiUOf33wMLh2Pwfl5n9fw==
   dependencies:
     "@babel/runtime" "^7.17.8"
-    "@glidejs/glide" "^3.5.2"
-    "@kickstartds/core" "^1.6.0-next.14"
-    classnames "^2.2.6"
-    date-fns "^2.28.0"
-    focus-visible "^5.0.2"
-    lodash-es "^4.17.21"
-    photoswipe "^4.1.3"
-    react-markdown "^8.0.2"
-    vhtml "^2.2.0"
-
-"@kickstartds/blog@1.6.0-canary.999.4212.0":
-  version "1.6.0-canary.999.4212.0"
-  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.6.0-canary.999.4212.0.tgz#7dffc8219df1000c096d341df145c56dec48fb4f"
-  integrity sha512-UF3WQtxbKe9TylEmf0Q8Gh/QdGrFUX7ATNXTGQtzlirBq0RcdhueamTB924KiVtr3jHXYebzpmUDZY7P1u0Xlw==
-  dependencies:
-    "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "1.6.0-canary.999.4212.0"
-    "@kickstartds/content" "1.6.0-canary.999.4212.0"
-    "@kickstartds/core" "1.6.0-canary.999.4212.0"
+    "@kickstartds/base" "2.0.0-canary.922.4260.0"
+    "@kickstartds/content" "2.0.0-canary.922.4260.0"
+    "@kickstartds/core" "2.0.0-canary.922.4260.0"
     classnames "^2.2.6"
     date-fns "^2.28.0"
 
-"@kickstartds/blog@^1.6.0-next.14":
-  version "1.6.0-next.14"
-  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-1.6.0-next.14.tgz#3caba62c6c6d04c66b2cff0c2b230a5c738289e4"
-  integrity sha512-oVtbOkIJWCNIU4X/E/wJq0wVaX7pebdjQnK4EZYSD2W78dqeR0BP7/EL9+4ov5NhkCFEVzGZYf91r+PWcdrPjQ==
+"@kickstartds/content@2.0.0-canary.922.4260.0":
+  version "2.0.0-canary.922.4260.0"
+  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-2.0.0-canary.922.4260.0.tgz#d6c0805e56fc38ea53413f8a255aef5b2e33fc6b"
+  integrity sha512-W1vbCX6q+ZP+gc6d4Fb9Qzg3MoNFxAH8u90S6FzIAt6qAxpmOrxgjTh801TQOu/nsI9aUgBl9FxeAWy6T1ZZPw==
   dependencies:
     "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "^1.6.0-next.14"
-    "@kickstartds/content" "^1.6.0-next.14"
-    "@kickstartds/core" "^1.6.0-next.14"
-    classnames "^2.2.6"
-    date-fns "^2.28.0"
-
-"@kickstartds/content@1.6.0-canary.999.4212.0":
-  version "1.6.0-canary.999.4212.0"
-  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.6.0-canary.999.4212.0.tgz#0eaf5087291a25bd56ada9d3c9f85bb1258e6bd3"
-  integrity sha512-3FCFOUb32GZr1BB9s0F+/zDgoHvkCjcECGxbzgcesg5gtoUigC9e/HV57d3F0NFZyfT/+qEGqAtAwQ1DDQ8AYA==
-  dependencies:
-    "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "1.6.0-canary.999.4212.0"
-    "@kickstartds/core" "1.6.0-canary.999.4212.0"
+    "@kickstartds/base" "2.0.0-canary.922.4260.0"
+    "@kickstartds/core" "2.0.0-canary.922.4260.0"
     classnames "^2.2.6"
     countup.js "^2.1.0"
 
-"@kickstartds/content@^1.6.0-next.14":
-  version "1.6.0-next.14"
-  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-1.6.0-next.14.tgz#ed827e12a6c463b4763d6834cd3223714eb9016b"
-  integrity sha512-1awq7u0wQGixjj1Ku5mwkVDjbsnx3CUG9MBsJZky39Inl0laEg6FxAiTIn30gOhW+uZdnRIU7x6MkE0cGs8sqQ==
-  dependencies:
-    "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "^1.6.0-next.14"
-    "@kickstartds/core" "^1.6.0-next.14"
-    classnames "^2.2.6"
-    countup.js "^2.1.0"
-
-"@kickstartds/core@1.6.0-canary.999.4212.0":
-  version "1.6.0-canary.999.4212.0"
-  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.6.0-canary.999.4212.0.tgz#f77a82c2f10b590d443b461fbe61d363d4a3d5e9"
-  integrity sha512-ZRaNFyuBKfMRUxyfgtnBT8LyRjHwnZ/ESXls5kuiVEjlAUELdnQRIgyKAs2FE5lPUDBRrD5q9iDIW6A4OW+gfQ==
+"@kickstartds/core@2.0.0-canary.922.4260.0":
+  version "2.0.0-canary.922.4260.0"
+  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-2.0.0-canary.922.4260.0.tgz#bbd85c085311cf76fe5e94cc50491049a998fa56"
+  integrity sha512-0AqBz5LH6J3AIZquHScYpHJAj/cDgrMW1I0aH7zE8BLQY21WIqE1NZEZGvydOF6E8YAzBqDteOi4Pm6tLU/wiQ==
   dependencies:
     "@babel/core" "^7.17.8"
     "@babel/preset-react" "^7.16.7"
@@ -1744,57 +1705,30 @@
     svgstore "^3.0.1"
     tinycolor2 "^1.4.2"
 
-"@kickstartds/core@^1.6.0-next.14":
-  version "1.6.0-next.14"
-  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-1.6.0-next.14.tgz#8c4d3306a038551ed2eb8e006a5e4f9e2b1fac4d"
-  integrity sha512-FReQzhRf8iRbMW2AeAtuWu+5WpgYielhbKD+ZiZlihrizjxaYJLdVTdSv8VIw7Z44YUkfFzUXrll/BqeycbvPA==
+"@kickstartds/design-system@2.0.16--canary.72.1913.0":
+  version "2.0.16--canary.72.1913.0"
+  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-2.0.16--canary.72.1913.0.tgz#6187a3329393c770f936a98790254156cef8ff2d"
+  integrity sha512-J8jg5Ob1xu13TdWYYD7gPKcKbBXGSpR+VlTO/rqnnrYXNwcH+++8u5+5syB358CaM/pnSDweLM/H2eK4BbZDwA==
   dependencies:
-    "@babel/runtime" "^7.17.8"
-    bourbon "^7.2.0"
-    del "^6.0.0"
-    dependency-graph "^0.11.0"
-    esbuild "^0.14.36"
-    fast-glob "^3.2.11"
-    fs-extra "^10.0.1"
-    lazysizes "^5.3.2"
-    lodash-es "^4.17.21"
-    pubsub-js "^1.9.4"
-    sass "^1.50.0"
-
-"@kickstartds/design-system@2.0.16--canary.72.1894.0":
-  version "2.0.16--canary.72.1894.0"
-  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-2.0.16--canary.72.1894.0.tgz#383f4e4cdfdf9526a6d1798d9a54eb8093745db2"
-  integrity sha512-zoVlGxCKl1v2BoiDDg2Mdt2R9sD4LPDlI1gCyBJ1ZQcF9/MTkyh4ftHcJKs3V/jzwI8/XQQN5H+OvENuoGPHpA==
-  dependencies:
-    "@kickstartds/base" "^1.6.0-next.14"
-    "@kickstartds/blog" "^1.6.0-next.14"
-    "@kickstartds/content" "^1.6.0-next.14"
-    "@kickstartds/core" "^1.6.0-next.14"
-    "@kickstartds/form" "^1.6.0-next.14"
+    "@kickstartds/base" "2.0.0-canary.922.4260.0"
+    "@kickstartds/blog" "2.0.0-canary.922.4260.0"
+    "@kickstartds/content" "2.0.0-canary.922.4260.0"
+    "@kickstartds/core" "2.0.0-canary.922.4260.0"
+    "@kickstartds/form" "2.0.0-canary.922.4260.0"
     change-case "^4.1.2"
     classnames "^2.3.1"
     json-schema-to-typescript "^10.1.5"
     postinstall-postinstall "^2.1.0"
     typescript "^4.5.4"
 
-"@kickstartds/form@1.6.0-canary.999.4212.0":
-  version "1.6.0-canary.999.4212.0"
-  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.6.0-canary.999.4212.0.tgz#d7512373d9a1c61855229a3785dd6003b2f2ae05"
-  integrity sha512-Xnj6qCTy8OV8yHtSEzN4KRVYMh0rUDY8twHuPGjAPNYQjUgFlfoyNDcWzafuGvZcvoL2QmOrBqqu/HD0DRMLRw==
+"@kickstartds/form@2.0.0-canary.922.4260.0":
+  version "2.0.0-canary.922.4260.0"
+  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-2.0.0-canary.922.4260.0.tgz#b75f592f48771316dfbdae89d52194cd4fda7f58"
+  integrity sha512-1Xe2L9TlkLzjXiAhyGIJOq+9kwKdYAbLqrd7r11ecsDYygfCvELp9S+9PTjUFHaralKwmi/8hWwm/X39oMQomA==
   dependencies:
     "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "1.6.0-canary.999.4212.0"
-    "@kickstartds/core" "1.6.0-canary.999.4212.0"
-    classnames "^2.2.6"
-
-"@kickstartds/form@^1.6.0-next.14":
-  version "1.6.0-next.14"
-  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-1.6.0-next.14.tgz#90d5f80eebfd319e68b435200afa592816abd8fe"
-  integrity sha512-Xyb+xS1eyqEzEac90Q2qWJRoI0k0KqeRvNdI2sfVG3AOaYGqJV+dxa/eCuLqzz6KHHXIbcybir6iTYZnYKpDQA==
-  dependencies:
-    "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "^1.6.0-next.14"
-    "@kickstartds/core" "^1.6.0-next.14"
+    "@kickstartds/base" "2.0.0-canary.922.4260.0"
+    "@kickstartds/core" "2.0.0-canary.922.4260.0"
     classnames "^2.2.6"
 
 "@kwsites/file-exists@^1.1.1":

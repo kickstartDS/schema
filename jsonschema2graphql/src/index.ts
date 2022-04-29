@@ -5,8 +5,6 @@ import { getSchemaReducer } from './schemaReducer'; // TODO this one differs, bu
 import { ConvertParams } from './@types';
 import { toArray, toSchema } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-
-
 // import needed types to type the result
 import { GraphQLTypeMap } from './@types';
 import { GraphQLSchema } from 'graphql';
@@ -45,6 +43,9 @@ export default function convert({
   const schemaArray: JSONSchema7[] = toArray(jsonSchemas).map(toSchema);
   const schemaReducer = getSchemaReducer(ajv, definitions);
 
+  // TODO move this out of here, this should work as the others:
+  // just reduce basic types. schema -> type 1:1, configuration
+  // (`GraphQLSchema`) should live outside (`createConfiguration`)
   const types = schemaArray.reduce(schemaReducer, {});
   return new GraphQLSchema({
     ...types,

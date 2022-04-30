@@ -15,11 +15,10 @@ import { createConfig } from './createConfig';
  */
 export default function convert({
   jsonSchemas,
-  definitions,
   ajv,
 }: ConvertParams): NetlifyCmsField[] {
   const schemaArray: JSONSchema7[] = toArray(jsonSchemas).map(toSchema);
-  const schemaReducer = getSchemaReducer(ajv, definitions);
+  const schemaReducer = getSchemaReducer(ajv);
 
   return schemaArray.reduce(schemaReducer, []);
 }

@@ -65,8 +65,6 @@ const widgetMapping = (property: JSONSchema7) : string => {
   return mapping[property.type as JSONSchema7TypeName];
 };
 
-let allDefinitions: JSONSchema7[];
-
 function toPascalCase(text: string): string {
   return text.replace(/(^\w|-\w)/g, clearAndUpper);
 }
@@ -75,9 +73,7 @@ function clearAndUpper(text: string): string {
   return text.replace(/-/, " ").toUpperCase();
 }
 
-export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
-  allDefinitions = definitions;
-
+export function getSchemaReducer(ajv: Ajv) {
   function schemaReducer(knownTypes: NetlifyCmsField[], schema: JSONSchema7): NetlifyCmsField[] {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
@@ -121,24 +117,23 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
   
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
+      // TODO move this reducer / merger logic to helpers.ts
       const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
         return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
           const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
             if (!_.isUndefined(allOf.$ref)) {
-              if (allOf.$ref.includes('#/definitions/')) {
-                const definitionName = allOf.$ref.split('/').pop() || '';
-                const definition = _.cloneDeep(allDefinitions[definitionName]);
-                if (definition.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf, outerComponentSchemaId))
-                }
-                return _.merge(finalSchema, definition);
-              } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(allOf.$ref as string, outerComponentSchemaId, ajv))?.schema as JSONSchema7);
-                if (reffedSchema.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
-                }
-                return _.merge(finalSchema, reffedSchema);
-              }
+              const reffedSchema = _.cloneDeep(
+                ajv.getSchema(
+                  getLayeredRefId(allOf.$ref as string, outerComponentSchemaId, ajv)
+                )?.schema as JSONSchema7
+              );
+
+              return _.merge(
+                finalSchema,
+                reffedSchema.allOf
+                  ? reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string)
+                  : _.merge(finalSchema, reffedSchema)
+              );
             } else {
               return _.merge(finalSchema, allOf);
             }
@@ -333,24 +328,21 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
   
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      if (schema.$ref.includes('#/definitions/')) {
-        const reffedSchemaId = schema.$ref.includes('http')
-          ? schema.$ref.split('#').shift()
-          : componentSchemaId
-            ? componentSchemaId
-            : outerSchema.$id;
-        const reffedPropertyName = schema.$ref.includes('http')
-          ? schema.$ref.split('#').pop()?.split('/').pop()
-          : schema.$ref.split('/').pop();
+      const reffedSchema = ajv.getSchema(getLayeredRefId(
+        schema.$ref.includes('#/definitions/') && !schema.$ref.includes('http')
+          ? `${componentSchemaId ? componentSchemaId : outerSchema.$id}${schema.$ref}` : schema.$ref,
+        componentSchemaId,
+        ajv
+      ))?.schema as JSONSchema7;
 
-        const reffedSchema = ajv.getSchema(getLayeredRefId(reffedSchemaId as string, componentSchemaId, ajv))?.schema as JSONSchema7;
-        const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : allDefinitions[reffedPropertyName as string] as JSONSchema7;
-
-        return buildType(reffedPropertyName as string, reffedProperty, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId);
-      } else {
-        const reffedSchema = ajv.getSchema(getLayeredRefId(schema.$ref as string, componentSchemaId, ajv))?.schema as JSONSchema7;
-        return buildType(name, reffedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
-      }
+      return buildType(
+        name,
+        reffedSchema,
+        contentFields,
+        outerSchema.$id?.includes('section.schema.json') ? true : false,
+        schema.$id?.includes('section.schema.json') ? schema : outerSchema,
+        reffedSchema.$id || componentSchemaId
+      );
     }
   
     // basic?

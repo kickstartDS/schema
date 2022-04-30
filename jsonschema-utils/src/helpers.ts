@@ -153,6 +153,10 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
 export const getLayeredRefId = (refId: string, reffingSchemaId: string, ajv: Ajv): string => {
   if (!refId.includes('schema.kickstartds.com')) return refId;
 
+  // TODO this needs to actually be handled (definitions could theoretically be overwritten, too)
+  // should go away anyways, though, with the removing of `getLayeredRefId` (-> helpers.ts pre-processing step)
+  if (refId.includes('#/definitions/')) return refId;
+
   const component = path.basename(refId);
   const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('schema.kickstartds.com'))
 

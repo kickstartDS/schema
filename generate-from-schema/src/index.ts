@@ -201,6 +201,9 @@ const pageSchema: JSONSchema7 = {
       netlifyConfigString,
     );
 
+    // TODO remove layering from reducers, should be done as a
+    // pre-processing step to reducing... possibly with a traverse(..)
+
     // TODO re-activate (needs to be realigned to refactoring)
     // const tinacmsAdminConfig = convertToTinaCMS({
     //   jsonSchemas: jsonSchemas,

@@ -4,7 +4,7 @@ import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import { getSchemaName, toPascalCase, clearAndUpper } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getSchemaName, toPascalCase } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 const typeResolutionField = 'type';
 
@@ -27,6 +27,7 @@ const mapping: TypeMapping = {
 
 const getInternalTypeDefinition = (type: string): NetlifyCmsField => {
   return {
+    label: toPascalCase(typeResolutionField),
     name: typeResolutionField,
     widget: 'hidden',
     description: 'Internal type for interface resolution',
@@ -92,8 +93,6 @@ export function getSchemaReducer(ajv: Ajv) {
     outerSchema: JSONSchema7,
     componentSchemaId: string = '',
   ): NetlifyCmsField {
-    const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
-    const contentComponent = outerRun && !sectionComponent;
     const name = propName;
 
     // oneOf?
@@ -111,7 +110,7 @@ export function getSchemaReducer(ajv: Ajv) {
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
       // TODO move this reducer / merger logic to helpers.ts
-      const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
+      const reduceSchemaAllOf = (allOfs: JSONSchema7[]): JSONSchema7 => {
         return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
           const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
             if (!_.isUndefined(allOf.$ref)) {
@@ -120,7 +119,7 @@ export function getSchemaReducer(ajv: Ajv) {
               return _.merge(
                 finalSchema,
                 reffedSchema.allOf
-                  ? reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string)
+                  ? reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[])
                   : _.merge(finalSchema, reffedSchema)
               );
             } else {
@@ -132,19 +131,18 @@ export function getSchemaReducer(ajv: Ajv) {
         }, { } as JSONSchema7);
       };
   
-      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], componentSchemaId);
+      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
       if (schema.properties)
         objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
 
-      const field: NetlifyCmsField = buildType(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId);
-      
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
-        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
-        }
-      }
-
-      return field
+      return buildType(
+        name,
+        objectSchema,
+        contentFields,
+        outerSchema.$id?.includes('section.schema.json') ? true : false,
+        schema.$id?.includes('section.schema.json') ? schema : outerSchema,
+        objectSchema.$id || componentSchemaId
+      );
     }
   
     // not?
@@ -164,7 +162,14 @@ export function getSchemaReducer(ajv: Ajv) {
               const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
               const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
-              return buildType(fieldName, objectSchema, contentFields, isOuterRun, schemaOuter, objectSchema.$id || componentSchemaId);
+              return buildType(
+                fieldName,
+                objectSchema,
+                contentFields,
+                isOuterRun,
+                schemaOuter,
+                objectSchema.$id || componentSchemaId
+              );
             })
           : [];
 
@@ -175,12 +180,6 @@ export function getSchemaReducer(ajv: Ajv) {
         fields: fields(),
         collapsed: true,
       };
-
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
-        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
-        }
-      }
         
       if (schema.default)
         field.default = schema.default as string;
@@ -206,7 +205,14 @@ export function getSchemaReducer(ajv: Ajv) {
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
             const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
-            return buildType(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
+            return buildType(
+              getSchemaName(resolvedSchema.$id),
+              resolvedSchema,
+              contentFields,
+              outerSchema.$id?.includes('section.schema.json') ? true : false,
+              resolvedSchema,
+              resolvedSchema.$id || componentSchemaId
+            );
           });
 
           const field: NetlifyCmsField = {
@@ -227,7 +233,14 @@ export function getSchemaReducer(ajv: Ajv) {
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) =>
-            buildType(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId)
+            buildType(
+              arraySchema.title?.toLowerCase() || '',
+              arraySchema,
+              contentFields,
+              outerSchema.$id?.includes('section.schema.json') ? true : false,
+              schema.$id?.includes('section.schema.json') ? schema : outerSchema,
+              arraySchema.$id || componentSchemaId
+            )
           );
 
           const field: NetlifyCmsField = {
@@ -260,9 +273,23 @@ export function getSchemaReducer(ajv: Ajv) {
         let fieldConfig;
         if (arraySchema.$ref) {
           const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
-          fieldConfig = buildType(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId);
+          fieldConfig = buildType(
+            getSchemaName(resolvedSchema.$id),
+            resolvedSchema,
+            contentFields,
+            true,
+            schemaOuter,
+            resolvedSchema.$id || componentSchemaId
+          );
         } else {
-          fieldConfig = buildType(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
+          fieldConfig = buildType(
+            name,
+            arraySchema,
+            contentFields,
+            isOuterRun,
+            schemaOuter,
+            arraySchema.$id || componentSchemaId
+          );
         }
 
         const field: NetlifyCmsField = {
@@ -330,6 +357,15 @@ export function getSchemaReducer(ajv: Ajv) {
         reffedSchema.$id || componentSchemaId
       );
     }
+
+    // const?
+    else if (!_.isUndefined(schema.const)) {
+      if (name !== typeResolutionField) {
+        console.log('schema.const that is not type', schema);
+        throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
+      }
+      return getInternalTypeDefinition(schema.const as string)
+    }
   
     // basic?
     else if (widgetMapping(schema)) {
@@ -357,7 +393,10 @@ export function getSchemaReducer(ajv: Ajv) {
     }
   
     // ¯\_(ツ)_/¯
-    else throw err(`The type ${schema.type} on property ${name} is unknown.`);
+    else {
+      console.log('schema', schema);
+      throw err(`The type ${schema.type} on property ${name} is unknown.`)
+    };
   };
 
   return schemaReducer;

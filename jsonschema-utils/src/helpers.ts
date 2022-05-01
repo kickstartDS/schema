@@ -115,10 +115,23 @@ export const layerRefs = (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[])
   });
 };
 
-// TODO eventually get rid of that `type` hack, if possible
+export const addTypeInterfaces = (jsonSchemas: JSONSchema7[]): void => {
+  jsonSchemas.forEach((jsonSchema) => {
+    jsonSchema.properties = jsonSchema.properties || {};
+    jsonSchema.type = jsonSchema.type || 'object';
+
+    if (jsonSchema.properties.type) {
+      jsonSchema.properties.typeProp = jsonSchema.properties.type;
+    }
+
+    jsonSchema.properties.type = {
+      "const": getSchemaName(jsonSchema.$id)
+    };
+  });
+};
+
 export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =>
-  fs.readFile(schemaPath, 'utf-8').then((schema: string) =>
-    JSON.parse(schema.replace(/"type": {/g, '"typeProp": {')) as JSONSchema7);
+  fs.readFile(schemaPath, 'utf-8').then((schema: string) => JSON.parse(schema) as JSONSchema7);
 
 export const getSchemasForGlob = async (schemaGlob: string): Promise<JSONSchema7[]> => 
   glob(schemaGlob).then((schemaPaths: string[]) =>
@@ -151,6 +164,8 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
     schemaAnyOfs.push(...addExplicitAnyOfs(mergeAnyOfEnums(jsonSchema, ajv)));
   });
   schemaAnyOfs.forEach((schemaAnyOf) => addJsonSchema(schemaAnyOf, ajv));
+
+  addTypeInterfaces([...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs]);
 
   return [...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs].map((jsonSchema) => jsonSchema.$id);
 };

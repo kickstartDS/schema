@@ -72,9 +72,7 @@ const dedupe = (schema: JSONSchema7, optionalName?: string): {
     fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
   );
 
-export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[]) {
-  allDefinitions = definitions;
-
+export function getSchemaReducer(ajv: Ajv) {
   function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7): GraphQLTypeMap {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');

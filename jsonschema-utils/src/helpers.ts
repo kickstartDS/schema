@@ -16,6 +16,29 @@ export interface SchemaReturns {
   schemaAnyOfs: JSONSchema7[]
 };
 
+export const getSchemaRegistry = (): Ajv => {
+  const ajv = new AjvConstructor({
+    removeAdditional: true,
+    validateSchema: true,
+    schemaId: '$id',
+    allErrors: true
+  });
+
+  // TODO update JSON Schema, clean up ignored formats
+  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email', 'html'];
+  ignoredFormats.forEach((ignoredFormat) =>
+    ajv.addFormat(ignoredFormat, { validate: () => true })
+  );
+
+  ajv.addKeyword({
+    keyword: "faker",
+    schemaType: "string",
+    validate: () => true,
+  });
+
+  return ajv;
+};
+
 export const addExplicitAnyOfs = (jsonSchema: JSONSchema7): JSONSchema7[] => {
   const schemaAnyOfs: JSONSchema7[] = [];
 
@@ -80,28 +103,6 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 => {
   return schema;
 };
 
-export const getSchemaRegistry = (): Ajv => {
-  const ajv = new AjvConstructor({
-    removeAdditional: true,
-    validateSchema: true,
-    schemaId: '$id',
-    allErrors: true
-  });
-
-  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email', 'html'];
-  ignoredFormats.forEach((ignoredFormat) =>
-    ajv.addFormat(ignoredFormat, { validate: () => true })
-  );
-
-  ajv.addKeyword({
-    keyword: "faker",
-    schemaType: "string",
-    validate: () => true,
-  });
-
-  return ajv;
-};
-
 export const addJsonSchema = (jsonSchema: JSONSchema7, ajv: Ajv) => {
   if (!ajv.getSchema(jsonSchema.$id)) ajv.addSchema(jsonSchema);
   return jsonSchema;
@@ -128,6 +129,8 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
   const allDefinitions: { [key: string]: JSONSchema7 } = {};
   const schemaAnyOfs: JSONSchema7[] = [];
 
+  layerRefs(jsonSchemas, kdsSchemas);
+
   [...jsonSchemas, ...kdsSchemas].forEach((jsonSchema) => {
     const { definitions } = jsonSchema;
     for (const definedTypeName in definitions) {
@@ -148,6 +151,20 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
     kdsSchemas,
     schemaAnyOfs,
   };
+};
+
+export const layerRefs = (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[]): void => {
+  jsonSchemas.forEach((jsonSchema) => {
+    kdsSchemas.forEach((kdsSchema) => {
+      traverse(kdsSchema, {
+        cb: (subSchema) => {
+          if (subSchema.$ref && jsonSchema.$id.split('/').pop() === subSchema.$ref.split('/').pop()) {
+            subSchema.$ref = jsonSchema.$id;
+          }
+        }
+      });
+    });
+  });
 };
 
 export const getLayeredRefId = (refId: string, reffingSchemaId: string, ajv: Ajv): string => {

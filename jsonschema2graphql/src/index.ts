@@ -36,12 +36,11 @@ import { DEFAULT_ENTRY_POINTS } from './helpers'; // TODO check this, needed?
  */
 export default function convert({
   jsonSchemas,
-  definitions,
   ajv,
   entryPoints = DEFAULT_ENTRY_POINTS,
 }: ConvertParams): GraphQLSchema {
   const schemaArray: JSONSchema7[] = toArray(jsonSchemas).map(toSchema);
-  const schemaReducer = getSchemaReducer(ajv, definitions);
+  const schemaReducer = getSchemaReducer(ajv);
 
   // TODO move this out of here, this should work as the others:
   // just reduce basic types. schema -> type 1:1, configuration

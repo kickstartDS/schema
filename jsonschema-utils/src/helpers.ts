@@ -9,13 +9,6 @@ import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 
-export interface SchemaReturns {
-  definitions: { [key: string]: JSONSchema7 }
-  jsonSchemas: JSONSchema7[]
-  kdsSchemas: JSONSchema7[]
-  schemaAnyOfs: JSONSchema7[]
-};
-
 export const getSchemaRegistry = (): Ajv => {
   const ajv = new AjvConstructor({
     removeAdditional: true,
@@ -108,6 +101,20 @@ export const addJsonSchema = (jsonSchema: JSONSchema7, ajv: Ajv) => {
   return jsonSchema;
 };
 
+export const layerRefs = (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[]): void => {
+  jsonSchemas.forEach((jsonSchema) => {
+    kdsSchemas.forEach((kdsSchema) => {
+      traverse(kdsSchema, {
+        cb: (subSchema) => {
+          if (subSchema.$ref && jsonSchema.$id.split('/').pop() === subSchema.$ref.split('/').pop()) {
+            subSchema.$ref = jsonSchema.$id;
+          }
+        }
+      });
+    });
+  });
+};
+
 // TODO eventually get rid of that `type` hack, if possible
 export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =>
   fs.readFile(schemaPath, 'utf-8').then((schema: string) =>
@@ -117,10 +124,10 @@ export const getSchemasForGlob = async (schemaGlob: string): Promise<JSONSchema7
   glob(schemaGlob).then((schemaPaths: string[]) =>
     Promise.all(schemaPaths.map(async (schemaPath: string) => loadSchemaPath(schemaPath))));
 
-export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv): Promise<SchemaReturns> => 
+export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv): Promise<string[]> => 
   processSchemas(await getSchemasForGlob(schemaGlob), ajv);
 
-export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Promise<SchemaReturns> => {
+export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Promise<string[]> => {
   // TODO this should go (`pathPrefix` / environment dependent paths)
   const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
   const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
@@ -145,28 +152,10 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
   });
   schemaAnyOfs.forEach((schemaAnyOf) => addJsonSchema(schemaAnyOf, ajv));
 
-  return {
-    definitions: allDefinitions,
-    jsonSchemas,
-    kdsSchemas,
-    schemaAnyOfs,
-  };
+  return [...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs].map((jsonSchema) => jsonSchema.$id);
 };
 
-export const layerRefs = (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[]): void => {
-  jsonSchemas.forEach((jsonSchema) => {
-    kdsSchemas.forEach((kdsSchema) => {
-      traverse(kdsSchema, {
-        cb: (subSchema) => {
-          if (subSchema.$ref && jsonSchema.$id.split('/').pop() === subSchema.$ref.split('/').pop()) {
-            subSchema.$ref = jsonSchema.$id;
-          }
-        }
-      });
-    });
-  });
-};
-
+// TODO deprecated, should go after refactor
 export const getLayeredRefId = (refId: string, reffingSchemaId: string, ajv: Ajv): string => {
   if (!refId.includes('schema.kickstartds.com')) return refId;
 
@@ -186,10 +175,18 @@ export const getSchemaName = (schemaId: string | undefined): string => {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
 
+// TODO deprecated, should go after refactor
 export const toArray = (x: JSONSchema7 | JSONSchema7[] | string | string[]): any[]  =>
   x instanceof Array ? x : [x];
 
+// TODO deprecated, should go after refactor
 export const toSchema = (x: JSONSchema7 | string): JSONSchema7 =>
   x instanceof Object ? x : JSON.parse(x);
 
 export const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1);
+
+export const toPascalCase = (text: string): string =>
+  text.replace(/(^\w|-\w)/g, clearAndUpper);
+
+export const clearAndUpper = (text: string): string =>
+  text.replace(/-/, " ").toUpperCase();

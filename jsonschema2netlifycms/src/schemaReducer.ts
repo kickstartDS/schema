@@ -4,10 +4,11 @@ import { err } from './helpers';
 import { NetlifyCmsField } from './@types';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import { getLayeredRefId, getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getSchemaName, toPascalCase, clearAndUpper } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 const typeResolutionField = 'type';
 
+// TODO pretty sure this is shared for all converters
 interface TypeMapping {
   boolean: string;
   string: string;
@@ -65,14 +66,6 @@ const widgetMapping = (property: JSONSchema7) : string => {
   return mapping[property.type as JSONSchema7TypeName];
 };
 
-function toPascalCase(text: string): string {
-  return text.replace(/(^\w|-\w)/g, clearAndUpper);
-}
-
-function clearAndUpper(text: string): string {
-  return text.replace(/-/, " ").toUpperCase();
-}
-
 export function getSchemaReducer(ajv: Ajv) {
   function schemaReducer(knownTypes: NetlifyCmsField[], schema: JSONSchema7): NetlifyCmsField[] {
     const $id = schema.$id
@@ -122,11 +115,7 @@ export function getSchemaReducer(ajv: Ajv) {
         return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
           const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
             if (!_.isUndefined(allOf.$ref)) {
-              const reffedSchema = _.cloneDeep(
-                ajv.getSchema(
-                  getLayeredRefId(allOf.$ref as string, outerComponentSchemaId, ajv)
-                )?.schema as JSONSchema7
-              );
+              const reffedSchema = _.cloneDeep(ajv.getSchema(allOf.$ref)?.schema as JSONSchema7);
 
               return _.merge(
                 finalSchema,
@@ -216,7 +205,7 @@ export function getSchemaReducer(ajv: Ajv) {
           // only hit for `page > content`
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
-            const resolvedSchema = ajv.getSchema(getLayeredRefId(arraySchema.$ref as string, componentSchemaId, ajv))?.schema as JSONSchema7;
+            const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
             return buildType(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
           });
 
@@ -270,7 +259,7 @@ export function getSchemaReducer(ajv: Ajv) {
 
         let fieldConfig;
         if (arraySchema.$ref) {
-          const resolvedSchema = ajv.getSchema(getLayeredRefId(arraySchema.$ref as string, componentSchemaId, ajv))?.schema as JSONSchema7;
+          const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
           fieldConfig = buildType(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId);
         } else {
           fieldConfig = buildType(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
@@ -328,12 +317,9 @@ export function getSchemaReducer(ajv: Ajv) {
   
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      const reffedSchema = ajv.getSchema(getLayeredRefId(
-        schema.$ref.includes('#/definitions/') && !schema.$ref.includes('http')
-          ? `${componentSchemaId ? componentSchemaId : outerSchema.$id}${schema.$ref}` : schema.$ref,
-        componentSchemaId,
-        ajv
-      ))?.schema as JSONSchema7;
+      const reffedSchema = ajv.getSchema(schema.$ref.includes('#/definitions/') && !schema.$ref.includes('http')
+        ? `${componentSchemaId ? componentSchemaId
+        : outerSchema.$id}${schema.$ref}` : schema.$ref)?.schema as JSONSchema7;
 
       return buildType(
         name,

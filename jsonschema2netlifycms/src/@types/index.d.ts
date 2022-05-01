@@ -2,7 +2,7 @@ import { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 
 export interface ConvertParams {
-  jsonSchemas: JSONSchema7 | JSONSchema7[] | string | string[]
+  schemaIds: string[]
   ajv: Ajv
 }
 

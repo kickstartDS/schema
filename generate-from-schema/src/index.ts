@@ -27,128 +27,70 @@ const pageSchema: JSONSchema7 = {
   title: "Page",
   description: "Abstracts a page concept into JSON schema",
   type: "object",
-  required: ["id", "layout", "title", "slug"],
+  required: ["id", "slug", "layout", "title"],
   properties: {
     id: {
       type: "string",
-      title: "Id",
-      description: "Id for the page",
-      format: "id"
-    },
-    layout: {
-      type: "string",
-      title: "Layout",
-      description: "Choose a layout for the page",
-      default: "default"
-    },
-    title: {
-      type: "string",
-      title: "Title",
-      description: "Title for the page"
-    },
-    description: {
-      type: "string",
-      title: "Description",
-      description: "Description for the page"
-    },
-    keywords: {
-      type: "string",
-      title: "Keywords",
-      description: "Keywords for the page"
-    },
-    image: {
-      type: "string",
-      title: "Preview Image",
-      description: "Preview image for the page"
-    },
-    cardImage: {
-      type: "string",
-      title: "Card Preview Image",
-      description: "Card preview image (larger, e.g. Twitter) for the page"
+      title: "ID",
+      description: "Identifying uuid for the page",
+      format: "uuid"
     },
     slug: {
       type: "string",
       title: "Slug",
       description: "URL slug for the page"
     },
+    layout: {
+      type: "string",
+      title: "Layout",
+      description: "Choose a layout for the page",
+      enum: ["default", "content", "blog-list", 'blog-detail', 'glossary'],
+      default: "default"
+    },
+    title: {
+      type: "string",
+      title: "Title",
+      description: "Title used for the page"
+    },
+    description: {
+      type: "string",
+      title: "Description",
+      description: "Description used for the page"
+    },
+    keywords: {
+      type: "string",
+      title: "Keywords",
+      description: "Keywords used for the page"
+    },
+    image: {
+      type: "string",
+      title: "Preview Image",
+      description: "Preview image used for the page",
+      format: "image"
+    },
+    cardImage: {
+      type: "string",
+      title: "Card Preview Image",
+      description: "Card preview image (larger, e.g. Twitter) used for the page"
+    },
     sections: {
       type: "array",
       title: "Sections",
-      description: "Collection of sections to render on the page",
+      description: "Collection of sections (with their contents) to render on the page",
       items: {
         $ref: "http://schema.kickstartds.com/base/section.schema.json"
-      }
-    },
-    components: {
-      type: "array",
-      title: "Components",
-      description: "Collection of components to render on the page",
-      items: {
-        "anyOf": [
-          {
-            "$ref": "http://schema.kickstartds.com/content/quotes-slider.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/link-button.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/button.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/tag-label.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/visual.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/quote.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/visual-slider.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/contact.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/storytelling.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/collapsible-box.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/count-up.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/content-box.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/headline.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/text-media.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/teaser-box.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/content/logo-tiles.schema.json"
-          },
-          {
-            "$ref": "http://schema.kickstartds.com/base/teaser-row.schema.json"
-          }
-        ]
       }
     },
     updated: {
       type: "string",
       title: "Updated",
-      description: "Last update date for content",
+      description: "Last update date for the page",
       format: "date-time"
     },
     created: {
       type: "string",
       title: "Created",
-      description: "Creation date for content",
+      description: "Creation date for the page",
       format: "date-time"
     }
   }

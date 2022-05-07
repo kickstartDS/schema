@@ -75,7 +75,7 @@ export function getSchemaReducer(ajv: Ajv) {
     const typeName = getSchemaName($id);
     const clonedSchema = _.cloneDeep(schema);
   
-    knownTypes.push(buildType(typeName, clonedSchema, knownTypes, clonedSchema));
+    knownTypes.push(buildType(typeName, clonedSchema, clonedSchema));
     return knownTypes;
   }
 
@@ -88,7 +88,6 @@ export function getSchemaReducer(ajv: Ajv) {
   function buildType(
     propName: string,
     schema: JSONSchema7,
-    contentFields: NetlifyCmsField[],
     outerSchema: JSONSchema7,
     componentSchemaId: string = '',
   ): NetlifyCmsField {
@@ -133,7 +132,6 @@ export function getSchemaReducer(ajv: Ajv) {
               return buildType(
                 fieldName,
                 objectSchema,
-                contentFields,
                 schema.$id?.includes('section.schema.json') ? schema : outerSchema,
                 objectSchema.$id || componentSchemaId
               );
@@ -175,7 +173,6 @@ export function getSchemaReducer(ajv: Ajv) {
             return buildType(
               getSchemaName(resolvedSchema.$id),
               resolvedSchema,
-              contentFields,
               resolvedSchema,
               resolvedSchema.$id || componentSchemaId
             );
@@ -202,7 +199,6 @@ export function getSchemaReducer(ajv: Ajv) {
             buildType(
               arraySchema.title?.toLowerCase() || '',
               arraySchema,
-              contentFields,
               schema.$id?.includes('section.schema.json') ? schema : outerSchema,
               arraySchema.$id || componentSchemaId
             )
@@ -240,7 +236,6 @@ export function getSchemaReducer(ajv: Ajv) {
           fieldConfig = buildType(
             getSchemaName(resolvedSchema.$id),
             resolvedSchema,
-            contentFields,
             schemaOuter,
             resolvedSchema.$id || componentSchemaId
           );
@@ -248,7 +243,6 @@ export function getSchemaReducer(ajv: Ajv) {
           fieldConfig = buildType(
             name,
             arraySchema,
-            contentFields,
             schemaOuter,
             arraySchema.$id || componentSchemaId
           );
@@ -310,12 +304,9 @@ export function getSchemaReducer(ajv: Ajv) {
         ? `${componentSchemaId ? componentSchemaId : outerSchema.$id}${schema.$ref}`
         : schema.$ref)?.schema as JSONSchema7;
 
-      if (!reffedSchema) console.log('reffedSchema empty', schema, schema.$ref, componentSchemaId, outerSchema.$id);
-
       return buildType(
         name,
         reffedSchema,
-        contentFields,
         schema.$id?.includes('section.schema.json') ? schema : outerSchema,
         reffedSchema.$id || componentSchemaId
       );

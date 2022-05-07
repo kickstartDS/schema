@@ -114,17 +114,16 @@ const pageSchema: JSONSchema7 = {
       .on('change', convertToNetlifyCMS);
   } else {
     const ajv = getSchemaRegistry();
-    await processSchemaGlob(customGlob, ajv);
+    const schemaIds = await processSchemaGlob(customGlob, ajv);
     
-    // const gql = convertToGraphQL({
-    //   jsonSchemas: [...kdsSchemas, ...jsonSchemas, ...schemaAnyOfs],
-    //   definitions,
-    //   ajv,
-    // });
-    // fs.writeFile(
-    //   `dist/page.graphql`,
-    //   printSchema(gql).replace(/`/g, "'"),
-    // );
+    const gql = convertToGraphQL({
+      schemaIds,
+      ajv,
+    });
+    fs.writeFile(
+      `dist/page.graphql`,
+      printSchema(gql).replace(/`/g, "'"),
+    );
 
     const configLocation = 'static/admin/config.yml';
     const config = configLocation && existsSync(configLocation) && yamlLoad(readFileSync(configLocation, 'utf-8'));

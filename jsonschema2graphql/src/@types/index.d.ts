@@ -16,7 +16,7 @@ declare namespace jsonschema2graphql {
   }
 
   export interface ConvertParams {
-    jsonSchemas: JSONSchema7 | JSONSchema7[] | string | string[]
+    schemaIds: string[]
     entryPoints?: EntryPointBuilder
     ajv: Ajv
   }

@@ -16,7 +16,10 @@ export default function convert({
   schemaIds,
   ajv,
 }: ConvertParams): NetlifyCmsField[] {
-  const schemaArray = schemaIds.map((schemaId) => ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7);
+  const schemaArray = schemaIds.map((schemaId) =>
+    ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7
+  );
+  
   return schemaArray.reduce(getSchemaReducer(ajv), []);
 }
 

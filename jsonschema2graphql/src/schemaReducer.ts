@@ -173,9 +173,6 @@ export function getSchemaReducer(ajv: Ajv) {
       if (dedupeFieldNames)
         objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
   
-      if (contentComponent && objectSchema && objectSchema.properties)
-        objectSchema.properties[typeResolutionField] = internalTypeDefinition;
-  
       return buildType(name, objectSchema, knownTypes, dedupeFieldNames, outerRun, outerSchema) as GraphQLObjectType;
     }
   
@@ -188,9 +185,6 @@ export function getSchemaReducer(ajv: Ajv) {
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
-  
-      if (contentComponent && schema && schema.properties)
-        schema.properties[typeResolutionField] = internalTypeDefinition;
   
       const fields = () =>
         !_.isEmpty(schema.properties)
@@ -274,6 +268,15 @@ export function getSchemaReducer(ajv: Ajv) {
         if (!type) throw err(`The referenced type ${ref} is unknown.`, name);
         return type;
       }
+    }
+
+    // const?
+    else if (!_.isUndefined(schema.const)) {
+      if (!name.toLowerCase().endsWith(typeResolutionField)) {
+        console.log('schema.const that is not type', schema);
+        throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
+      }
+      return GraphQLString
     }
 
     // image source?

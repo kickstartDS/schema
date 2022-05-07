@@ -89,7 +89,6 @@ export function getSchemaReducer(ajv: Ajv) {
     propName: string,
     schema: JSONSchema7,
     outerSchema: JSONSchema7,
-    componentSchemaId: string = '',
   ): NetlifyCmsField {
     const name = propName;
 
@@ -132,8 +131,7 @@ export function getSchemaReducer(ajv: Ajv) {
               return buildType(
                 fieldName,
                 objectSchema,
-                schema.$id?.includes('section.schema.json') ? schema : outerSchema,
-                objectSchema.$id || componentSchemaId
+                outerSchema,
               );
             })
           : [];
@@ -159,14 +157,12 @@ export function getSchemaReducer(ajv: Ajv) {
   
     // array?
     else if (schema.type === 'array') {
-      // anyOf -> convert all items
-      if(schema.items && (schema.items as JSONSchema7).anyOf) {
+      if (schema.items && (schema.items as JSONSchema7).anyOf) {
         const arraySchemas = (schema.items as JSONSchema7).anyOf as JSONSchema7[];
         const isRefArray = arraySchemas.length > 0 && arraySchemas.every((schema) => schema.$ref);
         const isObjectArray = arraySchemas.every((schema) => (typeof schema === 'object'));
 
         if (isRefArray) {
-          // only hit for `page > content`
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
             const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
@@ -174,7 +170,6 @@ export function getSchemaReducer(ajv: Ajv) {
               getSchemaName(resolvedSchema.$id),
               resolvedSchema,
               resolvedSchema,
-              resolvedSchema.$id || componentSchemaId
             );
           });
 
@@ -199,8 +194,7 @@ export function getSchemaReducer(ajv: Ajv) {
             buildType(
               arraySchema.title?.toLowerCase() || '',
               arraySchema,
-              schema.$id?.includes('section.schema.json') ? schema : outerSchema,
-              arraySchema.$id || componentSchemaId
+              outerSchema,
             )
           );
 
@@ -228,7 +222,6 @@ export function getSchemaReducer(ajv: Ajv) {
       } else {
         const description = buildDescription(outerSchema);
         const arraySchema = schema.items as JSONSchema7;
-        const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
         let fieldConfig;
         if (arraySchema.$ref) {
@@ -236,15 +229,13 @@ export function getSchemaReducer(ajv: Ajv) {
           fieldConfig = buildType(
             getSchemaName(resolvedSchema.$id),
             resolvedSchema,
-            schemaOuter,
-            resolvedSchema.$id || componentSchemaId
+            resolvedSchema,
           );
         } else {
           fieldConfig = buildType(
             name,
             arraySchema,
-            schemaOuter,
-            arraySchema.$id || componentSchemaId
+            outerSchema,
           );
         }
 
@@ -300,15 +291,12 @@ export function getSchemaReducer(ajv: Ajv) {
   
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      const reffedSchema = ajv.getSchema(schema.$ref.includes('#/definitions/') && !schema.$ref.includes('http')
-        ? `${componentSchemaId ? componentSchemaId : outerSchema.$id}${schema.$ref}`
-        : schema.$ref)?.schema as JSONSchema7;
+      const reffedSchema = ajv.getSchema(schema.$ref)?.schema as JSONSchema7;
 
       return buildType(
         name,
         reffedSchema,
-        schema.$id?.includes('section.schema.json') ? schema : outerSchema,
-        reffedSchema.$id || componentSchemaId
+        reffedSchema,
       );
     }
 

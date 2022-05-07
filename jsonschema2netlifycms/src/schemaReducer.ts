@@ -75,7 +75,7 @@ export function getSchemaReducer(ajv: Ajv) {
     const typeName = getSchemaName($id);
     const clonedSchema = _.cloneDeep(schema);
   
-    knownTypes.push(buildType(typeName, clonedSchema, knownTypes, true, clonedSchema));
+    knownTypes.push(buildType(typeName, clonedSchema, knownTypes, clonedSchema));
     return knownTypes;
   }
 
@@ -89,11 +89,13 @@ export function getSchemaReducer(ajv: Ajv) {
     propName: string,
     schema: JSONSchema7,
     contentFields: NetlifyCmsField[],
-    outerRun: boolean = false,
     outerSchema: JSONSchema7,
     componentSchemaId: string = '',
   ): NetlifyCmsField {
     const name = propName;
+
+    // all of the following JSON Schema composition keywords need to
+    // be handled by the pre-processing, they'll throw if they get here
 
     // oneOf?
     if (!_.isUndefined(schema.oneOf)) {
@@ -109,40 +111,8 @@ export function getSchemaReducer(ajv: Ajv) {
   
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      // TODO move this reducer / merger logic to helpers.ts
-      const reduceSchemaAllOf = (allOfs: JSONSchema7[]): JSONSchema7 => {
-        return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
-          const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
-            if (!_.isUndefined(allOf.$ref)) {
-              const reffedSchema = _.cloneDeep(ajv.getSchema(allOf.$ref)?.schema as JSONSchema7);
-
-              return _.merge(
-                finalSchema,
-                reffedSchema.allOf
-                  ? reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[])
-                  : _.merge(finalSchema, reffedSchema)
-              );
-            } else {
-              return _.merge(finalSchema, allOf);
-            }
-          };
-  
-          return mergeSchemaAllOf(allOf);
-        }, { } as JSONSchema7);
-      };
-  
-      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[]);
-      if (schema.properties)
-        objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
-
-      return buildType(
-        name,
-        objectSchema,
-        contentFields,
-        outerSchema.$id?.includes('section.schema.json') ? true : false,
-        schema.$id?.includes('section.schema.json') ? schema : outerSchema,
-        objectSchema.$id || componentSchemaId
-      );
+      console.log('schema with allOf', schema);
+      throw err(`The type allOf on property ${name} is not supported.`);
     }
   
     // not?
@@ -159,15 +129,12 @@ export function getSchemaReducer(ajv: Ajv) {
         !_.isEmpty(schema.properties)
           ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
               const objectSchema = _.cloneDeep(prop);
-              const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
-              const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
               return buildType(
                 fieldName,
                 objectSchema,
                 contentFields,
-                isOuterRun,
-                schemaOuter,
+                schema.$id?.includes('section.schema.json') ? schema : outerSchema,
                 objectSchema.$id || componentSchemaId
               );
             })
@@ -209,7 +176,6 @@ export function getSchemaReducer(ajv: Ajv) {
               getSchemaName(resolvedSchema.$id),
               resolvedSchema,
               contentFields,
-              outerSchema.$id?.includes('section.schema.json') ? true : false,
               resolvedSchema,
               resolvedSchema.$id || componentSchemaId
             );
@@ -237,7 +203,6 @@ export function getSchemaReducer(ajv: Ajv) {
               arraySchema.title?.toLowerCase() || '',
               arraySchema,
               contentFields,
-              outerSchema.$id?.includes('section.schema.json') ? true : false,
               schema.$id?.includes('section.schema.json') ? schema : outerSchema,
               arraySchema.$id || componentSchemaId
             )
@@ -267,7 +232,6 @@ export function getSchemaReducer(ajv: Ajv) {
       } else {
         const description = buildDescription(outerSchema);
         const arraySchema = schema.items as JSONSchema7;
-        const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
         const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
         let fieldConfig;
@@ -277,7 +241,6 @@ export function getSchemaReducer(ajv: Ajv) {
             getSchemaName(resolvedSchema.$id),
             resolvedSchema,
             contentFields,
-            true,
             schemaOuter,
             resolvedSchema.$id || componentSchemaId
           );
@@ -286,7 +249,6 @@ export function getSchemaReducer(ajv: Ajv) {
             name,
             arraySchema,
             contentFields,
-            isOuterRun,
             schemaOuter,
             arraySchema.$id || componentSchemaId
           );
@@ -345,14 +307,15 @@ export function getSchemaReducer(ajv: Ajv) {
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
       const reffedSchema = ajv.getSchema(schema.$ref.includes('#/definitions/') && !schema.$ref.includes('http')
-        ? `${componentSchemaId ? componentSchemaId
-        : outerSchema.$id}${schema.$ref}` : schema.$ref)?.schema as JSONSchema7;
+        ? `${componentSchemaId ? componentSchemaId : outerSchema.$id}${schema.$ref}`
+        : schema.$ref)?.schema as JSONSchema7;
+
+      if (!reffedSchema) console.log('reffedSchema empty', schema, schema.$ref, componentSchemaId, outerSchema.$id);
 
       return buildType(
         name,
         reffedSchema,
         contentFields,
-        outerSchema.$id?.includes('section.schema.json') ? true : false,
         schema.$id?.includes('section.schema.json') ? schema : outerSchema,
         reffedSchema.$id || componentSchemaId
       );
@@ -393,10 +356,7 @@ export function getSchemaReducer(ajv: Ajv) {
     }
   
     // ¯\_(ツ)_/¯
-    else {
-      console.log('schema', schema);
-      throw err(`The type ${schema.type} on property ${name} is unknown.`)
-    };
+    else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   };
 
   return schemaReducer;

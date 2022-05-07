@@ -8,6 +8,7 @@ import traverse from 'json-schema-traverse';
 import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv/dist/core';
+import _ from 'lodash';
 
 export const getSchemaRegistry = (): Ajv => {
   const ajv = new AjvConstructor({
@@ -32,7 +33,7 @@ export const getSchemaRegistry = (): Ajv => {
   return ajv;
 };
 
-export const addExplicitAnyOfs = (jsonSchema: JSONSchema7): JSONSchema7[] => {
+export const addExplicitAnyOfs = (jsonSchema: JSONSchema7, ajv: Ajv): JSONSchema7[] => {
   const schemaAnyOfs: JSONSchema7[] = [];
 
   traverse(jsonSchema, {
@@ -45,13 +46,16 @@ export const addExplicitAnyOfs = (jsonSchema: JSONSchema7): JSONSchema7[] => {
         schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
           if (anyOf.$ref) return anyOf;
 
-          const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
-          schemaAnyOfs.push({
+          const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
+          const schemaAnyOf = {
             $id: schemaName,
             $schema: "http://json-schema.org/draft-07/schema#",
             ...anyOf,
             definitions: jsonSchema.definitions
-          });
+          };
+          schemaAnyOfs.push(schemaAnyOf);
+          addJsonSchema(schemaAnyOf, ajv);
+          
           return { $ref: schemaName };
         });
       }
@@ -61,7 +65,7 @@ export const addExplicitAnyOfs = (jsonSchema: JSONSchema7): JSONSchema7[] => {
   return schemaAnyOfs;
 }
 
-export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 => {
+export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): void => {
   traverse(schema, {
     cb: (subSchema, pointer, rootSchema) => {
       const propertyName = pointer.split('/').pop();
@@ -70,9 +74,17 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 => {
         subSchema.anyOf &&
         subSchema.anyOf.length === 2 &&
         subSchema.anyOf.every((anyOf: JSONSchema7) => (anyOf.type === 'string' && anyOf.enum) || (anyOf.$ref && anyOf.$ref.includes(`properties/${propertyName}`))) &&
-        rootSchema.allOf &&
-        rootSchema.allOf.length === 2 &&
-        rootSchema.allOf.some((allOf: JSONSchema7) => allOf.properties && (allOf.properties[propertyName] as JSONSchema7)?.anyOf)
+        (
+          (
+            rootSchema.allOf &&
+            rootSchema.allOf.length === 2 &&
+            rootSchema.allOf.some((allOf: JSONSchema7) => allOf.properties && (allOf.properties[propertyName] as JSONSchema7)?.anyOf)
+          ) || (
+            rootSchema.properties &&
+            Object.keys(rootSchema.properties).length > 0 &&
+            rootSchema.properties[propertyName]
+          )
+        )
       ) {
         subSchema.type = subSchema.anyOf[0].type;
         subSchema.default = subSchema.anyOf[0].default;
@@ -84,7 +96,7 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 => {
           return enumValues;
         }, []);
 
-        if (rootSchema.allOf.some((allOf: JSONSchema7) => allOf.$ref)) {
+        if (rootSchema.allOf && rootSchema.allOf.some((allOf: JSONSchema7) => allOf.$ref)) {
           delete (ajv.getSchema(rootSchema.allOf.find((allOf: JSONSchema7) => allOf.$ref).$ref).schema as JSONSchema7).properties[propertyName];
         }
         
@@ -92,8 +104,63 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 => {
       }
     },
   });
+};
 
-  return schema;
+// this method should potentially be replaced by something "more"
+// standard, like: https://github.com/mokkabonna/json-schema-merge-allof
+// may result in handling all of those combinations of edge cases
+// ourselves, otherwise
+export const reduceSchemaAllOf = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 => {
+  const allOfs = schema.allOf as JSONSchema7[];
+
+  const reducedSchema = allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
+    const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
+      if (!_.isUndefined(allOf.$ref)) {
+        const reffedSchema = _.cloneDeep(ajv.getSchema(
+          allOf.$ref.includes('#/definitions/') && !allOf.$ref.includes('http')
+            ? `${schema.$id}${allOf.$ref}`
+            : allOf.$ref
+        )?.schema as JSONSchema7);
+
+        return _.merge(
+          finalSchema,
+          reffedSchema.allOf
+            ? reduceSchemaAllOf(reffedSchema, ajv)
+            : _.merge(finalSchema, reffedSchema)
+        );
+      } else {
+        reduceSchemaAllOfs(allOf, ajv);
+        return _.merge(finalSchema, allOf);
+      }
+    };
+
+    return mergeSchemaAllOf(allOf);
+  }, { } as JSONSchema7);
+
+  if (schema.properties)
+    reducedSchema.properties = _.merge(reducedSchema.properties, schema.properties);
+
+  mergeAnyOfEnums(reducedSchema, ajv);
+
+  return reducedSchema;
+};
+
+export const reduceSchemaAllOfs = (schema: JSONSchema7, ajv: Ajv): void => {
+  traverse(schema, {
+    cb: (subSchema, pointer, _rootSchema, _parentPointer, parentKeyword, parentSchema) => {
+      if (subSchema.allOf) {
+        if (parentSchema && parentKeyword) {
+          // if those two are equal, we're at the top level of the schema
+          pointer.split('/').pop() === parentKeyword
+            ? parentSchema[parentKeyword] = reduceSchemaAllOf(subSchema, ajv)
+            : parentSchema[parentKeyword][pointer.split('/').pop()] = reduceSchemaAllOf(subSchema, ajv);
+        } else {
+          schema.properties = reduceSchemaAllOf(subSchema, ajv).properties;
+          delete schema.allOf;
+        }
+      }
+    }
+  });
 };
 
 export const addJsonSchema = (jsonSchema: JSONSchema7, ajv: Ajv) => {
@@ -130,6 +197,30 @@ export const addTypeInterfaces = (jsonSchemas: JSONSchema7[]): void => {
   });
 };
 
+export const inlineDefinitions = (jsonSchemas: JSONSchema7[]): void => {
+  jsonSchemas.forEach((jsonSchema) => {
+    traverse(jsonSchema, {
+      cb: (subSchema, pointer, rootSchema, _parentPointer, parentKeyword, parentSchema) => {
+        if (subSchema.$ref && subSchema.$ref.includes('#/definitions/')) {
+          if (subSchema.$ref.includes('http')) {
+            if (parentKeyword === 'properties') {
+              parentSchema[parentKeyword][pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
+                jsonSchema.$id === subSchema.$ref.split('#').shift()
+              ).definitions[pointer.split('/').pop()];
+            } else if (parentKeyword === 'allOf') {
+              parentSchema.allOf[pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
+                jsonSchema.$id === subSchema.$ref.split('#').shift()
+              ).definitions[subSchema.$ref.split('/').pop()];
+            }
+          } else {
+            parentSchema[parentKeyword][pointer.split('/').pop()] = rootSchema.definitions[pointer.split('/').pop()];
+          }
+        }
+      }
+    });
+  });
+};
+
 export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =>
   fs.readFile(schemaPath, 'utf-8').then((schema: string) => JSON.parse(schema) as JSONSchema7);
 
@@ -143,31 +234,46 @@ export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv): Promise<s
 export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Promise<string[]> => {
   // TODO this should go (`pathPrefix` / environment dependent paths)
   const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
+  // load all the schema files provided by `@kickstartDS` itself
   const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
   const kdsSchemas = await getSchemasForGlob(schemaGlob);
 
-  const allDefinitions: { [key: string]: JSONSchema7 } = {};
-  const schemaAnyOfs: JSONSchema7[] = [];
+  // Processing consists of 5 steps currently, that need to be run in this
+  // exact order, because every step builds on the one before it
 
+  // 1. pre-process, before schemas enter `ajv`
   layerRefs(jsonSchemas, kdsSchemas);
+  addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);
+  inlineDefinitions([...jsonSchemas, ...kdsSchemas]);
 
-  [...jsonSchemas, ...kdsSchemas].forEach((jsonSchema) => {
-    const { definitions } = jsonSchema;
-    for (const definedTypeName in definitions) {
-      allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
-    }
-
-    addJsonSchema(jsonSchema, ajv);
+  // 2. add all schemas to ajv for the following processing steps
+  [...kdsSchemas, ...jsonSchemas].forEach((schema) => {
+    addJsonSchema(schema, ajv);
   });
 
-  [...jsonSchemas, ...kdsSchemas].forEach((jsonSchema) => {
-    schemaAnyOfs.push(...addExplicitAnyOfs(mergeAnyOfEnums(jsonSchema, ajv)));
+  // 3. "compile" JSON Schema composition keywords (`anyOf`, `allOf`)
+  const schemaAnyOfs: JSONSchema7[] = [];
+  [...kdsSchemas, ...jsonSchemas].forEach((schema) => {
+    reduceSchemaAllOfs(schema, ajv);
+    mergeAnyOfEnums(schema, ajv);
+
+    // 3. schema-local `anyOf` parts get split into distinct
+    // schemas, with their own unique `$id` for referencing.
+    // all generated schemas get added to `ajv` automatically
+    schemaAnyOfs.push(...addExplicitAnyOfs(schema, ajv));
   });
-  schemaAnyOfs.forEach((schemaAnyOf) => addJsonSchema(schemaAnyOf, ajv));
 
-  addTypeInterfaces([...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs]);
+  // 4. process new schemas, resulting from adding the distinct
+  // `anyOf`s in the step before 
+  addTypeInterfaces(schemaAnyOfs);
+  schemaAnyOfs.forEach((schemaAnyOf) => {
+    reduceSchemaAllOfs(schemaAnyOf, ajv);
+  });
 
-  return [...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs].map((jsonSchema) => jsonSchema.$id);
+  // 5. return list of processed schema `$id`s.
+  // Accessing the full schemas works through `ajv`
+  return [...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs]
+    .map((jsonSchema) => jsonSchema.$id);
 };
 
 // TODO deprecated, should go after refactor

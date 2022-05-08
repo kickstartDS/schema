@@ -2,9 +2,9 @@ const fs = require('fs-extra');
 const chokidar = require('chokidar');
 const { printSchema } = require('graphql');
 
-const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
+const convertToGraphQL = require('@kickstartds/jsonschema2graphql').convert;
 const createConfigGraphQL = require('@kickstartds/jsonschema2graphql').createConfig;
-const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
+const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').convert;
 const createConfigNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').createConfig;
 const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
 const convertToBuilderIO = require('@kickstartds/jsonschema2builderio').default;
@@ -26,6 +26,7 @@ import { JSONSchema7 } from 'json-schema';
 // TODO handle `default` merging in allOf reducers
 // TODO ensure correct `$id` ends up in schemas after allOf reduce
 // TODO update to schema 2012
+// TODO generate reference docs / JSDoc, etc
 
 // TODO move this to `kickstartDS` itself, should also not be a duplicate of
 // original `section.schema.json` items for components

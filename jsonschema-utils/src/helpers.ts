@@ -17,7 +17,7 @@ export const getSchemaRegistry = (): Ajv => {
     validateSchema: true,
     schemaId: '$id',
     allErrors: true
-  });
+  }) as Ajv;
 
   // TODO update JSON Schema, clean up ignored formats
   const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email', 'html'];

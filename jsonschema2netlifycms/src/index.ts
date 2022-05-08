@@ -1,4 +1,3 @@
-import { JSONSchema7 } from 'json-schema';
 import { getSchemasForIds } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 import { getSchemaReducer } from './schemaReducer';

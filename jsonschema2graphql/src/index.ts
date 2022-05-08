@@ -1,12 +1,10 @@
 import { getSchemasForIds } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 import { getSchemaReducer } from './schemaReducer';
-import { ConvertParams } from './@types';
-
-import { GraphQLTypeMap } from './@types';
+import { ConvertParams, GraphQLTypeMap } from './@types';
 import { GraphQLSchema } from 'graphql';
 
-import { DEFAULT_ENTRY_POINTS } from './helpers'; // TODO check this, needed?
+import { createConfig } from './createConfig';
 
 // TODO correct parameter documentation
 /**
@@ -33,13 +31,9 @@ import { DEFAULT_ENTRY_POINTS } from './helpers'; // TODO check this, needed?
 export default function convert({
   schemaIds,
   ajv,
-  entryPoints = DEFAULT_ENTRY_POINTS,
-}: ConvertParams): GraphQLSchema {
-  const schemaArray = getSchemasForIds(schemaIds, ajv);
-
-  const types = schemaArray.reduce(getSchemaReducer(ajv), {});
-  return new GraphQLSchema({
-    ...types,
-    ...entryPoints(types),
-  });
+}: ConvertParams): GraphQLTypeMap {
+  return getSchemasForIds(schemaIds, ajv)
+    .reduce(getSchemaReducer(ajv), {});
 }
+
+export { GraphQLSchema, createConfig };

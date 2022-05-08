@@ -1,12 +1,15 @@
 const fs = require('fs-extra');
-
 const chokidar = require('chokidar');
+const { printSchema } = require('graphql');
+
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
+const createConfigGraphQL = require('@kickstartds/jsonschema2graphql').createConfig;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
 const createConfigNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').createConfig;
 const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
 const convertToBuilderIO = require('@kickstartds/jsonschema2builderio').default;
-const { printSchema } = require('graphql');
+
+// TODO I hate that require / import usage is mixed here -_-
 import { 
   dump as yamlDump,
   load as yamlLoad
@@ -18,7 +21,6 @@ import {
   getUniqueSchemaIds,
 } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-// TODO I hate that require / import usage is mixed here -_-
 import { JSONSchema7 } from 'json-schema';
 
 // TODO handle `default` merging in allOf reducers
@@ -121,13 +123,14 @@ const pageSchema: JSONSchema7 = {
     const schemaIds = await processSchemaGlob(customGlob, ajv);
     const uniqueSchemaIds = getUniqueSchemaIds(schemaIds);
 
-    const gql = convertToGraphQL({
+    const gqlTypes = convertToGraphQL({
       schemaIds: uniqueSchemaIds,
       ajv,
     });
+
     fs.writeFile(
       `dist/page.graphql`,
-      printSchema(gql).replace(/`/g, "'"),
+      printSchema(createConfigGraphQL(gqlTypes)).replace(/`/g, "'"),
     );
 
     const configLocation = 'static/admin/config.yml';

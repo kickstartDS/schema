@@ -44,7 +44,7 @@ const textMediaComponentInterface = new GraphQLInterfaceType({
   fields: {
     type: { type: GraphQLString }
   },
-})
+});
 
 const gatsbyFileInterface = new GraphQLInterfaceType({
   name: 'File',

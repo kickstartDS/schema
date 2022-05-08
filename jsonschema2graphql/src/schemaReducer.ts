@@ -14,7 +14,7 @@ import {
   GraphQLInterfaceType,
 } from 'graphql';
 import { JSONSchema7 } from 'json-schema';
-import { getSchemaName, dedupe } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
 import { GraphQLTypeMap } from './@types';
 import { getTypeName } from './getTypeName';
 import { graphqlSafeEnumKey } from './graphqlSafeEnumKey';
@@ -52,21 +52,20 @@ const gatsbyFileInterface = new GraphQLInterfaceType({
 });
 
 // TODO these should be (cli) options
-const shouldDedupe = true;
 const gatsbyImages = true;
 
-export function getSchemaReducer() {
+// TODO check for fields generated without comment / documentation
+export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema7) {
   function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7): GraphQLTypeMap {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 
     const typeName = getTypeName($id);
-    const clonedSchema = _.cloneDeep(schema);
-  
-    if (shouldDedupe) 
-      clonedSchema.properties = dedupe(clonedSchema, getSchemaName(schema.$id));
-  
-    knownTypes[typeName] = buildType(typeName, clonedSchema, knownTypes, shouldDedupe, true, clonedSchema);
+    const clonedSchema = schemaPost
+      ? schemaPost(_.cloneDeep(schema))
+      : _.cloneDeep(schema);
+
+    knownTypes[typeName] = buildType(typeName, clonedSchema, knownTypes, true, clonedSchema);
     return knownTypes;
   }
 
@@ -74,7 +73,6 @@ export function getSchemaReducer() {
     propName: string,
     schema: JSONSchema7,
     knownTypes: GraphQLTypeMap,
-    dedupeFieldNames: boolean,
     outerRun: boolean = false,
     outerSchema: JSONSchema7,
   ): GraphQLType {
@@ -93,10 +91,7 @@ export function getSchemaReducer() {
         const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
         const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
         
-        if (dedupeFieldNames)
-          typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
-        
-        return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
+        return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
       })
       
       return new GraphQLUnionType({ name, description, types });
@@ -113,10 +108,7 @@ export function getSchemaReducer() {
         const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
         const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
 
-        if (dedupeFieldNames)
-          typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
-
-        return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
+        return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
       });
   
       return new GraphQLUnionType({ name, description, types });
@@ -144,10 +136,7 @@ export function getSchemaReducer() {
               const qualifiedFieldName = `${name}.${fieldName}`
               const objectSchema = _.cloneDeep(prop);
   
-              if (dedupeFieldNames)
-                objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
-  
-              const type = buildType(qualifiedFieldName, objectSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType
+              const type = buildType(qualifiedFieldName, objectSchema, knownTypes, false, outerSchema) as GraphQLObjectType
               const isRequired = _.includes(schema.required, fieldName)
               return {
                 type: isRequired ? new GraphQLNonNull(type) : type,
@@ -169,7 +158,6 @@ export function getSchemaReducer() {
     // array?
     else if (schema.type === 'array') {
       const arraySchema = _.cloneDeep(schema.items) as JSONSchema7;
-      arraySchema.properties = dedupe(arraySchema, getSchemaName(outerSchema.$id));
       
       if (arraySchema.anyOf && name !== 'SectionComponentContent') {
         return new GraphQLList(textMediaComponentInterface);
@@ -183,7 +171,7 @@ export function getSchemaReducer() {
         // }));
       }
 
-      const elementType = buildType(name, arraySchema, knownTypes, dedupeFieldNames, false, outerSchema);
+      const elementType = buildType(name, arraySchema, knownTypes, false, outerSchema);
       return name === 'SectionComponentContent'
         ? new GraphQLList(new GraphQLNonNull(contentComponentInterface))
         : new GraphQLList(new GraphQLNonNull(elementType));
@@ -210,11 +198,12 @@ export function getSchemaReducer() {
 
     // const?
     else if (!_.isUndefined(schema.const)) {
+      // TODO add comment to `type` field in generated `.gql`
       if (!name.toLowerCase().endsWith(typeResolutionField)) {
         console.log('schema.const that is not type', schema);
         throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
       }
-      return GraphQLString
+      return GraphQLString;
     }
 
     // image source?

@@ -1,4 +1,4 @@
-import { getSchemasForIds } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getSchemasForIds, dedupeDeep } from '@kickstartds/jsonschema-utils/dist/helpers';
 import { getSchemaReducer } from './schemaReducer';
 import { ConvertParams, GraphQLTypeMap } from './@types';
 import { GraphQLSchema } from 'graphql';
@@ -14,6 +14,6 @@ export const convert = ({
   ajv,
 }: ConvertParams): GraphQLTypeMap =>
   getSchemasForIds(schemaIds, ajv)
-    .reduce(getSchemaReducer(), {});
+    .reduce(getSchemaReducer(dedupeDeep), {});
 
 export { GraphQLSchema, createConfig };

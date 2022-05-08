@@ -338,6 +338,18 @@ export const dedupe = (schema: JSONSchema7, optionalName?: string): {
     fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
   );
 
+export const dedupeDeep = (schema: JSONSchema7): JSONSchema7 => {
+  traverse(schema, {
+    cb: (subSchema) => {
+      if (subSchema.properties) {
+        subSchema.properties = dedupe(subSchema, getSchemaName(schema.$id))
+      }
+    }
+  });
+
+  return schema;
+}
+
 export const toPascalCase = (text: string): string =>
   text.replace(/(^\w|-\w)/g, clearAndUpper);
 

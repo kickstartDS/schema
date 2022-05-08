@@ -67,6 +67,10 @@ const widgetMapping = (property: JSONSchema7) : string => {
   return mapping[property.type as JSONSchema7TypeName];
 };
 
+// TODO check the generated NetlifyCmsField properties for all elements:
+// * required -> this is not functional yet... needs to be evaluated intelligently,
+//      because of schema nesting (schema > array > allOf > $ref > object, etc)
+// * hint -> may be affected by the same challenge as `required`
 export function getSchemaReducer(ajv: Ajv) {
   function schemaReducer(knownTypes: NetlifyCmsField[], schema: JSONSchema7): NetlifyCmsField[] {
     const $id = schema.$id
@@ -79,12 +83,6 @@ export function getSchemaReducer(ajv: Ajv) {
     return knownTypes;
   }
 
-  // TODO check the following NetlifyCmsField properties for all elements:
-  // * required -> this is not functional yet... needs to be evaluated intelligently,
-  //      because of schema nesting (schema > array > allOf > $ref > object, etc)
-  // * hint -> may be affected by the same challenge as `required`
-  // note: throws err(..) with minimal logging for (currently) unsupported
-  // (and unutilized) JSON Schema features
   function buildType(
     propName: string,
     schema: JSONSchema7,

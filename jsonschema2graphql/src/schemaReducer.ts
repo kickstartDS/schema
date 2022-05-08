@@ -53,12 +53,6 @@ const gatsbyFileInterface = new GraphQLInterfaceType({
   fields: {}
 });
 
-const internalTypeDefinition: JSONSchema7Definition = {
-  "type": "string",
-  "title": "Internal type",
-  "description": "Internal type for interface resolution",
-};
-
 let allDefinitions: JSONSchema7[];
 const allDefinitionTypes = {};
 // TODO these should be (cli) options

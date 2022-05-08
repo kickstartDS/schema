@@ -12,7 +12,11 @@ import {
   load as yamlLoad
 } from 'js-yaml';
 import { readFileSync, existsSync } from 'fs-extra';
-import { processSchemaGlob, getSchemaRegistry } from '@kickstartds/jsonschema-utils/dist/helpers';
+import {
+  processSchemaGlob,
+  getSchemaRegistry,
+  getUniqueSchemaIds,
+} from '@kickstartds/jsonschema-utils/dist/helpers';
 
 // TODO I hate that require / import usage is mixed here -_-
 import { JSONSchema7 } from 'json-schema';
@@ -115,9 +119,10 @@ const pageSchema: JSONSchema7 = {
   } else {
     const ajv = getSchemaRegistry();
     const schemaIds = await processSchemaGlob(customGlob, ajv);
-    
+    const uniqueSchemaIds = getUniqueSchemaIds(schemaIds);
+
     const gql = convertToGraphQL({
-      schemaIds,
+      schemaIds: uniqueSchemaIds,
       ajv,
     });
     fs.writeFile(

@@ -304,6 +304,19 @@ export const toArray = (x: JSONSchema7 | JSONSchema7[] | string | string[]): any
 export const toSchema = (x: JSONSchema7 | string): JSONSchema7 =>
   x instanceof Object ? x : JSON.parse(x);
 
+export const getCustomSchemaIds = (schemaIds: string[]): string[] =>
+  schemaIds.filter((schemaId) => !schemaId.startsWith('http://schema.kickstartds.com/'));
+
+export const getUniqueSchemaIds = (schemaIds: string[]): string[] => {
+  const customSchemaIds = getCustomSchemaIds(schemaIds);
+  const unlayeredSchemaIds = schemaIds.filter((schemaId) => 
+    schemaId.startsWith('http://schema.kickstartds.com/') &&
+    !customSchemaIds.some((customSchemaId) => customSchemaId.endsWith(schemaId.split('/').pop()))
+  );
+
+  return [...customSchemaIds, ...unlayeredSchemaIds];
+}
+
 export const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1);
 
 export const toPascalCase = (text: string): string =>

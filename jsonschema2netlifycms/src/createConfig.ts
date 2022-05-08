@@ -15,6 +15,7 @@ const defaultConfig: NetlifyCmsConfig = {
   collections: [],
 }
 
+// TODO correct parameter documentation
 export function createConfig(
     contentFields: NetlifyCmsField[],
     baseConfig: NetlifyCmsConfig = defaultConfig,

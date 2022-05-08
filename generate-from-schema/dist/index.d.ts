@@ -1,2 +1,5 @@
-export declare const processSchemaGlobHelper: (schemaGlob: string, ajv: import("ajv/dist/core").default) => Promise<string[]>;
-export declare const getSchemaRegistryHelper: () => import("ajv/dist/core").default;
+import Ajv from 'ajv/dist/core';
+import { processSchemaGlob, getSchemaRegistry } from '@kickstartds/jsonschema-utils/dist/helpers';
+export declare const generateGraphQL: (schemaIds: string[], ajv: Ajv, configPath?: string) => void;
+export declare const generateNetlifyCMS: (schemaIds: string[], ajv: Ajv, configPath?: string) => void;
+export { processSchemaGlob, getSchemaRegistry };

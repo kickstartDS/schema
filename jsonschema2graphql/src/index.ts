@@ -14,6 +14,6 @@ export const convert = ({
   ajv,
 }: ConvertParams): GraphQLTypeMap =>
   getSchemasForIds(schemaIds, ajv)
-    .reduce(getSchemaReducer(ajv), {});
+    .reduce(getSchemaReducer(), {});
 
 export { GraphQLSchema, createConfig };

@@ -1,4 +1,3 @@
-import Ajv from 'ajv';
 import _ from 'lodash';
 import uppercamelcase from 'uppercamelcase';
 import {
@@ -56,7 +55,7 @@ const gatsbyFileInterface = new GraphQLInterfaceType({
 const shouldDedupe = true;
 const gatsbyImages = true;
 
-export function getSchemaReducer(ajv: Ajv) {
+export function getSchemaReducer() {
   function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7): GraphQLTypeMap {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');

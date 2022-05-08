@@ -26,12 +26,12 @@ import {
 // TODO ensure correct `$id` ends up in schemas after allOf reduce
 // TODO update to schema 2012
 // TODO generate reference docs / JSDoc, etc
-
-(async () => {
+// TODO re-add watch modes (and add some for other converters, too):
+/**
   const [, , param] = process.argv;
-  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
-  const customGlob = `${pathPrefix}node_modules/**/dist/**/*.(schema|definitions).json`;
-
+  
+  ...
+  
   if (param === '--watch') {
     chokidar
       .watch(customGlob, { ignoreInitial: true })
@@ -39,49 +39,54 @@ import {
       .on('change', convertToGraphQL)
       .on('add', convertToNetlifyCMS)
       .on('change', convertToNetlifyCMS);
-  } else {
-    // get shared ajv instance, pre-process schemas and get full
-    // set of unique schemas. precondition for the following conversions
-    const ajv = getSchemaRegistry();
-    const schemaIds = await processSchemaGlob(customGlob, ajv);
-    const uniqueSchemaIds = getUniqueSchemaIds(schemaIds);
-
-    // generate `GraphQLType` types and write `GraphQLSchema` to disk
-    // uses `uniqueSchemaIds` as input, to get complete set of kickstartDS
-    generateGraphQL(uniqueSchemaIds, ajv);
-
-    // generate `NetlifyCmsField` fields and write `NetlifyCmsConfig` to disk
-    // uses custom `section.schema.json` to generate a section-based config
-    generateNetlifyCMS([ 'http://kickstartds.com/section.schema.json' ], ajv);
-
-    // TODO finish the following stuff:
-    // TODO remove layering from reducers, should be done as a
-    // pre-processing step to reducing... possibly with a traverse(..)
-
-    // TODO re-activate (needs to be realigned to refactoring)
-    // const tinacmsAdminConfig = convertToTinaCMS({
-    //   jsonSchemas: jsonSchemas,
-    //   definitions,
-    //   ajv,
-    //   configLocation: 'static/.tina/schema.json'
-    // });
-    // fs.writeFile(
-    //   `dist/tina.json`,
-    //   tinacmsAdminConfig,
-    // );
-
-    // TODO re-activate (needs to be realigned to refactoring)
-    // const builderioInputsConfig = convertToBuilderIO({
-    //   jsonSchemas: jsonSchemas,
-    //   definitions,
-    //   ajv,
-    //   configLocation: 'static/.builderio/builder.inputs.json'
-    // });
-    // fs.writeFile(
-    //   `dist/builder.inputs.json`,
-    //   builderioInputsConfig,
-    // );
   }
+ */
+
+(async () => {
+  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
+  const customGlob = `${pathPrefix}node_modules/**/dist/**/*.(schema|definitions).json`;
+
+  // get shared ajv instance, pre-process schemas and get full
+  // set of unique schemas. precondition for the following conversions
+  const ajv = getSchemaRegistry();
+  const schemaIds = await processSchemaGlob(customGlob, ajv);
+  const uniqueSchemaIds = getUniqueSchemaIds(schemaIds);
+
+  // generate `GraphQLType` types and write `GraphQLSchema` to disk
+  // uses `uniqueSchemaIds` as input, to get complete set of kickstartDS
+  generateGraphQL(uniqueSchemaIds, ajv);
+
+  // generate `NetlifyCmsField` fields and write `NetlifyCmsConfig` to disk
+  // uses custom `section.schema.json` to generate a section-based config
+  generateNetlifyCMS([ 'http://kickstartds.com/section.schema.json' ], ajv);
+
+  // TODO finish the following stuff:
+  // TODO remove layering from reducers, should be done as a
+  // pre-processing step to reducing... possibly with a traverse(..)
+
+  // TODO re-activate (needs to be realigned to refactoring)
+  // const tinacmsAdminConfig = convertToTinaCMS({
+  //   jsonSchemas: jsonSchemas,
+  //   definitions,
+  //   ajv,
+  //   configLocation: 'static/.tina/schema.json'
+  // });
+  // fs.writeFile(
+  //   `dist/tina.json`,
+  //   tinacmsAdminConfig,
+  // );
+
+  // TODO re-activate (needs to be realigned to refactoring)
+  // const builderioInputsConfig = convertToBuilderIO({
+  //   jsonSchemas: jsonSchemas,
+  //   definitions,
+  //   ajv,
+  //   configLocation: 'static/.builderio/builder.inputs.json'
+  // });
+  // fs.writeFile(
+  //   `dist/builder.inputs.json`,
+  //   builderioInputsConfig,
+  // );
 })();
 
 export const generateGraphQL = (

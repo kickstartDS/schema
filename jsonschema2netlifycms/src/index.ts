@@ -1,11 +1,10 @@
 import { JSONSchema7 } from 'json-schema';
+import { getSchemasForIds } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 import { getSchemaReducer } from './schemaReducer';
 import { ConvertParams, NetlifyCmsField, NetlifyCmsConfig } from './@types';
 
 import { createConfig } from './createConfig';
-
-// import needed types to type the result
 
 // TODO correct parameter documentation
 /**
@@ -16,9 +15,7 @@ export default function convert({
   schemaIds,
   ajv,
 }: ConvertParams): NetlifyCmsField[] {
-  const schemaArray = schemaIds.map((schemaId) =>
-    ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7
-  );
+  const schemaArray = getSchemasForIds(schemaIds, ajv);
   
   return schemaArray.reduce(getSchemaReducer(ajv), []);
 }

@@ -6,9 +6,10 @@ const path = require('path');
 // TODO I hate that require / import usage is mixed here -_-
 import traverse from 'json-schema-traverse';
 import uppercamelcase from 'uppercamelcase';
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 import _ from 'lodash';
+import { createHash } from "crypto";
 
 export const getSchemaRegistry = (): Ajv => {
   const ajv = new AjvConstructor({
@@ -296,6 +297,11 @@ export const getSchemaName = (schemaId: string | undefined): string => {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
 
+export const getSchemasForIds = (schemaIds: string[], ajv: Ajv): JSONSchema7[] => 
+  schemaIds.map((schemaId) =>
+    ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7
+  );
+
 // TODO deprecated, should go after refactor
 export const toArray = (x: JSONSchema7 | JSONSchema7[] | string | string[]): any[]  =>
   x instanceof Array ? x : [x];
@@ -318,6 +324,19 @@ export const getUniqueSchemaIds = (schemaIds: string[]): string[] => {
 }
 
 export const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1);
+
+export const hashFieldName = (fieldName: string, optionalName?: string): string => {
+  return fieldName.includes('___NODE')
+    ? `${fieldName.replace('___NODE', '')}__${createHash('md5').update(fieldName.replace('___NODE', '') + (optionalName || '')).digest('hex').substr(0,4)}___NODE`
+    : `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`;
+};
+
+export const dedupe = (schema: JSONSchema7, optionalName?: string): {
+  [key: string]: JSONSchema7Definition;
+} | undefined =>
+  _.mapKeys(schema.properties, (_prop: JSONSchema7Definition, fieldName: string) => 
+    fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
+  );
 
 export const toPascalCase = (text: string): string =>
   text.replace(/(^\w|-\w)/g, clearAndUpper);

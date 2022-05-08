@@ -1,15 +1,11 @@
-import { JSONSchema7 } from 'json-schema';
-// TODO doesn't use `fs-extra`... why is that?
+import { getSchemasForIds } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-import { getSchemaReducer } from './schemaReducer'; // TODO this one differs, but shouldn't?
+import { getSchemaReducer } from './schemaReducer';
 import { ConvertParams } from './@types';
-import { toArray, toSchema } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-// import needed types to type the result
 import { GraphQLTypeMap } from './@types';
 import { GraphQLSchema } from 'graphql';
 
-// import locally needed utils
 import { DEFAULT_ENTRY_POINTS } from './helpers'; // TODO check this, needed?
 
 // TODO correct parameter documentation
@@ -39,20 +35,11 @@ export default function convert({
   ajv,
   entryPoints = DEFAULT_ENTRY_POINTS,
 }: ConvertParams): GraphQLSchema {
-  const schemaArray = schemaIds.map((schemaId) =>
-    ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7
-  );
+  const schemaArray = getSchemasForIds(schemaIds, ajv);
 
-  // TODO move this out of here, this should work as the others:
-  // just reduce basic types. schema -> type 1:1, configuration
-  // (`GraphQLSchema`) should live outside (`createConfiguration`)
   const types = schemaArray.reduce(getSchemaReducer(ajv), {});
   return new GraphQLSchema({
     ...types,
     ...entryPoints(types),
   });
 }
-
-export function createConfig() {
-  
-};

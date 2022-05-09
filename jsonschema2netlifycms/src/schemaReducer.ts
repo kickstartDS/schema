@@ -1,78 +1,56 @@
-import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
-import { NetlifyCmsField } from './@types';
-import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import { getSchemaName, toPascalCase } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-const typeResolutionField = 'type';
-
-// TODO pretty sure this is shared for all converters
-interface TypeMapping {
-  boolean: string;
-  string: string;
-  integer: string;
-  array: string;
-  object: string;
-}
-
-const mapping: TypeMapping = {
-  boolean: 'boolean',
-  string: 'string',
-  integer: 'number',
-  array: 'list',
-  object: 'object',
+export interface processInterface<T> {
+  name: string,
+  description: string,
+  subSchema: JSONSchema7,
+  rootSchema: JSONSchema7,
+  fields?: T[],
+  arrayField?: T,
+  options?: {
+    label: string;
+    value: string;
+  }[],
 };
 
-const getInternalTypeDefinition = (type: string): NetlifyCmsField => {
-  return {
-    label: toPascalCase(typeResolutionField),
-    name: typeResolutionField,
-    widget: 'hidden',
-    description: 'Internal type for interface resolution',
-    default: type,
-  }
-}
-
-const widgetMapping = (property: JSONSchema7) : string => {
-  if (property.type === 'string' && property.enum && property.enum.length) {
-    return 'select';
-  }
-
-  if (
-    property.type === 'string' &&
-    property.format &&
-    property.format === 'markdown'
-  ) {
-    return 'markdown';
-  }
-
-  if (
-    property.type === 'string' &&
-    property.format &&
-    property.format === 'image'
-  ) {
-    return 'image';
-  }
-
-  if (
-    property.type === 'string' &&
-    property.format &&
-    property.format === 'id'
-  ) {
-    return 'id';
-  }
-
-  return mapping[property.type as JSONSchema7TypeName];
+export interface processFn<T> {
+  (options: processInterface<T>): T
 };
 
-// TODO check the generated NetlifyCmsField properties for all elements:
-// * required -> this is not functional yet... needs to be evaluated intelligently,
-//      because of schema nesting (schema > array > allOf > $ref > object, etc)
-// * hint -> may be affected by the same challenge as `required`
-export function getSchemaReducer(ajv: Ajv) {
-  function schemaReducer(knownTypes: NetlifyCmsField[], schema: JSONSchema7): NetlifyCmsField[] {
+export interface schemaReducerOptions<T> {
+  ajv: Ajv,
+  typeResolutionField: string,
+  buildDescription: (d: any) => string | undefined,
+  safeEnumKey: (value: string) => string,
+  basicMapping: (property: JSONSchema7) => string,
+  processObject: processFn<T>,
+  processRefArray: processFn<T>,
+  processObjectArray: processFn<T>,
+  processArray: processFn<T>,
+  processEnum: processFn<T>,
+  processConst: processFn<T>,
+  processBasic: processFn<T>,
+};
+
+export function getSchemaReducer<T>({
+  ajv,
+  typeResolutionField,
+  buildDescription,
+  safeEnumKey,
+  basicMapping,
+  processObject,
+  processRefArray,
+  processObjectArray,
+  processArray,
+  processEnum,
+  processConst,
+  processBasic,
+}: schemaReducerOptions<T>) {
+  function schemaReducer(knownTypes: T[], schema: JSONSchema7): T[] {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 
@@ -87,7 +65,7 @@ export function getSchemaReducer(ajv: Ajv) {
     propName: string,
     schema: JSONSchema7,
     outerSchema: JSONSchema7,
-  ): NetlifyCmsField {
+  ): T {
     const name = propName;
 
     // all of the following JSON Schema composition keywords need to
@@ -121,7 +99,7 @@ export function getSchemaReducer(ajv: Ajv) {
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
 
-      const fields = (): NetlifyCmsField[] =>
+      const fields = (): T[] =>
         !_.isEmpty(schema.properties)
           ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
               const objectSchema = _.cloneDeep(prop);
@@ -133,24 +111,8 @@ export function getSchemaReducer(ajv: Ajv) {
               );
             })
           : [];
-
-      const field: NetlifyCmsField = {
-        label: toPascalCase(name),
-        name,
-        widget: widgetMapping(schema),
-        fields: fields(),
-        collapsed: true,
-      };
-        
-      if (schema.default)
-        field.default = schema.default as string;
-
-      if (description)
-        field.hint = description;
-
-      field.required = schema.required?.includes(name) || false;
   
-      return field;
+      return processObject({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fields() });
     }
   
     // array?
@@ -171,21 +133,7 @@ export function getSchemaReducer(ajv: Ajv) {
             );
           });
 
-          const field: NetlifyCmsField = {
-            name,
-            widget: 'list',
-            types: fieldConfigs
-          };
-
-          if (outerSchema.default)
-            field.default = schema.default as string;
-          
-          if (description)
-            field.hint = description;
-    
-          field.required = outerSchema.required?.includes(name) || false;
-          
-          return field;
+          return processRefArray({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fieldConfigs });
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) =>
@@ -196,21 +144,7 @@ export function getSchemaReducer(ajv: Ajv) {
             )
           );
 
-          const field: NetlifyCmsField = {
-            name,
-            widget: 'list',
-            types: fieldConfigs,
-          };
-
-          if (outerSchema.default)
-            field.default = schema.default as string;
-          
-          if (description)
-            field.hint = description;
-    
-          field.required = outerSchema.required?.includes(name) || false;
-
-          return field;
+          return processObjectArray({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fieldConfigs });
         } else {
           throw err(`Incompatible anyOf declaration for array with type ${schema.type} on property ${name}.`);
         }
@@ -237,24 +171,7 @@ export function getSchemaReducer(ajv: Ajv) {
           );
         }
 
-        const field: NetlifyCmsField = {
-          label: toPascalCase(name),
-          name,
-          widget: 'list',
-        };
-
-        if (outerSchema.default)
-          field.default = schema.default as string;
-      
-        if (description)
-          field.hint = description;
-
-        field.required = outerSchema.required?.includes(name) || false;
-  
-        if (fieldConfig && fieldConfig.fields)
-          field.fields = fieldConfig.fields;
-  
-        return field;
+        return processArray({ name, description, subSchema: schema, rootSchema: outerSchema, arrayField: fieldConfig });
       }
     }
   
@@ -269,22 +186,7 @@ export function getSchemaReducer(ajv: Ajv) {
         };
       });
 
-      const field: NetlifyCmsField = {
-        label: toPascalCase(name),
-        name,
-        widget: 'select',
-        options,
-      }
-
-      if (schema.default)
-        field.default = safeEnumKey(schema.default as string);
-
-      if (description)
-        field.hint = description;
-
-      field.required = schema.required?.includes(name) || false;
-  
-      return field;
+      return processEnum({ name, description, subSchema: schema, rootSchema: outerSchema, options });
     }
   
     // ref?
@@ -300,36 +202,20 @@ export function getSchemaReducer(ajv: Ajv) {
 
     // const?
     else if (!_.isUndefined(schema.const)) {
+      const description = buildDescription(schema);
+
       if (name !== typeResolutionField) {
         console.log('schema.const that is not type', schema);
         throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
       }
-      return getInternalTypeDefinition(schema.const as string)
+
+      return processConst({ name, description, subSchema: schema, rootSchema: outerSchema });
     }
   
     // basic?
-    else if (widgetMapping(schema)) {
+    else if (basicMapping(schema)) {
       const description = buildDescription(schema);
-      const widget = widgetMapping(schema);
-  
-      const field: NetlifyCmsField = {
-        label: toPascalCase(name),
-        name,
-        widget,
-      };
-  
-      if (widget === 'number')
-        field.valueType = 'int';
-
-      if (schema.default)
-        field.default = schema.default as string;
-
-      if (description)
-        field.hint = description;
-
-      field.required = outerSchema.required?.includes(name) || false;
-  
-      return field;
+      return processBasic({ name, description, subSchema: schema, rootSchema: outerSchema });
     }
   
     // ¯\_(ツ)_/¯
@@ -337,8 +223,4 @@ export function getSchemaReducer(ajv: Ajv) {
   };
 
   return schemaReducer;
-}
-
-function buildDescription(d: any): string | undefined {
-  return d.description || d.title || undefined;
 }

@@ -101,7 +101,7 @@ export function getSchemaReducer<T>({
 
       const fields = (): T[] =>
         !_.isEmpty(schema.properties)
-          ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
+          ? _.map(schema.properties, (prop: JSONSchema7, fieldName) => {
               const objectSchema = _.cloneDeep(prop);
 
               return buildType(

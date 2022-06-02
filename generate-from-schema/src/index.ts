@@ -6,8 +6,8 @@ const convertToGraphQL = require('@kickstartds/jsonschema2graphql').convert;
 const createConfigGraphQL = require('@kickstartds/jsonschema2graphql').createConfig;
 const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').convert;
 const createConfigNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').createConfig;
-const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
-const convertToBuilderIO = require('@kickstartds/jsonschema2builderio').default;
+// const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
+// const convertToBuilderIO = require('@kickstartds/jsonschema2builderio').default;
 
 // TODO I hate that require / import usage is mixed here -_-
 import { 

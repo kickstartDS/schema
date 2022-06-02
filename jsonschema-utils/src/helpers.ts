@@ -331,11 +331,12 @@ export const hashFieldName = (fieldName: string, optionalName?: string): string 
     : `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`;
 };
 
+// TODO pretty sure `fieldName === 'type'` shouldn't be hardcoded here
 export const dedupe = (schema: JSONSchema7, optionalName?: string): {
   [key: string]: JSONSchema7Definition;
 } | undefined =>
   _.mapKeys(schema.properties, (_prop: JSONSchema7Definition, fieldName: string) => 
-    fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
+    (fieldName.includes('__') || fieldName === 'type') ? fieldName : hashFieldName(fieldName, optionalName)
   );
 
 export const dedupeDeep = (schema: JSONSchema7): JSONSchema7 => {

@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@kickstartds/jsonschema-utils": "^2.1.1",
-    "ajv": "^8.11.0",
+    "ajv": "^8.5.0",
     "camelcase": "^6.3.0",
     "graphql": "^15.8.0",
     "lodash": "^4.17.21",

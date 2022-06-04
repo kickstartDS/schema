@@ -5,10 +5,8 @@ import { config } from './schemaReducer'
 import { ConvertParams } from './@types'
 import { toArray, toSchema } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-
-
 // import needed types to type the result
-import { TinaCloudSchema, TinaCloudCollection, TinaFieldInner, ObjectType } from 'tinacms/dist/types';
+import { TinaCloudSchema, TinaCloudCollection, TinaFieldInner, ObjectType } from '@tinacms/schema-tools';
 
 // import locally needed utils
 import { capitalize } from '@kickstartds/jsonschema-utils/dist/helpers';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * see: https://github.com/sanity-io/sanity/issues/1857#issuecomment-1079799475
  */

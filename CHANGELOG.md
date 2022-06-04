@@ -1,3 +1,136 @@
+# (Wed Apr 13 2022)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/generate-from-schema@2.1.1`, `@kickstartds/jsonschema-utils@2.1.1`, `@kickstartds/jsonschema2graphql@2.1.1`, `@kickstartds/jsonschema2netlifycms@2.1.1`, `@kickstartds/jsonschema2tinacms@2.1.1`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@2.1.1`
+  - fix: dehashing of backgrounds with dashes ([@julrich](https://github.com/julrich))
+
+#### 🔩 Dependency Updates
+
+- chore(deps): bump minimist from 1.2.5 to 1.2.6 [#34](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Apr 13 2022)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/jsonschema-utils@2.1.0`
+  - feature: add helper for enum merging [#35](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/35) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Apr 13 2022)
+
+#### 💥 Breaking Change
+
+- `@kickstartds/generate-from-schema@2.0.0`, `@kickstartds/jsonschema-utils@2.0.0`, `@kickstartds/jsonschema2graphql@2.0.0`, `@kickstartds/jsonschema2netlifycms@2.0.0`, `@kickstartds/jsonschema2tinacms@2.0.0`
+  - Add `Tina CMS` as a conversion target for our `JSON Schema` [#33](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/33) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Mar 02 2022)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@1.6.12`
+  - fix: hash link in cta, instead of button ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Mar 02 2022)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/generate-from-schema@0.7.15`, `@kickstartds/jsonschema2graphql@1.6.11`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@1.6.11`
+  - fix: no need to hash headline in storytelling anymore ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Tue Mar 01 2022)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@1.6.10`
+  - fix: no need to hash headline in storytelling anymore ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Tue Mar 01 2022)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- chore: update kds design-system dependency ([@julrich](https://github.com/julrich))
+- chore: update design-system dep ([@julrich](https://github.com/julrich))
+- fix: update dependencies ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@1.6.9`
+  - fix: fix post-meta fields in hashing ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Wed Feb 23 2022)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update kds design-system dependency ([@julrich](https://github.com/julrich))
+- chore: update design-system dep ([@julrich](https://github.com/julrich))
+- fix: update dependencies ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Tue Feb 22 2022)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update design-system dep ([@julrich](https://github.com/julrich))
+- fix: update dependencies ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Mon Feb 21 2022)
 
 #### ⚠️ Pushed to `master`

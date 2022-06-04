@@ -5,14 +5,19 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-jsonschema2sanity\" \"yarn build-generate-from-schema\" \"yarn watch-schemas\"",
-    "build": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-jsonschema2sanity\" \"yarn build-generate-graphql-fragments\" \"yarn build-add-gatsby-directives\" \"yarn build-generate-from-schema\") && yarn compile-schemas",
+    "start": "yarn build-jsonschema-utils && concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-jsonschema2sanity\" \"yarn build-jsonschema2tinacms\" \"yarn build-jsonschema2builderio\" \"yarn build-generate-from-schema\" \"yarn watch-schemas\"",
+    "build": "(yarn build-jsonschema-utils && concurrently --kill-others-on-fail \"yarn build-jsonschema2graphql\" \"yarn build-jsonschema2netlifycms\" \"yarn build-jsonschema2sanity\" \"yarn build-jsonschema2tinacms\" \"yarn build-jsonschema2builderio\" \"yarn build-generate-graphql-fragments\" \"yarn build-add-gatsby-directives\" \"yarn build-generate-from-schema\") && yarn compile-schemas",
+    "build-jsonschema-utils": "yarn workspace @kickstartds/jsonschema-utils build",
     "build-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql build",
     "watch-jsonschema2graphql": "yarn workspace @kickstartds/jsonschema2graphql watch",
     "build-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms build",
     "watch-jsonschema2netlifycms": "yarn workspace @kickstartds/jsonschema2netlifycms watch",
     "build-jsonschema2sanity": "yarn workspace @kickstartds/jsonschema2sanity build",
     "watch-jsonschema2sanity": "yarn workspace @kickstartds/jsonschema2sanity watch",
+    "build-jsonschema2tinacms": "yarn workspace @kickstartds/jsonschema2tinacms build",
+    "watch-jsonschema2tinacms": "yarn workspace @kickstartds/jsonschema2tinacms watch",
+    "build-jsonschema2builderio": "yarn workspace @kickstartds/jsonschema2builderio build",
+    "watch-jsonschema2builderio": "yarn workspace @kickstartds/jsonschema2builderio watch",
     "build-generate-graphql-fragments": "yarn workspace @kickstartds/graphql-cli-generate-fragments build",
     "build-add-gatsby-directives": "yarn workspace @kickstartds/graphql-cli-add-gatsby-directives build",
     "build-generate-from-schema": "yarn workspace @kickstartds/generate-from-schema build",
@@ -25,22 +30,25 @@
     "graphql-cli-generate-fragments",
     "graphql-cli-add-gatsby-directives",
     "generate-from-schema",
+    "jsonschema-utils",
+    "jsonschema2builderio",
     "jsonschema2graphql",
     "jsonschema2netlifycms",
     "jsonschema2sanity",
+    "jsonschema2tinacms",
     "example"
   ],
   "dependencies": {
-    "concurrently": "^6.1.0"
+    "concurrently": "^7.2.1"
   },
   "devDependencies": {
-    "@auto-it/npm": "^10.29.3",
-    "@auto-it/released": "^10.29.3",
-    "auto": "^10.29.3",
-    "lerna": "^4.0.0"
+    "@auto-it/npm": "^10.37.1",
+    "@auto-it/released": "^10.37.1",
+    "auto": "^10.37.1",
+    "lerna": "^5.0.0"
   },
   "resolutions": {
-    "graphql": "15.5.1"
+    "graphql": "15.8.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",

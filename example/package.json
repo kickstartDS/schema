@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "0.7.13",
+  "version": "2.1.1",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -10,12 +10,12 @@
   "author": "Jonas Ulrich | ruhmesmeile GmbH",
   "license": "UNLICENSED",
   "dependencies": {
-    "@kickstartds/base": "^1.6.0-next.9",
-    "@kickstartds/blog": "^1.6.0-next.9",
-    "@kickstartds/content": "^1.6.0-next.9",
-    "@kickstartds/core": "^1.6.0-next.9",
-    "@kickstartds/design-system": "1.13.0--canary.54.1405.0",
-    "@kickstartds/form": "^1.6.0-next.9",
-    "@kickstartds/generate-from-schema": "^0.7.12"
+    "@kickstartds/base": "2.0.0-canary.922.4383.0",
+    "@kickstartds/blog": "2.0.0-canary.922.4383.0",
+    "@kickstartds/content": "2.0.0-canary.922.4383.0",
+    "@kickstartds/core": "2.0.0-canary.922.4383.0",
+    "@kickstartds/design-system": "2.0.17--canary.74.1965.0",
+    "@kickstartds/form": "2.0.0-canary.922.4383.0",
+    "@kickstartds/generate-from-schema": "^2.1.1"
   }
 }

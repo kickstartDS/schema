@@ -1,7 +1,7 @@
 import camelcase from 'camelcase'
 import { GraphQLList, GraphQLObjectType, GraphQLType } from 'graphql'
 import pluralize from 'pluralize'
-import { createHash } from "crypto";
+import { hashFieldName } from '@kickstartds/jsonschema-utils/dist/helpers';
 
 import { EntryPointBuilder } from './@types'
 
@@ -22,12 +22,6 @@ export const DEFAULT_ENTRY_POINTS: EntryPointBuilder = types => ({
 
 export const err = (msg: string, propName?: string | null): Error =>
   new Error(`jsonschema2graphql: ${propName ? `Couldn't convert property ${propName}. ` : ''}${msg}`)
-
-export function hashFieldName(fieldName: string, optionalName?: string): string {
-  return fieldName.includes('___NODE')
-    ? `${fieldName.replace('___NODE', '')}__${createHash('md5').update(fieldName.replace('___NODE', '') + (optionalName || '')).digest('hex').substr(0,4)}___NODE`
-    : `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`;
-};
 
 export function hashObjectKeys(obj: Record<string, any>, outerComponent: string) {
   const hashedObj = {};
@@ -64,11 +58,9 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
         const outer = outerComponent === 'section' ? obj[property][typeResolutionField] : outerComponent;
         if ((outer === 'storytelling' && property === 'link') || (outer === 'count-up' && property === 'link')) {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
-        } else if (outer === 'storytelling' && property === 'headline') {
-          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'headline');
         } else if (outer === 'glossary' && property === 'cta') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'cta');
-        } else if (outer === 'cta' && property === 'button') {
+        } else if (outer === 'cta' && property === 'link') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
         } else if (outer === 'link-button' && property === 'icon') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'icon');

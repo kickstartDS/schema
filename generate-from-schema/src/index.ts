@@ -1,412 +1,186 @@
 const fs = require('fs-extra');
-const glob = require('fast-glob');
 const chokidar = require('chokidar');
 const { printSchema } = require('graphql');
-const convertToGraphQL = require('@kickstartds/jsonschema2graphql').default;
-const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').default;
-const convertToSanity = require('@kickstartds/jsonschema2sanity').default;
-const Ajv = require('ajv');
-const path = require('path');
-const merge = require('deepmerge');
+
+const convertToGraphQL = require('@kickstartds/jsonschema2graphql').convert;
+const createConfigGraphQL = require('@kickstartds/jsonschema2graphql').createConfig;
+const convertToNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').convert;
+const createConfigNetlifyCMS = require('@kickstartds/jsonschema2netlifycms').createConfig;
+// const convertToTinaCMS = require('@kickstartds/jsonschema2tinacms').default;
+// const convertToBuilderIO = require('@kickstartds/jsonschema2builderio').default;
+
 // TODO I hate that require / import usage is mixed here -_-
-import { createGetSchema } from './helper';
-import traverse from 'json-schema-traverse';
-import uppercamelcase from 'uppercamelcase';
-import { JSONSchema7 } from 'json-schema';
+import { 
+  dump as yamlDump,
+  load as yamlLoad
+} from 'js-yaml';
+import { readFileSync, existsSync } from 'fs-extra';
+import Ajv from 'ajv/dist/core';
+import {
+  processSchemaGlob,
+  getSchemaRegistry,
+  getUniqueSchemaIds,
+} from '@kickstartds/jsonschema-utils/dist/helpers';
 
-const ajv = new Ajv({
-  removeAdditional: true,
-  validateSchema: true,
-  schemaId: '$id',
-  allErrors: true
-});
-const getSchema = createGetSchema(ajv);
-
-const allDefinitions: { [key: string]: JSONSchema7 } = {};
-
-const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email'];
-ignoredFormats.forEach((ignoredFormat) =>
-  ajv.addFormat(ignoredFormat, { validate: () => true })
-);
-
-ajv.addKeyword({
-  keyword: "faker",
-  schemaType: "string",
-  validate: () => true,
-})
-
-// TODO move this to `kickstartDS` itself, should also not be a duplicate of
-// original `section.schema.json` items for components
-const pageSchema: JSONSchema7 = {
-  $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "http://frontend.ruhmesmeile.com/page.schema.json",
-  title: "Page",
-  description: "Abstracts a page concept into JSON schema",
-  type: "object",
-  required: ["id", "layout", "title", "slug"],
-  properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Id for the page",
-      format: "id"
-    },
-    layout: {
-      type: "string",
-      title: "Layout",
-      description: "Choose a layout for the page",
-      default: "default"
-    },
-    title: {
-      type: "string",
-      title: "Title",
-      description: "Title for the page"
-    },
-    description: {
-      type: "string",
-      title: "Description",
-      description: "Description for the page"
-    },
-    keywords: {
-      type: "string",
-      title: "Keywords",
-      description: "Keywords for the page"
-    },
-    image: {
-      type: "string",
-      title: "Preview Image",
-      description: "Preview image for the page"
-    },
-    cardImage: {
-      type: "string",
-      title: "Card Preview Image",
-      description: "Card preview image (larger, e.g. Twitter) for the page"
-    },
-    slug: {
-      type: "string",
-      title: "Slug",
-      description: "URL slug for the page"
-    },
-    sections: {
-      type: "array",
-      title: "Sections",
-      description: "Collection of sections to render on the page",
-      items: {
-        $ref: "http://frontend.ruhmesmeile.com/base/base/section.schema.json"
-      }
-    },
-    components: {
-      type: "array",
-      title: "Components",
-      description: "Collection of components to render on the page",
-      items: {
-        "anyOf": [
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/link-button.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/button.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/atoms/tag-label.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/quote.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/visual-slider.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/contact.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/storytelling.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/collapsible-box.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/count-up.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/content-box.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/text-media.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/teaser-box.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/content/molecules/logo-tiles.schema.json"
-          },
-          {
-            "$ref": "http://frontend.ruhmesmeile.com/base/molecules/teaser-row.schema.json"
-          }
-        ]
-      }
-    },
-    updated: {
-      type: "string",
-      title: "Updated",
-      description: "Last update date for content",
-      format: "date-time"
-    },
-    created: {
-      type: "string",
-      title: "Created",
-      description: "Creation date for content",
-      format: "date-time"
-    }
-  }
-};
-
-const addExplicitAnyOfs = (schemaJson: JSONSchema7, schemaAnyOfs: JSONSchema7[]) => {
-  traverse(schemaJson, {
-    cb: (schema, pointer, rootSchema) => {
-      if (schema.items && schema.items.anyOf) {
-        const componentPath = rootSchema.$id.split('/');
-        const componentType = path.basename(rootSchema.$id).split('.')[0];
-        const componentName = uppercamelcase(componentType);
-
-        schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
-          if (anyOf.$ref)
-            return anyOf;
-
-          const schemaName = `http://frontend.ruhmesmeile.com/${componentPath[3]}/${componentPath[4]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
-          schemaAnyOfs.push({
-            $id: schemaName,
-            $schema: "http://json-schema.org/draft-07/schema#",
-            ...anyOf,
-            definitions: schemaJson.definitions
-          });
-          return { $ref: schemaName };
-        });
-      }
-    },
-  });
-}
-
-// TODO: find a better domain name for "virtual" schemas
-const allOfSchemaDomain = "http://dereffed-allof.com";
-const addExplicitAllOfs = (schemaJson: JSONSchema7) => {
-  traverse(schemaJson, {
-    cb: (schema: JSONSchema7, pointer, rootSchema) => {
-      if (schema.allOf) {
-        const merged = (schema.allOf as JSONSchema7[]).reduceRight(
-          (mergedSchema, allOfEntry) => {
-            const refId = allOfEntry.$ref;
-
-            if (refId) {
-              if (refId.includes("#/definitions/")) {
-                const definitionName = refId.split("/").pop() || "";
-                // console.log('definitionName', definitionName, allDefinitions[definitionName]);
-                return merge.all([
-                  mergedSchema,
-                  allDefinitions[definitionName],
-                  { $id: rootSchema.$id },
-                ]);
-              } else {
-                const componentType = path
-                  .basename(rootSchema.$id)
-                  .split(".")[0];
-                const [, hashPath] = refId.split("#");
-                const reffedName = schema.$id
-                  ? componentType
-                  : `${componentType}-${(hashPath || pointer)
-                      .split("/properties/")
-                      .flatMap((p) => p.split("/"))
-                      .filter(Boolean)
-                      .join("-")}`;
-
-                const reffedSchema = getSchema(refId);
-
-                return merge.all([
-                  mergedSchema,
-                  reffedSchema,
-                  {
-                    $id: `${allOfSchemaDomain}/${componentType}/${reffedName}.schema.json`,
-                  },
-                ]);
-              }
-            } else {
-              return merge(mergedSchema, allOfEntry);
-            }
-          },
-          {}
-        );
-
-        if (merged.$id?.startsWith(allOfSchemaDomain)) {
-          delete schema.allOf;
-
-          // assign `title` & `description` to merged
-          merged.title = schema.title || merged.title;
-          merged.description = schema.description || merged.description;
-
-          addSchemaObject(merged);
-
-          schema.$ref = merged.$id;
-        }
-      }
-    },
-  });
-}
-
-const addSchemaObject = (schemaObject: JSONSchema7) => {
-  if (!ajv.getSchema(schemaObject.$id)) ajv.addSchema(schemaObject);
-  return schemaObject;
-};
-
-const addSchemaPath = async (schemaPath: string) => {
-  const schema = await fs.readFile(schemaPath, 'utf-8');
-  const schemaJson = JSON.parse(schema.replace(/"type": {/g, '"typeProp": {'));
-
-  return addSchemaObject(schemaJson);
-};
-
-(async () => {
+// TODO handle `default` merging in allOf reducers
+// TODO ensure correct `$id` ends up in schemas after allOf reduce
+// TODO update to schema 2012
+// TODO generate reference docs / JSDoc, etc
+// TODO re-add watch modes (and add some for other converters, too):
+/**
   const [, , param] = process.argv;
-  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
-  const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
-  const customGlob = `${pathPrefix}node_modules/**/dist/**/*.(schema|definitions).json`;
-
+  
+  ...
+  
   if (param === '--watch') {
     chokidar
-      .watch(schemaGlob, { ignoreInitial: true })
+      .watch(customGlob, { ignoreInitial: true })
       .on('add', convertToGraphQL)
       .on('change', convertToGraphQL)
       .on('add', convertToNetlifyCMS)
       .on('change', convertToNetlifyCMS);
-  } else {
-    const schemaPaths = await glob(schemaGlob);
-    const schemaJsons: JSONSchema7[] = await Promise.all(schemaPaths.map(async (schemaPath: string) => addSchemaPath(schemaPath)));
-    const schemaAnyOfs: JSONSchema7[] = [];
-    const customSchemaJsons: JSONSchema7[] = [];
-
-    schemaJsons.forEach((schemaJson) => {
-      const { definitions } = schemaJson;
-      for (const definedTypeName in definitions) {
-        allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
-      }
-
-      addExplicitAnyOfs(schemaJson, schemaAnyOfs);
-    });
-
-    schemaAnyOfs.forEach((schemaAnyOf) => addSchemaObject(schemaAnyOf));
-
-    const customPaths = await glob(customGlob);
-    if (customPaths.length) {
-      const customJsons: JSONSchema7[] = await Promise.all(customPaths.map(async (customPath: string) => addSchemaPath(customPath)));
-      const sectionSchema = customJsons.find((customJson) => customJson.$id?.includes('section.schema.json')) as JSONSchema7;
-
-      if (sectionSchema)
-        ((pageSchema.properties.sections as JSONSchema7).items as JSONSchema7).$ref = sectionSchema.$id;
-
-      customJsons.forEach((customJson) => {
-        const { definitions } = customJson;
-        let newCustomJson = true;
-
-        for (const definedTypeName in definitions) {
-          allDefinitions[definedTypeName] = definitions[definedTypeName] as JSONSchema7;
-        }
-
-        schemaJsons.forEach((schemaJson, index) => {
-          if (path.basename(customJson.$id) === path.basename(schemaJson.$id)) {
-            newCustomJson = false;
-            schemaJsons[index] = customJson;
-          }
-        });
-
-        if (newCustomJson) {
-          customSchemaJsons.push(customJson);
-        }
-      });
-    }
-
-    ajv.addSchema(pageSchema);
-    ajv.validateSchema(pageSchema);
-
-    const gql = convertToGraphQL({
-      jsonSchema: [...schemaJsons, ...schemaAnyOfs, ...customSchemaJsons],
-      definitions: allDefinitions,
-      ajv,
-      getSchema,
-    });
-    fs.writeFile(
-      `dist/page.graphql`,
-      printSchema(gql).replace(/`/g, "'"),
-    );
-
-    const netlifyAdminConfig = convertToNetlifyCMS({
-      jsonSchema: [...schemaJsons, pageSchema],
-      definitions: allDefinitions,
-      ajv,
-      configLocation: 'static/admin/config.yml',
-      getSchema,
-    });
-    fs.writeFile(
-      `dist/config.yml`,
-      netlifyAdminConfig,
-    );
-
-    schemaJsons.forEach(addExplicitAllOfs);
-
-    const sanitySchemas = [
-      'http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json',
-      'http://frontend.ruhmesmeile.com/base/atoms/link-button.schema.json',
-      'http://frontend.ruhmesmeile.com/base/atoms/toggle.definitions.json',
-      'http://frontend.ruhmesmeile.com/base/atoms/button.schema.json',
-      'http://frontend.ruhmesmeile.com/base/atoms/tag-label.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/quote.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/visual-slider.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/contact.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/storytelling.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/collapsible-box.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/count-up.schema.json',
-      'http://frontend.ruhmesmeile.com/base/molecules/content-box.schema.json',
-      'http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json',
-      'http://frontend.ruhmesmeile.com/base/molecules/text-media.schema.json',
-      'http://frontend.ruhmesmeile.com/base/molecules/teaser-box.schema.json',
-      'http://frontend.ruhmesmeile.com/content/molecules/logo-tiles.schema.json',
-      'http://frontend.ruhmesmeile.com/base/molecules/teaser-row.schema.json',
-    ];
-
-    const headlineSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/headline.sanity.schema.json`);
-    ajv.validateSchema(headlineSanitySchema);
-    addExplicitAllOfs(headlineSanitySchema);
-
-    const visualSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/visual.sanity.schema.json`);
-    ajv.validateSchema(visualSanitySchema);
-    addExplicitAllOfs(visualSanitySchema);
-
-    const sanityObjectFields: Record<string, string> = convertToSanity({
-      jsonSchema: [headlineSanitySchema, visualSanitySchema],
-      // jsonSchema: [...schemaJsons.filter((schemaJson) => sanitySchemas.includes(schemaJson.$id))],
-      definitions: allDefinitions,
-      ajv,
-      configLocation: 'static/admin/config.yml',
-      getSchema,
-    });
-
-    if (!fs.existsSync('dist/sanity')){
-      fs.mkdirSync('dist/sanity');
-    }
-
-    for (const key in sanityObjectFields) {
-      fs.writeFile(
-        `dist/sanity/${key}.js`,
-        sanityObjectFields[key],
-      );
-    };
   }
+ */
+
+(async () => {
+  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
+  const customGlob = `${pathPrefix}node_modules/**/dist/**/*.(schema|definitions).json`;
+
+  // get shared ajv instance, pre-process schemas and get full
+  // set of unique schemas. precondition for the following conversions
+  const ajv = getSchemaRegistry();
+  const schemaIds = await processSchemaGlob(customGlob, ajv);
+  const uniqueSchemaIds = getUniqueSchemaIds(schemaIds);
+
+  // generate `GraphQLType` types and write `GraphQLSchema` to disk
+  // uses `uniqueSchemaIds` as input, to get complete set of kickstartDS
+  generateGraphQL(uniqueSchemaIds, ajv);
+
+  // generate `NetlifyCmsField` fields and write `NetlifyCmsConfig` to disk
+  // uses custom `section.schema.json` to generate a section-based config
+  generateNetlifyCMS([ 'http://kickstartds.com/section.schema.json' ], ajv);
+
+  /*
+  const sanitySchemas = [
+    'http://frontend.ruhmesmeile.com/content/organisms/quotes-slider.schema.json',
+    'http://frontend.ruhmesmeile.com/base/atoms/link-button.schema.json',
+    'http://frontend.ruhmesmeile.com/base/atoms/toggle.definitions.json',
+    'http://frontend.ruhmesmeile.com/base/atoms/button.schema.json',
+    'http://frontend.ruhmesmeile.com/base/atoms/tag-label.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/visual.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/quote.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/visual-slider.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/contact.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/storytelling.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/collapsible-box.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/count-up.schema.json',
+    'http://frontend.ruhmesmeile.com/base/molecules/content-box.schema.json',
+    'http://frontend.ruhmesmeile.com/base/molecules/headline.schema.json',
+    'http://frontend.ruhmesmeile.com/base/molecules/text-media.schema.json',
+    'http://frontend.ruhmesmeile.com/base/molecules/teaser-box.schema.json',
+    'http://frontend.ruhmesmeile.com/content/molecules/logo-tiles.schema.json',
+    'http://frontend.ruhmesmeile.com/base/molecules/teaser-row.schema.json',
+  ];
+
+  const headlineSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/headline.sanity.schema.json`);
+  ajv.validateSchema(headlineSanitySchema);
+  addExplicitAllOfs(headlineSanitySchema);
+
+  const visualSanitySchema = await addSchemaPath(`${pathPrefix}/jsonschema2sanity/src/schemas/visual.sanity.schema.json`);
+  ajv.validateSchema(visualSanitySchema);
+  addExplicitAllOfs(visualSanitySchema);
+
+  const sanityObjectFields: Record<string, string> = convertToSanity({
+    jsonSchema: [headlineSanitySchema, visualSanitySchema],
+    // jsonSchema: [...schemaJsons.filter((schemaJson) => sanitySchemas.includes(schemaJson.$id))],
+    definitions: allDefinitions,
+    ajv,
+    configLocation: 'static/admin/config.yml',
+    getSchema,
+  });
+
+  if (!fs.existsSync('dist/sanity')){
+    fs.mkdirSync('dist/sanity');
+  }
+
+  for (const key in sanityObjectFields) {
+    fs.writeFile(
+      `dist/sanity/${key}.js`,
+      sanityObjectFields[key],
+    );
+  };
+  */
+
+  // TODO finish the following stuff:
+  // TODO remove layering from reducers, should be done as a
+  // pre-processing step to reducing... possibly with a traverse(..)
+
+  // TODO re-activate (needs to be realigned to refactoring)
+  // const tinacmsAdminConfig = convertToTinaCMS({
+  //   jsonSchemas: jsonSchemas,
+  //   definitions,
+  //   ajv,
+  //   configLocation: 'static/.tina/schema.json'
+  // });
+  // fs.writeFile(
+  //   `dist/tina.json`,
+  //   tinacmsAdminConfig,
+  // );
+
+  // TODO re-activate (needs to be realigned to refactoring)
+  // const builderioInputsConfig = convertToBuilderIO({
+  //   jsonSchemas: jsonSchemas,
+  //   definitions,
+  //   ajv,
+  //   configLocation: 'static/.builderio/builder.inputs.json'
+  // });
+  // fs.writeFile(
+  //   `dist/builder.inputs.json`,
+  //   builderioInputsConfig,
+  // );
 })();
+
+export const generateGraphQL = (
+  schemaIds: string[],
+  ajv: Ajv,
+  configPath: string = 'dist/page.graphql',
+) => {
+  const gqlTypes = convertToGraphQL({
+    schemaIds,
+    ajv,
+  });
+
+  // TODO make sure this disclaimer actually lands in the resulting file
+  const configDisclaimer = '# This file is auto-generated by @kickstartds/jsonschema2graphql\n# Don`t change manually, your changes *will* be lost!\n\n';
+  const configString = `${configDisclaimer}${printSchema(createConfigGraphQL(gqlTypes)).replace(/`/g, "'")}`;
+
+  fs.writeFile(
+    configPath,
+    configString,
+  );
+}
+
+export const generateNetlifyCMS = (
+  schemaIds: string[],
+  ajv: Ajv,
+  configPath: string = `dist/config.yml`,
+) => {
+  const configLocation = 'static/admin/config.yml';
+  const config = configLocation && existsSync(configLocation) && yamlLoad(readFileSync(configLocation, 'utf-8'));
+
+  const netlifyCmsFields = convertToNetlifyCMS({
+    schemaIds,
+    ajv,
+  });
+  
+  const configDisclaimer = '# This file is auto-generated by @kickstartds/jsonschema2netlifycms\n# Don`t change manually, your changes *will* be lost!\n\n';
+  const configString = `${configDisclaimer}${yamlDump(createConfigNetlifyCMS(netlifyCmsFields, config ? config : undefined, 'pages'))}`;
+
+  fs.writeFile(
+    configPath,
+    configString,
+  );
+}
+
+
+export { processSchemaGlob, getSchemaRegistry };

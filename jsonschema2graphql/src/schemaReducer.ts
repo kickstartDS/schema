@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import uppercamelcase from 'uppercamelcase';
 import {
   GraphQLBoolean,
   GraphQLEnumType,
@@ -11,17 +13,13 @@ import {
   GraphQLUnionType,
   GraphQLInterfaceType,
 } from 'graphql';
-import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
-import _ from 'lodash';
-import uppercamelcase from 'uppercamelcase';
-import { GraphQLTypeMap, GetSchema } from './@types'
+import { JSONSchema7 } from 'json-schema';
+import { getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { GraphQLTypeMap } from './@types';
 import { getTypeName } from './getTypeName';
 import { graphqlSafeEnumKey } from './graphqlSafeEnumKey';
 import { err } from './helpers';
-import Ajv from 'ajv';
-import * as path from 'path';
 
-import { hashFieldName } from './helpers';
 import { cleanFieldName } from './dehashing';
 
 const typeResolutionField = 'type';
@@ -46,61 +44,28 @@ const textMediaComponentInterface = new GraphQLInterfaceType({
   fields: {
     type: { type: GraphQLString }
   },
-})
+});
 
 const gatsbyFileInterface = new GraphQLInterfaceType({
   name: 'File',
   fields: {}
 });
 
-const internalTypeDefinition: JSONSchema7Definition = {
-  "type": "string",
-  "title": "Internal type",
-  "description": "Internal type for interface resolution",
-};
-
-let allDefinitions: JSONSchema7[];
-const allDefinitionTypes = {};
 // TODO these should be (cli) options
-const shouldDedupe = true;
 const gatsbyImages = true;
 
-export function getSchemaName(schemaId: string | undefined): string {
-  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
-};
-
-function getLayeredRefId(ajv: Ajv, refId: string, reffingSchemaId: string): string {
-  if (!refId.includes('frontend.ruhmesmeile.com')) return refId;
-
-  const component = path.basename(refId);
-  const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('frontend.ruhmesmeile.com'))
-
-  return layeredComponent.length > 0 && reffingSchemaId.includes('frontend.ruhmesmeile.com')
-    ? layeredComponent[0]
-    : refId;
-}
-
-const dedupe = (schema: JSONSchema7, optionalName?: string): {
-    [key: string]: JSONSchema7Definition;
-  } | undefined =>
-  _.mapKeys(schema.properties, (prop: JSONSchema7, fieldName: string) =>
-    fieldName.includes('__') ? fieldName : hashFieldName(fieldName, optionalName)
-  );
-
-export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema: GetSchema) {
-  allDefinitions = definitions;
-
-  function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7) {
+// TODO check for fields generated without comment / documentation
+export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema7) {
+  function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7): GraphQLTypeMap {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 
     const typeName = getTypeName($id);
-    const clonedSchema = _.cloneDeep(schema);
+    const clonedSchema = schemaPost
+      ? schemaPost(_.cloneDeep(schema))
+      : _.cloneDeep(schema);
 
-    if (shouldDedupe)
-      clonedSchema.properties = dedupe(clonedSchema, getSchemaName(schema.$id));
-
-    knownTypes[typeName] = buildType(typeName, clonedSchema, knownTypes, shouldDedupe, true, clonedSchema);
+    knownTypes[typeName] = buildType(typeName, clonedSchema, knownTypes, true, clonedSchema);
     return knownTypes;
   }
 
@@ -108,7 +73,6 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
     propName: string,
     schema: JSONSchema7,
     knownTypes: GraphQLTypeMap,
-    dedupeFieldNames: boolean,
     outerRun: boolean = false,
     outerSchema: JSONSchema7,
   ): GraphQLType {
@@ -126,11 +90,8 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
         const caseSchema = cases[caseIndex];
         const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
         const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
-
-        if (dedupeFieldNames)
-          typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
-
-        return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
+        
+        return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
       })
 
       return new GraphQLUnionType({ name, description, types });
@@ -147,10 +108,7 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
         const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
         const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
 
-        if (dedupeFieldNames)
-          typeSchema.properties = dedupe(typeSchema, getSchemaName(outerSchema.$id));
-
-        return buildType(qualifiedName, typeSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType;
+        return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
       });
 
       return new GraphQLUnionType({ name, description, types });
@@ -158,42 +116,8 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
 
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
-        return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
-          const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
-            if (!_.isUndefined(allOf.$ref)) {
-              if (allOf.$ref.includes('#/definitions/')) {
-                const definitionName = allOf.$ref.split('/').pop() || '';
-                const definition = _.cloneDeep(allDefinitions[definitionName]);
-                if (definition.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf, outerComponentSchemaId))
-                }
-                return _.merge(finalSchema, definition);
-              } else {
-                const reffedSchema = _.cloneDeep(getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId)));
-                if (reffedSchema.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
-                }
-                return _.merge(finalSchema, reffedSchema);
-              }
-            } else {
-              return _.merge(finalSchema, allOf);
-            }
-          }
-
-          return mergeSchemaAllOf(allOf);
-        }, { } as JSONSchema7);
-      };
-
-      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], outerSchema.$id as string);
-
-      if (dedupeFieldNames)
-        objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
-
-      if (contentComponent && objectSchema && objectSchema.properties)
-        objectSchema.properties[typeResolutionField] = internalTypeDefinition;
-
-      return buildType(name, objectSchema, knownTypes, dedupeFieldNames, outerRun, outerSchema) as GraphQLObjectType;
+      console.log('schema with allOf', schema);
+      throw err(`The type allOf on property ${name} is not supported.`);
     }
 
     // not?
@@ -205,20 +129,14 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
-
-      if (contentComponent && schema && schema.properties)
-        schema.properties[typeResolutionField] = internalTypeDefinition;
-
+  
       const fields = () =>
         !_.isEmpty(schema.properties)
           ? _.mapValues(schema.properties, (prop: JSONSchema7, fieldName: string) => {
               const qualifiedFieldName = `${name}.${fieldName}`
               const objectSchema = _.cloneDeep(prop);
-
-              if (dedupeFieldNames)
-                objectSchema.properties = dedupe(objectSchema, getSchemaName(outerSchema.$id));
-
-              const type = buildType(qualifiedFieldName, objectSchema, knownTypes, dedupeFieldNames, false, outerSchema) as GraphQLObjectType
+  
+              const type = buildType(qualifiedFieldName, objectSchema, knownTypes, false, outerSchema) as GraphQLObjectType
               const isRequired = _.includes(schema.required, fieldName)
               return {
                 type: isRequired ? new GraphQLNonNull(type) : type,
@@ -240,8 +158,7 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
     // array?
     else if (schema.type === 'array') {
       const arraySchema = _.cloneDeep(schema.items) as JSONSchema7;
-      arraySchema.properties = dedupe(arraySchema, getSchemaName(outerSchema.$id));
-
+      
       if (arraySchema.anyOf && name !== 'SectionComponentContent') {
         return new GraphQLList(textMediaComponentInterface);
 
@@ -254,7 +171,7 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
         // }));
       }
 
-      const elementType = buildType(name, arraySchema, knownTypes, dedupeFieldNames, false, outerSchema);
+      const elementType = buildType(name, arraySchema, knownTypes, false, outerSchema);
       return name === 'SectionComponentContent'
         ? new GraphQLList(new GraphQLNonNull(contentComponentInterface))
         : new GraphQLList(new GraphQLNonNull(elementType));
@@ -272,25 +189,21 @@ export function getSchemaReducer(ajv: Ajv, definitions: JSONSchema7[], getSchema
 
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      if (schema.$ref.includes('#/definitions/')) {
-        const ref = schema.$ref.split('#/definitions/').pop() as string;
-        const definitions = _.cloneDeep(allDefinitions[ref]);
+      const ref = getTypeName(schema.$ref, outerSchema.$id)
+      const type = knownTypes[ref];
 
-        if (dedupeFieldNames)
-          definitions.properties = dedupe(definitions, getSchemaName(outerSchema.$id));
+      if (!type) throw err(`The referenced type ${ref} is unknown.`, name);
+      return type;
+    }
 
-        if (!allDefinitionTypes[ref]) {
-          allDefinitionTypes[ref] = buildType(ref, definitions, knownTypes, shouldDedupe, false, schema);
-        }
-
-        return allDefinitionTypes[ref];
-      } else {
-        const ref = getTypeName(schema.$ref, outerSchema.$id)
-        const type = knownTypes[ref];
-
-        if (!type) throw err(`The referenced type ${ref} is unknown.`, name);
-        return type;
+    // const?
+    else if (!_.isUndefined(schema.const)) {
+      // TODO add comment to `type` field in generated `.gql`
+      if (!name.toLowerCase().endsWith(typeResolutionField)) {
+        console.log('schema.const that is not type', schema);
+        throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
       }
+      return GraphQLString;
     }
 
     // image source?

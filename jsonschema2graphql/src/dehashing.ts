@@ -22,8 +22,12 @@ export function cleanObjectKeys(obj: Record<string, any>): Record<string, any> {
         }
       } else if (typeof obj[property] === 'object') {
         if (obj[property] !== null) {
-          cleanedObject[cleanFieldName(property)] =
-            cleanObjectKeys(obj[property]);
+          if (obj[property]?.type !== 'root') {
+            cleanedObject[cleanFieldName(property)] =
+              cleanObjectKeys(obj[property]);
+          } else {
+            cleanedObject[cleanFieldName(property)] = obj[property];
+          }
         }
       } else if (obj[property]) {
         if (obj[property] !== null) {
@@ -35,10 +39,14 @@ export function cleanObjectKeys(obj: Record<string, any>): Record<string, any> {
           // we can't have custom handling per property here. At least in the long run!
           if (cleanFieldName(property) === 'variant') {
             cleanedObject[cleanFieldName(property)] = obj[property].replace('_', '-');
+          } else if (cleanFieldName(property) === 'background') {
+            cleanedObject[cleanFieldName(property)] = obj[property].replace('_', '-');
           } else if (cleanFieldName(property) === 'ratio') {
             cleanedObject[cleanFieldName(property)] = obj[property].replace('VALUE_', '').replace('_', ':');
           } else if (cleanFieldName(property) === 'pattern') {
             cleanedObject[cleanFieldName(property)] = obj[property].replace('VALUE_', '');
+          } else if (property === '__typename') {
+            cleanedObject[property] = obj[property];
           } else {
             cleanedObject[cleanFieldName(property)] = obj[property];
           }

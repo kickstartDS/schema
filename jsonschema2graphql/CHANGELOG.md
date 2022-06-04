@@ -1,3 +1,98 @@
+# v2.1.1 (Wed Apr 13 2022)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: dehashing of backgrounds with dashes ([@julrich](https://github.com/julrich))
+
+#### 🔩 Dependency Updates
+
+- chore(deps): bump minimist from 1.2.5 to 1.2.6 [#34](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# v2.0.0 (Wed Apr 13 2022)
+
+#### 💥 Breaking Change
+
+- Add `Tina CMS` as a conversion target for our `JSON Schema` [#33](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/33) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: tina typename ([@julrich](https://github.com/julrich))
+- fix: de-duplicate getSchemaName and move to exported helpers ([@julrich](https://github.com/julrich))
+- fix: move imports to new package ([@julrich](https://github.com/julrich))
+- feature: refactor helpers into their own module ([@julrich](https://github.com/julrich))
+- feature: extract layered ref helper, fix base schema name ([@julrich](https://github.com/julrich))
+- chore: trigger jsonschema2graphql rebuild ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# v1.6.12 (Wed Mar 02 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hash link in cta, instead of button ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# v1.6.11 (Wed Mar 02 2022)
+
+#### 🐛 Bug Fix
+
+- Bump independent versions \[skip ci\] (lukas.mestel@kickstartds.com)
+- Update CHANGELOG.md \[skip ci\] (lukas.mestel@kickstartds.com)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: no need to hash headline in storytelling anymore ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel (lukas.mestel@kickstartds.com)
+
+---
+
+# v1.6.10 (Tue Mar 01 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: no need to hash headline in storytelling anymore ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# v1.6.9 (Tue Mar 01 2022)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: fix post-meta fields in hashing ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v1.6.8 (Tue Nov 09 2021)
 
 #### ⚠️ Pushed to `master`

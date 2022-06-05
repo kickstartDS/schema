@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const util = require('util');
 // const chokidar = require('chokidar');
 const { printSchema } = require('graphql');
+const { camelCase } = require('change-case');
 
 const convertToGraphQL = require('@kickstartds/jsonschema2graphql').convert;
 const createConfigGraphQL = require('@kickstartds/jsonschema2graphql').createConfig;
@@ -155,16 +156,39 @@ export const generateSanity = (
 
   if (!fs.existsSync('dist/sanity')){
     fs.mkdirSync('dist/sanity');
+    fs.mkdirSync('dist/sanity/documents');
+    fs.mkdirSync('dist/sanity/objects');
   }
 
+  const schemaJs = `
+import createSchema from 'part:@sanity/base/schema-creator';
+${configs.documents.map((document: { name: string }) => `import ${camelCase(document.name)} from './documents/${document.name}.js'`).join('\n')}
+${configs.objects.map((object: { name: string }) => `import ${camelCase(object.name)} from './objects/${object.name}.js'`).join('\n')}
+
+import schemaTypes from 'all:part:@sanity/base/schema-type';
+
+export default createSchema({
+  name: 'kickstartDS',
+  types: schemaTypes.concat([
+    ${configs.documents.map((document: { name: string }) => `${camelCase(document.name)},`).join('\n    ')}
+    ${configs.objects.map((object: { name: string }) => `${camelCase(object.name)},`).join('\n    ')}
+  ]),
+});
+  `;
+
   fs.writeFile(
-    `dist/sanity/page.js`,
+    `dist/sanity/schema.js`,
+    `${configDisclaimer}\n${schemaJs}`
+  );
+
+  fs.writeFile(
+    `dist/sanity/documents/page.js`,
     `${configDisclaimer}\n\nexport default ${util.inspect(configs.documents[0], {showHidden: false, compact: false, depth: null})}`
   );
 
   Object.keys(configStrings).forEach((configStringKey) => {
     fs.writeFile(
-      `dist/sanity/${configStringKey}.js`,
+      `dist/sanity/objects/${configStringKey}.js`,
       configStrings[configStringKey],
     );
   });

@@ -1,5 +1,4 @@
-import { capitalize } from '@kickstartds/jsonschema-utils/dist/helpers';
-import { Document, ArrayOf, Body2TextProps, Field, ObjectField, ArrayField, DefaultConfigInterface, SanityConfigMap } from './@types';
+import { Document, ArrayOf, Body2TextProps, ObjectField, ArrayField, DefaultConfigInterface, SanityConfigMap } from './@types';
 
 export const fromBlock = (arr: Body2TextProps) =>
   Array.isArray(arr)

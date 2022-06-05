@@ -38,6 +38,7 @@
     "camelcase": "^6.2.0",
     "lodash": "^4.17.21",
     "netlify-cms-core": "^2.40.12",
+    "object-traversal": "^1.0.1",
     "ramda": "^0.27.1"
   },
   "devDependencies": {

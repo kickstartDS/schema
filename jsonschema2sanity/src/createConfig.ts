@@ -83,7 +83,10 @@ export function createConfig(
 
   const contentComponents = sanityComponents.filter((sanityComponent) => {
     if (sanityComponent.type === 'object') {
-      return (sanityComponent as ObjectField).name !== 'section'
+      // TODO handle table in Sanity, not compatible currently:
+      // `Found array member declaration of type "array"
+      // - multidimensional arrays are not currently supported by Sanity`
+      return (sanityComponent as ObjectField).name !== 'section' && (sanityComponent as ObjectField).name !== 'table'
     }
 
     return false;

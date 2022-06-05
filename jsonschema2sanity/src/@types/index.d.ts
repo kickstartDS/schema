@@ -12,6 +12,17 @@ declare namespace jsonschema2sanity {
     ajv: Ajv
   }
 
+  export interface SanityConfigMap {
+    config: DefaultConfigInterface,
+    documents: Document<Record<string, any>>[],
+    objects: ArrayOf[],
+  }
+  
+  export interface DefaultConfigInterface {
+    name: string,
+    types: (Document<Record<string, any>>|Field)[],
+  }
+
   // See https://github.com/sanity-io/sanity/issues/1857#issuecomment-905384304
   type Meta = {
     parent: { [key: string]: any };
@@ -38,6 +49,7 @@ declare namespace jsonschema2sanity {
   export type CommonFieldProps = {
     title?: string;
     fieldset?: string;
+    group?: string;
     validation?: Validation;
     description?: string;
     hidden?: boolean;
@@ -229,6 +241,17 @@ declare namespace jsonschema2sanity {
     validation?: Validation;
     preview?: Preview;
     fieldsets?: Fieldset[];
+    groups?: {
+      name: string;
+      title: string;
+      default?: boolean;
+      icon?: ElementType;
+      hidden?: (options: {
+        currentUser: unknown;
+        value: unknown;
+        parent: unknown;
+      }) => boolean;
+    }[],
     initialValue?: { [key: string]: any };
     orderings?: {
       name: string;

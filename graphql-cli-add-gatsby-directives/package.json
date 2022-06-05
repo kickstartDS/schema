@@ -20,8 +20,7 @@
   ],
   "scripts": {
     "build": "tsc -d",
-    "pretest": "npm run build",
-    "lint": "eslint -c .eslintrc.js --ext .ts src"
+    "pretest": "npm run build"
   },
   "author": "Jonas Ulrich <jonas.ulrich@kickstartds.com>",
   "license": "MIT",
@@ -30,11 +29,8 @@
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.38",
     "@types/yargs": "^17.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.27.0",
-    "@typescript-eslint/parser": "^5.27.0",
     "contributor": "^0.1.25",
     "debounce": "^1.2.1",
-    "eslint": "^8.17.0",
     "graphql-config": "^4.3.1",
     "typescript": "^4.7.3"
   },

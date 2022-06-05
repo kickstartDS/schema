@@ -3,7 +3,8 @@ import { getSchemasForIds, toPascalCase } from '@kickstartds/jsonschema-utils/di
 import { getSchemaReducer, processFn } from '@kickstartds/jsonschema2netlifycms/build/schemaReducer';
 import { safeEnumKey } from '@kickstartds/jsonschema2netlifycms/build/safeEnumKey';
 
-import { ConvertParams, Field, ObjectField, ArrayField, StringField, GetSchema } from './@types';
+import { ConvertParams, Field, ObjectField, ArrayField, StringField, RuleType, SanityConfigMap } from './@types';
+import { createConfig } from './createConfig';
 
 // TODO move `getSchemaReducer`, `processFn` and `safeEnumKey` to `jsonschema-utils`
 // TODO correct parameter documentation
@@ -14,7 +15,7 @@ import { ConvertParams, Field, ObjectField, ArrayField, StringField, GetSchema }
 export const convert = ({
   schemaIds,
   ajv,
-}: ConvertParams): Field[] => 
+}: ConvertParams): Field[] =>
   getSchemasForIds(schemaIds, ajv)
     .reduce(getSchemaReducer<Field>(
       {
@@ -33,6 +34,10 @@ export const convert = ({
       }
     ), []);
 
+export { SanityConfigMap, createConfig };
+
+const validateRequiredFn = (Rule: RuleType) => Rule.required();
+
 const processObject: processFn<Field> = ({
   name,
   description,
@@ -48,14 +53,14 @@ const processObject: processFn<Field> = ({
 
   if (description)
     field.description = description;
-    
+
   if (subSchema.default)
     field.initialValue = subSchema.default as string;
-  
-  if (subSchema.required?.includes(name))
-    field.validation = (Rule) => Rule.required();
 
-  return field; 
+  if (subSchema.required?.includes(name))
+    field.validation = validateRequiredFn;
+
+  return field;
 };
 
 const processRefArray: processFn<Field> = ({
@@ -70,12 +75,12 @@ const processRefArray: processFn<Field> = ({
     title: toPascalCase(name),
     of: fields || [],
   };
-  
+
   if (description)
     field.description = description;
 
   if (rootSchema.required?.includes(name))
-    field.validation = (Rule) => Rule.required();
+    field.validation = validateRequiredFn;
 
   return field;
 };
@@ -96,12 +101,12 @@ const processObjectArray: processFn<Field> = ({
 
   if (rootSchema.default)
     field.initialValue = subSchema.default as string;
-  
+
   if (description)
     field.description = description;
 
   if (rootSchema.required?.includes(name))
-    field.validation = (Rule) => Rule.required();
+    field.validation = validateRequiredFn;
 
   return field;
 };
@@ -130,7 +135,7 @@ const processArray: processFn<Field> = ({
     field.description = description;
 
   if (rootSchema.required?.includes(name))
-    field.validation = (Rule) => Rule.required();
+    field.validation = validateRequiredFn;
 
   return field;
 };
@@ -146,7 +151,7 @@ const processEnum: processFn<Field> = ({
     type: 'string',
     title: toPascalCase(name),
     options: {
-      list: options?.map((option) => { 
+      list: options?.map((option) => {
         return { title: option.label, value: option.value };
       }) || []
     },
@@ -162,8 +167,8 @@ const processEnum: processFn<Field> = ({
     field.description = description;
 
   if (subSchema.required?.includes(name))
-    field.validation = (Rule) => Rule.required();
-  
+    field.validation = validateRequiredFn;
+
   return field;
 };
 
@@ -180,12 +185,12 @@ const processBasic: processFn<Field> = ({
   rootSchema,
 }) => {
   const field = widgetMapping(subSchema, name, toPascalCase(name));
-  
+
   if (description)
     field.description = description;
 
   if (rootSchema.required?.includes(name))
-    field.validation = (Rule) => Rule.required();
+    field.validation = validateRequiredFn;
 
   return field;
 };
@@ -206,12 +211,6 @@ const getInternalTypeDefinition = (type: string): StringField => {
 };
 
 const widgetMapping = (property: JSONSchema7, name: string, title: string): Field => {
-  // const field: Field = {
-  //   name,
-  //   type: widget,
-  //   title: toPascalCase(name),
-  // };
-
   if (property.const) {
     return {
       name,

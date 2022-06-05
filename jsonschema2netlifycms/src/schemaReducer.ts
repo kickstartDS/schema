@@ -34,6 +34,7 @@ export interface schemaReducerOptions<T> {
   processEnum: processFn<T>,
   processConst: processFn<T>,
   processBasic: processFn<T>,
+  schemaPost?: (schema: JSONSchema7) => JSONSchema7,
 };
 
 export function getSchemaReducer<T>({
@@ -49,13 +50,16 @@ export function getSchemaReducer<T>({
   processEnum,
   processConst,
   processBasic,
+  schemaPost,
 }: schemaReducerOptions<T>) {
   function schemaReducer(knownTypes: T[], schema: JSONSchema7): T[] {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 
     const typeName = getSchemaName($id);
-    const clonedSchema = _.cloneDeep(schema);
+    const clonedSchema = schemaPost
+      ? schemaPost(_.cloneDeep(schema))
+      : _.cloneDeep(schema);
   
     knownTypes.push(buildType(typeName, clonedSchema, clonedSchema));
     return knownTypes;

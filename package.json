@@ -22,9 +22,13 @@
     "build-add-gatsby-directives": "yarn workspace @kickstartds/graphql-cli-add-gatsby-directives build",
     "build-generate-from-schema": "yarn workspace @kickstartds/generate-from-schema build",
     "compile-schemas": "yarn workspace @kickstartds/generate-from-schema generate && yarn generate-graphql-fragments",
+    "format": "prettier --write .",
     "watch-schemas": "yarn workspace @kickstartds/generate-from-schema generate --watch",
     "generate-graphql-fragments": "yarn workspace @kickstartds/generate-from-schema graphql-codegen",
     "test-jsonschema2netlifycms": "(concurrently --kill-others-on-fail \"yarn build-jsonschema2netlifycms\" \"yarn build-generate-from-schema\") && yarn compile-schemas"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,md,json,scss}": "prettier --write"
   },
   "workspaces": [
     "graphql-cli-generate-fragments",
@@ -45,7 +49,8 @@
     "@auto-it/npm": "^10.37.1",
     "@auto-it/released": "^10.37.1",
     "auto": "^10.37.1",
-    "lerna": "^5.0.0"
+    "lerna": "^5.0.0",
+    "prettier": "^2.6.2"
   },
   "resolutions": {
     "graphql": "15.8.0"

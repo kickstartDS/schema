@@ -1,8 +1,9 @@
-import { getSchemasForIds, toPascalCase } from '@kickstartds/jsonschema-utils/dist/helpers';
-import { getSchemaReducer, processFn } from './schemaReducer';
 import { ConvertParams, NetlifyCmsField, NetlifyCmsConfig } from './@types';
-import { createConfig } from './createConfig';
 import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import { getSchemasForIds, toPascalCase } from '@kickstartds/jsonschema-utils/dist/helpers';
+
+import { getSchemaReducer, processFn } from './schemaReducer';
+import { createConfig } from './createConfig';
 import { safeEnumKey } from './safeEnumKey';
 
 // TODO check the generated NetlifyCmsField properties for all elements:

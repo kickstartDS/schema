@@ -204,6 +204,27 @@ export default createSchema({
     `${configDisclaimer}\n\nexport default ${util.inspect(configs.documents[0], {showHidden: false, compact: false, depth: null})}`
   );
 
+  fs.writeFile(
+    `dist/sanity/documents/header.js`,
+    `${configDisclaimer}\n\nexport default ${util.inspect(configs.documents[1], {showHidden: false, compact: false, depth: null})}`
+  );
+
+  fs.writeFile(
+    `dist/sanity/documents/footer.js`,
+    `${configDisclaimer}\n\nexport default ${util.inspect(configs.documents[2], {showHidden: false, compact: false, depth: null})}`
+  );
+
+  fs.writeFile(
+    `dist/sanity/documents/settings.js`,
+    `${configDisclaimer}\n\nexport default ${util.inspect(configs.documents[3], {showHidden: false, compact: false, depth: null})}`
+  );
+
+  fs.writeFile(
+    `dist/sanity/documents/production.js`,
+    `${configDisclaimer}\n\nexport default ${util.inspect(configs.documents[4], {showHidden: false, compact: false, depth: null})}`
+  );
+
+
   Object.keys(configStrings).forEach((configStringKey) => {
     fs.writeFile(
       `dist/sanity/objects/${configStringKey}.js`,

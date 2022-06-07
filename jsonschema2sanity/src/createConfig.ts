@@ -5,13 +5,16 @@ export const fromBlock = (arr: Body2TextProps) =>
     ? arr.map((t) => t.children.map((c: { text: string }) => c.text).join("")).join("")
     : "";
 
+// TODO move to JSON Schemas
 const defaultConfig: DefaultConfigInterface = {
   // TODO make configurable, like for Netlify CMS pages collection
   name: "page",
   types: [],
 };
 
-const documentConfig: Document<Record<string, any>> = {
+// TODO re-add icons
+// TODO move to JSON Schemas
+const pageDocumentConfig: Document<Record<string, any>> = {
   name: "page",
   type: "document",
   title: "Pages",
@@ -76,6 +79,207 @@ const documentConfig: Document<Record<string, any>> = {
   // },
 };
 
+// TODO re-add icons
+// TODO re-add __experimental_actions
+// TODO re-add hidden
+// TODO move to JSON Schemas
+const headerDocumentConfig: Document<Record<string, any>> = {
+  name: 'header',
+  type: 'document',
+  title: 'Header',
+  // icon: FiSettings,
+  // __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
+  fields: [
+    {
+      name: 'nav',
+      type: 'object',
+      title: 'Main Navigation',
+      fields: [
+        {
+          name: 'enabled',
+          type: 'boolean',
+          title: 'Show Main Navigation',
+        },
+        {
+          name: 'items',
+          type: 'array',
+          title: 'Navigation Items',
+          of: [
+            { type: 'nav-link' },
+          ],
+          // hidden: ({ parent }) => !parent?.enabled,
+        },
+      ],
+    },
+  ],
+}
+
+// TODO re-add icons
+// TODO re-add __experimental_actions
+// TODO move to JSON Schemas
+const footerDocumentConfig: Document<Record<string, any>> = {
+  name: 'footer',
+  type: 'document',
+  title: 'Footer',
+  // icon: FiSettings,
+  // __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
+  fields: [
+    {
+      name: 'nav',
+      title: 'Footer Navigation',
+      type: 'array',
+      of: [{ type: 'nav-link' }],
+    },
+  ],
+}
+
+// TODO re-add icons
+// TODO re-add __experimental_actions
+// TODO re-add headHtml
+// TODO re-add bodyHtml
+// TODO move to JSON Schemas
+const settingsDocumentConfig: Document<Record<string, any>> = {
+  name: 'settings',
+  type: 'document',
+  title: 'Settings',
+  // icon: FiSettings,
+  // __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
+  groups: [
+    {
+      name: 'meta',
+      title: 'Meta',
+    },
+    {
+      name: 'forms',
+      title: 'Forms',
+    },
+    {
+      name: 'snippets',
+      title: 'Snippets',
+    },
+  ],
+  fields: [
+    {
+      name: 'description',
+      type: 'string',
+      title: 'Fallback Description',
+      group: 'meta',
+    },
+    {
+      name: 'keywords',
+      type: 'string',
+      title: 'Fallback Keywords',
+      group: 'meta',
+    },
+    {
+      name: 'author',
+      type: 'string',
+      title: 'Fallback Author',
+      group: 'meta',
+    },
+    {
+      name: 'socialImage',
+      type: 'image',
+      title: 'Fallback Social Image',
+      group: 'meta',
+    },
+    // {
+    //   name: "twitter_creator",
+    //   type: "string",
+    //   title: "Fallback Twitter Author Account",
+    //   group: "meta",
+    // },
+    // {
+    //   name: "twitter_site",
+    //   type: "string",
+    //   title: "Twitter Site Account",
+    //   group: "meta",
+    // },
+    {
+      name: 'title',
+      type: 'string',
+      title: 'Title',
+    },
+    {
+      name: 'titlePrefix',
+      type: 'boolean',
+      title: 'Show global title before page title',
+    },
+    {
+      name: 'titleSeparator',
+      type: 'string',
+      title: 'Title Separator',
+    },
+    // {
+    //   name: 'headHtml',
+    //   type: 'code',
+    //   group: 'snippets',
+    //   title: 'HTML Snippets in head',
+    //   options: {
+    //     language: 'html',
+    //   },
+    // },
+    // {
+    //   name: 'bodyHtml',
+    //   type: 'code',
+    //   group: 'snippets',
+    //   title: 'HTML Snippets in body',
+    //   options: {
+    //     language: 'html',
+    //   },
+    // },
+  ],
+}
+
+// TODO re-add liveEdit
+// TODO move to JSON Schemas
+const productionDocumentConfig: Document<Record<string, any>> = {
+  type: "document",
+  name: "production",
+  title: "Production Documents",
+  fields: [
+    {
+      name: "documentId",
+      type: "string",
+      title: "Document ID",
+    },
+    {
+      name: "documentType",
+      type: "string",
+      title: "Document Type",
+    },
+    {
+      name: "documentRev",
+      type: "string",
+      title: "Document Revision",
+    },
+    {
+      name: "slug",
+      type: "string",
+      title: "Page Slug",
+    },
+    {
+      name: "data",
+      type: "text",
+      title: "Document Data",
+    },
+  ],
+  // liveEdit: true,
+  preview: {
+    select: {
+      id: "documentId",
+      slug: "slug",
+      type: "documentType",
+    },
+    prepare({ id, slug, type }) {
+      return {
+        title: slug || id,
+        subtitle: type,
+      };
+    },
+  },
+}
+
 // TODO correct parameter documentation
 export function createConfig(
     sanityComponents: ArrayOf[],
@@ -109,12 +313,12 @@ export function createConfig(
   const contentArray = sectionComponent.fields.find((field) => field.name === 'content') as ArrayField;
   contentArray.of = contentComponentTypes;
 
-  const documentSections = documentConfig.fields.find((field) => field.name === 'sections') as ArrayField;
+  const documentSections = pageDocumentConfig.fields.find((field) => field.name === 'sections') as ArrayField;
   documentSections.of.push(sectionComponent);
 
   return {
     config: defaultConfig,
-    documents: [documentConfig],
+    documents: [pageDocumentConfig, headerDocumentConfig, footerDocumentConfig, settingsDocumentConfig, productionDocumentConfig],
     objects: contentComponents,
   };
 };

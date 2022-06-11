@@ -37,7 +37,7 @@ const schema = convert({ jsonSchema })
 console.log(printSchema(schema))
 ```
 
-Output
+Output:
 
 ```graphql
 type Person {

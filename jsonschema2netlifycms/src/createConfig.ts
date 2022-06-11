@@ -21,7 +21,7 @@ export function createConfig(
     baseConfig: NetlifyCmsConfig = defaultConfig,
     collectionName: string = 'pages',
   ): NetlifyCmsConfig {
-    
+
   const defaultMetaFields: NetlifyCmsField[] = [
     { label: 'Title', name: 'title', widget: 'string' },
     { label: 'Page URL', name: 'url', widget: 'string' },
@@ -48,7 +48,7 @@ export function createConfig(
     identifier_field: 'title',
     extension: 'md',
     slug: '{{fields.slug}}',
-    fields: contentFields,
+    fields: contentFields[0].fields,
   }
 
   if (!baseConfig.collections) {
@@ -56,7 +56,7 @@ export function createConfig(
   }
 
   const sortable = (field: NetlifyCmsField) => field.widget === 'object' || field.widget === 'list';
-  
+
   const sortFields = (contentFieldA: NetlifyCmsField, contentFieldB: NetlifyCmsField) => {
     if (sortable(contentFieldA) && sortable(contentFieldB)) {
       if (contentFieldA.widget === 'object' && contentFieldB.widget ==='object') {
@@ -94,7 +94,7 @@ export function createConfig(
   };
 
   const sortedFields = sortFieldsDeep(contentFields);
-  
+
   let pagesCollection = baseConfig.collections.find(
     (collection) => collection.name === collectionName
   );
@@ -103,6 +103,6 @@ export function createConfig(
   } else {
     baseConfig.collections.push(pages);
   }
-  
+
   return baseConfig;
 };

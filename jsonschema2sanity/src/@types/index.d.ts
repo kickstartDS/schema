@@ -17,7 +17,7 @@ declare namespace jsonschema2sanity {
     documents: Document<Record<string, any>>[],
     objects: ArrayOf[],
   }
-  
+
   export interface DefaultConfigInterface {
     name: string,
     types: (Document<Record<string, any>>|Field)[],
@@ -179,7 +179,7 @@ declare namespace jsonschema2sanity {
 
   export type CustomField<Name extends string = string> = CommonFieldProps & {
     name: Name;
-    type: 'money' | 'color' | 'icon' | 'iconPicker' | 'blockContent' | 'metadata';
+    type: 'money' | 'color' | 'icon' | 'iconPicker' | 'blockContent' | 'metadata' | 'code';
     options?: Record<string, any>;
   };
 
@@ -236,6 +236,8 @@ declare namespace jsonschema2sanity {
   export type Document<T extends Record<string, any>> = {
     type: 'document';
     name: string;
+    icon?: ElementType;
+    __experimental_actions?: string[];
     fields: FieldCollection<StringKeyof<T>>;
     title?: string;
     validation?: Validation;

@@ -1536,14 +1536,14 @@
   resolved "https://registry.npmjs.org/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
-"@kickstartds/base@2.0.0-canary.922.4383.0":
-  version "2.0.0-canary.922.4383.0"
-  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-2.0.0-canary.922.4383.0.tgz#2638834483218a4ac3421121cac17b685d6ac027"
-  integrity sha512-rG/kOcZ1Eh8/9bpeDwDzsVa619ObHdMmOd9C33lFOfFEmgyw8Q+FEbNmP/Y3shtlUgz70pxjd3Z6BSrfEoaHoQ==
+"@kickstartds/base@2.0.0-canary.922.4419.0":
+  version "2.0.0-canary.922.4419.0"
+  resolved "https://registry.npmjs.org/@kickstartds/base/-/base-2.0.0-canary.922.4419.0.tgz#7a494f48adb9c675f986885005cbda794ae67587"
+  integrity sha512-bL2B/7r+lHZ8CkOHxLG7VmMHUXBUDqb2Nz9HZQri7K/n+q7UdtovZ0wm80z66FW49VZ/KXaVj9voIcYjMRn1Xg==
   dependencies:
     "@babel/runtime" "^7.17.8"
     "@glidejs/glide" "^3.5.2"
-    "@kickstartds/core" "2.0.0-canary.922.4383.0"
+    "@kickstartds/core" "2.0.0-canary.922.4419.0"
     classnames "^2.2.6"
     date-fns "^2.28.0"
     focus-visible "^5.0.2"
@@ -1552,33 +1552,33 @@
     react-markdown "^8.0.2"
     vhtml "^2.2.0"
 
-"@kickstartds/blog@2.0.0-canary.922.4383.0":
-  version "2.0.0-canary.922.4383.0"
-  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-2.0.0-canary.922.4383.0.tgz#12244d7b017a8bb8ee36ec10c382267c363b125f"
-  integrity sha512-fzdyZZPGP3v8cwJO3nLIeqF2nIL3CCKOscNzAuMHJkG0pljxqv1xCJ8N70H50kPEja9DZONmrhZv4QNKKJMSng==
+"@kickstartds/blog@2.0.0-canary.922.4419.0":
+  version "2.0.0-canary.922.4419.0"
+  resolved "https://registry.npmjs.org/@kickstartds/blog/-/blog-2.0.0-canary.922.4419.0.tgz#bb3386f698fbf05d5968c2bd753ba0d555985130"
+  integrity sha512-Jg0xKxlzcHdB+cWRYsdKLpd8hG8JX6QBGyQMvRu3O630F7r5T7vn4EV/AZKv3QIS8bBOOzYre4bYjvYzlXPgpA==
   dependencies:
     "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "2.0.0-canary.922.4383.0"
-    "@kickstartds/content" "2.0.0-canary.922.4383.0"
-    "@kickstartds/core" "2.0.0-canary.922.4383.0"
+    "@kickstartds/base" "2.0.0-canary.922.4419.0"
+    "@kickstartds/content" "2.0.0-canary.922.4419.0"
+    "@kickstartds/core" "2.0.0-canary.922.4419.0"
     classnames "^2.2.6"
     date-fns "^2.28.0"
 
-"@kickstartds/content@2.0.0-canary.922.4383.0":
-  version "2.0.0-canary.922.4383.0"
-  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-2.0.0-canary.922.4383.0.tgz#25781e04784ea723e615630c835a56f5187c3988"
-  integrity sha512-Eaj2NxT7udvLcUro3HwqBY73MsNoKKN3UVTMyRL1S/hB8SO9IT/bFIs5l1OtjOUpFPNJ0EpihbuD8mK9/P19fA==
+"@kickstartds/content@2.0.0-canary.922.4419.0":
+  version "2.0.0-canary.922.4419.0"
+  resolved "https://registry.npmjs.org/@kickstartds/content/-/content-2.0.0-canary.922.4419.0.tgz#1705a25ff6d2e4b935289c4ac90da23ebf270403"
+  integrity sha512-tWH+2DziwjG4cUYJd+dCO678WhscVAuINsgTZa8rRbgmgHMZaxSy1r9gmtEECecYivTkGyR/BnGDWVtqeeTKIA==
   dependencies:
     "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "2.0.0-canary.922.4383.0"
-    "@kickstartds/core" "2.0.0-canary.922.4383.0"
+    "@kickstartds/base" "2.0.0-canary.922.4419.0"
+    "@kickstartds/core" "2.0.0-canary.922.4419.0"
     classnames "^2.2.6"
     countup.js "^2.1.0"
 
-"@kickstartds/core@2.0.0-canary.922.4383.0":
-  version "2.0.0-canary.922.4383.0"
-  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-2.0.0-canary.922.4383.0.tgz#af34c3edcf79ca34dc9a3bd33af225561e08be3d"
-  integrity sha512-7itApUKubeJ3O60cH/2l5+WWyekAXpkuPzQDgWPcEvCgky6ObKh2OEoKbH8Lee/iRu8IQZEf0p9LjC8jVmgmaA==
+"@kickstartds/core@2.0.0-canary.922.4419.0":
+  version "2.0.0-canary.922.4419.0"
+  resolved "https://registry.npmjs.org/@kickstartds/core/-/core-2.0.0-canary.922.4419.0.tgz#4092d4cbb31ea1a21c464f1f069910abed583709"
+  integrity sha512-duBM028yD1CPeI0PTe970OjdGyYavRHtjyvLwjq6OcMrztbyaWD02k8970WBY0wknMIM8QvNXTeWoDdEwwiISQ==
   dependencies:
     "@babel/core" "^7.17.8"
     "@babel/preset-react" "^7.16.7"
@@ -1607,30 +1607,30 @@
     svgstore "^3.0.1"
     tinycolor2 "^1.4.2"
 
-"@kickstartds/design-system@2.0.17--canary.74.1965.0":
-  version "2.0.17--canary.74.1965.0"
-  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-2.0.17--canary.74.1965.0.tgz#569eedc3b60b5f7d91d416c91c63197bb934f438"
-  integrity sha512-tf4LaxeZc0QKwH9uDGXTXDDvnKK7BygghcQHnRUqV9JASTyrLJyHm1J7bCQr7FnrhTeJ+BwJWbmmS0PqjZ9AEg==
+"@kickstartds/design-system@2.0.18--canary.74.1999.0":
+  version "2.0.18--canary.74.1999.0"
+  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-2.0.18--canary.74.1999.0.tgz#e872492cb0c66c96f4d6ddb90c7a61d5f1ab3dd2"
+  integrity sha512-Uo8UAVFjoJ+J9gZXuBsjN/jHAWgmeRlfI3csQwhdMHELfHZvQsfhHcNj7WNwcXXVtoimBsGzowWeBuLkFHXLQQ==
   dependencies:
-    "@kickstartds/base" "2.0.0-canary.922.4383.0"
-    "@kickstartds/blog" "2.0.0-canary.922.4383.0"
-    "@kickstartds/content" "2.0.0-canary.922.4383.0"
-    "@kickstartds/core" "2.0.0-canary.922.4383.0"
-    "@kickstartds/form" "2.0.0-canary.922.4383.0"
+    "@kickstartds/base" "2.0.0-canary.922.4419.0"
+    "@kickstartds/blog" "2.0.0-canary.922.4419.0"
+    "@kickstartds/content" "2.0.0-canary.922.4419.0"
+    "@kickstartds/core" "2.0.0-canary.922.4419.0"
+    "@kickstartds/form" "2.0.0-canary.922.4419.0"
     change-case "^4.1.2"
     classnames "^2.3.1"
     json-schema-to-typescript "^10.1.5"
     postinstall-postinstall "^2.1.0"
     typescript "^4.5.4"
 
-"@kickstartds/form@2.0.0-canary.922.4383.0":
-  version "2.0.0-canary.922.4383.0"
-  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-2.0.0-canary.922.4383.0.tgz#4ea31b896dfcc931949dea019ab6cce3dbf1bef6"
-  integrity sha512-FKQWC4k+8UpSuFSodgQApQbCnRQ1vb/K3S4dqBclqm/PXlc7GmKSKdCXcgpK0pWVTqDVuN2aKo4APqH8mIsS7w==
+"@kickstartds/form@2.0.0-canary.922.4419.0":
+  version "2.0.0-canary.922.4419.0"
+  resolved "https://registry.npmjs.org/@kickstartds/form/-/form-2.0.0-canary.922.4419.0.tgz#66e050d7dee33e918d970db4f43350702b3f0adc"
+  integrity sha512-14VGxLRPOxhd+Cv7aD9SQQXi+YuJJT5pcYY6I99iS/s4UF8VTY6NpypBmLVNFVsLvFAzV/1G0lSzBK3WJqHrNw==
   dependencies:
     "@babel/runtime" "^7.17.8"
-    "@kickstartds/base" "2.0.0-canary.922.4383.0"
-    "@kickstartds/core" "2.0.0-canary.922.4383.0"
+    "@kickstartds/base" "2.0.0-canary.922.4419.0"
+    "@kickstartds/core" "2.0.0-canary.922.4419.0"
     classnames "^2.2.6"
 
 "@lerna/add@5.0.0":
@@ -7797,7 +7797,7 @@ graphql-ws@^5.4.1:
   resolved "https://registry.npmjs.org/graphql-ws/-/graphql-ws-5.8.2.tgz#800184b1addb20b3010dc06cb70877703a5fff20"
   integrity sha512-hYo8kTGzxePFJtMGC7Y4cbypwifMphIJJ7n4TDcVUAfviRwQBnmZAbfZlC+XFwWDUaR7raEDQPxWctpccmE0JQ==
 
-graphql@^15.1.0, graphql@^15.8.0:
+graphql@15.8.0, graphql@^15.1.0, graphql@^15.8.0:
   version "15.8.0"
   resolved "https://registry.npmjs.org/graphql/-/graphql-15.8.0.tgz#33410e96b012fa3bdb1091cc99a94769db212b38"
   integrity sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==

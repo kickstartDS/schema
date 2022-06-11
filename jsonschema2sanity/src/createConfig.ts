@@ -88,7 +88,7 @@ const headerDocumentConfig: Document<Record<string, any>> = {
   type: 'document',
   title: 'Header',
   // icon: FiSettings,
-  // __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
+  __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
   fields: [
     {
       name: 'nav',
@@ -122,7 +122,7 @@ const footerDocumentConfig: Document<Record<string, any>> = {
   type: 'document',
   title: 'Footer',
   // icon: FiSettings,
-  // __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
+  __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
   fields: [
     {
       name: 'nav',
@@ -135,15 +135,13 @@ const footerDocumentConfig: Document<Record<string, any>> = {
 
 // TODO re-add icons
 // TODO re-add __experimental_actions
-// TODO re-add headHtml
-// TODO re-add bodyHtml
 // TODO move to JSON Schemas
 const settingsDocumentConfig: Document<Record<string, any>> = {
   name: 'settings',
   type: 'document',
   title: 'Settings',
   // icon: FiSettings,
-  // __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
+  __experimental_actions: [/*'create',*/ 'update', /*'delete',*/ 'publish'],
   groups: [
     {
       name: 'meta',
@@ -210,24 +208,24 @@ const settingsDocumentConfig: Document<Record<string, any>> = {
       type: 'string',
       title: 'Title Separator',
     },
-    // {
-    //   name: 'headHtml',
-    //   type: 'code',
-    //   group: 'snippets',
-    //   title: 'HTML Snippets in head',
-    //   options: {
-    //     language: 'html',
-    //   },
-    // },
-    // {
-    //   name: 'bodyHtml',
-    //   type: 'code',
-    //   group: 'snippets',
-    //   title: 'HTML Snippets in body',
-    //   options: {
-    //     language: 'html',
-    //   },
-    // },
+    {
+      name: 'headHtml',
+      type: 'code',
+      group: 'snippets',
+      title: 'HTML Snippets in head',
+      options: {
+        language: 'html',
+      },
+    },
+    {
+      name: 'bodyHtml',
+      type: 'code',
+      group: 'snippets',
+      title: 'HTML Snippets in body',
+      options: {
+        language: 'html',
+      },
+    },
   ],
 }
 
@@ -271,12 +269,12 @@ const productionDocumentConfig: Document<Record<string, any>> = {
       slug: "slug",
       type: "documentType",
     },
-    prepare({ id, slug, type }) {
-      return {
-        title: slug || id,
-        subtitle: type,
-      };
-    },
+    // prepare({ id, slug, type }) {
+    //   return {
+    //     title: slug || id,
+    //     subtitle: type,
+    //   };
+    // },
   },
 }
 

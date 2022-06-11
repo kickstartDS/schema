@@ -57,6 +57,7 @@ jobs:
             - graphql-cli-add-gatsby-directives
             - jsonschema2graphql
             - jsonschema2netlifycms
+            - jsonschema2sanity
             - jsonschema2tinacms
             - jsonschema-utils
 

@@ -2,9 +2,9 @@ version: 2.1
 
 defaults: &defaults
   docker:
-    - image: cimg/node:14.15
+    - image: cimg/node:16.14
   working_directory: /mnt/ramdisk
-  resource_class: medium+
+  resource_class: large
 
 aliases:
   - &save-cache-yarn
@@ -57,6 +57,7 @@ jobs:
             - graphql-cli-add-gatsby-directives
             - jsonschema2graphql
             - jsonschema2netlifycms
+            - jsonschema2sanity
             - jsonschema2tinacms
             - jsonschema-utils
 
@@ -76,6 +77,6 @@ workflows:
       - build
 
       - release:
-         context: kickstartDS
-         requires:
-           - build
+          context: kickstartDS
+          requires:
+            - build

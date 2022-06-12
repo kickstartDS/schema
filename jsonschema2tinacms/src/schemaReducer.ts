@@ -1,7 +1,7 @@
 import { JSONSchema7 } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
-import { TinaFieldInner, ObjectType, Template,  } from 'tinacms/dist/types';
+import { TinaFieldInner, ObjectType, Template } from '@tinacms/schema-tools';
 import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
 import { getLayeredRefId, getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';

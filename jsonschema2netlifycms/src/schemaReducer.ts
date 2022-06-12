@@ -34,6 +34,7 @@ export interface schemaReducerOptions<T> {
   processEnum: processFn<T>,
   processConst: processFn<T>,
   processBasic: processFn<T>,
+  schemaPost?: (schema: JSONSchema7) => JSONSchema7,
 };
 
 export function getSchemaReducer<T>({
@@ -49,13 +50,16 @@ export function getSchemaReducer<T>({
   processEnum,
   processConst,
   processBasic,
+  schemaPost,
 }: schemaReducerOptions<T>) {
   function schemaReducer(knownTypes: T[], schema: JSONSchema7): T[] {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 
     const typeName = getSchemaName($id);
-    const clonedSchema = _.cloneDeep(schema);
+    const clonedSchema = schemaPost
+      ? schemaPost(_.cloneDeep(schema))
+      : _.cloneDeep(schema);
   
     knownTypes.push(buildType(typeName, clonedSchema, clonedSchema));
     return knownTypes;
@@ -76,25 +80,25 @@ export function getSchemaReducer<T>({
       console.log('schema with oneOf', schema);
       throw err(`The type oneOf on property ${name} is not supported.`);
     }
-  
+
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
       console.log('schema with anyOf', schema);
       throw err(`The type anyOf on property ${name} is not supported.`);
     }
-  
+
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
       console.log('schema with allOf', schema);
       throw err(`The type allOf on property ${name} is not supported.`);
     }
-  
+
     // not?
     else if (!_.isUndefined(schema.not)) {
       console.log('schema with not', schema);
       throw err(`The type not on property ${name} is not supported.`);
     }
-  
+
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
@@ -114,7 +118,7 @@ export function getSchemaReducer<T>({
   
       return processObject({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fields() });
     }
-  
+
     // array?
     else if (schema.type === 'array') {
       if (schema.items && (schema.items as JSONSchema7).anyOf) {
@@ -174,7 +178,7 @@ export function getSchemaReducer<T>({
         return processArray({ name, description, subSchema: schema, rootSchema: outerSchema, arrayField: fieldConfig });
       }
     }
-  
+
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
@@ -188,7 +192,7 @@ export function getSchemaReducer<T>({
 
       return processEnum({ name, description, subSchema: schema, rootSchema: outerSchema, options });
     }
-  
+
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
       const reffedSchema = ajv.getSchema(schema.$ref)?.schema as JSONSchema7;
@@ -211,13 +215,13 @@ export function getSchemaReducer<T>({
 
       return processConst({ name, description, subSchema: schema, rootSchema: outerSchema });
     }
-  
+
     // basic?
     else if (basicMapping(schema)) {
       const description = buildDescription(schema);
       return processBasic({ name, description, subSchema: schema, rootSchema: outerSchema });
     }
-  
+
     // ¯\_(ツ)_/¯
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   };

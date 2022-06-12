@@ -79,11 +79,11 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
     const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
     const contentComponent = outerRun && !sectionComponent;
     const name = uppercamelcase(cleanFieldName(propName));
-  
+
     // oneOf?
     if (!_.isUndefined(schema.oneOf)) {
       const description = buildDescription(schema);
-  
+
       const cases = schema.oneOf as JSONSchema7;
       const caseKeys = Object.keys(cases);
       const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
@@ -93,14 +93,14 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
         
         return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
       })
-      
+
       return new GraphQLUnionType({ name, description, types });
     }
-  
+
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
       const description = buildDescription(schema);
-  
+
       const cases = schema.anyOf as JSONSchema7;
       const caseKeys = Object.keys(cases);
       const types: GraphQLObjectType[] = caseKeys.map((caseIndex: string) => {
@@ -110,22 +110,22 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
 
         return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
       });
-  
+
       return new GraphQLUnionType({ name, description, types });
     }
-  
+
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
       console.log('schema with allOf', schema);
       throw err(`The type allOf on property ${name} is not supported.`);
     }
-  
+
     // not?
     else if (!_.isUndefined(schema.not)) {
       console.log('schema with not', schema);
       throw err(`The type not on property ${name} is not supported.`);
     }
-  
+
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
@@ -145,16 +145,16 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
             })
           : // GraphQL doesn't allow types with no fields, so put a placeholder
             { _empty: { type: GraphQLString } };
-  
+
       const interfaces = contentComponent
         ? outerSchema.$id?.includes('.interface')
           ? [textMediaComponentInterface]
           : [contentComponentInterface]
-        : [];
+        : []
 
       return new GraphQLObjectType({ name, description, fields, interfaces });
     }
-  
+
     // array?
     else if (schema.type === 'array') {
       const arraySchema = _.cloneDeep(schema.items) as JSONSchema7;
@@ -176,7 +176,7 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
         ? new GraphQLList(new GraphQLNonNull(contentComponentInterface))
         : new GraphQLList(new GraphQLNonNull(elementType));
     }
-  
+
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
@@ -186,7 +186,7 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
       const enumType = new GraphQLEnumType({ name, description, values });
       return enumType;
     }
-  
+
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
       const ref = getTypeName(schema.$ref, outerSchema.$id)
@@ -207,15 +207,15 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
     }
 
     // image source?
-    else if (gatsbyImages && schema.type as string === 'string' && schema.format === 'image') {
+    else if (gatsbyImages && (schema.type as string) === 'string' && schema.format === 'image') {
       return gatsbyFileInterface;
     }
-  
+
     // basic?
     else if (BASIC_TYPE_MAPPING[schema.type as string]) {
       return BASIC_TYPE_MAPPING[schema.type as string];
     }
-  
+
     // ¯\_(ツ)_/¯
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   }

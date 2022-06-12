@@ -20,7 +20,7 @@ export const getSchemaRegistry = (): Ajv => {
   }) as Ajv;
 
   // TODO update JSON Schema, clean up ignored formats
-  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email', 'html'];
+  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email', 'html', 'uuid', 'date-time'];
   ignoredFormats.forEach((ignoredFormat) =>
     ajv.addFormat(ignoredFormat, { validate: () => true })
   );
@@ -56,7 +56,7 @@ export const addExplicitAnyOfs = (jsonSchema: JSONSchema7, ajv: Ajv): JSONSchema
           };
           schemaAnyOfs.push(schemaAnyOf);
           addJsonSchema(schemaAnyOf, ajv);
-          
+
           return { $ref: schemaName };
         });
       }
@@ -100,7 +100,7 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): void => {
         if (rootSchema.allOf && rootSchema.allOf.some((allOf: JSONSchema7) => allOf.$ref)) {
           delete (ajv.getSchema(rootSchema.allOf.find((allOf: JSONSchema7) => allOf.$ref).$ref).schema as JSONSchema7).properties[propertyName];
         }
-        
+
         delete subSchema.anyOf;
       }
     },
@@ -225,11 +225,11 @@ export const inlineDefinitions = (jsonSchemas: JSONSchema7[]): void => {
 export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =>
   fs.readFile(schemaPath, 'utf-8').then((schema: string) => JSON.parse(schema) as JSONSchema7);
 
-export const getSchemasForGlob = async (schemaGlob: string): Promise<JSONSchema7[]> => 
+export const getSchemasForGlob = async (schemaGlob: string): Promise<JSONSchema7[]> =>
   glob(schemaGlob).then((schemaPaths: string[]) =>
     Promise.all(schemaPaths.map(async (schemaPath: string) => loadSchemaPath(schemaPath))));
 
-export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv): Promise<string[]> => 
+export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv): Promise<string[]> =>
   processSchemas(await getSchemasForGlob(schemaGlob), ajv);
 
 export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Promise<string[]> => {
@@ -265,7 +265,7 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
   });
 
   // 4. process new schemas, resulting from adding the distinct
-  // `anyOf`s in the step before 
+  // `anyOf`s in the step before
   addTypeInterfaces(schemaAnyOfs);
   schemaAnyOfs.forEach((schemaAnyOf) => {
     reduceSchemaAllOfs(schemaAnyOf, ajv);
@@ -297,7 +297,7 @@ export const getSchemaName = (schemaId: string | undefined): string => {
   return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
 };
 
-export const getSchemasForIds = (schemaIds: string[], ajv: Ajv): JSONSchema7[] => 
+export const getSchemasForIds = (schemaIds: string[], ajv: Ajv): JSONSchema7[] =>
   schemaIds.map((schemaId) =>
     ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7
   );
@@ -315,7 +315,7 @@ export const getCustomSchemaIds = (schemaIds: string[]): string[] =>
 
 export const getUniqueSchemaIds = (schemaIds: string[]): string[] => {
   const customSchemaIds = getCustomSchemaIds(schemaIds);
-  const unlayeredSchemaIds = schemaIds.filter((schemaId) => 
+  const unlayeredSchemaIds = schemaIds.filter((schemaId) =>
     schemaId.startsWith('http://schema.kickstartds.com/') &&
     !customSchemaIds.some((customSchemaId) => customSchemaId.endsWith(schemaId.split('/').pop()))
   );
@@ -335,7 +335,7 @@ export const hashFieldName = (fieldName: string, optionalName?: string): string 
 export const dedupe = (schema: JSONSchema7, optionalName?: string): {
   [key: string]: JSONSchema7Definition;
 } | undefined =>
-  _.mapKeys(schema.properties, (_prop: JSONSchema7Definition, fieldName: string) => 
+  _.mapKeys(schema.properties, (_prop: JSONSchema7Definition, fieldName: string) =>
     (fieldName.includes('__') || fieldName === 'type') ? fieldName : hashFieldName(fieldName, optionalName)
   );
 

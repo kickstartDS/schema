@@ -1,3 +1,20 @@
+# (Sun Jun 12 2022)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@2.2.0`, `@kickstartds/graphql-cli-add-gatsby-directives@1.2.0`, `@kickstartds/graphql-cli-generate-fragments@1.7.0`, `@kickstartds/jsonschema-utils@2.2.0`, `@kickstartds/jsonschema2builderio@2.2.0`, `@kickstartds/jsonschema2graphql@2.2.0`, `@kickstartds/jsonschema2netlifycms@2.2.0`, `@kickstartds/jsonschema2sanity@1.1.0`, `@kickstartds/jsonschema2tinacms@2.2.0`
+  - feature: add conversion for Builder.io [#36](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/36) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+  - refactor: extract common functionality [#37](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/37) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+- `@kickstartds/generate-from-schema@2.2.0`, `@kickstartds/graphql-cli-add-gatsby-directives@1.2.0`, `@kickstartds/graphql-cli-generate-fragments@1.7.0`, `@kickstartds/jsonschema-utils@2.2.0`, `@kickstartds/jsonschema2graphql@2.2.0`, `@kickstartds/jsonschema2netlifycms@2.2.0`, `@kickstartds/jsonschema2sanity@1.1.0`, `@kickstartds/jsonschema2tinacms@2.2.0`
+  - feature: add draft for sanity schema generation [#29](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/29) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # (Wed Apr 13 2022)
 
 #### ⚠️ Pushed to `master`

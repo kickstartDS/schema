@@ -1,3 +1,50 @@
+# v2.2.0 (Sun Jun 12 2022)
+
+#### 🚀 Enhancement
+
+- feature: add conversion for Builder.io [#36](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/36) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+- refactor: extract common functionality [#37](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/37) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+- feature: add draft for sanity schema generation [#29](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/29) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+
+#### 🐛 Bug Fix
+
+- fix: re-add page schema to netlify cms ([@julrich](https://github.com/julrich))
+- fix(sanity): replace functions in generated files ([@julrich](https://github.com/julrich))
+- feature(sanity): get first working files in fs ([@julrich](https://github.com/julrich))
+- fix: get sanity generation up to speed again ([@julrich](https://github.com/julrich))
+- Merge branch 'feature/shared-api-for-transformers' into feature/add-sanity-schema-support ([@julrich](https://github.com/julrich))
+- Merge branch 'feature/shared-api-for-transformers' of github.com:kickstartDS/kickstartDS-schema-toolkit into feature/shared-api-for-transformers ([@julrich](https://github.com/julrich))
+- chore: update ksds dependencies ([@julrich](https://github.com/julrich))
+- feature: split out shared reducer ([@julrich](https://github.com/julrich))
+- refactor: extract deduping from GraphQL schemaReducer ([@julrich](https://github.com/julrich))
+- refactor: further alignment of code, add structure ([@julrich](https://github.com/julrich))
+- refactor: further align converters ([@julrich](https://github.com/julrich))
+- feature: add createConfig to graphql converter ([@julrich](https://github.com/julrich))
+- fix: align reducers some more, extract helpers ([@julrich](https://github.com/julrich))
+- feature: re-activate graphql conversion after refactoring ([@julrich](https://github.com/julrich))
+- chore: clean up reducer ([@julrich](https://github.com/julrich))
+- fix: remove unused variable in reducer ([@julrich](https://github.com/julrich))
+- feature: finish up pre-processing ([@julrich](https://github.com/julrich))
+- refactor: clean up handling of type interfaces ([@julrich](https://github.com/julrich))
+- refactor: start reworking converter input mechanism ([@julrich](https://github.com/julrich))
+- refactor: start reworking definitions, ref layering ([@julrich](https://github.com/julrich))
+- refactor: remove need for definitions in reducer ([@julrich](https://github.com/julrich))
+- chore: align some more function signatures ([@julrich](https://github.com/julrich))
+- chore: remove duplicated code ([@julrich](https://github.com/julrich))
+- chore: refactor schema loading ([@julrich](https://github.com/julrich))
+- fix: update dependencies, fix netlify cms reducer ([@julrich](https://github.com/julrich))
+- feature: extract common functionality ([@julrich](https://github.com/julrich))
+- Merge branch 'master' into feature/add-sanity-schema-support ([@julrich](https://github.com/julrich))
+- fix: fix sanity schema generation ([@lmestel](https://github.com/lmestel))
+- feature: add draft for sanity schema generation ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v2.1.1 (Wed Apr 13 2022)
 
 #### ⚠️ Pushed to `master`

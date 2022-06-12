@@ -1,3 +1,54 @@
+# v2.2.0 (Sun Jun 12 2022)
+
+#### 🚀 Enhancement
+
+- feature: add conversion for Builder.io [#36](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/36) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+- refactor: extract common functionality [#37](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/37) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+- feature: add draft for sanity schema generation [#29](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/29) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+
+#### 🐛 Bug Fix
+
+- fix: re-add page schema to netlify cms ([@julrich](https://github.com/julrich))
+- feature(sanity): create more boilerplate files ([@julrich](https://github.com/julrich))
+- fix(sanity): replace functions in generated files ([@julrich](https://github.com/julrich))
+- fix(sanity): get config running ([@julrich](https://github.com/julrich))
+- feature(sanity): get first working files in fs ([@julrich](https://github.com/julrich))
+- fix: get sanity generation up to speed again ([@julrich](https://github.com/julrich))
+- chore: update all dependencies ([@julrich](https://github.com/julrich))
+- Merge branch 'feature/shared-api-for-transformers' into feature/add-sanity-schema-support ([@julrich](https://github.com/julrich))
+- fix: deactivate jsonschema2tinacms, jsonschemabuildio for now ([@julrich](https://github.com/julrich))
+- chore: comments ([@julrich](https://github.com/julrich))
+- refactor: and even more clean-up ([@julrich](https://github.com/julrich))
+- refactor: further alignment of code, add structure ([@julrich](https://github.com/julrich))
+- refactor: further align converters ([@julrich](https://github.com/julrich))
+- feature: add createConfig to graphql converter ([@julrich](https://github.com/julrich))
+- fix: input of GraphQL generation, works again now ([@julrich](https://github.com/julrich))
+- feature: re-activate graphql conversion after refactoring ([@julrich](https://github.com/julrich))
+- feature: finish up pre-processing ([@julrich](https://github.com/julrich))
+- refactor: start reworking converter input mechanism ([@julrich](https://github.com/julrich))
+- refactor: start reworking definitions, ref layering ([@julrich](https://github.com/julrich))
+- chore: update page structure schema ([@julrich](https://github.com/julrich))
+- chore: add comment about layering refactoring ([@julrich](https://github.com/julrich))
+- chore: align some more function signatures ([@julrich](https://github.com/julrich))
+- chore: refactor schema loading ([@julrich](https://github.com/julrich))
+- fix: update dependencies, fix netlify cms reducer ([@julrich](https://github.com/julrich))
+- fix: clean up NetlifyCmsConfig type ([@julrich](https://github.com/julrich))
+- feature: extract common functionality ([@julrich](https://github.com/julrich))
+- feature: add conversion for Builder.io ([@julrich](https://github.com/julrich))
+- Merge branch 'master' into feature/add-sanity-schema-support ([@julrich](https://github.com/julrich))
+- fix: fix sanity schema generation ([@lmestel](https://github.com/lmestel))
+- feat: eliminate `allOf`s ([@lmestel](https://github.com/lmestel))
+- feature: rework allOf handling ([@julrich](https://github.com/julrich))
+- feature: add processed sanity schemas ([@julrich](https://github.com/julrich))
+- feature: add draft for sanity schema generation ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v2.1.1 (Wed Apr 13 2022)
 
 #### ⚠️ Pushed to `master`

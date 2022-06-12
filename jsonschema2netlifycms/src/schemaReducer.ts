@@ -1,255 +1,154 @@
-import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
-import { NetlifyCmsField } from './@types';
-import { safeEnumKey } from './safeEnumKey';
 import Ajv from 'ajv';
-import { getLayeredRefId, getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
+import { getSchemaName } from '@kickstartds/jsonschema-utils/dist/helpers';
 
-const typeResolutionField = 'type';
-
-interface TypeMapping {
-  boolean: string;
-  string: string;
-  integer: string;
-  array: string;
-  object: string;
-}
-
-const mapping: TypeMapping = {
-  boolean: 'boolean',
-  string: 'string',
-  integer: 'number',
-  array: 'list',
-  object: 'object',
+export interface processInterface<T> {
+  name: string,
+  description: string,
+  subSchema: JSONSchema7,
+  rootSchema: JSONSchema7,
+  fields?: T[],
+  arrayField?: T,
+  options?: {
+    label: string;
+    value: string;
+  }[],
 };
 
-const getInternalTypeDefinition = (type: string): NetlifyCmsField => {
-  return {
-    name: typeResolutionField,
-    widget: 'hidden',
-    description: 'Internal type for interface resolution',
-    default: type,
-  }
-}
-
-const widgetMapping = (property: JSONSchema7) : string => {
-  if (property.type === 'string' && property.enum && property.enum.length) {
-    return 'select';
-  }
-
-  if (
-    property.type === 'string' &&
-    property.format &&
-    property.format === 'markdown'
-  ) {
-    return 'markdown';
-  }
-
-  if (
-    property.type === 'string' &&
-    property.format &&
-    property.format === 'image'
-  ) {
-    return 'image';
-  }
-
-  if (
-    property.type === 'string' &&
-    property.format &&
-    property.format === 'id'
-  ) {
-    return 'id';
-  }
-
-  return mapping[property.type as JSONSchema7TypeName];
+export interface processFn<T> {
+  (options: processInterface<T>): T
 };
 
-let allDefinitions: JSONSchema7[];
+export interface schemaReducerOptions<T> {
+  ajv: Ajv,
+  typeResolutionField: string,
+  buildDescription: (d: any) => string | undefined,
+  safeEnumKey: (value: string) => string,
+  basicMapping: (property: JSONSchema7) => string,
+  processObject: processFn<T>,
+  processRefArray: processFn<T>,
+  processObjectArray: processFn<T>,
+  processArray: processFn<T>,
+  processEnum: processFn<T>,
+  processConst: processFn<T>,
+  processBasic: processFn<T>,
+  schemaPost?: (schema: JSONSchema7) => JSONSchema7,
+};
 
-function toPascalCase(text: string): string {
-  return text.replace(/(^\w|-\w)/g, clearAndUpper);
-}
+export function getSchemaReducer<T>({
+  ajv,
+  typeResolutionField,
+  buildDescription,
+  safeEnumKey,
+  basicMapping,
+  processObject,
+  processRefArray,
+  processObjectArray,
+  processArray,
+  processEnum,
+  processConst,
+  processBasic,
+  schemaPost,
+}: schemaReducerOptions<T>) {
+  function schemaReducer(knownTypes: T[], schema: JSONSchema7): T[] {
+    const $id = schema.$id
+    if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 
-function clearAndUpper(text: string): string {
-  return text.replace(/-/, " ").toUpperCase();
-}
-
-// TODO check the following NetlifyCmsField properties for all elements:
-// * required -> this is not functional yet... needs to be evaluated intelligently,
-//      because of schema nesting (schema > array > allOf > $ref > object, etc)
-// * hint -> may be affected by the same challenge as `required`
-// note: throws err(..) with minimal logging for (currently) unsupported
-// (and unutilized) JSON Schema features
-export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): NetlifyCmsField[] {
-  allDefinitions = definitions;
+    const typeName = getSchemaName($id);
+    const clonedSchema = schemaPost
+      ? schemaPost(_.cloneDeep(schema))
+      : _.cloneDeep(schema);
   
-  function buildConfig(
+    knownTypes.push(buildType(typeName, clonedSchema, clonedSchema));
+    return knownTypes;
+  }
+
+  function buildType(
     propName: string,
     schema: JSONSchema7,
-    contentFields: NetlifyCmsField[],
-    outerRun: boolean = false,
     outerSchema: JSONSchema7,
-    componentSchemaId: string = '',
-  ): NetlifyCmsField {
-    const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
-    const contentComponent = outerRun && !sectionComponent;
+  ): T {
     const name = propName;
+
+    // all of the following JSON Schema composition keywords need to
+    // be handled by the pre-processing, they'll throw if they get here
 
     // oneOf?
     if (!_.isUndefined(schema.oneOf)) {
       console.log('schema with oneOf', schema);
       throw err(`The type oneOf on property ${name} is not supported.`);
     }
-  
+
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
       console.log('schema with anyOf', schema);
       throw err(`The type anyOf on property ${name} is not supported.`);
     }
-  
+
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
-        return allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
-          const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
-            if (!_.isUndefined(allOf.$ref)) {
-              if (allOf.$ref.includes('#/definitions/')) {
-                const definitionName = allOf.$ref.split('/').pop() || '';
-                const definition = _.cloneDeep(allDefinitions[definitionName]);
-                if (definition.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(definition.allOf, outerComponentSchemaId))
-                }
-                return _.merge(finalSchema, definition);
-              } else {
-                const reffedSchema = _.cloneDeep(ajv.getSchema(getLayeredRefId(ajv, allOf.$ref as string, outerComponentSchemaId))?.schema as JSONSchema7);
-                if (reffedSchema.allOf) {
-                  return _.merge(finalSchema, reduceSchemaAllOf(reffedSchema.allOf as JSONSchema7[], reffedSchema.$id as string))
-                }
-                return _.merge(finalSchema, reffedSchema);
-              }
-            } else {
-              return _.merge(finalSchema, allOf);
-            }
-          };
-  
-          return mergeSchemaAllOf(allOf);
-        }, { } as JSONSchema7);
-      };
-  
-      const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], componentSchemaId);
-      if (schema.properties)
-        objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
-
-      const field: NetlifyCmsField = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId);
-      
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
-        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
-        }
-      }
-
-      return field
+      console.log('schema with allOf', schema);
+      throw err(`The type allOf on property ${name} is not supported.`);
     }
-  
+
     // not?
     else if (!_.isUndefined(schema.not)) {
       console.log('schema with not', schema);
       throw err(`The type not on property ${name} is not supported.`);
     }
-  
+
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
 
-      const fields = (): NetlifyCmsField[] =>
+      const fields = (): T[] =>
         !_.isEmpty(schema.properties)
-          ? _.map(schema.properties, (prop: JSONSchema7, fieldName: string) => {
+          ? _.map(schema.properties, (prop: JSONSchema7, fieldName) => {
               const objectSchema = _.cloneDeep(prop);
-              const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
-              const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
-              return buildConfig(fieldName, objectSchema, contentFields, isOuterRun, schemaOuter, objectSchema.$id || componentSchemaId);
+              return buildType(
+                fieldName,
+                objectSchema,
+                outerSchema,
+              );
             })
           : [];
-
-      const field: NetlifyCmsField = {
-        label: toPascalCase(name),
-        name,
-        widget: widgetMapping(schema),
-        fields: fields(),
-        collapsed: true,
-      };
-
-      if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
-        if (!Object.values(field.fields).find((field) => field.name === 'type')) {
-          field.fields.push(getInternalTypeDefinition(name));
-        }
-      }
-        
-      if (schema.default)
-        field.default = schema.default as string;
-
-      if (description)
-        field.hint = description;
-
-      field.required = schema.required?.includes(name) || false;
   
-      return field;
+      return processObject({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fields() });
     }
-  
+
     // array?
     else if (schema.type === 'array') {
-      // anyOf -> convert all items
-      if(schema.items && (schema.items as JSONSchema7).anyOf) {
+      if (schema.items && (schema.items as JSONSchema7).anyOf) {
         const arraySchemas = (schema.items as JSONSchema7).anyOf as JSONSchema7[];
         const isRefArray = arraySchemas.length > 0 && arraySchemas.every((schema) => schema.$ref);
         const isObjectArray = arraySchemas.every((schema) => (typeof schema === 'object'));
 
         if (isRefArray) {
-          // only hit for `page > content`
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
-            const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-            return buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, resolvedSchema, resolvedSchema.$id || componentSchemaId);
+            const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
+            return buildType(
+              getSchemaName(resolvedSchema.$id),
+              resolvedSchema,
+              resolvedSchema,
+            );
           });
 
-          const field: NetlifyCmsField = {
-            name,
-            widget: 'list',
-            types: fieldConfigs
-          };
-
-          if (outerSchema.default)
-            field.default = schema.default as string;
-          
-          if (description)
-            field.hint = description;
-    
-          field.required = outerSchema.required?.includes(name) || false;
-          
-          return field;
+          return processRefArray({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fieldConfigs });
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) =>
-            buildConfig(arraySchema.title?.toLowerCase() || '', arraySchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, arraySchema.$id || componentSchemaId)
+            buildType(
+              arraySchema.title?.toLowerCase() || '',
+              arraySchema,
+              outerSchema,
+            )
           );
 
-          const field: NetlifyCmsField = {
-            name,
-            widget: 'list',
-            types: fieldConfigs,
-          };
-
-          if (outerSchema.default)
-            field.default = schema.default as string;
-          
-          if (description)
-            field.hint = description;
-    
-          field.required = outerSchema.required?.includes(name) || false;
-
-          return field;
+          return processObjectArray({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fieldConfigs });
         } else {
           throw err(`Incompatible anyOf declaration for array with type ${schema.type} on property ${name}.`);
         }
@@ -259,38 +158,27 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
       } else {
         const description = buildDescription(outerSchema);
         const arraySchema = schema.items as JSONSchema7;
-        const isOuterRun = outerSchema.$id?.includes('section.schema.json') ? true : false;
-        const schemaOuter = schema.$id?.includes('section.schema.json') ? schema : outerSchema;
 
         let fieldConfig;
         if (arraySchema.$ref) {
-          const resolvedSchema = ajv.getSchema(getLayeredRefId(ajv, arraySchema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-          fieldConfig = buildConfig(getSchemaName(resolvedSchema.$id), resolvedSchema, contentFields, true, schemaOuter, resolvedSchema.$id || componentSchemaId);
+          const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
+          fieldConfig = buildType(
+            getSchemaName(resolvedSchema.$id),
+            resolvedSchema,
+            resolvedSchema,
+          );
         } else {
-          fieldConfig = buildConfig(name, arraySchema, contentFields, isOuterRun, schemaOuter, arraySchema.$id || componentSchemaId);
+          fieldConfig = buildType(
+            name,
+            arraySchema,
+            outerSchema,
+          );
         }
 
-        const field: NetlifyCmsField = {
-          label: toPascalCase(name),
-          name,
-          widget: 'list',
-        };
-
-        if (outerSchema.default)
-          field.default = schema.default as string;
-      
-        if (description)
-          field.hint = description;
-
-        field.required = outerSchema.required?.includes(name) || false;
-  
-        if (fieldConfig && fieldConfig.fields)
-          field.fields = fieldConfig.fields;
-  
-        return field;
+        return processArray({ name, description, subSchema: schema, rootSchema: outerSchema, arrayField: fieldConfig });
       }
     }
-  
+
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
@@ -302,85 +190,41 @@ export function configGenerator(ajv: Ajv, definitions: JSONSchema7[], schemas: J
         };
       });
 
-      const field: NetlifyCmsField = {
-        label: toPascalCase(name),
-        name,
-        widget: 'select',
-        options,
-      }
-
-      if (schema.default)
-        field.default = safeEnumKey(schema.default as string);
-
-      if (description)
-        field.hint = description;
-
-      field.required = schema.required?.includes(name) || false;
-  
-      return field;
+      return processEnum({ name, description, subSchema: schema, rootSchema: outerSchema, options });
     }
-  
+
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      if (schema.$ref.includes('#/definitions/')) {
-        const reffedSchemaId = schema.$ref.includes('http')
-          ? schema.$ref.split('#').shift()
-          : outerSchema.$id;
-        const reffedPropertyName = schema.$ref.includes('http')
-          ? schema.$ref.split('#').pop()?.split('/').pop()
-          : schema.$ref.split('/').pop();
+      const reffedSchema = ajv.getSchema(schema.$ref)?.schema as JSONSchema7;
 
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, reffedSchemaId as string, componentSchemaId))?.schema as JSONSchema7;
-        const reffedProperty = reffedSchema && reffedSchema.definitions ? reffedSchema.definitions[reffedPropertyName as string] as JSONSchema7 : allDefinitions[reffedPropertyName as string] as JSONSchema7;
-
-        return buildConfig(reffedPropertyName as string, reffedProperty, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedProperty.$id || componentSchemaId);
-      } else {
-        const reffedSchema = ajv.getSchema(getLayeredRefId(ajv, schema.$ref as string, componentSchemaId))?.schema as JSONSchema7;
-        return buildConfig(name, reffedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
-      }
-    }
-  
-    // basic?
-    else if (widgetMapping(schema)) {
-      const description = buildDescription(schema);
-      const widget = widgetMapping(schema);
-  
-      const field: NetlifyCmsField = {
-        label: toPascalCase(name),
+      return buildType(
         name,
-        widget,
-      };
-  
-      if (widget === 'number')
-        field.valueType = 'int';
-
-      if (schema.default)
-        field.default = schema.default as string;
-
-      if (description)
-        field.hint = description;
-
-      field.required = outerSchema.required?.includes(name) || false;
-  
-      return field;
+        reffedSchema,
+        reffedSchema,
+      );
     }
-  
+
+    // const?
+    else if (!_.isUndefined(schema.const)) {
+      const description = buildDescription(schema);
+
+      if (name !== typeResolutionField) {
+        console.log('schema.const that is not type', schema);
+        throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
+      }
+
+      return processConst({ name, description, subSchema: schema, rootSchema: outerSchema });
+    }
+
+    // basic?
+    else if (basicMapping(schema)) {
+      const description = buildDescription(schema);
+      return processBasic({ name, description, subSchema: schema, rootSchema: outerSchema });
+    }
+
     // ¯\_(ツ)_/¯
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
-  }
+  };
 
-  const contentFields: NetlifyCmsField[] = [];
-  // TODO don't hardcode page schema here
-  const pageSchema = schemas.find((schema) => schema.$id?.includes('page.schema.json')) as JSONSchema7;
-
-  const $id = pageSchema.$id
-  if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
-  const typeName = getSchemaName($id);
-  contentFields.push(buildConfig(typeName, pageSchema, contentFields, true, pageSchema, pageSchema.$id));
-
-  return contentFields;
-}
-
-function buildDescription(d: any): string | undefined {
-  return d.description || d.title || undefined;
+  return schemaReducer;
 }

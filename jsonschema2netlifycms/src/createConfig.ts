@@ -101,7 +101,7 @@ export function createConfig(
     identifier_field: 'title',
     extension: 'md',
     slug: '{{fields.slug}}',
-    fields: contentFields[0].fields,
+    fields: sortedContentFields[0].fields,
   }
 
   const settings: NetlifyCmsCollection = {
@@ -120,7 +120,7 @@ export function createConfig(
     (collection) => collection.name === collectionName
   );
   if (pagesCollection) {
-    pagesCollection.fields = sortedContentFields;
+    pagesCollection.fields = sortedContentFields[0].fields;
   } else {
     baseConfig.collections.push(pages);
   }

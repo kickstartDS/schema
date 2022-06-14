@@ -1607,10 +1607,10 @@
     svgstore "^3.0.1"
     tinycolor2 "^1.4.2"
 
-"@kickstartds/design-system@2.0.18--canary.74.1999.0":
-  version "2.0.18--canary.74.1999.0"
-  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-2.0.18--canary.74.1999.0.tgz#e872492cb0c66c96f4d6ddb90c7a61d5f1ab3dd2"
-  integrity sha512-Uo8UAVFjoJ+J9gZXuBsjN/jHAWgmeRlfI3csQwhdMHELfHZvQsfhHcNj7WNwcXXVtoimBsGzowWeBuLkFHXLQQ==
+"@kickstartds/design-system@2.1.0--canary.75.2022.0":
+  version "2.1.0--canary.75.2022.0"
+  resolved "https://registry.npmjs.org/@kickstartds/design-system/-/design-system-2.1.0--canary.75.2022.0.tgz#ea54dd01b1a11a4eeb0e7fd5e737a1b98e6bae42"
+  integrity sha512-3KUOuyZBRZyx8HD0dwTeE+oxrYPxPhfiGksk5fCtjCDfEoGIZWDQKVJlcEgOi5toT1gUhtEbzu8Zf+qNNUaLBA==
   dependencies:
     "@kickstartds/base" "2.0.0-canary.922.4419.0"
     "@kickstartds/blog" "2.0.0-canary.922.4419.0"
@@ -1620,6 +1620,7 @@
     change-case "^4.1.2"
     classnames "^2.3.1"
     json-schema-to-typescript "^10.1.5"
+    json-schema-traverse "^1.0.0"
     postinstall-postinstall "^2.1.0"
     typescript "^4.5.4"
 

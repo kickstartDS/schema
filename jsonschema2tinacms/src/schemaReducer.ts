@@ -126,7 +126,7 @@ function clearAndUpper(text: string): string {
 // (and unutilized) JSON Schema features
 export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema7[]): TinaFieldInner<false>[] {
   allDefinitions = definitions;
-  
+
   function buildConfig(
     propName: string,
     schema: JSONSchema7,
@@ -144,13 +144,13 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
       console.log('schema with oneOf', schema);
       throw err(`The type oneOf on property ${name} is not supported.`);
     }
-  
+
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
       console.log('schema with anyOf', schema);
       throw err(`The type anyOf on property ${name} is not supported.`);
     }
-  
+
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
       const reduceSchemaAllOf = (allOfs: JSONSchema7[], outerComponentSchemaId: string): JSONSchema7 => {
@@ -175,17 +175,17 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
               return _.merge(finalSchema, allOf);
             }
           };
-  
+
           return mergeSchemaAllOf(allOf);
         }, { } as JSONSchema7);
       };
-  
+
       const objectSchema = reduceSchemaAllOf(schema.allOf as JSONSchema7[], componentSchemaId);
       if (schema.properties)
         objectSchema.properties = _.merge(objectSchema.properties, schema.properties);
 
       const field: ObjectType<false> = buildConfig(name, objectSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, objectSchema.$id || componentSchemaId) as ObjectType<false>;
-      
+
       if ((contentComponent || sectionComponent) && field && field.fields && name !== 'button' && name !== 'section') {
         if (!Object.values(field.fields).find((field) => field.name === 'type')) {
           (field.fields as TinaFieldInner<false>[]).push(getInternalTypeDefinition(name));
@@ -194,13 +194,13 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
 
       return field
     }
-  
+
     // not?
     else if (!_.isUndefined(schema.not)) {
       console.log('schema with not', schema);
       throw err(`The type not on property ${name} is not supported.`);
     }
-  
+
     // object?
     else if (schema.type === 'object') {
       // TODO re-add description, add defaults
@@ -229,10 +229,10 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
           (field.fields as TinaFieldInner<false>[]).push(getInternalTypeDefinition(name));
         }
       }
-        
+
       return field;
     }
-  
+
     // array?
     else if (schema.type === 'array') {
       // anyOf -> convert all items
@@ -307,7 +307,7 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
         return field;
       }
     }
-  
+
     // enum?
     else if (!_.isUndefined(schema.enum)) {
       if (schema.type !== 'string') throw err(`Only string enums are supported.`, name);
@@ -330,7 +330,7 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
 
       return field;
     }
-  
+
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
       if (schema.$ref.includes('#/definitions/')) {
@@ -350,15 +350,15 @@ export function config(ajv: Ajv, definitions: JSONSchema7[], schemas: JSONSchema
         return buildConfig(name, reffedSchema, contentFields, outerSchema.$id?.includes('section.schema.json') ? true : false, schema.$id?.includes('section.schema.json') ? schema : outerSchema, reffedSchema.$id || componentSchemaId);
       }
     }
-  
+
     // basic?
     else if (scalarMapping(schema, name)) {
       // TODO re-add description, add defaults
       // const description = buildDescription(schema);
-  
+
       return scalarMapping(schema, name);
     }
-  
+
     // ¯\_(ツ)_/¯
     else throw err(`The type ${schema.type} on property ${name} is unknown.`);
   }

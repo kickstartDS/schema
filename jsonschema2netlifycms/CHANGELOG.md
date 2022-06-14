@@ -1,3 +1,21 @@
+# v2.3.0 (Tue Jun 14 2022)
+
+#### 🚀 Enhancement
+
+- feature: add support for settings in Netlify CMS [#40](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/40) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: problem with cases where config already exists ([@julrich](https://github.com/julrich))
+- fix(netlifycms): fix capitilization, move settings files ([@julrich](https://github.com/julrich))
+- feature: add support for settings in Netlify CMS ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.2.0 (Sun Jun 12 2022)
 
 #### 🚀 Enhancement

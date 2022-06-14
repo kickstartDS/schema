@@ -1,3 +1,16 @@
+# (Tue Jun 14 2022)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@2.3.0`, `@kickstartds/jsonschema2netlifycms@2.3.0`, `@kickstartds/jsonschema2tinacms@2.3.0`
+  - feature: add support for settings in Netlify CMS [#40](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/40) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Jun 12 2022)
 
 #### 🚀 Enhancement

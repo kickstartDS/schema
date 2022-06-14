@@ -18,42 +18,11 @@ const defaultConfig: NetlifyCmsConfig = {
 // TODO correct parameter documentation
 export function createConfig(
     contentFields: NetlifyCmsField[],
+    settingsFields: NetlifyCmsField[],
     baseConfig: NetlifyCmsConfig = defaultConfig,
     collectionName: string = 'pages',
+    settingsName: string = 'settings',
   ): NetlifyCmsConfig {
-
-  const defaultMetaFields: NetlifyCmsField[] = [
-    { label: 'Title', name: 'title', widget: 'string' },
-    { label: 'Page URL', name: 'url', widget: 'string' },
-    {
-      label: 'Meta',
-      name: 'meta',
-      widget: 'object',
-      fields: [
-        { label: 'Title', name: 'title', widget: 'string' },
-        { label: 'Description', name: 'description', widget: 'string' },
-      ],
-    },
-  ]
-
-  // TODO re-introduce `...defaultMetaFields` -> SEO
-  const pages: NetlifyCmsCollection = {
-    name: collectionName,
-    label: capitalize(collectionName),
-    label_singular: capitalize(collectionName).slice(0, -1),
-    description: `${capitalize(collectionName)} consisting of default content elements`,
-    folder: 'content',
-    create: true,
-    delete: true,
-    identifier_field: 'title',
-    extension: 'md',
-    slug: '{{fields.slug}}',
-    fields: contentFields[0].fields,
-  }
-
-  if (!baseConfig.collections) {
-    baseConfig.collections = [];
-  }
 
   const sortable = (field: NetlifyCmsField) => field.widget === 'object' || field.widget === 'list';
 
@@ -93,15 +62,76 @@ export function createConfig(
     return sortedFields;
   };
 
-  const sortedFields = sortFieldsDeep(contentFields);
+  const sortedContentFields = sortFieldsDeep(contentFields);
+  const sortedSettingsFields = sortFieldsDeep(settingsFields);
 
-  let pagesCollection = baseConfig.collections.find(
+  const settingsFileConfigs = sortedSettingsFields.map((sortedSettingsField) => {
+    // TODO path should be completely configurable (`content/settings`)
+    return {
+      name: sortedSettingsField.name,
+      file: `content/settings/${sortedSettingsField.name}.yml`,
+      label: capitalize(sortedSettingsField.name),
+      fields: sortedSettingsField.fields,
+    };
+  });
+
+  // const defaultMetaFields: NetlifyCmsField[] = [
+  //   { label: 'Title', name: 'title', widget: 'string' },
+  //   { label: 'Page URL', name: 'url', widget: 'string' },
+  //   {
+  //     label: 'Meta',
+  //     name: 'meta',
+  //     widget: 'object',
+  //     fields: [
+  //       { label: 'Title', name: 'title', widget: 'string' },
+  //       { label: 'Description', name: 'description', widget: 'string' },
+  //     ],
+  //   },
+  // ]
+
+  // TODO re-introduce `...defaultMetaFields` -> SEO
+  const pages: NetlifyCmsCollection = {
+    name: collectionName,
+    label: capitalize(collectionName),
+    label_singular: capitalize(collectionName).slice(0, -1),
+    description: `${capitalize(collectionName)} documents consisting of default content elements`,
+    folder: 'content',
+    create: true,
+    delete: true,
+    identifier_field: 'title',
+    extension: 'md',
+    slug: '{{fields.slug}}',
+    fields: sortedContentFields[0].fields,
+  }
+
+  const settings: NetlifyCmsCollection = {
+    name: settingsName,
+    label: capitalize(settingsName),
+    label_singular: capitalize(settingsName).slice(0, -1),
+    description: `${capitalize(settingsName)} consisting of general configuration options for the page`,
+    files: settingsFileConfigs,
+  };
+
+  if (!baseConfig.collections) {
+    baseConfig.collections = [];
+  }
+
+  const pagesCollection = baseConfig.collections.find(
     (collection) => collection.name === collectionName
   );
   if (pagesCollection) {
-    pagesCollection.fields = sortedFields;
+    pagesCollection.fields = sortedContentFields[0].fields;
   } else {
     baseConfig.collections.push(pages);
+  }
+
+  const settingsCollection = baseConfig.collections.find(
+    (collection) => collection.name === settingsName
+  );
+  if (settingsCollection) {
+    settingsCollection.files = settingsFileConfigs;
+  } else {
+    baseConfig.collections.push(settings);
   }
 
   return baseConfig;

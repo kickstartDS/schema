@@ -102,13 +102,20 @@ export type NetlifyCmsField = {
   options?: string[] | { label: string; value: string }[]
 }
 
+export type NetlifyCmsFileCollection = {
+  name: string,
+  file: string,
+  label?: string,
+  fields?: NetlifyCmsField[]
+}
+
 export type NetlifyCmsCollection = {
   name: string
   identifier_field?: string
   label?: string
   label_singular?: string
   description?: string
-  files?: string
+  files?: NetlifyCmsFileCollection[]
   folder?: string
   filter?: string
   create?: boolean
@@ -118,7 +125,7 @@ export type NetlifyCmsCollection = {
   frontmatter_delimiter?: string | string[]
   slug?: string
   preview_path?: string
-  fields: NetlifyCmsField[]
+  fields?: NetlifyCmsField[]
   editor?: boolean
   summary?: string
 }

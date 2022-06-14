@@ -66,9 +66,10 @@ export function createConfig(
   const sortedSettingsFields = sortFieldsDeep(settingsFields);
 
   const settingsFileConfigs = sortedSettingsFields.map((sortedSettingsField) => {
+    // TODO path should be completely configurable (`content/settings`)
     return {
-      name: capitalize(sortedSettingsField.name),
-      file: `settings/${sortedSettingsField.name}.yml`,
+      name: sortedSettingsField.name,
+      file: `content/settings/${sortedSettingsField.name}.yml`,
       label: capitalize(sortedSettingsField.name),
       fields: sortedSettingsField.fields,
     };

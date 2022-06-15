@@ -69,7 +69,7 @@ export function createConfig(
     // TODO path should be completely configurable (`content/settings`)
     return {
       name: sortedSettingsField.name,
-      file: `content/settings/${sortedSettingsField.name}.yml`,
+      file: `content/settings/${sortedSettingsField.name}.md`,
       label: capitalize(sortedSettingsField.name),
       fields: sortedSettingsField.fields,
     };
@@ -109,6 +109,8 @@ export function createConfig(
     label: capitalize(settingsName),
     label_singular: capitalize(settingsName).slice(0, -1),
     description: `${capitalize(settingsName)} consisting of general configuration options for the page`,
+    extension: 'md',
+    format: 'yaml-frontmatter',
     files: settingsFileConfigs,
   };
 

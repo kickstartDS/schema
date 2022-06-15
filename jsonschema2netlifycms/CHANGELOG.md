@@ -1,3 +1,15 @@
+# v2.3.1 (Wed Jun 15 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix(netlifycms): use correct format for settings files ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.3.0 (Tue Jun 14 2022)
 
 #### 🚀 Enhancement

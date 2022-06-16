@@ -77,7 +77,9 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
     outerSchema: JSONSchema7,
   ): GraphQLType {
     const sectionComponent = (outerSchema.$id?.includes('section.schema.json'));
-    const contentComponent = outerRun && !sectionComponent;
+    const headerComponent = (outerSchema.$id?.includes('/cms/header.schema.json'));
+    const footerComponent = (outerSchema.$id?.includes('/cms/footer.schema.json'));
+    const contentComponent = outerRun && !sectionComponent && !headerComponent && !footerComponent;
     const name = uppercamelcase(cleanFieldName(propName));
 
     // oneOf?
@@ -90,7 +92,7 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
         const caseSchema = cases[caseIndex];
         const typeSchema = _.cloneDeep(caseSchema.then || caseSchema) as JSONSchema7;
         const qualifiedName = `${name}_${getSchemaName(typeSchema.$ref) || caseIndex}`;
-        
+
         return buildType(qualifiedName, typeSchema, knownTypes, false, outerSchema) as GraphQLObjectType;
       })
 
@@ -129,13 +131,13 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
     // object?
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
-  
+
       const fields = () =>
         !_.isEmpty(schema.properties)
           ? _.mapValues(schema.properties, (prop: JSONSchema7, fieldName: string) => {
               const qualifiedFieldName = `${name}.${fieldName}`
               const objectSchema = _.cloneDeep(prop);
-  
+
               const type = buildType(qualifiedFieldName, objectSchema, knownTypes, false, outerSchema) as GraphQLObjectType
               const isRequired = _.includes(schema.required, fieldName)
               return {
@@ -158,7 +160,7 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
     // array?
     else if (schema.type === 'array') {
       const arraySchema = _.cloneDeep(schema.items) as JSONSchema7;
-      
+
       if (arraySchema.anyOf && name !== 'SectionComponentContent') {
         return new GraphQLList(textMediaComponentInterface);
 

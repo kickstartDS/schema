@@ -59,7 +59,7 @@ import { traverse } from 'object-traversal';
 
   // generate `GraphQLType` types and write `GraphQLSchema` to disk
   // uses `uniqueSchemaIds` as input, to get complete set of kickstartDS
-  generateGraphQL(uniqueSchemaIds.filter((schemaId) => !schemaId.includes('/cms/')), ajv);
+  generateGraphQL(uniqueSchemaIds.filter((schemaId) => !schemaId.includes('/cms/page.schema.json')), ajv);
 
   // generate `NetlifyCmsField` fields and write `NetlifyCmsConfig` to disk
   // uses custom `section.schema.json` to generate a section-based config
@@ -75,7 +75,7 @@ import { traverse } from 'object-traversal';
   );
 
   // TODO add comment
-  generateSanity(uniqueSchemaIds.filter((schemaId) => !schemaId.includes('page.schema.json')), ajv);
+  generateSanity(uniqueSchemaIds.filter((schemaId) => !schemaId.includes('/cms/page.schema.json')), ajv);
 
   // TODO finish the following stuff:
   // TODO remove layering from reducers, should be done as a

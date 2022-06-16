@@ -14,7 +14,7 @@
     "@kickstartds/blog": "2.0.0-canary.922.4419.0",
     "@kickstartds/content": "2.0.0-canary.922.4419.0",
     "@kickstartds/core": "2.0.0-canary.922.4419.0",
-    "@kickstartds/design-system": "2.1.0--canary.75.2022.0",
+    "@kickstartds/design-system": "2.1.0--canary.74.2038.0",
     "@kickstartds/form": "2.0.0-canary.922.4419.0",
     "@kickstartds/generate-from-schema": "^2.3.2"
   }

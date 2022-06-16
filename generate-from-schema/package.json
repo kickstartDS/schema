@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/generate-from-schema",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "@kickstartds/graphql-cli-add-gatsby-directives": "^1.2.0",
     "@kickstartds/graphql-cli-generate-fragments": "^1.7.0",
     "@kickstartds/jsonschema-utils": "^2.2.0",
-    "@kickstartds/jsonschema2graphql": "^2.2.1",
+    "@kickstartds/jsonschema2graphql": "^2.2.2",
     "@kickstartds/jsonschema2netlifycms": "^2.3.2",
     "@kickstartds/jsonschema2sanity": "^1.1.0",
     "@kickstartds/jsonschema2tinacms": "^2.3.0",

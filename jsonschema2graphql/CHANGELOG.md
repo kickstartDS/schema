@@ -1,3 +1,16 @@
+# v2.2.1 (Thu Jun 16 2022)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix(graphql): include header and footer in GraphQL ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.2.0 (Sun Jun 12 2022)
 
 #### 🚀 Enhancement

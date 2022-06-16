@@ -1,3 +1,15 @@
+# v2.3.2 (Thu Jun 16 2022)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.3.1 (Wed Jun 15 2022)
 
 #### ⚠️ Pushed to `master`

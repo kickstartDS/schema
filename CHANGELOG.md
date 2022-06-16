@@ -1,3 +1,16 @@
+# (Wed Jun 15 2022)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2netlifycms@2.3.1`
+  - fix(netlifycms): use correct format for settings files ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Tue Jun 14 2022)
 
 #### 🚀 Enhancement

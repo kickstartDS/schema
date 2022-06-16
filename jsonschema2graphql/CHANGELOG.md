@@ -1,3 +1,15 @@
+# v2.2.2 (Thu Jun 16 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hashing of cta in glossary ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.2.1 (Thu Jun 16 2022)
 
 #### ⚠️ Pushed to `master`

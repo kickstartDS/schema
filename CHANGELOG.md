@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/jsonschema2graphql@2.2.2`
+  - fix: hashing of cta in glossary ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Thu Jun 16 2022)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/generate-from-schema@2.3.2`, `@kickstartds/jsonschema2netlifycms@2.3.2`
   - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
 - `@kickstartds/generate-from-schema@2.3.2`, `@kickstartds/jsonschema2graphql@2.2.1`

@@ -60,7 +60,7 @@ export function getSchemaReducer<T>({
     const clonedSchema = schemaPost
       ? schemaPost(_.cloneDeep(schema))
       : _.cloneDeep(schema);
-  
+
     knownTypes.push(buildType(typeName, clonedSchema, clonedSchema));
     return knownTypes;
   }
@@ -115,7 +115,7 @@ export function getSchemaReducer<T>({
               );
             })
           : [];
-  
+
       return processObject({ name, description, subSchema: schema, rootSchema: outerSchema, fields: fields() });
     }
 

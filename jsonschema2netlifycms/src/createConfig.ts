@@ -75,21 +75,6 @@ export function createConfig(
     };
   });
 
-  // const defaultMetaFields: NetlifyCmsField[] = [
-  //   { label: 'Title', name: 'title', widget: 'string' },
-  //   { label: 'Page URL', name: 'url', widget: 'string' },
-  //   {
-  //     label: 'Meta',
-  //     name: 'meta',
-  //     widget: 'object',
-  //     fields: [
-  //       { label: 'Title', name: 'title', widget: 'string' },
-  //       { label: 'Description', name: 'description', widget: 'string' },
-  //     ],
-  //   },
-  // ]
-
-  // TODO re-introduce `...defaultMetaFields` -> SEO
   const pages: NetlifyCmsCollection = {
     name: collectionName,
     label: capitalize(collectionName),

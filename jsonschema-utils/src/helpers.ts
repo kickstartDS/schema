@@ -236,7 +236,7 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
   // TODO this should go (`pathPrefix` / environment dependent paths)
   const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
   // load all the schema files provided by `@kickstartDS` itself
-  const schemaGlob = `${pathPrefix}node_modules/@kickstartds/*/lib/**/*.(schema|definitions).json`;
+  const schemaGlob = `${pathPrefix}**/node_modules/@kickstartds/*/(lib|cms)/**/*.(schema|definitions).json`;
   const kdsSchemas = await getSchemasForGlob(schemaGlob);
 
   // Processing consists of 5 steps currently, that need to be run in this

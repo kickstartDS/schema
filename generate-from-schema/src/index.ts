@@ -49,7 +49,7 @@ import { traverse } from 'object-traversal';
 
 (async () => {
   const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
-  const customGlob = `${pathPrefix}node_modules/**/(dist|cms)/**/*.(schema|definitions).json`;
+  const customGlob = `${pathPrefix}node_modules/@kickstartds/design-system/(dist|cms)/**/*.(schema|definitions).json`;
 
   // get shared ajv instance, pre-process schemas and get full
   // set of unique schemas. precondition for the following conversions
@@ -250,6 +250,32 @@ export default createSchema({
       configStrings[configStringKey],
     );
   });
+}
+
+export const generateTinaCMS = (
+  schemaIds: string[],
+  ajv: Ajv,
+  configPath: string = `dist/tina.json`,
+) => {
+  const configLocation = 'static/.tina/schema.json';
+  const config = configLocation && existsSync(configLocation) && yamlLoad(readFileSync(configLocation, 'utf-8'));
+
+  const pageFields = convertToTinaCMS({
+    schemaIds,
+    ajv,
+  });
+
+  const tinaConfig = createConfigTinaCMS(
+    pageFields,
+    config ? config : undefined,
+    'pages',
+  );
+
+  const configString = `${JSON.stringify(tinaConfig, null, 2)}`;
+  fs.writeFile(
+    configPath,
+    configString,
+  );
 }
 
 export { processSchemaGlob, getSchemaRegistry };

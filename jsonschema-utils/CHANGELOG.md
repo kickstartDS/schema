@@ -1,3 +1,20 @@
+# v2.3.0 (Sun Jun 19 2022)
+
+#### 🚀 Enhancement
+
+- Merge branch 'master' into feature/move-tina-cms-to-shared-api [#41](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/41) ([@julrich](https://github.com/julrich))
+
+#### 🐛 Bug Fix
+
+- fix: merge ([@julrich](https://github.com/julrich))
+- feature: introduce common reducer api to tina cms ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.2.0 (Sun Jun 12 2022)
 
 #### 🚀 Enhancement

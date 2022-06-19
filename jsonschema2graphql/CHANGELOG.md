@@ -1,3 +1,21 @@
+# v2.3.0 (Sun Jun 19 2022)
+
+#### 🐛 Bug Fix
+
+- Bump independent versions \[skip ci\] (lukas.mestel@kickstartds.com)
+- Update CHANGELOG.md \[skip ci\] (lukas.mestel@kickstartds.com)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hashing of cta in glossary ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel (lukas.mestel@kickstartds.com)
+
+---
+
 # v2.2.2 (Thu Jun 16 2022)
 
 #### ⚠️ Pushed to `master`

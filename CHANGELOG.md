@@ -1,3 +1,21 @@
+# (Sun Jun 19 2022)
+
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@2.4.0`, `@kickstartds/jsonschema-utils@2.3.0`, `@kickstartds/jsonschema2netlifycms@2.4.0`
+  - Merge branch 'master' into feature/move-tina-cms-to-shared-api [#41](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/41) ([@julrich](https://github.com/julrich))
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@2.3.0`
+  - fix: hashing of cta in glossary ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Thu Jun 16 2022)
 
 #### ⚠️ Pushed to `master`

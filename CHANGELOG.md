@@ -1,3 +1,16 @@
+# (Mon Jun 27 2022)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@2.3.1`, `@kickstartds/jsonschema2netlifycms@2.4.1`, `@kickstartds/jsonschema2sanity@1.1.1`, `@kickstartds/jsonschema2tinacms@2.4.1`
+  - fix: make schemaPost configurable ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Jun 19 2022)
 
 #### 🚀 Enhancement

@@ -1,3 +1,15 @@
+# v2.3.1 (Mon Jun 27 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: make schemaPost configurable ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.3.0 (Sun Jun 19 2022)
 
 #### 🐛 Bug Fix

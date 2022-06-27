@@ -5,6 +5,7 @@ declare namespace jsonschema2tinacms {
   export interface ConvertParams {
     schemaIds: string[]
     ajv: Ajv
+    schemaPost?: (schema: JSONSchema7) => JSONSchema7
   }
 }
 

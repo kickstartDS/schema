@@ -10,6 +10,7 @@ declare namespace jsonschema2sanity {
   export interface ConvertParams {
     schemaIds: string[]
     ajv: Ajv
+    schemaPost?: (schema: JSONSchema7) => JSONSchema7
   }
 
   export interface SanityConfigMap {

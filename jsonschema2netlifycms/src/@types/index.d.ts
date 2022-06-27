@@ -1,8 +1,10 @@
+import { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 
 export interface ConvertParams {
   schemaIds: string[]
   ajv: Ajv
+  schemaPost?: (schema: JSONSchema7) => JSONSchema7
 }
 
 // See https://www.marcveens.nl/netlify-cms-generate-config-yml

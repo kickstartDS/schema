@@ -16,6 +16,7 @@ import { createConfig } from './createConfig';
 export const convert = ({
   schemaIds,
   ajv,
+  schemaPost,
 }: ConvertParams): TinaFieldInner<false>[] =>
   getSchemasForIds(schemaIds, ajv)
     .reduce(getSchemaReducer<TinaFieldInner<false>>(
@@ -32,6 +33,7 @@ export const convert = ({
         processEnum,
         processConst,
         processBasic,
+        schemaPost,
       }
     ), []);
 

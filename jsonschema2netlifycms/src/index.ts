@@ -19,6 +19,7 @@ import { safeEnumKey } from './safeEnumKey';
 export const convert = ({
   schemaIds,
   ajv,
+  schemaPost,
 }: ConvertParams): NetlifyCmsField[] =>
   getSchemasForIds(schemaIds, ajv)
     .reduce(getSchemaReducer<NetlifyCmsField>(
@@ -35,6 +36,7 @@ export const convert = ({
         processEnum,
         processConst,
         processBasic,
+        schemaPost,
       }
     ), []);
 
@@ -53,16 +55,16 @@ const processObject: processFn<NetlifyCmsField> = ({
     fields: fields,
     collapsed: true,
   };
-    
+
   if (subSchema.default)
     field.default = subSchema.default as string;
-  
+
   if (description)
     field.hint = description;
-  
+
   field.required = subSchema.required?.includes(name) || false;
 
-  return field; 
+  return field;
 };
 
 const processRefArray: processFn<NetlifyCmsField> = ({
@@ -100,7 +102,7 @@ const processObjectArray: processFn<NetlifyCmsField> = ({
 
   if (rootSchema.default)
     field.default = subSchema.default as string;
-  
+
   if (description)
     field.hint = description;
 

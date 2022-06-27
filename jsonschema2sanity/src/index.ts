@@ -15,6 +15,7 @@ import { createConfig } from './createConfig';
 export const convert = ({
   schemaIds,
   ajv,
+  schemaPost,
 }: ConvertParams): Field[] =>
   getSchemasForIds(schemaIds, ajv)
     .reduce(getSchemaReducer<Field>(
@@ -31,6 +32,7 @@ export const convert = ({
         processEnum,
         processConst,
         processBasic,
+        schemaPost,
       }
     ), []);
 

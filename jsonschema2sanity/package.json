@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2sanity",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Converts JSON schema to Sanity schema config",
   "repository": "github:kickstartDS/jsonschema2sanity",
   "homepage": "https://github.com/kickstartDS/jsonschema2sanity#readme",

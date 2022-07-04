@@ -1,3 +1,4 @@
+// TODO move stuff to jsonschema-utils
 const typeResolutionField = 'type';
 
 export function cleanFieldName(name: string): string {

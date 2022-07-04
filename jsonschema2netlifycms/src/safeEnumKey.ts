@@ -1,5 +1,6 @@
 import R from 'ramda'
 
+// TODO move stuff to jsonschema-utils
 // TODO deduplicate this and `graphqlSfeEnumKey.ts` of `jsonschema2graphql`
 
 /** Turns an enum key from JSON schema into one that is safe for GraphQL. */

@@ -2,6 +2,7 @@ import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import { getSchemasForIds, toPascalCase } from '@kickstartds/jsonschema-utils/dist/helpers';
 import { getSchemaReducer, processFn } from '@kickstartds/jsonschema2netlifycms/build/schemaReducer';
 import { safeEnumKey } from '@kickstartds/jsonschema2netlifycms/build/safeEnumKey';
+import { cleanFieldName } from '@kickstartds/jsonschema2graphql/build/dehashing';
 
 import { TinaCloudSchema, TinaFieldInner, ObjectType } from '@tinacms/schema-tools';
 
@@ -42,14 +43,19 @@ export { TinaCloudSchema, createConfig };
 const processObject: processFn<TinaFieldInner<false>> = ({
   name,
   description,
-  // subSchema,
+  subSchema,
   fields,
 }) => {
   const field: ObjectType<false> = {
     name: name.replace('-', '_'),
     type: 'object',
-    label: toPascalCase(name),
+    label: toPascalCase(cleanFieldName(name)),
     fields,
+  }
+
+  if (subSchema.default) {
+    field.ui = field.ui || {};
+    field.ui.defaultItem = subSchema.default;
   }
 
   if (description)
@@ -73,12 +79,17 @@ const processRefArray: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     list: true,
     type: 'object',
-    label: toPascalCase(name),
-    templates: fields as {
+    label: toPascalCase(cleanFieldName(name)),
+    templates: (fields as {
       label: string;
       name: string;
       fields: TinaFieldInner<false>[];
-    }[],
+    }[]).map(({label, ...rest}) => {
+      return {
+        ...rest,
+        label: toPascalCase(cleanFieldName(label)),
+      }
+    }),
   };
 
   if (description)
@@ -102,12 +113,17 @@ const processObjectArray: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     list: true,
     type: 'object',
-    label: toPascalCase(name),
-    templates: fields as {
+    label: toPascalCase(cleanFieldName(name)),
+    templates: (fields as {
       label: string;
       name: string;
       fields: TinaFieldInner<false>[];
-    }[],
+    }[]).map(({label, ...rest}) => {
+      return {
+        ...rest,
+        label: toPascalCase(cleanFieldName(label)),
+      }
+    }),
   };
 
   if (description)
@@ -130,17 +146,23 @@ const processArray: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     list: true,
     type: 'object',
-    label: toPascalCase(name),
+    label: toPascalCase(cleanFieldName(name)),
     templates: []
   };
 
   // TODO should try to get by without that forced type
-  if (arrayField)
-    field.templates.push(arrayField as {
+  if (arrayField) {
+    const { label, ...rest } = arrayField;
+
+    field.templates.push({
+      label: toPascalCase(cleanFieldName(label)),
+      ...rest
+    } as {
       label: string;
       name: string;
       fields: TinaFieldInner<false>[];
     });
+  }
 
   if (description)
     field.description = description;
@@ -162,8 +184,13 @@ const processEnum: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     type: 'string',
     list: false,
-    label: toPascalCase(name),
+    label: toPascalCase(cleanFieldName(name)),
     options,
+  };
+
+  if (subSchema.default) {
+    field.ui = field.ui || {};
+    field.ui.defaultValue = safeEnumKey(subSchema.default as string)
   };
 
   if (description)
@@ -195,6 +222,9 @@ const getInternalTypeDefinition = (type: string): TinaFieldInner<false> => {
     name: typeResolutionField,
     description: 'Internal type for interface resolution',
     type: 'string',
+    ui: {
+      defaultValue: type,
+    }
   };
 
   return field;
@@ -260,12 +290,19 @@ const scalarMapping = (
 ) : TinaFieldInner<false> => {
   if (property.type === 'string' && property.enum && property.enum.length) {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       list: true,
       name: propertyName.replace('-', '_'),
       options: property.enum.map((value) => value as string) || [],
       type: 'string',
+      ui: {
+        defaultValue: [property.default as string],
+        // TODO this is a dummy currently, doesn't get rendered
+        validate: (value, data) => {
+          return null;
+        }
+      },
     };
   }
 
@@ -275,10 +312,13 @@ const scalarMapping = (
     property.format === 'markdown'
   ) {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'rich-text',
+      ui: {
+        defaultValue: property.default as string
+      },
     };
   }
 
@@ -288,10 +328,13 @@ const scalarMapping = (
     property.format === 'image'
   ) {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'image',
+      ui: {
+        defaultValue: [property.default as string]
+      },
     };
   }
 
@@ -301,13 +344,14 @@ const scalarMapping = (
     property.format === 'date'
   ) {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'string',
       ui: {
         dateFormat: 'YYYY MM DD',
-      }
+        defaultValue: property.default as string,
+      },
     };
   }
 
@@ -317,48 +361,63 @@ const scalarMapping = (
     property.format === 'id'
   ) {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'string',
       list: false,
+      ui: {
+        defaultValue: property.default as string
+      },
     };
   }
 
   if (property.type === 'string') {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'string',
       list: false,
+      ui: {
+        defaultValue: property.default as string
+      },
     };
   }
 
   if (property.type === 'integer' || property.type === 'number') {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'number',
+      ui: {
+        defaultValue: property.default as number
+      },
     };
   }
 
   if (property.type === 'boolean') {
     return {
-      label: propertyName,
+      label: toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'boolean',
+      ui: {
+        defaultValue: property.default as boolean
+      },
     }
   }
 
   // TODO handle this better, catch-all so something is returned
   return {
-    label: propertyName,
+    label: toPascalCase(cleanFieldName(propertyName)),
     description,
     name: propertyName.replace('-', '_'),
     type: 'boolean',
+    ui: {
+      defaultValue: property.default as boolean
+    },
   }
 
   // console.log('unsupported property in scalarMapping', property);

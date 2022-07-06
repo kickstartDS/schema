@@ -49,7 +49,7 @@ const processObject: processFn<TinaFieldInner<false>> = ({
   const field: ObjectType<false> = {
     name: name.replace('-', '_'),
     type: 'object',
-    label: toPascalCase(cleanFieldName(name)),
+    label: subSchema.title || toPascalCase(cleanFieldName(name)),
     fields,
   }
 
@@ -71,6 +71,7 @@ const processObject: processFn<TinaFieldInner<false>> = ({
 const processRefArray: processFn<TinaFieldInner<false>> = ({
   name,
   description,
+  subSchema,
   // rootSchema,
   fields,
 }) => {
@@ -79,7 +80,7 @@ const processRefArray: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     list: true,
     type: 'object',
-    label: toPascalCase(cleanFieldName(name)),
+    label: subSchema.title || toPascalCase(cleanFieldName(name)),
     templates: (fields as {
       label: string;
       name: string;
@@ -105,6 +106,7 @@ const processRefArray: processFn<TinaFieldInner<false>> = ({
 const processObjectArray: processFn<TinaFieldInner<false>> = ({
   name,
   description,
+  subSchema,
   // rootSchema,
   fields,
 }) => {
@@ -113,7 +115,7 @@ const processObjectArray: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     list: true,
     type: 'object',
-    label: toPascalCase(cleanFieldName(name)),
+    label: subSchema.title || toPascalCase(cleanFieldName(name)),
     templates: (fields as {
       label: string;
       name: string;
@@ -139,6 +141,7 @@ const processObjectArray: processFn<TinaFieldInner<false>> = ({
 const processArray: processFn<TinaFieldInner<false>> = ({
   name,
   description,
+  subSchema,
   // rootSchema,
   arrayField,
 }) => {
@@ -146,7 +149,7 @@ const processArray: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     list: true,
     type: 'object',
-    label: toPascalCase(cleanFieldName(name)),
+    label: subSchema.title || toPascalCase(cleanFieldName(name)),
     templates: []
   };
 
@@ -184,7 +187,7 @@ const processEnum: processFn<TinaFieldInner<false>> = ({
     name: name.replace('-', '_'),
     type: 'string',
     list: false,
-    label: toPascalCase(cleanFieldName(name)),
+    label: subSchema.title || toPascalCase(cleanFieldName(name)),
     options,
   };
 
@@ -290,7 +293,7 @@ const scalarMapping = (
 ) : TinaFieldInner<false> => {
   if (property.type === 'string' && property.enum && property.enum.length) {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       list: true,
       name: propertyName.replace('-', '_'),
@@ -312,7 +315,7 @@ const scalarMapping = (
     property.format === 'markdown'
   ) {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'rich-text',
@@ -328,7 +331,7 @@ const scalarMapping = (
     property.format === 'image'
   ) {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'image',
@@ -344,7 +347,7 @@ const scalarMapping = (
     property.format === 'date'
   ) {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'string',
@@ -361,7 +364,7 @@ const scalarMapping = (
     property.format === 'id'
   ) {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'string',
@@ -374,7 +377,7 @@ const scalarMapping = (
 
   if (property.type === 'string') {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'string',
@@ -387,7 +390,7 @@ const scalarMapping = (
 
   if (property.type === 'integer' || property.type === 'number') {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'number',
@@ -399,7 +402,7 @@ const scalarMapping = (
 
   if (property.type === 'boolean') {
     return {
-      label: toPascalCase(cleanFieldName(propertyName)),
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
       description,
       name: propertyName.replace('-', '_'),
       type: 'boolean',
@@ -411,7 +414,7 @@ const scalarMapping = (
 
   // TODO handle this better, catch-all so something is returned
   return {
-    label: toPascalCase(cleanFieldName(propertyName)),
+    label: property.title || toPascalCase(cleanFieldName(propertyName)),
     description,
     name: propertyName.replace('-', '_'),
     type: 'boolean',

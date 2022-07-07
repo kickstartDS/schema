@@ -35,6 +35,7 @@
   "dependencies": {
     "@kickstartds/jsonschema-utils": "^2.3.1",
     "@kickstartds/jsonschema2netlifycms": "^2.4.2",
+    "@kickstartds/jsonschema2graphql": "^2.3.1",
     "ajv": "^8.5.0",
     "camelcase": "^6.2.0",
     "lodash": "^4.17.21",

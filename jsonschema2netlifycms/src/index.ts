@@ -56,6 +56,7 @@ const processObject: processFn<NetlifyCmsField> = ({
     collapsed: true,
   };
 
+  // TODO this is suspect, should expect an object here when in processObject
   if (subSchema.default)
     field.default = subSchema.default as string;
 
@@ -100,6 +101,7 @@ const processObjectArray: processFn<NetlifyCmsField> = ({
     types: fields,
   };
 
+  // TODO this is suspect, should expect an object here when in processObject
   if (rootSchema.default)
     field.default = subSchema.default as string;
 
@@ -124,6 +126,7 @@ const processArray: processFn<NetlifyCmsField> = ({
     widget: 'list',
   };
 
+  // TODO this is suspect, should expect an object here when in processObject
   if (rootSchema.default)
     field.default = subSchema.default as string;
 

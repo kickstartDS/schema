@@ -1,3 +1,4 @@
+// TODO move stuff to jsonschema-utils
 import { JSONSchema7 } from 'json-schema';
 import _ from 'lodash';
 import { err } from './helpers';
@@ -35,6 +36,7 @@ export interface schemaReducerOptions<T> {
   processConst: processFn<T>,
   processBasic: processFn<T>,
   schemaPost?: (schema: JSONSchema7) => JSONSchema7,
+  getSchemaFn?: (id: string) => JSONSchema7,
 };
 
 export function getSchemaReducer<T>({
@@ -51,7 +53,14 @@ export function getSchemaReducer<T>({
   processConst,
   processBasic,
   schemaPost,
+  getSchemaFn,
 }: schemaReducerOptions<T>) {
+  function getSchema(id: string): JSONSchema7 {
+    return schemaPost
+      ? schemaPost(ajv.getSchema(id).schema as JSONSchema7)
+      : ajv.getSchema(id).schema as JSONSchema7;
+  };
+
   function schemaReducer(knownTypes: T[], schema: JSONSchema7): T[] {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
@@ -129,7 +138,7 @@ export function getSchemaReducer<T>({
         if (isRefArray) {
           const description = buildDescription(outerSchema);
           const fieldConfigs = arraySchemas.map((arraySchema) => {
-            const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
+            const resolvedSchema = getSchemaFn ? getSchemaFn(arraySchema.$ref) : getSchema(arraySchema.$ref);
             return buildType(
               getSchemaName(resolvedSchema.$id),
               resolvedSchema,
@@ -161,7 +170,7 @@ export function getSchemaReducer<T>({
 
         let fieldConfig;
         if (arraySchema.$ref) {
-          const resolvedSchema = ajv.getSchema(arraySchema.$ref)?.schema as JSONSchema7;
+          const resolvedSchema = getSchemaFn ? getSchemaFn(arraySchema.$ref) : getSchema(arraySchema.$ref);
           fieldConfig = buildType(
             getSchemaName(resolvedSchema.$id),
             resolvedSchema,
@@ -195,7 +204,7 @@ export function getSchemaReducer<T>({
 
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
-      const reffedSchema = ajv.getSchema(schema.$ref)?.schema as JSONSchema7;
+      const reffedSchema = getSchemaFn ? getSchemaFn(schema.$ref) : getSchema(schema.$ref);
 
       return buildType(
         name,

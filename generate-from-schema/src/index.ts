@@ -25,6 +25,9 @@ import {
   processSchemaGlob,
   getSchemaRegistry,
   getUniqueSchemaIds,
+  dedupeDeep,
+  collectComponentInterfaces,
+  getSchemasForIds,
 } from '@kickstartds/jsonschema-utils/dist/helpers';
 import { traverse } from 'object-traversal';
 
@@ -99,9 +102,13 @@ export const generateGraphQL = (
   ajv: Ajv,
   configPath: string = 'dist/page.graphql',
 ) => {
+  const jsonSchemas = getSchemasForIds(schemaIds, ajv);
+  const componentInterfaces = collectComponentInterfaces(jsonSchemas);
+
   const gqlTypes = convertToGraphQL({
     schemaIds,
     ajv,
+    componentInterfaces,
   });
 
   // TODO make sure this disclaimer actually lands in the resulting file
@@ -246,11 +253,13 @@ export const generateTinaCMS = (
   configPath: string = `dist/tina.json`,
 ) => {
   const configLocation = 'static/.tina/schema.json';
+  // TODO fix reading of config, yamlLoad is obviously wrong here... this can't work!
   const config = configLocation && existsSync(configLocation) && yamlLoad(readFileSync(configLocation, 'utf-8'));
 
   const pageFields = convertToTinaCMS({
     schemaIds,
     ajv,
+    schemaPost: dedupeDeep,
   });
 
   const tinaConfig = createConfigTinaCMS(

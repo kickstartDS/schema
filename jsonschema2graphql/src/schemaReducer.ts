@@ -32,30 +32,19 @@ const BASIC_TYPE_MAPPING = {
   boolean: GraphQLBoolean,
 };
 
-const contentComponentInterface = new GraphQLInterfaceType({
-  name: 'ContentComponent',
-  fields: {
-    type: { type: GraphQLString }
-  },
-});
-
-const textMediaComponentInterface = new GraphQLInterfaceType({
-  name: 'TextMediaComponentMedia', // TextMediaComponentMedia
-  fields: {
-    type: { type: GraphQLString }
-  },
-});
-
 const gatsbyFileInterface = new GraphQLInterfaceType({
   name: 'File',
   fields: {}
 });
 
-// TODO these should be (cli) options
-const gatsbyImages = true;
-
 // TODO check for fields generated without comment / documentation
-export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema7) {
+export function getSchemaReducer(
+  schemaPost: (schema: JSONSchema7) => JSONSchema7,
+  componentInterfaces: Record<string, string[]>,
+  gatsbyImages = true,
+) {
+  const interfaceTypes: Record<string, GraphQLInterfaceType> = {};
+
   function schemaReducer(knownTypes: GraphQLTypeMap, schema: JSONSchema7): GraphQLTypeMap {
     const $id = schema.$id
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
@@ -67,6 +56,19 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
 
     knownTypes[typeName] = buildType(typeName, clonedSchema, knownTypes, true, clonedSchema);
     return knownTypes;
+  }
+
+  function getComponentInterface(interfaceName: string) {
+    if (!interfaceTypes[interfaceName]) {
+      interfaceTypes[interfaceName] = new GraphQLInterfaceType({
+        name: interfaceName,
+        fields: {
+          type: { type: GraphQLString }
+        },
+      });
+    }
+
+    return interfaceTypes[interfaceName];
   }
 
   function buildType(
@@ -149,10 +151,11 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
             { _empty: { type: GraphQLString } };
 
       const interfaces = contentComponent
-        ? outerSchema.$id?.includes('.interface')
-          ? [textMediaComponentInterface]
-          : [contentComponentInterface]
-        : []
+        && componentInterfaces[outerSchema.$id]
+        && componentInterfaces[outerSchema.$id].length > 0
+        ? componentInterfaces[outerSchema.$id].map((interfaceName) =>
+          getComponentInterface(interfaceName)
+        ) : [];
 
       return new GraphQLObjectType({ name, description, fields, interfaces });
     }
@@ -161,22 +164,12 @@ export function getSchemaReducer(schemaPost: (schema: JSONSchema7) => JSONSchema
     else if (schema.type === 'array') {
       const arraySchema = _.cloneDeep(schema.items) as JSONSchema7;
 
-      if (arraySchema.anyOf && name !== 'SectionComponentContent') {
-        return new GraphQLList(textMediaComponentInterface);
-
-        // TODO: repurpose this to generalize again:
-        // return new GraphQLList(new GraphQLInterfaceType({
-        //   name: `${uppercamelcase(cleanFieldName(propName))}`,
-        //   fields: {
-        //     type: { type: GraphQLString }
-        //   },
-        // }));
+      if (arraySchema.anyOf) {
+        return new GraphQLList(getComponentInterface(name));
       }
 
       const elementType = buildType(name, arraySchema, knownTypes, false, outerSchema);
-      return name === 'SectionComponentContent'
-        ? new GraphQLList(new GraphQLNonNull(contentComponentInterface))
-        : new GraphQLList(new GraphQLNonNull(elementType));
+      return new GraphQLList(new GraphQLNonNull(elementType));
     }
 
     // enum?

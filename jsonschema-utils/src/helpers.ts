@@ -218,10 +218,69 @@ export const inlineDefinitions = (jsonSchemas: JSONSchema7[]): void => {
           } else {
             parentSchema[parentKeyword][pointer.split('/').pop()] = rootSchema.definitions[pointer.split('/').pop()];
           }
+        } else if (subSchema.$ref && subSchema.$ref.includes('#/properties/')) {
+          if (parentKeyword === 'properties') {
+            parentSchema[parentKeyword][pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
+              jsonSchema.$id === subSchema.$ref.split('#').shift()
+            ).properties[pointer.split('/').pop()];
+          }
         }
       }
     });
   });
+};
+
+export const collectComponentInterfaces = (jsonSchemas: JSONSchema7[]): Record<string, string[]> => {
+  const interfaceMap: Record<string, string[]> = {};
+
+  jsonSchemas.forEach((jsonSchema) => {
+    traverse(jsonSchema, {
+      cb: (subSchema, pointer) => {
+        if (
+          subSchema.items &&
+          subSchema.items.anyOf &&
+          subSchema.items.anyOf.length > 0 &&
+          subSchema.items.anyOf.every((anyOf: JSONSchema7) => anyOf.$ref)
+        ) {
+          const interfaceName = `${uppercamelcase(getSchemaName(jsonSchema.$id))}Component${uppercamelcase(pointer.split('/').pop())}`;
+
+          subSchema.items.anyOf.forEach((anyOf: JSONSchema7) => {
+            interfaceMap[anyOf.$ref] = interfaceMap[anyOf.$ref] || [];
+            if (!interfaceMap[anyOf.$ref].includes(interfaceName)) {
+              interfaceMap[anyOf.$ref].push(interfaceName);
+            }
+          });
+        };
+      }
+    });
+  });
+
+  return interfaceMap;
+};
+
+export const collectReferencedSchemaIds = (jsonSchemas: JSONSchema7[], ajv: Ajv): string[] => {
+  const referencedIds: string[] = [];
+
+  jsonSchemas.forEach((jsonSchema) => {
+    traverse(jsonSchema, {
+      cb: (subSchema) => {
+        if (subSchema.$ref && !referencedIds.includes(subSchema.$ref)) {
+          referencedIds.push(subSchema.$ref);
+
+          const schema = ajv.getSchema<JSONSchema7>(subSchema.$ref).schema as JSONSchema7;
+          if (schema) {
+            collectReferencedSchemaIds([schema], ajv).forEach((schemaId) => {
+              if (!referencedIds.includes(schemaId)) {
+                referencedIds.push(schemaId);
+              }
+            });
+          }
+        }
+      }
+    });
+  });
+
+  return referencedIds;
 };
 
 export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =>

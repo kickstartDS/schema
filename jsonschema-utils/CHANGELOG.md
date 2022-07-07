@@ -1,3 +1,16 @@
+# v2.3.1 (Thu Jul 07 2022)
+
+#### 🐛 Bug Fix
+
+- prevent error while adding new schemas [#43](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/43) ([@lmestel](https://github.com/lmestel))
+- fix: don't compile schemas while adding ([@lmestel](https://github.com/lmestel))
+
+#### Authors: 1
+
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v2.3.0 (Sun Jun 19 2022)
 
 #### 🚀 Enhancement

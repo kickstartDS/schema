@@ -375,6 +375,24 @@ const scalarMapping = (
     };
   }
 
+  if (
+    property.type === 'string' &&
+    property.format &&
+    property.format === 'color'
+  ) {
+    return {
+      label: property.title || toPascalCase(cleanFieldName(propertyName)),
+      description,
+      name: propertyName.replace('-', '_'),
+      type: 'string',
+      list: false,
+      ui: {
+        component: 'color',
+        defaultValue: property.default as string
+      },
+    };
+  }
+
   if (property.type === 'string') {
     return {
       label: property.title || toPascalCase(cleanFieldName(propertyName)),

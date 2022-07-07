@@ -5,6 +5,8 @@ import Ajv from 'ajv/dist/core'
 export interface ConvertParams {
   schemaIds: string[]
   ajv: Ajv
+  componentInterfaces?: Record<string, string[]>
+  gatsbyImages?: boolean
   schemaPost?: (schema: JSONSchema7) => JSONSchema7
 }
 

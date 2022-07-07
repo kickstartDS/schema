@@ -12,9 +12,11 @@ import { createConfig } from './createConfig';
 export const convert = ({
   schemaIds,
   ajv,
+  componentInterfaces = {},
+  gatsbyImages = true,
   schemaPost = dedupeDeep,
 }: ConvertParams): GraphQLTypeMap =>
   getSchemasForIds(schemaIds, ajv)
-    .reduce(getSchemaReducer(schemaPost), {});
+    .reduce(getSchemaReducer(schemaPost, componentInterfaces, gatsbyImages), {});
 
 export { GraphQLSchema, createConfig };

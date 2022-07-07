@@ -165,7 +165,9 @@ export const reduceSchemaAllOfs = (schema: JSONSchema7, ajv: Ajv): void => {
 };
 
 export const addJsonSchema = (jsonSchema: JSONSchema7, ajv: Ajv) => {
-  if (!ajv.getSchema(jsonSchema.$id)) ajv.addSchema(jsonSchema);
+  if (!(ajv.schemas[jsonSchema.$id] || ajv.refs[jsonSchema.$id])) {
+    ajv.addSchema(jsonSchema);
+  }
   return jsonSchema;
 };
 

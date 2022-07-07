@@ -258,6 +258,31 @@ export const collectComponentInterfaces = (jsonSchemas: JSONSchema7[]): Record<s
   return interfaceMap;
 };
 
+export const collectReferencedSchemaIds = (jsonSchemas: JSONSchema7[], ajv: Ajv): string[] => {
+  const referencedIds: string[] = [];
+
+  jsonSchemas.forEach((jsonSchema) => {
+    traverse(jsonSchema, {
+      cb: (subSchema) => {
+        if (subSchema.$ref && !referencedIds.includes(subSchema.$ref)) {
+          referencedIds.push(subSchema.$ref);
+
+          const schema = ajv.getSchema<JSONSchema7>(subSchema.$ref).schema as JSONSchema7;
+          if (schema) {
+            collectReferencedSchemaIds([schema], ajv).forEach((schemaId) => {
+              if (!referencedIds.includes(schemaId)) {
+                referencedIds.push(schemaId);
+              }
+            });
+          }
+        }
+      }
+    });
+  });
+
+  return referencedIds;
+};
+
 export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =>
   fs.readFile(schemaPath, 'utf-8').then((schema: string) => JSON.parse(schema) as JSONSchema7);
 

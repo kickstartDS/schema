@@ -1,5 +1,19 @@
 # (Thu Jul 07 2022)
 
+#### 🚀 Enhancement
+
+- `@kickstartds/generate-from-schema@2.5.0`, `@kickstartds/jsonschema-utils@2.4.0`, `@kickstartds/jsonschema2graphql@2.4.0`, `@kickstartds/jsonschema2netlifycms@2.5.0`, `@kickstartds/jsonschema2tinacms@2.5.0`
+  - feature(tina): add defaults, hash fields and clean labels for tina [#44](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/44) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
+# (Thu Jul 07 2022)
+
 #### 🐛 Bug Fix
 
 - `@kickstartds/jsonschema-utils@2.3.1`

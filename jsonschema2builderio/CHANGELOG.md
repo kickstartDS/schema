@@ -1,3 +1,15 @@
+# v2.4.0 (Thu Jul 07 2022)
+
+#### 🐛 Bug Fix
+
+- Merge branch 'master' into feature/add-default-values-and-hashing-to-tina ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.2.0 (Sun Jun 12 2022)
 
 #### 🚀 Enhancement

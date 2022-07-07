@@ -1,3 +1,22 @@
+# v2.5.0 (Thu Jul 07 2022)
+
+#### 🚀 Enhancement
+
+- feature(tina): add defaults, hash fields and clean labels for tina [#44](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/44) ([@julrich](https://github.com/julrich) [@lmestel](https://github.com/lmestel))
+
+#### 🐛 Bug Fix
+
+- Merge branch 'master' into feature/add-default-values-and-hashing-to-tina ([@julrich](https://github.com/julrich))
+- Merge branch 'hotfix/prevent-error-while-adding-schemas' into feature/add-default-values-and-hashing-to-tina ([@julrich](https://github.com/julrich))
+- feature(tina): add defaults, hash fields and clean labels for tina ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v2.4.1 (Mon Jun 27 2022)
 
 #### ⚠️ Pushed to `master`

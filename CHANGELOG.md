@@ -1,3 +1,16 @@
+# (Fri Jul 08 2022)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/jsonschema2tinacms@2.5.1`
+  - accept optional `label` in tina's `createConfig` [#46](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/46) ([@lmestel](https://github.com/lmestel))
+
+#### Authors: 1
+
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # (Thu Jul 07 2022)
 
 #### 🚀 Enhancement

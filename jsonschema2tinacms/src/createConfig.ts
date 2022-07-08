@@ -10,10 +10,11 @@ export function createConfig(
   contentFields: TinaFieldInner<false>[],
   baseConfig: TinaCloudSchema<false> = defaultConfig,
   collectionName: string,
+  collectionLabel: string = capitalize(collectionName)
 ): TinaCloudSchema<false> {
   const pages: TinaCloudCollection<false> = {
     name: collectionName,
-    label: capitalize(collectionName),
+    label: collectionLabel,
     path: `content/${collectionName}`,
     fields: contentFields,
   }

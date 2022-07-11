@@ -10,6 +10,7 @@ export interface processInterface<T> {
   description: string,
   subSchema: JSONSchema7,
   rootSchema: JSONSchema7,
+  parentSchema?: JSONSchema7,
   fields?: T[],
   arrayField?: T,
   options?: {
@@ -78,6 +79,7 @@ export function getSchemaReducer<T>({
     propName: string,
     schema: JSONSchema7,
     outerSchema: JSONSchema7,
+    parentSchema?: JSONSchema7,
   ): T {
     const name = propName;
 
@@ -121,6 +123,7 @@ export function getSchemaReducer<T>({
                 fieldName,
                 objectSchema,
                 outerSchema,
+                schema,
               );
             })
           : [];
@@ -143,6 +146,7 @@ export function getSchemaReducer<T>({
               getSchemaName(resolvedSchema.$id),
               resolvedSchema,
               resolvedSchema,
+              parentSchema,
             );
           });
 
@@ -154,6 +158,7 @@ export function getSchemaReducer<T>({
               arraySchema.title?.toLowerCase() || '',
               arraySchema,
               outerSchema,
+              parentSchema,
             )
           );
 
@@ -175,12 +180,14 @@ export function getSchemaReducer<T>({
             getSchemaName(resolvedSchema.$id),
             resolvedSchema,
             resolvedSchema,
+            parentSchema,
           );
         } else {
           fieldConfig = buildType(
             name,
             arraySchema,
             outerSchema,
+            parentSchema,
           );
         }
 
@@ -199,7 +206,7 @@ export function getSchemaReducer<T>({
         };
       });
 
-      return processEnum({ name, description, subSchema: schema, rootSchema: outerSchema, options });
+      return processEnum({ name, description, subSchema: schema, rootSchema: outerSchema, options, parentSchema });
     }
 
     // ref?
@@ -210,6 +217,7 @@ export function getSchemaReducer<T>({
         name,
         reffedSchema,
         reffedSchema,
+        parentSchema,
       );
     }
 
@@ -222,13 +230,13 @@ export function getSchemaReducer<T>({
         throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
       }
 
-      return processConst({ name, description, subSchema: schema, rootSchema: outerSchema });
+      return processConst({ name, description, subSchema: schema, rootSchema: outerSchema, parentSchema });
     }
 
     // basic?
     else if (basicMapping(schema)) {
       const description = buildDescription(schema);
-      return processBasic({ name, description, subSchema: schema, rootSchema: outerSchema });
+      return processBasic({ name, description, subSchema: schema, rootSchema: outerSchema, parentSchema });
     }
 
     // ¯\_(ツ)_/¯

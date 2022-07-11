@@ -182,6 +182,7 @@ const processEnum: processFn<TinaFieldInner<false>> = ({
   description,
   subSchema,
   options,
+  parentSchema,
 }) => {
   const field: TinaFieldInner<false> = {
     name: name.replace('-', '_'),
@@ -199,7 +200,7 @@ const processEnum: processFn<TinaFieldInner<false>> = ({
   if (description)
     field.description = description;
 
-  if (subSchema.required?.includes(name))
+  if (parentSchema.required?.includes(cleanFieldName(name)))
     field.required = true;
 
   return field;
@@ -215,8 +216,9 @@ const processBasic: processFn<TinaFieldInner<false>> = ({
   name,
   description,
   subSchema,
+  parentSchema,
 }) => {
-  return scalarMapping(subSchema, name, description);
+  return scalarMapping(subSchema, name, description, parentSchema);
 };
 
 const typeResolutionField = 'type';
@@ -289,8 +291,13 @@ const basicMapping = (property: JSONSchema7) : string => {
 const scalarMapping = (
   property: JSONSchema7,
   propertyName: string,
-  description: string
+  description: string,
+  parentSchema: JSONSchema7,
 ) : TinaFieldInner<false> => {
+  if (parentSchema.required?.length > 0) {
+    console.log(parentSchema.required?.includes(cleanFieldName(propertyName)), parentSchema, propertyName);
+  }
+
   if (property.type === 'string' && property.enum && property.enum.length) {
     return {
       label: property.title || toPascalCase(cleanFieldName(propertyName)),
@@ -299,12 +306,9 @@ const scalarMapping = (
       name: propertyName.replace('-', '_'),
       options: property.enum.map((value) => value as string) || [],
       type: 'string',
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         defaultValue: [property.default as string],
-        // TODO this is a dummy currently, doesn't get rendered
-        validate: (value, data) => {
-          return null;
-        }
       },
     };
   }
@@ -319,6 +323,7 @@ const scalarMapping = (
       description,
       name: propertyName.replace('-', '_'),
       type: 'rich-text',
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         defaultValue: property.default as string
       },
@@ -335,6 +340,7 @@ const scalarMapping = (
       description,
       name: propertyName.replace('-', '_'),
       type: 'image',
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         defaultValue: [property.default as string]
       },
@@ -351,6 +357,7 @@ const scalarMapping = (
       description,
       name: propertyName.replace('-', '_'),
       type: 'string',
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         dateFormat: 'YYYY MM DD',
         defaultValue: property.default as string,
@@ -369,6 +376,7 @@ const scalarMapping = (
       name: propertyName.replace('-', '_'),
       type: 'string',
       list: false,
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         defaultValue: property.default as string
       },
@@ -400,6 +408,7 @@ const scalarMapping = (
       name: propertyName.replace('-', '_'),
       type: 'string',
       list: false,
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         defaultValue: property.default as string
       },
@@ -412,6 +421,7 @@ const scalarMapping = (
       description,
       name: propertyName.replace('-', '_'),
       type: 'number',
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         defaultValue: property.default as number
       },
@@ -424,6 +434,7 @@ const scalarMapping = (
       description,
       name: propertyName.replace('-', '_'),
       type: 'boolean',
+      required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
         defaultValue: property.default as boolean
       },
@@ -436,6 +447,7 @@ const scalarMapping = (
     description,
     name: propertyName.replace('-', '_'),
     type: 'boolean',
+    required: parentSchema.required?.includes(cleanFieldName(propertyName)),
     ui: {
       defaultValue: property.default as boolean
     },

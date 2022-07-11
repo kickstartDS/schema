@@ -290,10 +290,10 @@ export const getSchemasForGlob = async (schemaGlob: string): Promise<JSONSchema7
   glob(schemaGlob).then((schemaPaths: string[]) =>
     Promise.all(schemaPaths.map(async (schemaPath: string) => loadSchemaPath(schemaPath))));
 
-export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv): Promise<string[]> =>
-  processSchemas(await getSchemasForGlob(schemaGlob), ajv);
+export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv, typeResolution: boolean = true): Promise<string[]> =>
+  processSchemas(await getSchemasForGlob(schemaGlob), ajv, typeResolution);
 
-export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Promise<string[]> => {
+export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv, typeResolution: boolean = true): Promise<string[]> => {
   // TODO this should go (`pathPrefix` / environment dependent paths)
   const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
   // load all the schema files provided by `@kickstartDS` itself
@@ -305,7 +305,7 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
 
   // 1. pre-process, before schemas enter `ajv`
   layerRefs(jsonSchemas, kdsSchemas);
-  addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);
+  if (typeResolution) addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);
   inlineDefinitions([...jsonSchemas, ...kdsSchemas]);
 
   // 2. add all schemas to ajv for the following processing steps
@@ -327,7 +327,7 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv): Prom
 
   // 4. process new schemas, resulting from adding the distinct
   // `anyOf`s in the step before
-  addTypeInterfaces(schemaAnyOfs);
+  if (typeResolution) addTypeInterfaces(schemaAnyOfs);
   schemaAnyOfs.forEach((schemaAnyOf) => {
     reduceSchemaAllOfs(schemaAnyOf, ajv);
   });

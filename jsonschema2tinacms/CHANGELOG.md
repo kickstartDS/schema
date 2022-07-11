@@ -1,3 +1,15 @@
+# v2.5.2 (Mon Jul 11 2022)
+
+#### ⚠️ Pushed to `master`
+
+- feature: add required fields ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.5.1 (Fri Jul 08 2022)
 
 #### 🐛 Bug Fix

@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2builderio",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Converts JSON schema to Builder.io inputs config",
   "repository": "github:kickstartDS/jsonschema2builderio",
   "homepage": "https://github.com/kickstartDS/jsonschema2buidlerio#readme",
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@builder.io/sdk": "^1.1.26",
-    "@kickstartds/jsonschema-utils": "^2.4.0",
+    "@kickstartds/jsonschema-utils": "^2.4.1",
     "ajv": "^8.5.0",
     "camelcase": "^6.2.0",
     "lodash": "^4.17.21",

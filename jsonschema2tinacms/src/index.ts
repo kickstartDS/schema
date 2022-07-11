@@ -294,10 +294,6 @@ const scalarMapping = (
   description: string,
   parentSchema: JSONSchema7,
 ) : TinaFieldInner<false> => {
-  if (parentSchema.required?.length > 0) {
-    console.log(parentSchema.required?.includes(cleanFieldName(propertyName)), parentSchema, propertyName);
-  }
-
   if (property.type === 'string' && property.enum && property.enum.length) {
     return {
       label: property.title || toPascalCase(cleanFieldName(propertyName)),

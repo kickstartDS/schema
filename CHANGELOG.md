@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `master`
 
+- `@kickstartds/jsonschema2tinacms@2.5.3`
+  - chore: remove console.log ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Mon Jul 11 2022)
+
+#### ⚠️ Pushed to `master`
+
 - `@kickstartds/jsonschema-utils@2.4.1`, `@kickstartds/jsonschema2netlifycms@2.5.1`, `@kickstartds/jsonschema2tinacms@2.5.2`
   - feature: add required fields ([@julrich](https://github.com/julrich))
 

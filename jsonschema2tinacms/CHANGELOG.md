@@ -1,3 +1,15 @@
+# v2.5.3 (Mon Jul 11 2022)
+
+#### ⚠️ Pushed to `master`
+
+- chore: remove console.log ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.5.2 (Mon Jul 11 2022)
 
 #### ⚠️ Pushed to `master`

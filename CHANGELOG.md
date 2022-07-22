@@ -1,3 +1,16 @@
+# (Fri Jul 22 2022)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2tinacms@2.5.4`
+  - fix(tinacms): replace all dashes with underscores ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Mon Jul 11 2022)
 
 #### ⚠️ Pushed to `master`

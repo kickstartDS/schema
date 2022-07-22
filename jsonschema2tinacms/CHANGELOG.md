@@ -1,3 +1,15 @@
+# v2.5.4 (Fri Jul 22 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix(tinacms): replace all dashes with underscores ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.5.3 (Mon Jul 11 2022)
 
 #### ⚠️ Pushed to `master`

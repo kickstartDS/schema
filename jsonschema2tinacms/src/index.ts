@@ -47,7 +47,7 @@ const processObject: processFn<TinaFieldInner<false>> = ({
   fields,
 }) => {
   const field: ObjectType<false> = {
-    name: name.replace('-', '_'),
+    name: name.replace(/-/g, '_'),
     type: 'object',
     label: subSchema.title || toPascalCase(cleanFieldName(name)),
     fields,
@@ -77,7 +77,7 @@ const processRefArray: processFn<TinaFieldInner<false>> = ({
 }) => {
   // TODO should try to get by without that forced type
   const field: ObjectType<false> = {
-    name: name.replace('-', '_'),
+    name: name.replace(/-/g, '_'),
     list: true,
     type: 'object',
     label: subSchema.title || toPascalCase(cleanFieldName(name)),
@@ -112,7 +112,7 @@ const processObjectArray: processFn<TinaFieldInner<false>> = ({
 }) => {
   // TODO should try to get by without that forced type
   const field: ObjectType<false> = {
-    name: name.replace('-', '_'),
+    name: name.replace(/-/g, '_'),
     list: true,
     type: 'object',
     label: subSchema.title || toPascalCase(cleanFieldName(name)),
@@ -146,7 +146,7 @@ const processArray: processFn<TinaFieldInner<false>> = ({
   arrayField,
 }) => {
   const field: ObjectType<false> = {
-    name: name.replace('-', '_'),
+    name: name.replace(/-/g, '_'),
     list: true,
     type: 'object',
     label: subSchema.title || toPascalCase(cleanFieldName(name)),
@@ -185,7 +185,7 @@ const processEnum: processFn<TinaFieldInner<false>> = ({
   parentSchema,
 }) => {
   const field: TinaFieldInner<false> = {
-    name: name.replace('-', '_'),
+    name: name.replace(/-/g, '_'),
     type: 'string',
     list: false,
     label: subSchema.title || toPascalCase(cleanFieldName(name)),

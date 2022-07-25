@@ -176,7 +176,24 @@ export const layerRefs = (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[])
     kdsSchemas.forEach((kdsSchema) => {
       traverse(kdsSchema, {
         cb: (subSchema) => {
-          if (subSchema.$ref && jsonSchema.$id.split('/').pop() === subSchema.$ref.split('/').pop()) {
+          if (!subSchema.$ref || !subSchema.$ref.includes('http')) return;
+
+          const kdsSchemaURL = new URL(jsonSchema.$id);
+          const customSchemaURL = new URL(subSchema.$ref);
+
+          const kdsSchemaURLPathParts = kdsSchemaURL.pathname.split('/');
+          const customSchemaURLPathParts = customSchemaURL.pathname.split('/');
+
+          const kdsSchemaFileName = kdsSchemaURLPathParts.pop();
+          const customSchemaFileName = customSchemaURLPathParts.pop();
+
+          const kdsSchemaPathRest = kdsSchemaURLPathParts.pop();
+          const customSchemaPathRest = kdsSchemaURLPathParts.pop();
+
+          if (
+            kdsSchemaFileName === customSchemaFileName &&
+            (customSchemaPathRest && kdsSchemaPathRest === customSchemaPathRest)
+          ) {
             subSchema.$ref = jsonSchema.$id;
           }
         }

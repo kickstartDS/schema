@@ -1,3 +1,15 @@
+# v2.4.2 (Mon Jul 25 2022)
+
+#### ⚠️ Pushed to `master`
+
+- fix: handling of layered refs ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.4.1 (Mon Jul 11 2022)
 
 #### ⚠️ Pushed to `master`

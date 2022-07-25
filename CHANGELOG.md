@@ -1,3 +1,16 @@
+# (Mon Jul 25 2022)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema-utils@2.4.2`
+  - fix: handling of layered refs ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Fri Jul 22 2022)
 
 #### ⚠️ Pushed to `master`

@@ -337,9 +337,6 @@ const scalarMapping = (
       name: propertyName.replace('-', '_'),
       type: 'image',
       required: parentSchema.required?.includes(cleanFieldName(propertyName)),
-      ui: {
-        defaultValue: [property.default as string]
-      },
     };
   }
 

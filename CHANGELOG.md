@@ -1,3 +1,16 @@
+# (Tue Aug 02 2022)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/jsonschema2tinacms@2.5.6`
+  - tina image field [#47](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/47) ([@lmestel](https://github.com/lmestel))
+
+#### Authors: 1
+
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # (Mon Jul 25 2022)
 
 #### ⚠️ Pushed to `master`

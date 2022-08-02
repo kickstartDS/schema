@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2tinacms",
-  "version": "2.5.5",
+  "version": "2.5.6",
   "description": "Converts JSON schema to Tina CMS admin config",
   "repository": "github:kickstartDS/jsonschema2tinacms",
   "homepage": "https://github.com/kickstartDS/jsonschema2tinacms#readme",

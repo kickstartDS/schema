@@ -1,3 +1,19 @@
+# (Wed Aug 03 2022)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/jsonschema-utils@2.4.3`, `@kickstartds/jsonschema2tinacms@2.5.7`
+  - use tina's rich-text syntax for rich-text default values [#48](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/48) ([@lmestel](https://github.com/lmestel) [@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema-utils@2.4.3`
+  - fix: switch order in merge to fix defaults [#49](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/49) ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # (Tue Aug 02 2022)
 
 #### 🐛 Bug Fix

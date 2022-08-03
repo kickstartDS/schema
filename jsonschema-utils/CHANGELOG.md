@@ -1,3 +1,18 @@
+# v2.4.3 (Wed Aug 03 2022)
+
+#### 🐛 Bug Fix
+
+- use tina's rich-text syntax for rich-text default values [#48](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/48) ([@lmestel](https://github.com/lmestel) [@julrich](https://github.com/julrich))
+- fix: switch order in merge to fix defaults [#49](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/49) ([@julrich](https://github.com/julrich))
+- fix: switch order in merge to fix defaults ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v2.4.2 (Mon Jul 25 2022)
 
 #### ⚠️ Pushed to `master`

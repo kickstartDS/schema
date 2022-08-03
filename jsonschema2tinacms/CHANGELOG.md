@@ -1,3 +1,17 @@
+# v2.5.7 (Wed Aug 03 2022)
+
+#### 🐛 Bug Fix
+
+- use tina's rich-text syntax for rich-text default values [#48](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/48) ([@lmestel](https://github.com/lmestel) [@julrich](https://github.com/julrich))
+- fix: use tina's rich-text syntax for rich-text default values ([@lmestel](https://github.com/lmestel))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v2.5.6 (Tue Aug 02 2022)
 
 #### 🐛 Bug Fix

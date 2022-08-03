@@ -321,9 +321,22 @@ const scalarMapping = (
       type: 'rich-text',
       required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
-        defaultValue: property.default as string
+        defaultValue: {
+          type: 'root',
+          children: [
+            {
+              type: 'p',
+              children: (property.default as string || '')
+                .split('\n\n')
+                .map((text) => ({
+                  type: 'text',
+                  text,
+                })),
+            },
+          ],
+        },
       },
-    };
+    }
   }
 
   if (

@@ -124,14 +124,14 @@ export const reduceSchemaAllOf = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 =>
         )?.schema as JSONSchema7);
 
         return _.merge(
-          finalSchema,
           reffedSchema.allOf
             ? reduceSchemaAllOf(reffedSchema, ajv)
-            : _.merge(finalSchema, reffedSchema)
+            : _.merge(reffedSchema, finalSchema),
+          finalSchema,
         );
       } else {
         reduceSchemaAllOfs(allOf, ajv);
-        return _.merge(finalSchema, allOf);
+        return _.merge(allOf, finalSchema);
       }
     };
 
@@ -139,7 +139,7 @@ export const reduceSchemaAllOf = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 =>
   }, { } as JSONSchema7);
 
   if (schema.properties)
-    reducedSchema.properties = _.merge(reducedSchema.properties, schema.properties);
+    reducedSchema.properties = _.merge(schema.properties, reducedSchema.properties);
 
   mergeAnyOfEnums(reducedSchema, ajv);
 

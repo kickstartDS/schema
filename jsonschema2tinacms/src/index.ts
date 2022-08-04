@@ -8,6 +8,7 @@ import { TinaCloudSchema, TinaFieldInner, ObjectType } from '@tinacms/schema-too
 
 import { ConvertParams } from './@types';
 import { createConfig } from './createConfig';
+import { parseMDX } from './parse';
 
 // TODO correct parameter documentation
 /**
@@ -321,20 +322,12 @@ const scalarMapping = (
       type: 'rich-text',
       required: parentSchema.required?.includes(cleanFieldName(propertyName)),
       ui: {
-        defaultValue: {
-          type: 'root',
-          children: [
-            {
-              type: 'p',
-              children: (property.default as string || '')
-                .split('\n\n')
-                .map((text) => ({
-                  type: 'text',
-                  text,
-                })),
-            },
-          ],
-        },
+        defaultValue: parseMDX(
+          property.default as string,
+          { type: 'rich-text', name: '' },
+          { useRelativeMedia: true },
+          { collections: [] }
+        ),
       },
     }
   }

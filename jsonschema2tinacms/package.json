@@ -23,6 +23,7 @@
     "build"
   ],
   "scripts": {
+    "prepare": "esbuild src/parseMDX/parse.ts --outfile=src/parse.js --bundle --platform=node --target=es6",
     "build": "tsc -p tsconfig.json",
     "clean": "del build",
     "reset": "git clean -dfx && git reset --hard && yarn install",
@@ -36,6 +37,7 @@
     "@kickstartds/jsonschema-utils": "^2.4.3",
     "@kickstartds/jsonschema2graphql": "^2.4.3",
     "@kickstartds/jsonschema2netlifycms": "^2.5.3",
+    "@tinacms/graphql": "^0.61.8",
     "ajv": "^8.5.0",
     "camelcase": "^6.2.0",
     "lodash": "^4.17.21",
@@ -45,6 +47,7 @@
     "@types/fs-extra": "^9.0.11",
     "@types/gh-pages": "^3.0.0",
     "@types/json-schema": "^7.0.7",
+    "@types/level": "^6.0.1",
     "@types/lodash": "^4.14.170",
     "@types/node": "^14.17.1",
     "@types/pluralize": "^0.0.29",
@@ -52,6 +55,7 @@
     "@types/uppercamelcase": "^3.0.0",
     "babel-jest": "^27.0.2",
     "del-cli": "^4.0.0",
+    "esbuild": "^0.14.53",
     "fs-extra": "^10.0.0",
     "gh-pages": "^3.2.0",
     "jest": "27.0.4",

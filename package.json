@@ -5,6 +5,7 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
+    "prepare": "yarn workspace @kickstartds/jsonschema2tinacms prepare",
     "start": "yarn build-jsonschema-utils && yarn build-jsonschema2netlifycms && yarn build-jsonschema2graphql && concurrently --kill-others-on-fail \"yarn build-jsonschema2sanity\" \"yarn build-jsonschema2tinacms\" \"yarn build-jsonschema2builderio\" \"yarn build-generate-from-schema\" \"yarn watch-schemas\"",
     "build": "(yarn build-jsonschema-utils && yarn build-jsonschema2netlifycms && yarn build-jsonschema2graphql && concurrently --kill-others-on-fail \"yarn build-jsonschema2sanity\" \"yarn build-jsonschema2tinacms\" \"yarn build-jsonschema2builderio\" \"yarn build-generate-graphql-fragments\" \"yarn build-add-gatsby-directives\" \"yarn build-generate-from-schema\") && yarn compile-schemas",
     "build-jsonschema-utils": "yarn workspace @kickstartds/jsonschema-utils build",

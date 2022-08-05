@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "allowJs": true,
     "baseUrl": ".",
     "declaration": true,
     "esModuleInterop": true,

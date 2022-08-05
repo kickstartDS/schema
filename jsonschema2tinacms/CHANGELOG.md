@@ -1,3 +1,16 @@
+# v2.5.8 (Fri Aug 05 2022)
+
+#### 🐛 Bug Fix
+
+- convert markdown default values to tina rich-text format [#50](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/50) ([@lmestel](https://github.com/lmestel))
+- feat: convert md default values to tina rich-text format ([@lmestel](https://github.com/lmestel))
+
+#### Authors: 1
+
+- Lukas Mestel ([@lmestel](https://github.com/lmestel))
+
+---
+
 # v2.5.7 (Wed Aug 03 2022)
 
 #### 🐛 Bug Fix

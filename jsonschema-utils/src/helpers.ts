@@ -224,22 +224,22 @@ export const inlineDefinitions = (jsonSchemas: JSONSchema7[]): void => {
         if (subSchema.$ref && subSchema.$ref.includes('#/definitions/')) {
           if (subSchema.$ref.includes('http')) {
             if (parentKeyword === 'properties') {
-              parentSchema[parentKeyword][pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
+              parentSchema.properties[pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
                 jsonSchema.$id === subSchema.$ref.split('#').shift()
-              ).definitions[pointer.split('/').pop()];
+              ).definitions[subSchema.$ref.split('/').pop()];
             } else if (parentKeyword === 'allOf') {
               parentSchema.allOf[pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
                 jsonSchema.$id === subSchema.$ref.split('#').shift()
               ).definitions[subSchema.$ref.split('/').pop()];
             }
           } else {
-            parentSchema[parentKeyword][pointer.split('/').pop()] = rootSchema.definitions[pointer.split('/').pop()];
+            parentSchema[parentKeyword][pointer.split('/').pop()] = rootSchema.definitions[subSchema.$ref.split('/').pop()];
           }
         } else if (subSchema.$ref && subSchema.$ref.includes('#/properties/')) {
           if (parentKeyword === 'properties') {
-            parentSchema[parentKeyword][pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
+            parentSchema.properties[pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
               jsonSchema.$id === subSchema.$ref.split('#').shift()
-            ).properties[pointer.split('/').pop()];
+            ).properties[subSchema.$ref.split('/').pop()];
           }
         }
       }

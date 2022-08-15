@@ -1,3 +1,15 @@
+# v2.4.5 (Mon Aug 15 2022)
+
+#### 🐛 Bug Fix
+
+- fix: pull values from correct property in inlining [#51](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/51) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.4.0 (Thu Jul 07 2022)
 
 #### 🚀 Enhancement

@@ -192,9 +192,9 @@ export const layerRefs = (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[])
 
           if (
             kdsSchemaFileName === customSchemaFileName &&
-            (customSchemaPathRest && kdsSchemaPathRest === customSchemaPathRest)
+            (!customSchemaPathRest || (customSchemaPathRest && kdsSchemaPathRest === customSchemaPathRest))
           ) {
-            subSchema.$ref = jsonSchema.$id;
+              subSchema.$ref = jsonSchema.$id;
           }
         }
       });

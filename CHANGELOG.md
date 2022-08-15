@@ -2,6 +2,22 @@
 
 #### 🐛 Bug Fix
 
+- `@kickstartds/jsonschema2graphql@2.4.7`
+  - fix: bug in hashing / de-hashing [#54](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/54) ([@julrich](https://github.com/julrich))
+  - fix: hashing of button [#53](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/53) ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema-utils@2.4.6`
+  - fix: pull values from correct property in inlining [#51](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/51) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Mon Aug 15 2022)
+
+#### 🐛 Bug Fix
+
 - `@kickstartds/jsonschema2graphql@2.4.6`
   - fix: hashing of button [#53](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/53) ([@julrich](https://github.com/julrich))
 - `@kickstartds/jsonschema-utils@2.4.6`

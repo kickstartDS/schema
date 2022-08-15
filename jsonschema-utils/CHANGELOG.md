@@ -1,3 +1,16 @@
+# v2.4.4 (Mon Aug 15 2022)
+
+#### 🐛 Bug Fix
+
+- fix(utils): re-add refs that are missing in layering [#52](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/52) ([@julrich](https://github.com/julrich))
+- fix(utils): some refs were not layered after the last refactoring ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.4.3 (Wed Aug 03 2022)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,16 @@
+# (Mon Aug 15 2022)
+
+#### 🐛 Bug Fix
+
+- `@kickstartds/jsonschema-utils@2.4.4`
+  - fix(utils): re-add refs that are missing in layering [#52](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/52) ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Fri Aug 05 2022)
 
 #### 🐛 Bug Fix

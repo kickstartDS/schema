@@ -1,3 +1,20 @@
+# v2.4.6 (Mon Aug 15 2022)
+
+#### 🐛 Bug Fix
+
+- fix: hashing of button [#53](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/53) ([@julrich](https://github.com/julrich))
+- fix: hashing of button ([@julrich](https://github.com/julrich))
+- Bump independent versions \[skip ci\] (lukas.mestel@kickstartds.com)
+- Update CHANGELOG.md \[skip ci\] (lukas.mestel@kickstartds.com)
+- fix: pull values from correct property in inlining [#51](https://github.com/kickstartDS/kickstartDS-schema-toolkit/pull/51) ([@julrich](https://github.com/julrich))
+
+#### Authors: 2
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+- Lukas Mestel (lukas.mestel@kickstartds.com)
+
+---
+
 # v2.4.5 (Mon Aug 15 2022)
 
 #### 🐛 Bug Fix

@@ -57,12 +57,12 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
         // sub-types a bit differently
         const outer = outerComponent === 'section' ? obj[property][typeResolutionField] : outerComponent;
         if ((outer === 'storytelling' && property === 'link') || (outer === 'count-up' && property === 'link')) {
-          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
+          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'button');
         } else if (outer === 'glossary' && property === 'cta') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'storytelling');
         } else if (outer === 'cta' && property === 'link') {
-          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'link-button');
-        } else if (outer === 'link-button' && property === 'icon') {
+          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'button');
+        } else if (outer === 'button' && property === 'icon') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'icon');
         } else if (outer === 'media-image' && property === 'image') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'picture');

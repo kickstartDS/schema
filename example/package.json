@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "2.5.12",
+  "version": "2.5.13",
   "main": "index.js",
   "private": true,
   "scripts": {

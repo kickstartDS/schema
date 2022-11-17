@@ -43,15 +43,13 @@
     "jsonschema2tinacms",
     "example"
   ],
-  "dependencies": {
-    "concurrently": "^7.2.1"
-  },
   "devDependencies": {
-    "@auto-it/npm": "^10.37.1",
-    "@auto-it/released": "^10.37.1",
-    "auto": "^10.37.1",
-    "lerna": "^5.0.0",
-    "prettier": "^2.6.2"
+    "@auto-it/npm": "^10.37.6",
+    "@auto-it/released": "^10.37.6",
+    "auto": "^10.37.6",
+    "concurrently": "^7.5.0",
+    "lerna": "^6.0.3",
+    "prettier": "^2.7.1"
   },
   "resolutions": {
     "graphql": "15.8.0"

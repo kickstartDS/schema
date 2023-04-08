@@ -1,3 +1,16 @@
+# v2.4.6 (Sat Apr 08 2023)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- chore(utils): add README, make public ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.4.5 (Mon Aug 15 2022)
 
 #### 🐛 Bug Fix

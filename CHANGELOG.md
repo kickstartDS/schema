@@ -1,3 +1,20 @@
+# (Sat Apr 08 2023)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@2.4.8`
+  - fix: add appearance to correct hashing ([@julrich](https://github.com/julrich))
+- `@kickstartds/generate-from-schema@2.5.14`, `@kickstartds/jsonschema2netlifycms@2.5.7`, `@kickstartds/jsonschema2tinacms@2.5.14`
+  - Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema-utils@2.4.6`
+  - chore(utils): add README, make public ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Thu Nov 17 2022)
 
 #### 🐛 Bug Fix

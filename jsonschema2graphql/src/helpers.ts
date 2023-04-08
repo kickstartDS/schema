@@ -43,6 +43,12 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
             return hashObjectKeys(item, 'picture');
           } else if (outerComponent === 'appearance' && property === 'participants') {
             return hashObjectKeys(item, 'person');
+          } else if (outerComponent === 'appearance' && property === 'related') {
+            return hashObjectKeys(item, 'related');
+          } else if (outerComponent === 'glossary' && property === 'related') {
+            return hashObjectKeys(item, 'related');
+          } else if (outerComponent === 'showcase' && property === 'related') {
+            return hashObjectKeys(item, 'related');
           } else if (outerComponent === 'quotes-slider') {
             return hashObjectKeys(item, 'quote');
           } else if (outerComponent === 'post-head' && property === 'categories') {

@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2netlifycms",
-  "version": "2.5.6",
+  "version": "2.5.7",
   "description": "Converts JSON schema to Netlify CMS admin config",
   "repository": "github:kickstartDS/jsonschema2netlifycms",
   "homepage": "https://github.com/kickstartDS/jsonschema2netlifycms#readme",
@@ -33,7 +33,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@kickstartds/jsonschema-utils": "^2.4.5",
+    "@kickstartds/jsonschema-utils": "^2.4.6",
     "ajv": "^8.11.2",
     "camelcase": "^7.0.0",
     "lodash": "^4.17.21",

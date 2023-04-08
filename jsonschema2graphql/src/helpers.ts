@@ -41,6 +41,8 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           // sub-types a bit differently
           if (outerComponent === 'logo-tiles') {
             return hashObjectKeys(item, 'picture');
+          } else if (outerComponent === 'appearance' && property === 'participants') {
+            return hashObjectKeys(item, 'person');
           } else if (outerComponent === 'quotes-slider') {
             return hashObjectKeys(item, 'quote');
           } else if (outerComponent === 'post-head' && property === 'categories') {

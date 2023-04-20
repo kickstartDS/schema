@@ -34,25 +34,29 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
     } else {
       if (Array.isArray(obj[property]) && obj[property].length > 0 && (typeof obj[property][0] === 'string' || obj[property][0] instanceof String)) {
         hashedObj[hashFieldName(property, outerComponent)] = obj[property];
-      } else if (Array.isArray(obj[property]) && obj[property].length > 0) {
-        hashedObj[hashFieldName(property, outerComponent)] = obj[property].map((item: Record<string, any>) => {
-          // TODO re-simplify this... only needed because of inconsistent hashing on sub-types
-          // the main incompatibility lies with `dedupe` in `schemaReducer.js`, which handles
-          // sub-types a bit differently
-          if (outerComponent === 'logo-tiles') {
-            return hashObjectKeys(item, 'picture');
-          } else if (outerComponent === 'appearance' && property === 'participants') {
-            return hashObjectKeys(item, 'person');
-          } else if (outerComponent === 'quotes-slider') {
-            return hashObjectKeys(item, 'quote');
-          } else if (outerComponent === 'post-head' && property === 'categories') {
-            return hashObjectKeys(item, 'tag-label');
-          } else if (outerComponent === 'text-media' && property === 'media') {
-            return hashObjectKeys(item, 'media-image'); // TODO this also needs to handle `media-video` and other permutations
-          } else {
-            return hashObjectKeys(item, outerComponent === 'section' ? item[typeResolutionField] : outerComponent);
-          }
-        });
+      } else if (Array.isArray(obj[property])) {
+        if (obj[property].length > 0) {
+          hashedObj[hashFieldName(property, outerComponent)] = obj[property].map((item: Record<string, any>) => {
+            // TODO re-simplify this... only needed because of inconsistent hashing on sub-types
+            // the main incompatibility lies with `dedupe` in `schemaReducer.js`, which handles
+            // sub-types a bit differently
+            if (outerComponent === 'logo-tiles') {
+              return hashObjectKeys(item, 'picture');
+            } else if (outerComponent === 'appearance' && property === 'participants') {
+              return hashObjectKeys(item, 'person');
+            } else if (outerComponent === 'quotes-slider') {
+              return hashObjectKeys(item, 'quote');
+            } else if (outerComponent === 'post-head' && property === 'categories') {
+              return hashObjectKeys(item, 'tag-label');
+            } else if (outerComponent === 'text-media' && property === 'media') {
+              return hashObjectKeys(item, 'media-image'); // TODO this also needs to handle `media-video` and other permutations
+            } else {
+              return hashObjectKeys(item, outerComponent === 'section' ? item[typeResolutionField] : outerComponent);
+            }
+          });
+        } else {
+          hashedObj[hashFieldName(property, outerComponent)] = [];
+        }
       } else if (typeof obj[property] === 'object') {
         // TODO re-simplify this... only needed because of inconsistent hashing on sub-types
         // the main incompatibility lies with `dedupe` in `schemaReducer.js`, which handles

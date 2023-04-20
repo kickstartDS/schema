@@ -1,3 +1,15 @@
+# (Thu Apr 20 2023)
+
+#### ⚠️ Pushed to `master`
+
+- chore: update design system dependency ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Sun Apr 09 2023)
 
 #### ⚠️ Pushed to `master`

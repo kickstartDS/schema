@@ -10,12 +10,7 @@
   "author": "Jonas Ulrich | ruhmesmeile GmbH",
   "license": "UNLICENSED",
   "dependencies": {
-    "@kickstartds/base": "2.0.0-canary.922.4761.0",
-    "@kickstartds/blog": "2.0.0-canary.922.4761.0",
-    "@kickstartds/content": "2.0.0-canary.922.4761.0",
-    "@kickstartds/core": "2.0.0-canary.922.4761.0",
-    "@kickstartds/design-system": "2.1.24",
-    "@kickstartds/form": "2.0.0-canary.922.4761.0",
+    "@kickstartds/design-system": "2.5.0--canary.105.3029.0",
     "@kickstartds/generate-from-schema": "^2.5.16"
   }
 }

@@ -2,6 +2,21 @@
 
 #### ⚠️ Pushed to `master`
 
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- chore: update design system dependency ([@julrich](https://github.com/julrich))
+- `@kickstartds/jsonschema2graphql@2.4.11`
+  - fix: handle empty array case correctly ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
+# (Thu Apr 20 2023)
+
+#### ⚠️ Pushed to `master`
+
 - chore: update design system dependency ([@julrich](https://github.com/julrich))
 
 #### Authors: 1

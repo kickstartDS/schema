@@ -1,3 +1,16 @@
+# v2.4.11 (Thu Apr 20 2023)
+
+#### ⚠️ Pushed to `master`
+
+- Merge branch 'master' of github.com:kickstartDS/kickstartDS-schema-toolkit ([@julrich](https://github.com/julrich))
+- fix: handle empty array case correctly ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.4.10 (Sun Apr 09 2023)
 
 #### ⚠️ Pushed to `master`

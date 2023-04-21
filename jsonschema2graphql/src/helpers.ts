@@ -80,6 +80,8 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'picture');
         } else if (outer === 'post-aside' && property === 'shareBar') {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'post-share-bar');
+        } else if (outerComponent === 'section' && property === 'headline') {
+          hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], 'section');
         } else {
           hashedObj[hashFieldName(property, outerComponent)] = hashObjectKeys(obj[property], outer);
         }

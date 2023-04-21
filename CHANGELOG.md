@@ -1,3 +1,16 @@
+# (Fri Apr 21 2023)
+
+#### ⚠️ Pushed to `master`
+
+- `@kickstartds/jsonschema2graphql@2.4.12`
+  - fix: hash headline in section correctly ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # (Thu Apr 20 2023)
 
 #### ⚠️ Pushed to `master`

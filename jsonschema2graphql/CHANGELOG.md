@@ -1,3 +1,15 @@
+# v2.4.12 (Fri Apr 21 2023)
+
+#### ⚠️ Pushed to `master`
+
+- fix: hash headline in section correctly ([@julrich](https://github.com/julrich))
+
+#### Authors: 1
+
+- Jonas Ulrich ([@julrich](https://github.com/julrich))
+
+---
+
 # v2.4.11 (Thu Apr 20 2023)
 
 #### ⚠️ Pushed to `master`

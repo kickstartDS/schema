@@ -50,6 +50,8 @@ export function hashObjectKeys(obj: Record<string, any>, outerComponent: string)
               return hashObjectKeys(item, 'tag-label');
             } else if (outerComponent === 'text-media' && property === 'media') {
               return hashObjectKeys(item, 'media-image'); // TODO this also needs to handle `media-video` and other permutations
+            } else if (outerComponent === 'storytelling' && property === 'links') {
+              return hashObjectKeys(item, 'button');
             } else {
               return hashObjectKeys(item, outerComponent === 'section' ? item[typeResolutionField] : outerComponent);
             }

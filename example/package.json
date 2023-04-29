@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "2.5.20",
+  "version": "2.5.21",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -11,6 +11,6 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@kickstartds/design-system": "2.5.0--canary.105.3029.0",
-    "@kickstartds/generate-from-schema": "^2.5.18"
+    "@kickstartds/generate-from-schema": "^2.5.19"
   }
 }

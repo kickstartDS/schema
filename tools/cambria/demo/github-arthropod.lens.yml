@@ -1,0 +1,42 @@
+# Convert a Github Issue into the Arthropod format
+schemaName: Issue
+
+lens:
+  # remove unnecessary fields
+  - remove: { name: milestone }
+  - remove: { name: pull_request }
+  - remove: { name: closed_by }
+  - remove: { name: repository_url }
+  - remove: { name: number }
+  - remove: { name: assignees }
+  - remove: { name: user }
+  - remove: { name: url }
+  - remove: { name: comments_url }
+  - remove: { name: events_url }
+  - remove: { name: html_url }
+  - remove: { name: locked }
+  - remove: { name: active_lock_reason }
+  - remove: { name: comments }
+  - remove: { name: node_id }
+  - remove: { name: closed_at }
+
+  - rename:
+      source: title
+      destination: name
+
+  - head:
+      name: labels
+
+  - in:
+      name: labels
+      lens:
+        - rename:
+            source: name
+            destination: category
+
+  - hoist:
+      host: labels
+      name: category
+
+  - remove:
+      name: labels

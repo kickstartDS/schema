@@ -1,0 +1,235 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "lens",
+  "title": "Cambria Lens",
+  "type": "object",
+  "properties": {
+    "schemaName": {
+      "type": "string",
+      "title": "Schema name",
+      "description": "The name of the schema being extended"
+    },
+    "lens": { "$ref": "#/definitions/lens" }
+  },
+  "required": ["schemaName", "lens"],
+  "definitions": {
+    "jsonSchemaType": {
+      "type": "string",
+      "enum": ["string", "boolean", "null", "object", "array", "number"]
+    },
+    "fields": {
+      "dataType": {
+        "allOf": [
+          { "$ref": "#/definitions/jsonSchemaType" },
+          {
+            "title": "Type",
+            "description": "The type of the new property"
+          }
+        ]
+      },
+      "name": {
+        "type": "string",
+        "title": "Name",
+        "description": "The name of the property to operate on"
+      },
+      "default": {
+        "title": "Default",
+        "description": "The default value used when none can be found."
+      },
+      "req": {
+        "title": "Required",
+        "description": "Is the value required?",
+        "optional": true
+      }
+    },
+    "valueMapping": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "title": "Old-to-new Map",
+          "description": "A lookup table where keys will be translated to values when running the lens forward."
+        },
+        {
+          "type": "object",
+          "title": "New-to-old Map",
+          "description": "A lookup table where keys will be translated to values when running the lens backwards."
+        }
+      ]
+    },
+    "lens": {
+      "type": "array",
+      "title": "Lens",
+      "description": "A lens to apply inside of the given context",
+      "items": { "$ref": "#/definitions/lensOp" }
+    },
+    "lensOp": {
+      "title": "Lens Operation",
+      "description": "One step in a lens conversion",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "add": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "$ref": "#/definitions/fields/name" },
+                "type": { "$ref": "#/definitions/fields/dataType" },
+                "default": { "$ref": "#/definitions/fields/default" },
+                "required": { "$ref": "#/definitions/fields/req" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "remove": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "$ref": "#/definitions/fields/name" },
+                "type": { "$ref": "#/definitions/fields/dataType" },
+                "default": { "$ref": "#/definitions/fields/default" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rename": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "title": "Source",
+                  "description": "The old name for the property"
+                },
+                "destination": {
+                  "type": "string",
+                  "title": "Destination",
+                  "description": "The new name for the property"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "hoist": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "$ref": "#/definitions/fields/name" },
+                "host": {
+                  "type": "string",
+                  "title": "Host",
+                  "description": "The property name of the containing object to hoist out of"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "plunge": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "$ref": "#/definitions/fields/name" },
+                "host": {
+                  "type": "string",
+                  "title": "Host",
+                  "description": "The property name of the containing object to plunge into"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "wrap": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "$ref": "#/definitions/fields/name" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "head": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "$ref": "#/definitions/fields/name" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "in": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "The property name in which the sub-lens will be run"
+                },
+                "lens": { "$ref": "#/definitions/lens" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "map": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "lens": { "$ref": "#/definitions/lens" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "convert": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "$ref": "#/definitions/fields/name" },
+                "sourceType": { "$ref": "#/definitions/fields/dataType" },
+                "destinationType": { "$ref": "#/definitions/fields/dataType" },
+                "mapping": { "$ref": "#/definitions/valueMapping" }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

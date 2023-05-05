@@ -2,21 +2,21 @@
   "name": "@kickstartds/cambria-example",
   "version": "1.0.0",
   "description": "Example use of the cambria tool package",
-  "main": "index.js",
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "build": "tsc --outDir ./dist --project ./tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@kickstartds/cambria": "workspace:*"
   },
   "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
     "@types/json-schema": "^7.0.11",
     "@types/node": "^18.16.3",
-    "@tsconfig/node16": "^1.0.3",
     "typescript": "^5.0.4"
   }
 }

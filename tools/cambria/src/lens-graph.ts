@@ -69,13 +69,13 @@ export function lensFromTo({ graph }: LensGraph, from: string, to: string): Lens
 
   const migrationPaths = alg.dijkstra(graph, to)
   const lenses: LensOp[] = []
-  if (migrationPaths[from].distance == Infinity) {
+  if (migrationPaths[from].distance === Infinity) {
     throw new Error(`no path found from ${from} to ${to}`)
   }
-  if (migrationPaths[from].distance == 0) {
+  if (migrationPaths[from].distance === 0) {
     return []
   }
-  for (let v = from; v != to; v = migrationPaths[v].predecessor) {
+  for (let v = from; v !== to; v = migrationPaths[v].predecessor) {
     const w = migrationPaths[v].predecessor
     const edge = graph.edge({ v, w })
     lenses.push(...edge)

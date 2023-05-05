@@ -15,11 +15,13 @@
     "@kickstartds/cambria": "workspace:*"
   },
   "devDependencies": {
+    "@rushstack/eslint-config": "^3.2.0",
     "@rushstack/heft": "^0.50.4",
     "@rushstack/heft-node-rig": "^1.12.10",
     "@tsconfig/node16": "^1.0.3",
     "@types/json-schema": "^7.0.11",
     "@types/node": "^18.16.3",
+    "eslint": "^8.39.0",
     "typescript": "^5.0.4"
   }
 }

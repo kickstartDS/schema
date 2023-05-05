@@ -13,7 +13,7 @@ importers:
       '@rushstack/heft-node-rig': ^1.12.10
       '@tsconfig/node16': ^1.0.3
       '@types/json-schema': ^7.0.11
-      '@types/node': ^18.16.3
+      '@types/node': ^18.16.4
       eslint: ^8.39.0
       typescript: ^5.0.4
     dependencies:
@@ -33,13 +33,14 @@ importers:
       '@json-editor/json-editor': ^2.9.1
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
+      '@rushstack/heft-jest-plugin': ~0.5.10
       '@rushstack/heft-node-rig': ^1.12.10
-      '@tsconfig/node16': ^1.0.3
       '@types/graphlib': ^2.1.8
+      '@types/heft-jest': 1.0.3
       '@types/js-yaml': ^4.0.5
       '@types/json-schema': ^7.0.11
       '@types/mocha': ^10.0.1
-      '@types/node': ^18.16.3
+      '@types/node': ^18.16.4
       '@types/to-json-schema': ^0.2.1
       ajv: ^8.12.0
       assert: ^2.0.0
@@ -63,9 +64,10 @@ importers:
       '@json-editor/json-editor': 2.9.1
       '@rushstack/eslint-config': 3.2.0_iacogk7kkaymxepzhgcbytyi7q
       '@rushstack/heft': 0.50.4_@types+node@18.16.4
+      '@rushstack/heft-jest-plugin': 0.5.10_lcwprofbyfc2kwgbjx6uvnmfqu
       '@rushstack/heft-node-rig': 1.12.10_lcwprofbyfc2kwgbjx6uvnmfqu
-      '@tsconfig/node16': 1.0.3
       '@types/graphlib': 2.1.8
+      '@types/heft-jest': 1.0.3
       '@types/js-yaml': 4.0.5
       '@types/json-schema': 7.0.11
       '@types/mocha': 10.0.1
@@ -1080,6 +1082,12 @@ packages:
     resolution: {integrity: sha512-8nbbyD3zABRA9ePoBgAl2ym8cIwKQXTfv1gaIRTdY99yEOCaHfmjBeRp+BIemS8NtOqoWK7mfzWxjNrxLK3T5w==}
     dev: true
 
+  /@types/heft-jest/1.0.3:
+    resolution: {integrity: sha512-Z8u264kbGYY4+NER7zMox9OKp270/igaHqhLnCvNJ8CrFl/CTC8zUE4V3c6FDjN/rukIVreuhkfLlbchTcW9Vg==}
+    dependencies:
+      '@types/jest': 29.5.1
+    dev: true
+
   /@types/istanbul-lib-coverage/2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
     dev: true
@@ -1094,6 +1102,13 @@ packages:
     resolution: {integrity: sha512-c3mAZEuK0lvBp8tmuL74XRKn1+y2dcwOUpH7x4WrF6gk1GIgiluDRgMYQtw2OFcBvAJWlt6ASU3tSqxp0Uu0Aw==}
     dependencies:
       '@types/istanbul-lib-report': 3.0.0
+    dev: true
+
+  /@types/jest/29.5.1:
+    resolution: {integrity: sha512-tEuVcHrpaixS36w7hpsfLBLpjtMRJUE09/MHXn923LOVojDwyC14cWcfc0rDs0VEfUyYmt/+iX1kxxp+gZMcaQ==}
+    dependencies:
+      expect: 29.5.0
+      pretty-format: 29.5.0
     dev: true
 
   /@types/js-yaml/4.0.5:

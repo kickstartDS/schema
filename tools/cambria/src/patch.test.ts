@@ -1,8 +1,7 @@
-import assert from 'assert'
-import { Patch, applyLensToPatch, PatchOp, expandPatch } from '../src/patch'
-import { applyLensToDoc } from '../src/doc'
-import { updateSchema, schemaForLens } from '../src/json-schema'
-import { LensSource } from '../src/lens-ops'
+import { Patch, applyLensToPatch, PatchOp, expandPatch } from '../src/patch.js'
+import { applyLensToDoc } from '../src/doc.js'
+import { updateSchema, schemaForLens } from '../src/json-schema.js'
+import { LensSource } from '../src/lens-ops.js'
 import {
   renameProperty,
   addProperty,
@@ -13,9 +12,9 @@ import {
   wrapProperty,
   headProperty,
   convertValue,
-} from '../src/helpers'
+} from '../src/helpers.js'
 
-import { reverseLens } from '../src/reverse'
+import { reverseLens } from '../src/reverse.js'
 import { ReplaceOperation } from 'fast-json-patch'
 import { JSONSchema7 } from 'json-schema'
 
@@ -97,7 +96,7 @@ describe('field rename', () => {
     ]
     // test the converted patch
 
-    assert.deepEqual(applyLensToPatch(lensSource, editTitleV1, projectV1Schema), [
+    expect(applyLensToPatch(lensSource, editTitleV1, projectV1Schema)).toEqual([
       { op: 'replace', path: '/name', value: 'new title' },
     ])
   })
@@ -111,7 +110,7 @@ describe('field rename', () => {
       },
     ]
 
-    assert.deepEqual(applyLensToPatch(lensSource, editTitleBla, projectV1Schema), editTitleBla)
+    expect(applyLensToPatch(lensSource, editTitleBla, projectV1Schema)).toEqual(editTitleBla)
   })
 
   it('converts downwards', () => {
@@ -124,19 +123,18 @@ describe('field rename', () => {
       },
     ]
 
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         reverseLens(lensSource),
         editNameV2,
         updateSchema(projectV1Schema, lensSource)
-      ),
-      [{ op: 'replace', path: '/title', value: 'new name' }]
-    )
+      )
+    ).toEqual([{ op: 'replace', path: '/title', value: 'new name' }])
   })
 
   it('works with whole doc conversion too', () => {
     // fills in default values for missing fields
-    assert.deepEqual(applyLensToDoc(lensSource, { title: 'hello' }, projectV1Schema), {
+    expect(applyLensToDoc(lensSource, { title: 'hello' }, projectV1Schema)).toEqual({
       complete: '',
       description: '',
       name: 'hello',
@@ -158,14 +156,13 @@ describe('add field', () => {
         value: 'going swimmingly',
       },
     ]
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         reverseLens(lensSource),
         editDescription,
         updateSchema(projectV1Schema, lensSource)
-      ),
-      []
-    )
+      )
+    ).toEqual([])
   })
 })
 
@@ -183,7 +180,7 @@ describe('value conversion', () => {
       },
     ]
 
-    assert.deepEqual(applyLensToPatch(lensSource, setComplete, projectV1Schema), [
+    expect(applyLensToPatch(lensSource, setComplete, projectV1Schema)).toEqual([
       { op: 'replace', path: '/complete', value: 'done' },
     ])
   })
@@ -197,14 +194,13 @@ describe('value conversion', () => {
       },
     ]
 
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         reverseLens(lensSource),
         setStatus,
         updateSchema(projectV1Schema, lensSource)
-      ),
-      [{ op: 'replace', path: '/complete', value: false }]
-    )
+      )
+    ).toEqual([{ op: 'replace', path: '/complete', value: false }])
   })
 
   it('handles a value conversion and a rename in the same lens', () => {
@@ -229,7 +225,7 @@ describe('value conversion', () => {
       },
     ]
 
-    assert.deepEqual(applyLensToPatch(lensSource, setComplete, projectV1Schema), [
+    expect(applyLensToPatch(lensSource, setComplete, projectV1Schema)).toEqual([
       { op: 'replace', path: '/status', value: 'done' },
     ])
   })
@@ -270,13 +266,13 @@ describe('nested objects', () => {
         },
       ]
 
-      assert.deepEqual(applyLensToPatch(lensSource, setDescription, docSchema), [
+      expect(applyLensToPatch(lensSource, setDescription, docSchema)).toEqual([
         { op: 'replace' as const, path: '/metadata/name', value: 'hello' },
       ])
     })
 
     it('works with whole doc conversion', () => {
-      assert.deepEqual(applyLensToDoc(lensSource, { metadata: { title: 'hello' } }, docSchema), {
+      expect(applyLensToDoc(lensSource, { metadata: { title: 'hello' } }, docSchema)).toEqual({
         metadata: { name: 'hello' },
         otherparent: { title: '' },
       })
@@ -291,7 +287,7 @@ describe('nested objects', () => {
         },
       ]
 
-      assert.deepEqual(applyLensToPatch(lensSource, randomPatch, docSchema), randomPatch)
+      expect(applyLensToPatch(lensSource, randomPatch, docSchema)).toEqual(randomPatch)
     })
 
     it('renames a field in the left direction', () => {
@@ -305,7 +301,7 @@ describe('nested objects', () => {
 
       const updatedSchema = updateSchema(docSchema, lensSource)
 
-      assert.deepEqual(applyLensToPatch(reverseLens(lensSource), setDescription, updatedSchema), [
+      expect(applyLensToPatch(reverseLens(lensSource), setDescription, updatedSchema)).toEqual([
         { op: 'replace' as const, path: '/metadata/title', value: 'hello' },
       ])
     })
@@ -319,7 +315,7 @@ describe('nested objects', () => {
         },
       ]
 
-      assert.deepEqual(applyLensToPatch(lensSource, setDescription, docSchema), [
+      expect(applyLensToPatch(lensSource, setDescription, docSchema)).toEqual([
         {
           op: 'replace' as const,
           path: '/metadata',
@@ -340,7 +336,7 @@ describe('arrays', () => {
   const lensSource: LensSource = [inside('tasks', [map([renameProperty('title', 'name')])])]
 
   it('renames a field in an array element', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -351,13 +347,12 @@ describe('arrays', () => {
           },
         ],
         projectV1Schema
-      ),
-      [{ op: 'replace' as const, path: '/tasks/23/name', value: 'hello' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/tasks/23/name', value: 'hello' }])
   })
 
   it('renames a field in the left direction', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         reverseLens(lensSource),
         [
@@ -368,9 +363,8 @@ describe('arrays', () => {
           },
         ],
         updateSchema(projectV1Schema, lensSource)
-      ),
-      [{ op: 'replace' as const, path: '/tasks/23/title', value: 'hello' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/tasks/23/title', value: 'hello' }])
   })
 })
 
@@ -378,7 +372,7 @@ describe('hoist (object)', () => {
   const lensSource: LensSource = [hoistProperty('metadata', 'createdAt')]
 
   it('pulls a field up to its parent', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -389,9 +383,8 @@ describe('hoist (object)', () => {
           },
         ],
         projectV1Schema
-      ),
-      [{ op: 'replace' as const, path: '/createdAt', value: 'July 7th, 2020' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/createdAt', value: 'July 7th, 2020' }])
   })
 })
 
@@ -400,18 +393,17 @@ describe('plunge (object)', () => {
 
   // currently does not pass - strange ordering issue with fields in the object
   it.skip('pushes a field into a child with applyLensToDoc', () => {
-    assert.deepEqual(
+    expect(
       applyLensToDoc([{ op: 'plunge', host: 'tags', name: 'color' }], {
         // this currently throws an error but works if we re-order color and tags in the object below
         color: 'orange',
         tags: {},
-      }),
-      { tags: { color: 'orange' } }
-    )
+      })
+    ).toEqual({ tags: { color: 'orange' } })
   })
 
   it('pushes a field into its child', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -422,9 +414,8 @@ describe('plunge (object)', () => {
           },
         ],
         projectV1Schema
-      ),
-      [{ op: 'replace' as const, path: '/metadata/title', value: 'Fun project' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/metadata/title', value: 'Fun project' }])
   })
 })
 
@@ -440,7 +431,7 @@ describe('wrap (scalar to array)', () => {
   const lensSource: LensSource = [wrapProperty('assignee')]
 
   it('converts head replace value into 0th element writes into its child', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -451,13 +442,12 @@ describe('wrap (scalar to array)', () => {
           },
         ],
         docSchema
-      ),
-      [{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }])
   })
 
   it('converts head add value into 0th element writes into its child', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -468,16 +458,15 @@ describe('wrap (scalar to array)', () => {
           },
         ],
         docSchema
-      ),
-      [{ op: 'add' as const, path: '/assignee/0', value: 'July 7th, 2020' }]
-    )
+      )
+    ).toEqual([{ op: 'add' as const, path: '/assignee/0', value: 'July 7th, 2020' }])
   })
 
   // todo: many possible options for how to handle this.
   // Consider other options:
   // https://github.com/inkandswitch/cambria/blob/default/conversations/converting-scalar-to-arrays.md
   it('converts head null write into a remove the first element op', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -488,9 +477,8 @@ describe('wrap (scalar to array)', () => {
           },
         ],
         docSchema
-      ),
-      [{ op: 'remove' as const, path: '/assignee/0' }]
-    )
+      )
+    ).toEqual([{ op: 'remove' as const, path: '/assignee/0' }])
   })
 
   it('handles a wrap followed by a rename', () => {
@@ -499,7 +487,7 @@ describe('wrap (scalar to array)', () => {
       renameProperty('assignee', 'assignees'),
     ]
 
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -510,9 +498,8 @@ describe('wrap (scalar to array)', () => {
           },
         ],
         docSchema
-      ),
-      [{ op: 'replace' as const, path: '/assignees/0', value: 'pvh' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/assignees/0', value: 'pvh' }])
   })
 
   it('converts nested values into 0th element writes into its child', () => {
@@ -525,7 +512,7 @@ describe('wrap (scalar to array)', () => {
       },
     }
 
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -536,9 +523,8 @@ describe('wrap (scalar to array)', () => {
           },
         ],
         docSchema
-      ),
-      [{ op: 'replace' as const, path: '/assignee/0/name', value: 'Orion' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/0/name', value: 'Orion' }])
   })
 
   describe('reverse direction', () => {
@@ -546,20 +532,19 @@ describe('wrap (scalar to array)', () => {
     // and is just a sanity check that the reverse isn't totally broken.
     // (could be also tested independently, but this is a nice backup)
     it('converts array first element write into a write on the scalar', () => {
-      assert.deepEqual(
+      expect(
         applyLensToPatch(
           reverseLens(lensSource),
           [{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }],
           updateSchema(docSchema, lensSource)
-        ),
-        [
-          {
-            op: 'replace' as const,
-            path: '/assignee',
-            value: 'July 7th, 2020',
-          },
-        ]
-      )
+        )
+      ).toEqual([
+        {
+          op: 'replace' as const,
+          path: '/assignee',
+          value: 'July 7th, 2020',
+        },
+      ])
     })
   })
 })
@@ -576,7 +561,7 @@ describe('head (array to nullable scalar)', () => {
   const lensSource: LensSource = [headProperty('assignee')]
 
   it('converts head set value into 0th element writes into its child', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -587,13 +572,12 @@ describe('head (array to nullable scalar)', () => {
           },
         ],
         docSchema
-      ),
-      [{ op: 'replace' as const, path: '/assignee', value: 'Peter' }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/assignee', value: 'Peter' }])
   })
 
   it('converts a write on other elements to a no-op', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -604,49 +588,44 @@ describe('head (array to nullable scalar)', () => {
           },
         ],
         docSchema
-      ),
-      []
-    )
+      )
+    ).toEqual([])
   })
 
   it('converts array first element delete into a null write on the scalar', () => {
-    assert.deepEqual(
-      applyLensToPatch(lensSource, [{ op: 'remove' as const, path: '/assignee/0' }], docSchema),
-      [{ op: 'replace' as const, path: '/assignee', value: null }]
-    )
+    expect(
+      applyLensToPatch(lensSource, [{ op: 'remove' as const, path: '/assignee/0' }], docSchema)
+    ).toEqual([{ op: 'replace' as const, path: '/assignee', value: null }])
   })
 
   it('preserves the rest of the path after the array index', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [{ op: 'replace' as const, path: '/assignee/0/age', value: 23 }],
         docSchema
-      ),
-      [{ op: 'replace' as const, path: '/assignee/age', value: 23 }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/age', value: 23 }])
   })
 
   it('preserves the rest of the path after the array index with nulls', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [{ op: 'replace' as const, path: '/assignee/0/age', value: null }],
         docSchema
-      ),
-      [{ op: 'replace' as const, path: '/assignee/age', value: null }]
-    )
+      )
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/age', value: null }])
   })
 
   it('preserves the rest of the path after the array index with removes', () => {
-    assert.deepEqual(
-      applyLensToPatch(lensSource, [{ op: 'remove' as const, path: '/assignee/0/age' }], docSchema),
-      [{ op: 'remove' as const, path: '/assignee/age' }]
-    )
+    expect(
+      applyLensToPatch(lensSource, [{ op: 'remove' as const, path: '/assignee/0/age' }], docSchema)
+    ).toEqual([{ op: 'remove' as const, path: '/assignee/age' }])
   })
 
   it('correctly handles a sequence of array writes', () => {
-    assert.deepEqual(
+    expect(
       applyLensToPatch(
         lensSource,
         [
@@ -662,20 +641,19 @@ describe('head (array to nullable scalar)', () => {
           { op: 'replace' as const, path: '/assignee/0', value: 'orion' },
         ],
         docSchema
-      ),
-      [
-        {
-          op: 'add' as const,
-          path: '/assignee',
-          value: 'geoffrey',
-        },
-        {
-          op: 'replace' as const,
-          path: '/assignee',
-          value: 'orion',
-        },
-      ]
-    )
+      )
+    ).toEqual([
+      {
+        op: 'add' as const,
+        path: '/assignee',
+        value: 'geoffrey',
+      },
+      {
+        op: 'replace' as const,
+        path: '/assignee',
+        value: 'orion',
+      },
+    ])
   })
 
   describe('reverse direction', () => {
@@ -693,7 +671,7 @@ describe('head (array to nullable scalar)', () => {
     }
 
     it('converts head set value into 0th element writes into its child', () => {
-      assert.deepEqual(
+      expect(
         applyLensToPatch(
           reverseLens(lensSource),
           [
@@ -704,9 +682,8 @@ describe('head (array to nullable scalar)', () => {
             },
           ],
           docSchema
-        ),
-        [{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }]
-      )
+        )
+      ).toEqual([{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }])
     })
   })
 })
@@ -719,7 +696,7 @@ describe('patch expander', () => {
       value: { a: { b: 5 } },
     }
 
-    assert.deepEqual(expandPatch(setObject), [
+    expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '/obj',
@@ -745,7 +722,7 @@ describe('patch expander', () => {
       value: { a: { b: 5, c: { d: 6 } } },
     }
 
-    assert.deepEqual(expandPatch(setObject), [
+    expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '/obj',
@@ -781,7 +758,7 @@ describe('patch expander', () => {
       value: ['hello', 'world'],
     }
 
-    assert.deepEqual(expandPatch(setObject), [
+    expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '/obj',
@@ -801,7 +778,7 @@ describe('patch expander', () => {
 
     // deepEqual returns true for {} === []; so we need to double check ourselves
     const op = expandPatch(setObject)[0] as ReplaceOperation<any>
-    assert(Array.isArray(op.value))
+    expect(Array.isArray(op.value)).toBeTruthy()
   })
 
   it('works recursively with objects and arrays', () => {
@@ -811,7 +788,7 @@ describe('patch expander', () => {
       value: { tasks: [{ name: 'hello' }, { name: 'world' }] },
     }
 
-    assert.deepEqual(expandPatch(setObject), [
+    expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '',
@@ -877,7 +854,7 @@ describe('default value initialization', () => {
       value: { name: 'bug' },
     }
 
-    assert.deepEqual(applyLensToPatch([], [patchOp], v1Schema), [
+    expect(applyLensToPatch([], [patchOp], v1Schema)).toEqual([
       {
         op: 'add',
         path: '/tags/123',
@@ -908,7 +885,7 @@ describe('default value initialization', () => {
       value: 'bug',
     }
 
-    assert.deepEqual(applyLensToPatch([], [patchOp], v1Schema), [patchOp])
+    expect(applyLensToPatch([], [patchOp], v1Schema)).toEqual([patchOp])
   })
 
   it('recursively fills in defaults from the root', () => {
@@ -918,7 +895,7 @@ describe('default value initialization', () => {
       value: {},
     }
 
-    assert.deepEqual(applyLensToPatch([], [patchOp], v1Schema), [
+    expect(applyLensToPatch([], [patchOp], v1Schema)).toEqual([
       {
         op: 'add',
         path: '',
@@ -971,7 +948,7 @@ describe('default value initialization', () => {
       value: { name: 'bug' },
     }
 
-    assert.deepEqual(applyLensToPatch(v1Tov2Lens, [patchOp], v1Schema), [
+    expect(applyLensToPatch(v1Tov2Lens, [patchOp], v1Schema)).toEqual([
       {
         op: 'add',
         path: '/labels/123',
@@ -1013,7 +990,7 @@ describe('inferring schemas from documents', () => {
   it('infers a schema when converting a doc', () => {
     const lens = [inside('details', [renameProperty('height', 'heightInches')])]
 
-    assert.deepEqual(applyLensToDoc(lens, doc), {
+    expect(applyLensToDoc(lens, doc)).toEqual({
       ...doc,
       details: {
         age: 23,
@@ -1027,13 +1004,8 @@ describe('inferring schemas from documents', () => {
   // If our lens tries to rename a nonexistent field, it should throw an error.
   it("throws if the lens doesn't match the doc's inferred schema", () => {
     const lens = [renameProperty('nonexistent', 'ghost')]
-    assert.throws(
-      () => {
-        applyLensToDoc(lens, doc)
-      },
-      {
-        message: /Cannot rename property/,
-      }
-    )
+    expect(() => {
+      applyLensToDoc(lens, doc)
+    }).toThrow()
   })
 })

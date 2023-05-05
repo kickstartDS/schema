@@ -5,10 +5,11 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "index.js",
+  "exports": "./lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
-    "start": "node dist/index.js",
+    "start": "node lib/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -20,8 +21,11 @@
     "@rushstack/heft-node-rig": "^1.12.10",
     "@tsconfig/node16": "^1.0.3",
     "@types/json-schema": "^7.0.11",
-    "@types/node": "^18.16.3",
+    "@types/node": "^18.16.4",
     "eslint": "^8.39.0",
     "typescript": "^5.0.4"
+  },
+  "engines": {
+    "node": ">=14.16"
   }
 }

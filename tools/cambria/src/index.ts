@@ -1,6 +1,3 @@
-// TODO: The exported surface is fairly large right now,
-// See how much we can narrow this.
-
 export { updateSchema, schemaForLens } from './json-schema.js'
 export { compile, applyLensToPatch, Patch, CompiledLens } from './patch.js'
 export { applyLensToDoc, importDoc } from './doc.js'

@@ -1,16 +1,16 @@
 {
   "name": "@kickstartds/cambria",
   "version": "1.0.0",
+  "exports": "./lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
   "engines": {
     "node": ">=14.16"
   },
-  "exports": "./dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
   "license": "MIT",
   "scripts": {
     "build": "heft build --clean",
-    "test": "mocha -r ts-node/register test/**.ts"
+    "test": "heft test --clean"
   },
   "dependencies": {
     "fast-json-patch": "^3.1.1",
@@ -22,12 +22,11 @@
   "devDependencies": {
     "@json-editor/json-editor": "^2.9.1",
     "@rushstack/heft": "^0.50.4",
-    "@tsconfig/node16": "^1.0.3",
     "@types/graphlib": "^2.1.8",
     "@types/js-yaml": "^4.0.5",
     "@types/json-schema": "^7.0.11",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.16.3",
+    "@types/node": "^18.16.4",
     "@types/to-json-schema": "^0.2.1",
     "ajv": "^8.12.0",
     "assert": "^2.0.0",
@@ -37,6 +36,8 @@
     "json-schema-view-js": "^2.0.1",
     "mocha": "^10.2.0",
     "prettier": "^2.8.8",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "@rushstack/heft-jest-plugin": "~0.5.10",
+    "@types/heft-jest": "1.0.3"
   }
 }

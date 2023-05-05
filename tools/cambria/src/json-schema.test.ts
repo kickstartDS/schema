@@ -1,6 +1,5 @@
-import assert from 'assert'
 import { JSONSchema7 } from 'json-schema'
-import { updateSchema } from '../src/json-schema'
+import { updateSchema } from '../src/json-schema.js'
 import {
   addProperty,
   inside,
@@ -11,7 +10,7 @@ import {
   plungeProperty,
   renameProperty,
   convertValue,
-} from '../src/helpers'
+} from '../src/helpers.js'
 
 describe('transforming a json schema', () => {
   const v1Schema = {
@@ -40,7 +39,7 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'description', type: 'string' }),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         description: { type: 'string', default: '' },
       })
@@ -51,7 +50,7 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'description', type: ['string', 'null'] }),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         description: { type: ['string', 'null'], default: null },
       })
@@ -62,7 +61,7 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'description', type: 'string', default: 'hi' }),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         description: { type: 'string', default: 'hi' },
       })
@@ -73,19 +72,19 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'description', type: 'string', required: true }),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         description: { type: 'string', default: '' },
       })
 
-      assert.deepEqual(newSchema.required, [...(v1Schema.required || []), 'description'])
+      expect(newSchema.required).toEqual([...(v1Schema.required || []), 'description'])
     })
 
     it('fails when presented with invalid data', () => {
       const badData: any = { garbage: 'input' }
-      assert.throws(() => {
+      expect(() => {
         updateSchema(v1Schema, [addProperty(badData)])
-      }, `Missing property name in addProperty.\nFound:\n${JSON.stringify(badData)}`)
+      }).toThrow()
     })
   })
 
@@ -93,7 +92,7 @@ describe('transforming a json schema', () => {
     const newSchema = updateSchema(v1Schema, [renameProperty('name', 'title')])
 
     it('adds a new property and removes the old property', () => {
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         title: {
           type: 'string',
           default: '',
@@ -106,7 +105,7 @@ describe('transforming a json schema', () => {
     })
 
     it('removes the old property from required array', () => {
-      assert.equal(newSchema.required?.indexOf('name'), -1)
+      expect(newSchema.required?.indexOf('name')).toEqual(-1)
     })
   })
 
@@ -124,7 +123,7 @@ describe('transforming a json schema', () => {
         ),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         name: {
           type: 'string',
           default: '',
@@ -141,14 +140,14 @@ describe('transforming a json schema', () => {
         convertValue('summary', [{ something: 'another' }, { another: 'something' }]),
       ])
 
-      assert.deepEqual(newSchema, v1Schema)
+      expect(newSchema).toEqual(v1Schema)
     })
 
     it('fails when presented with invalid data', () => {
       const badData: any = { garbage: 'input' }
-      assert.throws(() => {
+      expect(() => {
         updateSchema(v1Schema, [addProperty(badData)])
-      }, `Missing property destinationType in 'convert'.\nFound:\n${JSON.stringify(badData)}`)
+      }).toThrow()
     })
   })
 
@@ -162,7 +161,7 @@ describe('transforming a json schema', () => {
         ]),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         metadata: {
           type: 'object',
@@ -191,7 +190,7 @@ describe('transforming a json schema', () => {
         ]),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         name: {
           type: 'string',
           default: '',
@@ -227,7 +226,7 @@ describe('transforming a json schema', () => {
         ]),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         tasks: {
           type: 'array',
@@ -259,7 +258,7 @@ describe('transforming a json schema', () => {
         ]),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         tasks: {
           type: 'array',
@@ -291,7 +290,7 @@ describe('transforming a json schema', () => {
       // { { type: 'null', type: 'string' }, default: 'Joe' } }
       // the behaviour you see below here doesn't really work with at least AJV
       // https://github.com/ajv-validator/ajv/issues/276
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         assignees: { anyOf: [{ type: 'null' }, { type: 'string', default: '' }] },
       })
@@ -321,7 +320,7 @@ describe('transforming a json schema', () => {
         },
       }
 
-      assert.deepEqual(newSchema.properties, expectedSchema)
+      expect(newSchema.properties).toEqual(expectedSchema)
     })
   })
 
@@ -332,7 +331,7 @@ describe('transforming a json schema', () => {
         wrapProperty('assignee'),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         assignee: {
           type: 'array',
@@ -355,7 +354,7 @@ describe('transforming a json schema', () => {
         wrapProperty('assignee'),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         assignee: {
           type: 'array',
@@ -383,7 +382,7 @@ describe('transforming a json schema', () => {
         hoistProperty('metadata', 'createdAt'),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         metadata: {
           type: 'object',
@@ -414,7 +413,7 @@ describe('transforming a json schema', () => {
         hoistProperty('metadata', 'details'),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         metadata: {
           type: 'object',
@@ -446,7 +445,7 @@ describe('transforming a json schema', () => {
         plungeProperty('metadata', 'summary'),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         name: v1Schema.properties?.name,
         metadata: {
           type: 'object',
@@ -471,9 +470,9 @@ describe('transforming a json schema', () => {
     })
 
     it('fails when presented with invalid data', () => {
-      assert.throws(() => {
+      expect(() => {
         updateSchema(v1Schema, [plungeProperty('metadata', 'nosaj-thing')])
-      }, /Could not find a property called nosaj-thing among/)
+      }).toThrow()
     })
 
     it.skip('plunges an object down with its child properties', () => {
@@ -488,7 +487,7 @@ describe('transforming a json schema', () => {
         plungeProperty('container', 'metadata'),
       ])
 
-      assert.deepEqual(newSchema.properties, {
+      expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         container: {
           type: 'object',

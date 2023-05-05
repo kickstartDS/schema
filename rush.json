@@ -6,6 +6,7 @@
   "nodeSupportedVersionInstructions": "Run 'nvs use' to switch to the expected node version.",
   "projectFolderMinDepth": 2,
   "projectFolderMaxDepth": 2,
+  "ensureConsistentVersions": true,
   "gitPolicy": {
     "versionBumpCommitMessage": "Bump versions [skip ci]",
     "changeLogUpdateCommitMessage": "Update changelogs [skip ci]",

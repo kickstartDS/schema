@@ -66,4 +66,4 @@ const headlineSchema = {
 const lensData = await fs.readFile(path.resolve(__dirname, `../resources/headline.lens.yml`), 'utf-8');
 const lens = loadYamlLens(lensData);
 const updatedSchema = updateSchema(headlineSchema, lens);
-console.log('updateSchema', updatedSchema);
+console.log('Updated headline.schema.json', updatedSchema);

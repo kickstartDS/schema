@@ -7,13 +7,16 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --outDir ./dist --project ./tsconfig.json",
+    "build": "heft build --clean",
+    "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@kickstartds/cambria": "workspace:*"
   },
   "devDependencies": {
+    "@rushstack/heft": "^0.50.4",
+    "@rushstack/heft-node-rig": "^1.12.10",
     "@tsconfig/node16": "^1.0.3",
     "@types/json-schema": "^7.0.11",
     "@types/node": "^18.16.3",

@@ -1,5 +1,5 @@
 import { JSONSchema7, JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema'
-import { inspect } from 'util'
+import { inspect } from 'node:util'
 import { defaultValuesByType } from './defaults.js'
 import {
   Property,

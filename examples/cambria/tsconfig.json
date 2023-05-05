@@ -1,11 +1,6 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "preserveConstEnums": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "target": "es2021",
     "module": "node16",
     "moduleResolution": "node16",
     "declaration": true,

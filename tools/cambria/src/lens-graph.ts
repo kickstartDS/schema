@@ -1,7 +1,9 @@
-import { Graph, alg, json } from 'graphlib'
+import pkg, { Graph } from 'graphlib'
 import { LensSource, LensOp, updateSchema, reverseLens } from './index.js'
 import { emptySchema } from './json-schema.js'
 import { JSONSchema7 } from 'json-schema'
+
+const { alg, json } = pkg
 
 export interface LensGraph {
   graph: Graph

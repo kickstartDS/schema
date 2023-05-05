@@ -1,0 +1,9 @@
+# Convert a kickstartDS Headline into a simpler format
+schemaName: Headline
+
+lens:
+  # remove unnecessary fields
+  - remove: { name: level }
+  - remove: { name: styleAs }
+  - remove: { name: spaceAfter }
+  - remove: { name: className }

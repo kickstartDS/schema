@@ -1,7 +1,9 @@
 /* eslint-disable no-use-before-define */
-import { applyPatch } from 'fast-json-patch'
+import pkg from 'fast-json-patch'
 import { JSONSchema7, JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema'
 import { Patch } from './patch.js'
+
+const { applyPatch } = pkg
 
 /**
  * behaviour:

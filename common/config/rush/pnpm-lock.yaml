@@ -5,6 +5,21 @@ importers:
   .:
     specifiers: {}
 
+  ../../examples/cambria:
+    specifiers:
+      '@kickstartds/cambria': workspace:*
+      '@tsconfig/node16': 1.0.3
+      '@types/json-schema': ^7.0.11
+      '@types/node': ^18.16.3
+      typescript: ~5.0.4
+    dependencies:
+      '@kickstartds/cambria': link:../../tools/cambria
+    devDependencies:
+      '@tsconfig/node16': 1.0.3
+      '@types/json-schema': 7.0.11
+      '@types/node': 18.16.4
+      typescript: 5.0.4
+
   ../../tools/cambria:
     specifiers:
       '@json-editor/json-editor': ^2.9.1

@@ -24,13 +24,19 @@
   },
   "variants": [],
   "telemetryEnabled": false,
-  "allowedProjectTags": ["tools"],
+  "allowedProjectTags": ["tools", "examples"],
   "projects": [
     {
       "packageName": "@kickstartds/cambria",
       "projectFolder": "tools/cambria",
       "reviewCategory": "tools",
       "tags": ["tools"]
+    },
+    {
+      "packageName": "@kickstartds/cambria-example",
+      "projectFolder": "examples/cambria",
+      "reviewCategory": "examples",
+      "tags": ["examples"]
     }
   ]
 }

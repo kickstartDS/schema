@@ -10,7 +10,9 @@
   "gitPolicy": {
     "versionBumpCommitMessage": "Bump versions [skip ci]",
     "changeLogUpdateCommitMessage": "Update changelogs [skip ci]",
-    "changefilesCommitMessage": "Rush change"
+    "changefilesCommitMessage": "Rush change",
+    "allowedEmailRegExps": ["[^@]+@kickstartds\\.com"],
+    "sampleEmail": "jonas.ulrich@kickstartds.com"
   },
   "repository": {
     "url": "https://github.com/kickstartDS/schema",

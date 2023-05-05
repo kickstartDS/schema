@@ -401,14 +401,11 @@ describe('plunge (object)', () => {
   // currently does not pass - strange ordering issue with fields in the object
   it.skip('pushes a field into a child with applyLensToDoc', () => {
     assert.deepEqual(
-      applyLensToDoc(
-        [{op: "plunge", host: "tags", name: "color"}],
-        {
-          // this currently throws an error but works if we re-order color and tags in the object below
-          color: "orange",
-          tags: {}
-        }
-      ),
+      applyLensToDoc([{ op: 'plunge', host: 'tags', name: 'color' }], {
+        // this currently throws an error but works if we re-order color and tags in the object below
+        color: 'orange',
+        tags: {},
+      }),
       { tags: { color: 'orange' } }
     )
   })

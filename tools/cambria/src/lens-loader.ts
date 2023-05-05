@@ -5,7 +5,7 @@ interface YAMLLens {
   lens: LensSource
 }
 
-const foldInOp = (lensOpJson: { [key:string]: any }): LensOp => {
+const foldInOp = (lensOpJson: { [key: string]: any }): LensOp => {
   const opName = Object.keys(lensOpJson)[0]
 
   // the json format isJSONSchema7
@@ -14,7 +14,7 @@ const foldInOp = (lensOpJson: { [key:string]: any }): LensOp => {
   // {op: <opName>, ...opArgs}
   const data = lensOpJson[opName]
   if (['in', 'map'].includes(opName)) {
-    data.lens = data.lens.map((lensOp: { [key:string]: any}) => foldInOp(lensOp))
+    data.lens = data.lens.map((lensOp: { [key: string]: any }) => foldInOp(lensOp))
   }
 
   const op = { op: opName, ...data }

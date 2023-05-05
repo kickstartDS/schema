@@ -8,7 +8,7 @@ import { Patch, applyLensToPatch } from './patch.js'
 import { LensSource } from './lens-ops.js'
 import { updateSchema } from './json-schema.js'
 
-const { compare, applyPatch } = pkg;
+const { compare, applyPatch } = pkg
 
 /**
  * importDoc - convert any Plain Old Javascript Object into an implied JSON Schema and

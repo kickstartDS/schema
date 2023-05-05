@@ -7,7 +7,13 @@ export { applyLensToDoc, importDoc } from './doc.js'
 export { LensSource, LensOp, Property } from './lens-ops.js'
 export { defaultObjectForSchema } from './defaults.js'
 export { reverseLens } from './reverse.js'
-export { LensGraph, initLensGraph, registerLens, lensGraphSchema, lensFromTo } from './lens-graph.js'
+export {
+  LensGraph,
+  initLensGraph,
+  registerLens,
+  lensGraphSchema,
+  lensFromTo,
+} from './lens-graph.js'
 
 export {
   addProperty,

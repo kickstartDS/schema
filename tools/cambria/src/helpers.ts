@@ -17,7 +17,7 @@ import {
   HeadProperty,
   ValueMapping,
   ConvertValue,
-} from './lens-ops'
+} from './lens-ops.js'
 
 export function addProperty(property: Property): AddProperty {
   return {

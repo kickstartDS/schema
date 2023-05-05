@@ -1,23 +1,15 @@
 {
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "noFallthroughCasesInSwitch": true,
-    "lib": ["es2015", "es2017", "es2019", "dom", "webworker"],
-    "target": "es2016",
-    "module": "CommonJS",
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react",
-    "pretty": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true
-  },
-  "parserOptions": {
-    "tsconfigRootDir": "."
+    "allowJs": true,
+    "target": "es2021",
+    "module": "node16",
+    "moduleResolution": "node16",
+    "declaration": true,
+    "outDir": "dist"
   },
   "include": ["src/**/*.ts"]
 }

@@ -1,6 +1,6 @@
 import { JSONSchema7, JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema'
 import { inspect } from 'util'
-import { defaultValuesByType } from './defaults'
+import { defaultValuesByType } from './defaults.js'
 import {
   Property,
   LensSource,
@@ -9,7 +9,7 @@ import {
   HeadProperty,
   WrapProperty,
   LensIn,
-} from './lens-ops'
+} from './lens-ops.js'
 
 export const emptySchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
@@ -314,11 +314,11 @@ function wrapProperty(schema: JSONSchema7, op: WrapProperty): JSONSchema7 {
   }
 }
 
-function headProperty(schema, op: HeadProperty) {
+function headProperty(schema: JSONSchema7, op: HeadProperty) {
   if (!op.name) {
     throw new Error('Head requires a `name` to identify what to take head from.')
   }
-  if (!schema.properties[op.name]) {
+  if (!schema.properties || !schema.properties[op.name]) {
     throw new Error(`Cannot head property '${op.name}' because it does not exist.`)
   }
 
@@ -326,7 +326,7 @@ function headProperty(schema, op: HeadProperty) {
     ...schema,
     properties: {
       ...schema.properties,
-      [op.name]: { anyOf: [{ type: 'null' }, schema.properties[op.name].items] },
+      [op.name]: { anyOf: [{ type: 'null' }, (schema.properties[op.name] as JSONSchema7).items] },
     },
   }
 }
@@ -495,7 +495,7 @@ function applyLensOperation(schema: JSONSchema7, op: LensOp) {
 export function updateSchema(schema: JSONSchema7, lens: LensSource): JSONSchema7 {
   return lens.reduce<JSONSchema7>((schema: JSONSchema7, op: LensOp) => {
     if (schema === undefined) throw new Error("Can't update undefined schema")
-    return applyLensOperation(schema, op)
+    return applyLensOperation(schema, op) as JSONSchema7
   }, schema as JSONSchema7)
 }
 

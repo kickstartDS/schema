@@ -1,9 +1,9 @@
 import { Operation } from 'fast-json-patch'
 import { JSONSchema7 } from 'json-schema'
-import { LensSource, LensOp } from './lens-ops'
-import { reverseLens } from './reverse'
-import { addDefaultValues } from './defaults'
-import { updateSchema } from './json-schema'
+import { LensSource, LensOp } from './lens-ops.js'
+import { reverseLens } from './reverse.js'
+import { addDefaultValues } from './defaults.js'
+import { updateSchema } from './json-schema.js'
 
 // todo: we're throwing away the type param right now so it doesn't actually do anything.
 // can we actually find a way to keep it around and typecheck patches against a type?

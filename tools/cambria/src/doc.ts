@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { JSONSchema7 } from 'json-schema'
 import { compare, applyPatch } from 'fast-json-patch'
-import toJSONSchema from 'to-json-schema'
+import toJSONSchema, { Options } from 'to-json-schema'
 
-import { defaultObjectForSchema } from './defaults'
-import { Patch, applyLensToPatch } from './patch'
-import { LensSource } from './lens-ops'
-import { updateSchema } from './json-schema'
+import { defaultObjectForSchema } from './defaults.js'
+import { Patch, applyLensToPatch } from './patch.js'
+import { LensSource } from './lens-ops.js'
+import { updateSchema } from './json-schema.js'
 
 /**
  * importDoc - convert any Plain Old Javascript Object into an implied JSON Schema and
@@ -14,7 +14,7 @@ import { updateSchema } from './json-schema'
  * @param inputDoc a document to convert into a big JSON patch describing its full contents
  */
 export function importDoc(inputDoc: any): [JSONSchema7, Patch] {
-  const options = {
+  const options: Options = {
     postProcessFnc: (type, schema, obj, defaultFnc) => ({
       ...defaultFnc(type, schema, obj),
       type: [type, 'null'],

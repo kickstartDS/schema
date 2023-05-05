@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { applyPatch } from 'fast-json-patch'
 import { JSONSchema7, JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema'
-import { Patch } from './patch'
+import { Patch } from './patch.js'
 
 /**
  * behaviour:
@@ -12,9 +12,11 @@ import { Patch } from './patch'
 const defaultValuesForType = {
   string: '',
   number: 0,
+  integer: 0,
   boolean: false,
   array: [],
   object: {},
+  null: null,
 }
 export function defaultValuesByType(
   type: JSONSchema7TypeName | JSONSchema7TypeName[]

@@ -21,28 +21,6 @@ Lenses are bidirectional. Once you've converted a document from schema A to sche
 - Transform a JSON document into a different shape on the command line
 - Combine with [cambria-automerge](https://github.com/inkandswitch/cambria-automerge) to collaborate on documents across multiple versions of [local-first software](https://www.inkandswitch.com/local-first.html)
 
-## CLI Usage
-
-Cambria includes a simple CLI tool for converting JSON from the command line.
-
-(You'll want to run `yarn build` to compile the latest code.)
-
-Covert the github issue into a an arthropod-style issue:
-
-`cat ./demo/github-issue.json | node ./dist/cli.js -l ./demo/github-arthropod.lens.yml`
-
-To get a live updating pipeline using `entr`:
-
-`echo ./demo/github-arthropod.lens.yml | entr bash -c "cat ./demo/github-issue.json | node ./dist/cli.js -l ./demo/github-arthropod.lens.yml > ./demo/simple-issue.json"`
-
-Compile back from an updated "simple issue" to a new github issue file:
-
-`cat ./demo/simple-issue.json | node ./dist/cli.js -l ./demo/github-arthropod.lens.yml -r -b ./demo/github-issue.json`
-
-Live updating pipeline backwards:
-
-`echo ./demo/simple-issue.json | entr bash -c "cat ./demo/simple-issue.json | node ./dist/cli.js -l ./demo/github-arthropod.lens.yml -r -b ./demo/github-issue.json > ./demo/new-github-issue.json"`
-
 ## API Usage
 
 Cambria is mostly intended to be used as a Typescript / Javascript library. Here's a simple example of converting an entire document.

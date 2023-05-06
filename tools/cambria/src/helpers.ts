@@ -2,7 +2,8 @@
 // (we might write our own parser later, but at least for now
 // this avoids seeing the raw json...)
 
-import { JSONSchema7TypeName } from 'json-schema'
+import { JSONSchema7TypeName } from 'json-schema';
+
 import {
   LensSource,
   ILensMap,
@@ -16,74 +17,74 @@ import {
   IWrapProperty,
   IHeadProperty,
   ValueMapping,
-  IConvertValue,
-} from './lens-ops.js'
+  IConvertValue
+} from './lens-ops.js';
 
 export function addProperty(property: IProperty): IAddProperty {
   return {
     op: 'add',
-    ...property,
-  }
+    ...property
+  };
 }
 
 export function removeProperty(property: IProperty): IRemoveProperty {
   return {
     op: 'remove',
-    ...property,
-  }
+    ...property
+  };
 }
 
 export function renameProperty(source: string, destination: string): IRenameProperty {
   return {
     op: 'rename',
     source,
-    destination,
-  }
+    destination
+  };
 }
 
 export function hoistProperty(host: string, name: string): IHoistProperty {
   return {
     op: 'hoist',
     host,
-    name,
-  }
+    name
+  };
 }
 
 export function plungeProperty(host: string, name: string): IPlungeProperty {
   return {
     op: 'plunge',
     host,
-    name,
-  }
+    name
+  };
 }
 
 export function wrapProperty(name: string): IWrapProperty {
   return {
     op: 'wrap',
-    name,
-  }
+    name
+  };
 }
 
 export function headProperty(name: string): IHeadProperty {
   return {
     op: 'head',
-    name,
-  }
+    name
+  };
 }
 
 export function inside(name: string, lens: LensSource): ILensIn {
   return {
     op: 'in',
     name,
-    lens,
-  }
+    lens
+  };
 }
 
 export function map(lens: LensSource): ILensMap {
   return {
     op: 'map',
-    lens,
-  }
+    lens
+  };
 }
 
 export function convertValue(
@@ -97,6 +98,6 @@ export function convertValue(
     name,
     mapping,
     sourceType,
-    destinationType,
-  }
+    destinationType
+  };
 }

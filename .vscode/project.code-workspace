@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "@kickstartDS/schema",
+      "path": "../"
+    },
+    {
+      "name": "examples/cambria",
+      "path": "../examples/cambria"
+    },
+    {
+      "name": "tools/cambria",
+      "path": "../tools/cambria"
+    }
+  ],
+  "settings": {}
+}

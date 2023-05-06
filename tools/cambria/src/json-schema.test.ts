@@ -1,5 +1,5 @@
-import { JSONSchema7 } from 'json-schema'
-import { updateSchema } from './json-schema.js'
+import { JSONSchema7 } from 'json-schema';
+
 import {
   addProperty,
   inside,
@@ -9,9 +9,10 @@ import {
   hoistProperty,
   plungeProperty,
   renameProperty,
-  convertValue,
-} from './helpers.js'
-import { IProperty } from './lens-ops.js'
+  convertValue
+} from './helpers.js';
+import { updateSchema } from './json-schema.js';
+import { IProperty } from './lens-ops.js';
 
 describe('transforming a json schema', () => {
   const v1Schema = {
@@ -24,91 +25,89 @@ describe('transforming a json schema', () => {
     properties: {
       name: {
         type: 'string',
-        default: '',
+        default: ''
       },
       summary: {
         type: 'string',
-        default: '',
-      },
+        default: ''
+      }
     },
-    required: ['name', 'summary'],
-  } as JSONSchema7 // need to convince typescript this is valid json schema
+    required: ['name', 'summary']
+  } as JSONSchema7; // need to convince typescript this is valid json schema
 
   describe('addProperty', () => {
     it('adds the property', () => {
-      const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'description', type: 'string' }),
-      ])
+      const newSchema = updateSchema(v1Schema, [addProperty({ name: 'description', type: 'string' })]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
-        description: { type: 'string', default: '' },
-      })
-    })
+        description: { type: 'string', default: '' }
+      });
+    });
 
     it('supports nullable fields', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'description', type: ['string', 'null'] }),
-      ])
+        addProperty({ name: 'description', type: ['string', 'null'] })
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
-        description: { type: ['string', 'null'], default: null },
-      })
-    })
+        description: { type: ['string', 'null'], default: null }
+      });
+    });
 
     it('uses default value if provided', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'description', type: 'string', default: 'hi' }),
-      ])
+        addProperty({ name: 'description', type: 'string', default: 'hi' })
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
-        description: { type: 'string', default: 'hi' },
-      })
-    })
+        description: { type: 'string', default: 'hi' }
+      });
+    });
 
     it('sets field as required', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'description', type: 'string', required: true }),
-      ])
+        addProperty({ name: 'description', type: 'string', required: true })
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
-        description: { type: 'string', default: '' },
-      })
+        description: { type: 'string', default: '' }
+      });
 
-      expect(newSchema.required).toEqual([...(v1Schema.required || []), 'description'])
-    })
+      expect(newSchema.required).toEqual([...(v1Schema.required || []), 'description']);
+    });
 
     it('fails when presented with invalid data', () => {
-      const badData: { [key: string]: unknown } = { garbage: 'input' }
+      const badData: { [key: string]: unknown } = { garbage: 'input' };
       expect(() => {
-        updateSchema(v1Schema, [addProperty(badData as unknown as IProperty)])
-      }).toThrow()
-    })
-  })
+        updateSchema(v1Schema, [addProperty(badData as unknown as IProperty)]);
+      }).toThrow();
+    });
+  });
 
   describe('renameProperty', () => {
-    const newSchema = updateSchema(v1Schema, [renameProperty('name', 'title')])
+    const newSchema = updateSchema(v1Schema, [renameProperty('name', 'title')]);
 
     it('adds a new property and removes the old property', () => {
       expect(newSchema.properties).toEqual({
         title: {
           type: 'string',
-          default: '',
+          default: ''
         },
         summary: {
           type: 'string',
-          default: '',
-        },
-      })
-    })
+          default: ''
+        }
+      });
+    });
 
     it('removes the old property from required array', () => {
-      expect(newSchema.required?.indexOf('name')).toEqual(-1)
-    })
-  })
+      expect(newSchema.required?.indexOf('name')).toEqual(-1);
+    });
+  });
 
   describe('convertValue', () => {
     it('changes the type on the existing property', () => {
@@ -117,40 +116,40 @@ describe('transforming a json schema', () => {
           'summary',
           [
             { todo: false, inProgress: false, done: true },
-            { false: 'todo', true: 'done' },
+            { false: 'todo', true: 'done' }
           ],
           'string',
           'boolean'
-        ),
-      ])
+        )
+      ]);
 
       expect(newSchema.properties).toEqual({
         name: {
           type: 'string',
-          default: '',
+          default: ''
         },
         summary: {
           type: 'boolean',
-          default: false,
-        },
-      })
-    })
+          default: false
+        }
+      });
+    });
 
     it("doesn't update the schema when there's no type change", () => {
       const newSchema = updateSchema(v1Schema, [
-        convertValue('summary', [{ something: 'another' }, { another: 'something' }]),
-      ])
+        convertValue('summary', [{ something: 'another' }, { another: 'something' }])
+      ]);
 
-      expect(newSchema).toEqual(v1Schema)
-    })
+      expect(newSchema).toEqual(v1Schema);
+    });
 
     it('fails when presented with invalid data', () => {
-      const badData: { [key: string]: unknown } = { garbage: 'input' }
+      const badData: { [key: string]: unknown } = { garbage: 'input' };
       expect(() => {
-        updateSchema(v1Schema, [addProperty(badData as unknown as IProperty)])
-      }).toThrow()
-    })
-  })
+        updateSchema(v1Schema, [addProperty(badData as unknown as IProperty)]);
+      }).toThrow();
+    });
+  });
 
   describe('inside', () => {
     it('adds new properties inside a key', () => {
@@ -158,9 +157,9 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'metadata', type: 'object' }),
         inside('metadata', [
           addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'updatedAt', type: 'number' }),
-        ]),
-      ])
+          addProperty({ name: 'updatedAt', type: 'number' })
+        ])
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -170,35 +169,35 @@ describe('transforming a json schema', () => {
           properties: {
             createdAt: {
               type: 'number',
-              default: 0,
+              default: 0
             },
             updatedAt: {
               type: 'number',
-              default: 0,
-            },
+              default: 0
+            }
           },
-          required: ['createdAt', 'updatedAt'],
-        },
-      })
-    })
+          required: ['createdAt', 'updatedAt']
+        }
+      });
+    });
 
     it('renames properties inside a key', () => {
       const newSchema = updateSchema(v1Schema, [
         addProperty({ name: 'metadata', type: 'object' }),
         inside('metadata', [
           addProperty({ name: 'createdAt', type: 'number' }),
-          renameProperty('createdAt', 'created'),
-        ]),
-      ])
+          renameProperty('createdAt', 'created')
+        ])
+      ]);
 
       expect(newSchema.properties).toEqual({
         name: {
           type: 'string',
-          default: '',
+          default: ''
         },
         summary: {
           type: 'string',
-          default: '',
+          default: ''
         },
         metadata: {
           type: 'object',
@@ -206,14 +205,14 @@ describe('transforming a json schema', () => {
           properties: {
             created: {
               type: 'number',
-              default: 0,
-            },
+              default: 0
+            }
           },
-          required: ['created'],
-        },
-      })
-    })
-  })
+          required: ['created']
+        }
+      });
+    });
+  });
 
   describe('map', () => {
     it('adds new properties inside an array', () => {
@@ -222,10 +221,10 @@ describe('transforming a json schema', () => {
         inside('tasks', [
           map([
             addProperty({ name: 'name', type: 'string' }),
-            addProperty({ name: 'description', type: 'string' }),
-          ]),
-        ]),
-      ])
+            addProperty({ name: 'description', type: 'string' })
+          ])
+        ])
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -238,26 +237,26 @@ describe('transforming a json schema', () => {
             properties: {
               name: {
                 type: 'string',
-                default: '',
+                default: ''
               },
               description: {
                 type: 'string',
-                default: '',
-              },
+                default: ''
+              }
             },
-            required: ['name', 'description'],
-          },
-        },
-      })
-    })
+            required: ['name', 'description']
+          }
+        }
+      });
+    });
 
     it('renames properties inside an array', () => {
       const newSchema = updateSchema(v1Schema, [
         addProperty({ name: 'tasks', type: 'array', items: { type: 'object' as const } }),
         inside('tasks', [
-          map([addProperty({ name: 'name', type: 'string' }), renameProperty('name', 'title')]),
-        ]),
-      ])
+          map([addProperty({ name: 'name', type: 'string' }), renameProperty('name', 'title')])
+        ])
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -270,22 +269,22 @@ describe('transforming a json schema', () => {
             properties: {
               title: {
                 type: 'string',
-                default: '',
-              },
+                default: ''
+              }
             },
-            required: ['title'],
-          },
-        },
-      })
-    })
-  })
+            required: ['title']
+          }
+        }
+      });
+    });
+  });
 
   describe('headProperty', () => {
     it('can turn an array into a scalar', () => {
       const newSchema = updateSchema(v1Schema, [
         addProperty({ name: 'assignees', type: 'array', items: { type: 'string' as const } }),
-        headProperty('assignees'),
-      ])
+        headProperty('assignees')
+      ]);
 
       // Really, the correct result would be:
       // { { type: 'null', type: 'string' }, default: 'Joe' } }
@@ -293,16 +292,16 @@ describe('transforming a json schema', () => {
       // https://github.com/ajv-validator/ajv/issues/276
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
-        assignees: { anyOf: [{ type: 'null' }, { type: 'string', default: '' }] },
-      })
-    })
+        assignees: { anyOf: [{ type: 'null' }, { type: 'string', default: '' }] }
+      });
+    });
 
     it('can preserve schema information for an array of objects becoming a single object', () => {
       const newSchema = updateSchema(v1Schema, [
         addProperty({ name: 'assignees', type: 'array', items: { type: 'object' as const } }),
         inside('assignees', [map([addProperty({ name: 'name', type: 'string' })])]),
-        headProperty('assignees'),
-      ])
+        headProperty('assignees')
+      ]);
 
       const expectedSchema = {
         ...v1Schema.properties,
@@ -313,24 +312,24 @@ describe('transforming a json schema', () => {
               type: 'object',
               default: {},
               properties: {
-                name: { type: 'string', default: '' },
+                name: { type: 'string', default: '' }
               },
-              required: ['name'],
-            },
-          ],
-        },
-      }
+              required: ['name']
+            }
+          ]
+        }
+      };
 
-      expect(newSchema.properties).toEqual(expectedSchema)
-    })
-  })
+      expect(newSchema.properties).toEqual(expectedSchema);
+    });
+  });
 
   describe('wrapProperty', () => {
     it('can wrap a scalar into an array', () => {
       const newSchema = updateSchema(v1Schema, [
         addProperty({ name: 'assignee', type: ['string', 'null'] }),
-        wrapProperty('assignee'),
-      ])
+        wrapProperty('assignee')
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -339,21 +338,21 @@ describe('transforming a json schema', () => {
           default: [],
           items: {
             type: 'string' as const,
-            default: '',
-          },
-        },
-      })
-    })
+            default: ''
+          }
+        }
+      });
+    });
 
     it.skip('can wrap an object into an array', () => {
       const newSchema = updateSchema(v1Schema, [
         addProperty({ name: 'assignee', type: ['object', 'null'] }),
         inside('assignee', [
           addProperty({ name: 'id', type: 'string' }),
-          addProperty({ name: 'name', type: 'string' }),
+          addProperty({ name: 'name', type: 'string' })
         ]),
-        wrapProperty('assignee'),
-      ])
+        wrapProperty('assignee')
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -364,13 +363,13 @@ describe('transforming a json schema', () => {
             type: 'object' as const,
             properties: {
               name: { type: 'string', default: '' },
-              id: { type: 'string', default: '' },
-            },
-          },
-        },
-      })
-    })
-  })
+              id: { type: 'string', default: '' }
+            }
+          }
+        }
+      });
+    });
+  });
 
   describe('hoistProperty', () => {
     it('hoists the property up in the schema', () => {
@@ -378,10 +377,10 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'metadata', type: 'object' }),
         inside('metadata', [
           addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'editedAt', type: 'number' }),
+          addProperty({ name: 'editedAt', type: 'number' })
         ]),
-        hoistProperty('metadata', 'createdAt'),
-      ])
+        hoistProperty('metadata', 'createdAt')
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -391,17 +390,17 @@ describe('transforming a json schema', () => {
           properties: {
             editedAt: {
               type: 'number',
-              default: 0,
-            },
+              default: 0
+            }
           },
-          required: ['editedAt'],
+          required: ['editedAt']
         },
         createdAt: {
           type: 'number',
-          default: 0,
-        },
-      })
-    })
+          default: 0
+        }
+      });
+    });
 
     it('hoists up an object with child properties', () => {
       // hoist up a details object out of metadata
@@ -409,10 +408,10 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'metadata', type: 'object' }),
         inside('metadata', [
           addProperty({ name: 'details', type: 'object' }),
-          inside('details', [addProperty({ name: 'title', type: 'string' })]),
+          inside('details', [addProperty({ name: 'title', type: 'string' })])
         ]),
-        hoistProperty('metadata', 'details'),
-      ])
+        hoistProperty('metadata', 'details')
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -420,19 +419,19 @@ describe('transforming a json schema', () => {
           type: 'object',
           default: {},
           properties: {},
-          required: [],
+          required: []
         },
         details: {
           type: 'object',
           default: {},
           properties: {
-            title: { type: 'string', default: '' },
+            title: { type: 'string', default: '' }
           },
-          required: ['title'],
-        },
-      })
-    })
-  })
+          required: ['title']
+        }
+      });
+    });
+  });
 
   describe('plungeProperty', () => {
     it('plunges the property down in the schema', () => {
@@ -441,10 +440,10 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'metadata', type: 'object' }),
         inside('metadata', [
           addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'editedAt', type: 'number' }),
+          addProperty({ name: 'editedAt', type: 'number' })
         ]),
-        plungeProperty('metadata', 'summary'),
-      ])
+        plungeProperty('metadata', 'summary')
+      ]);
 
       expect(newSchema.properties).toEqual({
         name: v1Schema.properties?.name,
@@ -454,27 +453,27 @@ describe('transforming a json schema', () => {
           properties: {
             createdAt: {
               type: 'number',
-              default: 0,
+              default: 0
             },
             editedAt: {
               type: 'number',
-              default: 0,
+              default: 0
             },
             summary: {
               type: 'string',
-              default: '',
-            },
+              default: ''
+            }
           },
-          required: ['createdAt', 'editedAt', 'summary'],
-        },
-      })
-    })
+          required: ['createdAt', 'editedAt', 'summary']
+        }
+      });
+    });
 
     it('fails when presented with invalid data', () => {
       expect(() => {
-        updateSchema(v1Schema, [plungeProperty('metadata', 'nosaj-thing')])
-      }).toThrow()
-    })
+        updateSchema(v1Schema, [plungeProperty('metadata', 'nosaj-thing')]);
+      }).toThrow();
+    });
 
     it.skip('plunges an object down with its child properties', () => {
       // plunge metadata object into a container object
@@ -483,10 +482,10 @@ describe('transforming a json schema', () => {
         addProperty({ name: 'metadata', type: 'object' }),
         inside('metadata', [
           addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'editedAt', type: 'number' }),
+          addProperty({ name: 'editedAt', type: 'number' })
         ]),
-        plungeProperty('container', 'metadata'),
-      ])
+        plungeProperty('container', 'metadata')
+      ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -501,18 +500,18 @@ describe('transforming a json schema', () => {
               properties: {
                 createdAt: {
                   type: 'number',
-                  default: 0,
+                  default: 0
                 },
                 editedAt: {
                   type: 'number',
-                  default: 0,
-                },
+                  default: 0
+                }
               },
-              required: ['createdAt', 'editedAt', 'summary'],
-            },
-          },
-        },
-      })
-    })
-  })
-})
+              required: ['createdAt', 'editedAt', 'summary']
+            }
+          }
+        }
+      });
+    });
+  });
+});

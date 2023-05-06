@@ -1,15 +1,16 @@
 /* eslint-disable no-use-before-define */
-import pkg from 'fast-json-patch'
+import pkg from 'fast-json-patch';
 import {
   JSONSchema7,
   JSONSchema7Definition,
   JSONSchema7TypeName,
   JSONSchema7Array,
-  JSONSchema7Object,
-} from 'json-schema'
-import { Patch } from './patch.js'
+  JSONSchema7Object
+} from 'json-schema';
 
-const { applyPatch } = pkg
+import { Patch } from './patch.js';
+
+const { applyPatch } = pkg;
 
 /**
  * behaviour:
@@ -18,13 +19,13 @@ const { applyPatch } = pkg
  *  - otherwise just use the value to lookup in the table
  */
 const defaultValuesForType: {
-  string: string
-  number: number
-  integer: number
-  boolean: boolean
-  array: JSONSchema7Array
-  object: JSONSchema7Object
-  null: undefined
+  string: string;
+  number: number;
+  integer: number;
+  boolean: boolean;
+  array: JSONSchema7Array;
+  object: JSONSchema7Object;
+  null: undefined;
 } = {
   string: '',
   number: 0,
@@ -32,18 +33,18 @@ const defaultValuesForType: {
   boolean: false,
   array: [],
   object: {},
-  null: undefined,
-}
+  null: undefined
+};
 export function defaultValuesByType(
   type: JSONSchema7TypeName | JSONSchema7TypeName[]
 ): JSONSchema7['default'] {
   if (Array.isArray(type)) {
     if (type.includes('null')) {
-      return null
+      return null;
     }
-    return defaultValuesForType[type[0]]
+    return defaultValuesForType[type[0]];
   }
-  return defaultValuesForType[type]
+  return defaultValuesForType[type];
 }
 
 // Return a recursively filled-in default object for a given schema
@@ -54,12 +55,12 @@ export function defaultObjectForSchema(schema: JSONSchema7): JSONSchema7 {
     {
       op: 'add' as const,
       path: '',
-      value: {},
-    },
-  ]
-  const defaultsPatch = addDefaultValues(initializeRootPatch, schema)
+      value: {}
+    }
+  ];
+  const defaultsPatch = addDefaultValues(initializeRootPatch, schema);
 
-  return applyPatch({}, defaultsPatch).newDocument
+  return applyPatch({}, defaultsPatch).newDocument;
 }
 
 export function addDefaultValues(patch: Patch, schema: JSONSchema7): Patch {
@@ -69,18 +70,18 @@ export function addDefaultValues(patch: Patch, schema: JSONSchema7): Patch {
         (op.op === 'add' || op.op === 'replace') &&
         op.value !== null &&
         typeof op.value === 'object' &&
-        Object.entries(op.value).length === 0
+        Object.entries(op.value).length === 0;
 
-      if (!isMakeMap) return op
+      if (!isMakeMap) return op;
 
-      const objectProperties = getPropertiesForPath(schema, op.path)
+      const objectProperties = getPropertiesForPath(schema, op.path);
 
       return [
         op,
         // fill in default values for each property on the object
         ...Object.entries(objectProperties).map(([propName, propSchema]) => {
-          if (typeof propSchema !== 'object') throw new Error(`Missing property ${propName}`)
-          const path = `${op.path}/${propName}`
+          if (typeof propSchema !== 'object') throw new Error(`Missing property ${propName}`);
+          const path = `${op.path}/${propName}`;
 
           // Fill in a default iff:
           // 1) it's an object or array: init to empty
@@ -89,54 +90,51 @@ export function addDefaultValues(patch: Patch, schema: JSONSchema7): Patch {
           // Should we allow defaulting containers to non-empty? seems like no.
           // Should we fill in "default defaults" like empty string?
           // I think better to let the json schema explicitly define defaults
-          let defaultValue
+          let defaultValue;
           if (propSchema.type === 'object') {
-            defaultValue = {}
+            defaultValue = {};
           } else if (propSchema.type === 'array') {
-            defaultValue = []
+            defaultValue = [];
           } else if ('default' in propSchema) {
-            defaultValue = propSchema.default
+            defaultValue = propSchema.default;
           } else if (Array.isArray(propSchema.type) && propSchema.type.includes('null')) {
-            defaultValue = null
+            defaultValue = null;
           }
 
           if (defaultValue !== undefined) {
             // todo: this is a TS hint, see if we can remove
-            if (op.op !== 'add' && op.op !== 'replace') throw new Error('')
-            return addDefaultValues([{ ...op, path, value: defaultValue }], schema)
+            if (op.op !== 'add' && op.op !== 'replace') throw new Error('');
+            return addDefaultValues([{ ...op, path, value: defaultValue }], schema);
           }
-          return []
-        }),
-      ].flat(Infinity)
+          return [];
+        })
+      ].flat(Infinity);
     })
-    .flat(Infinity) as Patch
+    .flat(Infinity) as Patch;
 }
 
 // given a json schema and a json path to an object field somewhere in that schema,
 // return the json schema for the object being pointed to
-function getPropertiesForPath(
-  schema: JSONSchema7,
-  path: string
-): { [key: string]: JSONSchema7Definition } {
-  const pathComponents = path.split('/').slice(1)
+function getPropertiesForPath(schema: JSONSchema7, path: string): { [key: string]: JSONSchema7Definition } {
+  const pathComponents = path.split('/').slice(1);
   const { properties } = pathComponents.reduce((schema: JSONSchema7, pathSegment: string) => {
-    const types = Array.isArray(schema.type) ? schema.type : [schema.type]
+    const types = Array.isArray(schema.type) ? schema.type : [schema.type];
     if (types.includes('object')) {
-      const schemaForProperty = schema.properties && schema.properties[pathSegment]
-      if (typeof schemaForProperty !== 'object') throw new Error('Expected object')
-      return schemaForProperty
+      const schemaForProperty = schema.properties && schema.properties[pathSegment];
+      if (typeof schemaForProperty !== 'object') throw new Error('Expected object');
+      return schemaForProperty;
     }
     if (types.includes('array')) {
       // throw away the array index, just return the schema for array items
       if (!schema.items || typeof schema.items !== 'object')
-        throw new Error('Expected array items to have types')
+        throw new Error('Expected array items to have types');
 
       // todo: revisit this "as", was a huge pain to get this past TS
-      return schema.items as JSONSchema7
+      return schema.items as JSONSchema7;
     }
-    throw new Error('Expected object or array in schema based on JSON Pointer')
-  }, schema)
+    throw new Error('Expected object or array in schema based on JSON Pointer');
+  }, schema);
 
-  if (properties === undefined) return {}
-  return properties
+  if (properties === undefined) return {};
+  return properties;
 }

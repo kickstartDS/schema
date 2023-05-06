@@ -1,7 +1,7 @@
-import { Patch, applyLensToPatch, PatchOp, expandPatch } from './patch.js'
-import { applyLensToDoc } from './doc.js'
-import { updateSchema, schemaForLens } from './json-schema.js'
-import { LensSource } from './lens-ops.js'
+import { ReplaceOperation } from 'fast-json-patch';
+import { JSONSchema7 } from 'json-schema';
+
+import { applyLensToDoc } from './doc.js';
 import {
   renameProperty,
   addProperty,
@@ -11,32 +11,32 @@ import {
   plungeProperty,
   wrapProperty,
   headProperty,
-  convertValue,
-} from './helpers.js'
-
-import { reverseLens } from './reverse.js'
-import { ReplaceOperation } from 'fast-json-patch'
-import { JSONSchema7 } from 'json-schema'
+  convertValue
+} from './helpers.js';
+import { updateSchema, schemaForLens } from './json-schema.js';
+import { LensSource } from './lens-ops.js';
+import { Patch, applyLensToPatch, PatchOp, expandPatch } from './patch.js';
+import { reverseLens } from './reverse.js';
 
 export interface IProjectV1 {
-  title: string
-  tasks: { title: string }[]
-  complete: boolean
+  title: string;
+  tasks: { title: string }[];
+  complete: boolean;
   metadata: {
-    createdAt: number
-    updatedAt: number
-  }
+    createdAt: number;
+    updatedAt: number;
+  };
 }
 
 export interface IProjectV2 {
-  name: string
-  description: string
-  issues: { title: string }[]
-  status: string
+  name: string;
+  description: string;
+  issues: { title: string }[];
+  status: string;
   metadata: {
-    createdAt: number
-    updatedAt: number
-  }
+    createdAt: number;
+    updatedAt: number;
+  };
 }
 
 const lensSource: LensSource = [
@@ -46,12 +46,12 @@ const lensSource: LensSource = [
     'complete',
     [
       { false: 'todo', true: 'done' },
-      { todo: false, inProgress: false, done: true },
+      { todo: false, inProgress: false, done: true }
     ],
     'boolean',
     'string'
-  ),
-]
+  )
+];
 
 const projectV1Schema = {
   $schema: 'http://json-schema.org/draft-07/schema',
@@ -64,20 +64,20 @@ const projectV1Schema = {
       items: {
         type: 'object',
         properties: {
-          title: { type: 'string' },
-        },
-      },
+          title: { type: 'string' }
+        }
+      }
     },
     complete: { type: 'boolean' as const },
     metadata: {
       type: 'object',
       properties: {
         createdAt: { type: 'number', default: 123 },
-        updatedAt: { type: 'number', default: 123 },
-      },
-    },
-  },
-} as const
+        updatedAt: { type: 'number', default: 123 }
+      }
+    }
+  }
+} as const;
 
 // ======================================
 // Try sending a patch through the lens
@@ -91,27 +91,27 @@ describe('field rename', () => {
       {
         op: 'replace' as const,
         path: '/title',
-        value: 'new title',
-      },
-    ]
+        value: 'new title'
+      }
+    ];
     // test the converted patch
 
     expect(applyLensToPatch(lensSource, editTitleV1, projectV1Schema)).toEqual([
-      { op: 'replace', path: '/name', value: 'new title' },
-    ])
-  })
+      { op: 'replace', path: '/name', value: 'new title' }
+    ]);
+  });
 
   it('does not rename another property that starts with same string', () => {
     const editTitleBla: Patch = [
       {
         op: 'replace' as const,
         path: '/title_bla',
-        value: 'new title',
-      },
-    ]
+        value: 'new title'
+      }
+    ];
 
-    expect(applyLensToPatch(lensSource, editTitleBla, projectV1Schema)).toEqual(editTitleBla)
-  })
+    expect(applyLensToPatch(lensSource, editTitleBla, projectV1Schema)).toEqual(editTitleBla);
+  });
 
   it('converts downwards', () => {
     // We can also use the left lens to convert a v2 patch into a v1 patch
@@ -119,18 +119,14 @@ describe('field rename', () => {
       {
         op: 'replace' as const,
         path: '/name',
-        value: 'new name',
-      },
-    ]
+        value: 'new name'
+      }
+    ];
 
     expect(
-      applyLensToPatch(
-        reverseLens(lensSource),
-        editNameV2,
-        updateSchema(projectV1Schema, lensSource)
-      )
-    ).toEqual([{ op: 'replace', path: '/title', value: 'new name' }])
-  })
+      applyLensToPatch(reverseLens(lensSource), editNameV2, updateSchema(projectV1Schema, lensSource))
+    ).toEqual([{ op: 'replace', path: '/title', value: 'new name' }]);
+  });
 
   it('works with whole doc conversion too', () => {
     // fills in default values for missing fields
@@ -141,11 +137,11 @@ describe('field rename', () => {
       tasks: [],
       metadata: {
         createdAt: 123,
-        updatedAt: 123,
-      },
-    })
-  })
-})
+        updatedAt: 123
+      }
+    });
+  });
+});
 
 describe('add field', () => {
   it('becomes an empty patch when reversed', () => {
@@ -153,18 +149,14 @@ describe('add field', () => {
       {
         op: 'replace' as const,
         path: '/description',
-        value: 'going swimmingly',
-      },
-    ]
+        value: 'going swimmingly'
+      }
+    ];
     expect(
-      applyLensToPatch(
-        reverseLens(lensSource),
-        editDescription,
-        updateSchema(projectV1Schema, lensSource)
-      )
-    ).toEqual([])
-  })
-})
+      applyLensToPatch(reverseLens(lensSource), editDescription, updateSchema(projectV1Schema, lensSource))
+    ).toEqual([]);
+  });
+});
 
 // ======================================
 // Demo more complex conversions than a rename: todo boolean case
@@ -176,32 +168,28 @@ describe('value conversion', () => {
       {
         op: 'replace' as const,
         path: '/complete',
-        value: true,
-      },
-    ]
+        value: true
+      }
+    ];
 
     expect(applyLensToPatch(lensSource, setComplete, projectV1Schema)).toEqual([
-      { op: 'replace', path: '/complete', value: 'done' },
-    ])
-  })
+      { op: 'replace', path: '/complete', value: 'done' }
+    ]);
+  });
 
   it('reverse converts from a string enum to a boolean', () => {
     const setStatus: Patch = [
       {
         op: 'replace' as const,
         path: '/complete',
-        value: 'inProgress',
-      },
-    ]
+        value: 'inProgress'
+      }
+    ];
 
     expect(
-      applyLensToPatch(
-        reverseLens(lensSource),
-        setStatus,
-        updateSchema(projectV1Schema, lensSource)
-      )
-    ).toEqual([{ op: 'replace', path: '/complete', value: false }])
-  })
+      applyLensToPatch(reverseLens(lensSource), setStatus, updateSchema(projectV1Schema, lensSource))
+    ).toEqual([{ op: 'replace', path: '/complete', value: false }]);
+  });
 
   it('handles a value conversion and a rename in the same lens', () => {
     const lensSource = [
@@ -210,32 +198,32 @@ describe('value conversion', () => {
         'status',
         [
           { false: 'todo', true: 'done' },
-          { todo: false, inProgress: false, done: true },
+          { todo: false, inProgress: false, done: true }
         ],
         'boolean',
         'string'
-      ),
-    ]
+      )
+    ];
 
     const setComplete: Patch = [
       {
         op: 'replace' as const,
         path: '/complete',
-        value: true,
-      },
-    ]
+        value: true
+      }
+    ];
 
     expect(applyLensToPatch(lensSource, setComplete, projectV1Schema)).toEqual([
-      { op: 'replace', path: '/status', value: 'done' },
-    ])
-  })
-})
+      { op: 'replace', path: '/status', value: 'done' }
+    ]);
+  });
+});
 
 describe('nested objects', () => {
   describe('singly nested object', () => {
     // renaming metadata/basic/title to metadata/basic/name. a more sugary syntax:
     // in("metadata", rename("title", "name", "string"))
-    const lensSource: LensSource = [inside('metadata', [renameProperty('title', 'name')])]
+    const lensSource: LensSource = [inside('metadata', [renameProperty('title', 'name')])];
 
     const docSchema = {
       $schema: 'http://json-schema.org/draft-07/schema',
@@ -245,95 +233,95 @@ describe('nested objects', () => {
         metadata: {
           type: 'object' as const,
           properties: {
-            title: { type: 'string' as const },
-          },
+            title: { type: 'string' as const }
+          }
         },
         otherparent: {
           type: 'object' as const,
           properties: {
-            title: { type: 'string' as const, default: '' },
-          },
-        },
-      },
-    }
+            title: { type: 'string' as const, default: '' }
+          }
+        }
+      }
+    };
 
     it('renames a field correctly', () => {
       const setDescription: Patch = [
         {
           op: 'replace' as const,
           path: '/metadata/title',
-          value: 'hello',
-        },
-      ]
+          value: 'hello'
+        }
+      ];
 
       expect(applyLensToPatch(lensSource, setDescription, docSchema)).toEqual([
-        { op: 'replace' as const, path: '/metadata/name', value: 'hello' },
-      ])
-    })
+        { op: 'replace' as const, path: '/metadata/name', value: 'hello' }
+      ]);
+    });
 
     it('works with whole doc conversion', () => {
       expect(applyLensToDoc(lensSource, { metadata: { title: 'hello' } }, docSchema)).toEqual({
         metadata: { name: 'hello' },
-        otherparent: { title: '' },
-      })
-    })
+        otherparent: { title: '' }
+      });
+    });
 
     it("doesn't rename another field", () => {
       const randomPatch: Patch = [
         {
           op: 'replace' as const,
           path: '/otherparent/title',
-          value: 'hello',
-        },
-      ]
+          value: 'hello'
+        }
+      ];
 
-      expect(applyLensToPatch(lensSource, randomPatch, docSchema)).toEqual(randomPatch)
-    })
+      expect(applyLensToPatch(lensSource, randomPatch, docSchema)).toEqual(randomPatch);
+    });
 
     it('renames a field in the left direction', () => {
       const setDescription: Patch = [
         {
           op: 'replace' as const,
           path: '/metadata/name',
-          value: 'hello',
-        },
-      ]
+          value: 'hello'
+        }
+      ];
 
-      const updatedSchema = updateSchema(docSchema, lensSource)
+      const updatedSchema = updateSchema(docSchema, lensSource);
 
       expect(applyLensToPatch(reverseLens(lensSource), setDescription, updatedSchema)).toEqual([
-        { op: 'replace' as const, path: '/metadata/title', value: 'hello' },
-      ])
-    })
+        { op: 'replace' as const, path: '/metadata/title', value: 'hello' }
+      ]);
+    });
 
     it('renames the field when a whole object is set in a patch', () => {
       const setDescription: Patch = [
         {
           op: 'replace' as const,
           path: '/metadata',
-          value: { title: 'hello' },
-        },
-      ]
+          value: { title: 'hello' }
+        }
+      ];
 
       expect(applyLensToPatch(lensSource, setDescription, docSchema)).toEqual([
         {
           op: 'replace' as const,
           path: '/metadata',
-          value: {},
+          value: {}
         },
         {
           op: 'replace' as const,
           path: '/metadata/name',
-          value: 'hello',
-        },
-      ])
-    })
-  })
-})
+          value: 'hello'
+        }
+      ]);
+    });
+  });
+});
 
 describe('arrays', () => {
   // renaming tasks/n/title to tasks/n/name
-  const lensSource: LensSource = [inside('tasks', [map([renameProperty('title', 'name')])])]
+  const lensSource: LensSource = [inside('tasks', [map([renameProperty('title', 'name')])])];
 
   it('renames a field in an array element', () => {
     expect(
@@ -343,13 +331,13 @@ describe('arrays', () => {
           {
             op: 'replace' as const,
             path: '/tasks/23/title',
-            value: 'hello',
-          },
+            value: 'hello'
+          }
         ],
         projectV1Schema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/tasks/23/name', value: 'hello' }])
-  })
+    ).toEqual([{ op: 'replace' as const, path: '/tasks/23/name', value: 'hello' }]);
+  });
 
   it('renames a field in the left direction', () => {
     expect(
@@ -359,17 +347,17 @@ describe('arrays', () => {
           {
             op: 'replace' as const,
             path: '/tasks/23/name',
-            value: 'hello',
-          },
+            value: 'hello'
+          }
         ],
         updateSchema(projectV1Schema, lensSource)
       )
-    ).toEqual([{ op: 'replace' as const, path: '/tasks/23/title', value: 'hello' }])
-  })
-})
+    ).toEqual([{ op: 'replace' as const, path: '/tasks/23/title', value: 'hello' }]);
+  });
+});
 
 describe('hoist (object)', () => {
-  const lensSource: LensSource = [hoistProperty('metadata', 'createdAt')]
+  const lensSource: LensSource = [hoistProperty('metadata', 'createdAt')];
 
   it('pulls a field up to its parent', () => {
     expect(
@@ -379,17 +367,17 @@ describe('hoist (object)', () => {
           {
             op: 'replace' as const,
             path: '/metadata/createdAt',
-            value: 'July 7th, 2020',
-          },
+            value: 'July 7th, 2020'
+          }
         ],
         projectV1Schema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/createdAt', value: 'July 7th, 2020' }])
-  })
-})
+    ).toEqual([{ op: 'replace' as const, path: '/createdAt', value: 'July 7th, 2020' }]);
+  });
+});
 
 describe('plunge (object)', () => {
-  const lensSource: LensSource = [plungeProperty('metadata', 'title')]
+  const lensSource: LensSource = [plungeProperty('metadata', 'title')];
 
   // currently does not pass - strange ordering issue with fields in the object
   it.skip('pushes a field into a child with applyLensToDoc', () => {
@@ -397,10 +385,10 @@ describe('plunge (object)', () => {
       applyLensToDoc([{ op: 'plunge', host: 'tags', name: 'color' }], {
         // this currently throws an error but works if we re-order color and tags in the object below
         color: 'orange',
-        tags: {},
+        tags: {}
       })
-    ).toEqual({ tags: { color: 'orange' } })
-  })
+    ).toEqual({ tags: { color: 'orange' } });
+  });
 
   it('pushes a field into its child', () => {
     expect(
@@ -410,14 +398,14 @@ describe('plunge (object)', () => {
           {
             op: 'replace' as const,
             path: '/title',
-            value: 'Fun project',
-          },
+            value: 'Fun project'
+          }
         ],
         projectV1Schema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/metadata/title', value: 'Fun project' }])
-  })
-})
+    ).toEqual([{ op: 'replace' as const, path: '/metadata/title', value: 'Fun project' }]);
+  });
+});
 
 describe('wrap (scalar to array)', () => {
   const docSchema: JSONSchema7 = {
@@ -425,10 +413,10 @@ describe('wrap (scalar to array)', () => {
     type: 'object' as const,
     additionalProperties: false,
     properties: {
-      assignee: { type: ['string' as const, 'null' as const] },
-    },
-  }
-  const lensSource: LensSource = [wrapProperty('assignee')]
+      assignee: { type: ['string' as const, 'null' as const] }
+    }
+  };
+  const lensSource: LensSource = [wrapProperty('assignee')];
 
   it('converts head replace value into 0th element writes into its child', () => {
     expect(
@@ -438,13 +426,13 @@ describe('wrap (scalar to array)', () => {
           {
             op: 'replace' as const,
             path: '/assignee',
-            value: 'July 7th, 2020',
-          },
+            value: 'July 7th, 2020'
+          }
         ],
         docSchema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }])
-  })
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }]);
+  });
 
   it('converts head add value into 0th element writes into its child', () => {
     expect(
@@ -454,13 +442,13 @@ describe('wrap (scalar to array)', () => {
           {
             op: 'add' as const,
             path: '/assignee',
-            value: 'July 7th, 2020',
-          },
+            value: 'July 7th, 2020'
+          }
         ],
         docSchema
       )
-    ).toEqual([{ op: 'add' as const, path: '/assignee/0', value: 'July 7th, 2020' }])
-  })
+    ).toEqual([{ op: 'add' as const, path: '/assignee/0', value: 'July 7th, 2020' }]);
+  });
 
   // todo: many possible options for how to handle this.
   // Consider other options:
@@ -473,19 +461,16 @@ describe('wrap (scalar to array)', () => {
           {
             op: 'replace' as const,
             path: '/assignee',
-            value: null,
-          },
+            value: null
+          }
         ],
         docSchema
       )
-    ).toEqual([{ op: 'remove' as const, path: '/assignee/0' }])
-  })
+    ).toEqual([{ op: 'remove' as const, path: '/assignee/0' }]);
+  });
 
   it('handles a wrap followed by a rename', () => {
-    const lensSource: LensSource = [
-      wrapProperty('assignee'),
-      renameProperty('assignee', 'assignees'),
-    ]
+    const lensSource: LensSource = [wrapProperty('assignee'), renameProperty('assignee', 'assignees')];
 
     expect(
       applyLensToPatch(
@@ -494,13 +479,13 @@ describe('wrap (scalar to array)', () => {
           {
             op: 'replace' as const,
             path: '/assignee',
-            value: 'pvh',
-          },
+            value: 'pvh'
+          }
         ],
         docSchema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/assignees/0', value: 'pvh' }])
-  })
+    ).toEqual([{ op: 'replace' as const, path: '/assignees/0', value: 'pvh' }]);
+  });
 
   it('converts nested values into 0th element writes into its child', () => {
     const docSchema: JSONSchema7 = {
@@ -508,9 +493,9 @@ describe('wrap (scalar to array)', () => {
       type: 'object' as const,
       additionalProperties: false,
       properties: {
-        assignee: { type: ['object', 'null'], properties: { name: { type: 'string' } } },
-      },
-    }
+        assignee: { type: ['object', 'null'], properties: { name: { type: 'string' } } }
+      }
+    };
 
     expect(
       applyLensToPatch(
@@ -519,13 +504,13 @@ describe('wrap (scalar to array)', () => {
           {
             op: 'replace' as const,
             path: '/assignee/name',
-            value: 'Orion',
-          },
+            value: 'Orion'
+          }
         ],
         docSchema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/assignee/0/name', value: 'Orion' }])
-  })
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/0/name', value: 'Orion' }]);
+  });
 
   describe('reverse direction', () => {
     // this duplicates the tests of head;
@@ -542,12 +527,12 @@ describe('wrap (scalar to array)', () => {
         {
           op: 'replace' as const,
           path: '/assignee',
-          value: 'July 7th, 2020',
-        },
-      ])
-    })
-  })
-})
+          value: 'July 7th, 2020'
+        }
+      ]);
+    });
+  });
+});
 
 describe('head (array to nullable scalar)', () => {
   const docSchema = {
@@ -555,10 +540,10 @@ describe('head (array to nullable scalar)', () => {
     type: 'object' as const,
     additionalProperties: false,
     properties: {
-      assignee: { type: 'array', items: { type: 'string' } },
-    },
-  } as const
-  const lensSource: LensSource = [headProperty('assignee')]
+      assignee: { type: 'array', items: { type: 'string' } }
+    }
+  } as const;
+  const lensSource: LensSource = [headProperty('assignee')];
 
   it('converts head set value into 0th element writes into its child', () => {
     expect(
@@ -568,13 +553,13 @@ describe('head (array to nullable scalar)', () => {
           {
             op: 'replace' as const,
             path: '/assignee/0',
-            value: 'Peter',
-          },
+            value: 'Peter'
+          }
         ],
         docSchema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/assignee', value: 'Peter' }])
-  })
+    ).toEqual([{ op: 'replace' as const, path: '/assignee', value: 'Peter' }]);
+  });
 
   it('converts a write on other elements to a no-op', () => {
     expect(
@@ -584,19 +569,19 @@ describe('head (array to nullable scalar)', () => {
           {
             op: 'replace' as const,
             path: '/assignee/1',
-            value: 'Peter',
-          },
+            value: 'Peter'
+          }
         ],
         docSchema
       )
-    ).toEqual([])
-  })
+    ).toEqual([]);
+  });
 
   it('converts array first element delete into a null write on the scalar', () => {
-    expect(
-      applyLensToPatch(lensSource, [{ op: 'remove' as const, path: '/assignee/0' }], docSchema)
-    ).toEqual([{ op: 'replace' as const, path: '/assignee', value: null }])
-  })
+    expect(applyLensToPatch(lensSource, [{ op: 'remove' as const, path: '/assignee/0' }], docSchema)).toEqual(
+      [{ op: 'replace' as const, path: '/assignee', value: null }]
+    );
+  });
 
   it('preserves the rest of the path after the array index', () => {
     expect(
@@ -605,8 +590,8 @@ describe('head (array to nullable scalar)', () => {
         [{ op: 'replace' as const, path: '/assignee/0/age', value: 23 }],
         docSchema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/assignee/age', value: 23 }])
-  })
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/age', value: 23 }]);
+  });
 
   it('preserves the rest of the path after the array index with nulls', () => {
     expect(
@@ -615,14 +600,14 @@ describe('head (array to nullable scalar)', () => {
         [{ op: 'replace' as const, path: '/assignee/0/age', value: null }],
         docSchema
       )
-    ).toEqual([{ op: 'replace' as const, path: '/assignee/age', value: null }])
-  })
+    ).toEqual([{ op: 'replace' as const, path: '/assignee/age', value: null }]);
+  });
 
   it('preserves the rest of the path after the array index with removes', () => {
     expect(
       applyLensToPatch(lensSource, [{ op: 'remove' as const, path: '/assignee/0/age' }], docSchema)
-    ).toEqual([{ op: 'remove' as const, path: '/assignee/age' }])
-  })
+    ).toEqual([{ op: 'remove' as const, path: '/assignee/age' }]);
+  });
 
   it('correctly handles a sequence of array writes', () => {
     expect(
@@ -638,7 +623,7 @@ describe('head (array to nullable scalar)', () => {
           // (this isn't a good patch format given crdt problems, but it's convenient for now
           // because the patch itself gives us the new head value)
           { op: 'remove' as const, path: '/assignee/1' },
-          { op: 'replace' as const, path: '/assignee/0', value: 'orion' },
+          { op: 'replace' as const, path: '/assignee/0', value: 'orion' }
         ],
         docSchema
       )
@@ -646,15 +631,15 @@ describe('head (array to nullable scalar)', () => {
       {
         op: 'add' as const,
         path: '/assignee',
-        value: 'geoffrey',
+        value: 'geoffrey'
       },
       {
         op: 'replace' as const,
         path: '/assignee',
-        value: 'orion',
-      },
-    ])
-  })
+        value: 'orion'
+      }
+    ]);
+  });
 
   describe('reverse direction', () => {
     // this duplicates the tests of wrap;
@@ -666,9 +651,9 @@ describe('head (array to nullable scalar)', () => {
       type: 'object' as const,
       additionalProperties: false,
       properties: {
-        assignee: { type: ['string', 'null'] },
-      },
-    }
+        assignee: { type: ['string', 'null'] }
+      }
+    };
 
     it('converts head set value into 0th element writes into its child', () => {
       expect(
@@ -678,150 +663,150 @@ describe('head (array to nullable scalar)', () => {
             {
               op: 'replace' as const,
               path: '/assignee',
-              value: 'July 7th, 2020',
-            },
+              value: 'July 7th, 2020'
+            }
           ],
           docSchema
         )
-      ).toEqual([{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }])
-    })
-  })
-})
+      ).toEqual([{ op: 'replace' as const, path: '/assignee/0', value: 'July 7th, 2020' }]);
+    });
+  });
+});
 
 describe('patch expander', () => {
   it('expands a patch that sets an object', () => {
     const setObject: PatchOp = {
       op: 'replace' as const,
       path: '/obj',
-      value: { a: { b: 5 } },
-    }
+      value: { a: { b: 5 } }
+    };
 
     expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '/obj',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/obj/a',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/obj/a/b',
-        value: 5,
-      },
-    ])
-  })
+        value: 5
+      }
+    ]);
+  });
 
   it('works with multiple keys', () => {
     const setObject: PatchOp = {
       op: 'replace' as const,
       path: '/obj',
-      value: { a: { b: 5, c: { d: 6 } } },
-    }
+      value: { a: { b: 5, c: { d: 6 } } }
+    };
 
     expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '/obj',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/obj/a',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/obj/a/b',
-        value: 5,
+        value: 5
       },
       {
         op: 'replace' as const,
         path: '/obj/a/c',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/obj/a/c/d',
-        value: 6,
-      },
-    ])
-  })
+        value: 6
+      }
+    ]);
+  });
 
   it('expands a patch that sets an array', () => {
     const setObject: PatchOp = {
       op: 'replace' as const,
       path: '/obj',
-      value: ['hello', 'world'],
-    }
+      value: ['hello', 'world']
+    };
 
     expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '/obj',
-        value: [],
+        value: []
       },
       {
         op: 'replace' as const,
         path: '/obj/0',
-        value: 'hello',
+        value: 'hello'
       },
       {
         op: 'replace' as const,
         path: '/obj/1',
-        value: 'world',
-      },
-    ])
+        value: 'world'
+      }
+    ]);
 
     // deepEqual returns true for {} === []; so we need to double check ourselves
-    const op = expandPatch(setObject)[0] as ReplaceOperation<unknown>
-    expect(Array.isArray(op.value)).toBeTruthy()
-  })
+    const op = expandPatch(setObject)[0] as ReplaceOperation<unknown>;
+    expect(Array.isArray(op.value)).toBeTruthy();
+  });
 
   it('works recursively with objects and arrays', () => {
     const setObject: PatchOp = {
       op: 'replace' as const,
       path: '',
-      value: { tasks: [{ name: 'hello' }, { name: 'world' }] },
-    }
+      value: { tasks: [{ name: 'hello' }, { name: 'world' }] }
+    };
 
     expect(expandPatch(setObject)).toEqual([
       {
         op: 'replace' as const,
         path: '',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/tasks',
-        value: [],
+        value: []
       },
       {
         op: 'replace' as const,
         path: '/tasks/0',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/tasks/0/name',
-        value: 'hello',
+        value: 'hello'
       },
       {
         op: 'replace' as const,
         path: '/tasks/1',
-        value: {},
+        value: {}
       },
       {
         op: 'replace' as const,
         path: '/tasks/1/name',
-        value: 'world',
-      },
-    ])
-  })
-})
+        value: 'world'
+      }
+    ]);
+  });
+});
 
 describe('default value initialization', () => {
   // one lens that creates objects inside of arrays and other objects
@@ -830,182 +815,180 @@ describe('default value initialization', () => {
     inside('tags', [
       map([
         addProperty({ name: 'name', type: 'string', default: '' }),
-        addProperty({ name: 'color', type: 'string', default: '#ffffff' }),
-      ]),
+        addProperty({ name: 'color', type: 'string', default: '#ffffff' })
+      ])
     ]),
     addProperty({ name: 'metadata', type: 'object', default: {} }),
     inside('metadata', [
       addProperty({ name: 'title', type: 'string', default: '' }),
       addProperty({ name: 'flags', type: 'object', default: {} }),
-      inside('flags', [addProperty({ name: 'O_CREATE', type: 'boolean', default: true })]),
+      inside('flags', [addProperty({ name: 'O_CREATE', type: 'boolean', default: true })])
     ]),
     addProperty({
       name: 'assignee',
-      type: ['string', 'null'],
-    }),
-  ]
+      type: ['string', 'null']
+    })
+  ];
 
-  const v1Schema = schemaForLens(v1Lens)
+  const v1Schema = schemaForLens(v1Lens);
 
   it('fills in defaults on a patch that adds a new array item', () => {
     const patchOp: PatchOp = {
       op: 'add',
       path: '/tags/123',
-      value: { name: 'bug' },
-    }
+      value: { name: 'bug' }
+    };
 
     expect(applyLensToPatch([], [patchOp], v1Schema)).toEqual([
       {
         op: 'add',
         path: '/tags/123',
-        value: {},
+        value: {}
       },
       {
         op: 'add',
         path: '/tags/123/name',
-        value: '',
+        value: ''
       },
       {
         op: 'add',
         path: '/tags/123/color',
-        value: '#ffffff',
+        value: '#ffffff'
       },
       {
         op: 'add',
         path: '/tags/123/name',
-        value: 'bug',
-      },
-    ])
-  })
+        value: 'bug'
+      }
+    ]);
+  });
 
   it("doesn't expand a patch on an object key that already exists", () => {
     const patchOp: PatchOp = {
       op: 'add',
       path: '/tags/123/name',
-      value: 'bug',
-    }
+      value: 'bug'
+    };
 
-    expect(applyLensToPatch([], [patchOp], v1Schema)).toEqual([patchOp])
-  })
+    expect(applyLensToPatch([], [patchOp], v1Schema)).toEqual([patchOp]);
+  });
 
   it('recursively fills in defaults from the root', () => {
     const patchOp: PatchOp = {
       op: 'add',
       path: '',
-      value: {},
-    }
+      value: {}
+    };
 
     expect(applyLensToPatch([], [patchOp], v1Schema)).toEqual([
       {
         op: 'add',
         path: '',
-        value: {},
+        value: {}
       },
       {
         op: 'add',
         path: '/tags',
-        value: [],
+        value: []
       },
       {
         op: 'add',
         path: '/metadata',
-        value: {},
+        value: {}
       },
       {
         op: 'add',
         path: '/metadata/title',
-        value: '',
+        value: ''
       },
       {
         op: 'add',
         path: '/metadata/flags',
-        value: {},
+        value: {}
       },
       {
         op: 'add',
         path: '/metadata/flags/O_CREATE',
-        value: true,
+        value: true
       },
       {
         op: 'add',
         path: '/assignee',
-        value: null,
-      },
-    ])
-  })
+        value: null
+      }
+    ]);
+  });
 
   it('works correctly when properties are spread across multiple lenses', () => {
     const v1Tov2Lens = [
       renameProperty('tags', 'labels'),
-      inside('labels', [
-        map([addProperty({ name: 'important', type: 'boolean', default: false })]),
-      ]),
-    ]
+      inside('labels', [map([addProperty({ name: 'important', type: 'boolean', default: false })])])
+    ];
 
     const patchOp: PatchOp = {
       op: 'add',
       path: '/tags/123',
-      value: { name: 'bug' },
-    }
+      value: { name: 'bug' }
+    };
 
     expect(applyLensToPatch(v1Tov2Lens, [patchOp], v1Schema)).toEqual([
       {
         op: 'add',
         path: '/labels/123',
-        value: {},
+        value: {}
       },
       {
         op: 'add',
         path: '/labels/123/name',
-        value: '',
+        value: ''
       },
       {
         op: 'add',
         path: '/labels/123/color',
-        value: '#ffffff',
+        value: '#ffffff'
       },
       {
         op: 'add',
         path: '/labels/123/important',
-        value: false,
+        value: false
       },
       {
         op: 'add',
         path: '/labels/123/name',
-        value: 'bug',
-      },
-    ])
-  })
-})
+        value: 'bug'
+      }
+    ]);
+  });
+});
 
 describe('inferring schemas from documents', () => {
   const doc = {
     name: 'hello',
     details: {
       age: 23,
-      height: 64,
-    },
-  }
+      height: 64
+    }
+  };
 
   it('infers a schema when converting a doc', () => {
-    const lens = [inside('details', [renameProperty('height', 'heightInches')])]
+    const lens = [inside('details', [renameProperty('height', 'heightInches')])];
 
     expect(applyLensToDoc(lens, doc)).toEqual({
       ...doc,
       details: {
         age: 23,
-        heightInches: 64,
-      },
-    })
-  })
+        heightInches: 64
+      }
+    });
+  });
 
   // We should do more here, but this is the bare minimum test of whether schema inference
   // is actually working at all.
   // If our lens tries to rename a nonexistent field, it should throw an error.
   it("throws if the lens doesn't match the doc's inferred schema", () => {
-    const lens = [renameProperty('nonexistent', 'ghost')]
+    const lens = [renameProperty('nonexistent', 'ghost')];
     expect(() => {
-      applyLensToDoc(lens, doc)
-    }).toThrow()
-  })
-})
+      applyLensToDoc(lens, doc);
+    }).toThrow();
+  });
+});

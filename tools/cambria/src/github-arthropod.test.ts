@@ -1,9 +1,9 @@
 // a quasi-integration test, converting a github doc to an arthropod doc--
 // testing a complex doc + lens
 
-import githubIssue from './github-issue.json'
-import { applyLensToDoc } from './doc.js'
-import { reverseLens } from './reverse.js'
+import { applyLensToDoc } from './doc.js';
+import githubIssue from './github-issue.json';
+import { reverseLens } from './reverse.js';
 
 describe('renaming title, and hoisting label name to category', () => {
   const lens = [
@@ -12,32 +12,32 @@ describe('renaming title, and hoisting label name to category', () => {
     {
       op: 'in' as const,
       name: 'labels',
-      lens: [{ op: 'rename' as const, source: 'name', destination: 'category' }],
+      lens: [{ op: 'rename' as const, source: 'name', destination: 'category' }]
     },
     { op: 'hoist' as const, host: 'labels', name: 'category' },
     {
       op: 'remove' as const,
       name: 'labels',
-      type: ['object' as const, 'null' as const],
-    },
-  ]
+      type: ['object' as const, 'null' as const]
+    }
+  ];
 
   it('converts the doc forwards', () => {
-    const { title: _title, labels: _labels, ...rest } = githubIssue
+    const { title: _title, labels: _labels, ...rest } = githubIssue;
     expect(applyLensToDoc(lens, githubIssue)).toEqual({
       ...rest,
       name: githubIssue.title,
-      category: githubIssue.labels[0].name,
-    })
-  })
+      category: githubIssue.labels[0].name
+    });
+  });
 
   it('converts the doc backwards, merging with the original doc', () => {
     const newArthropod = {
       name: 'Changed the name',
-      category: 'Bug',
-    }
+      category: 'Bug'
+    };
 
-    const newGithub = applyLensToDoc(reverseLens(lens), newArthropod, undefined, githubIssue)
+    const newGithub = applyLensToDoc(reverseLens(lens), newArthropod, undefined, githubIssue);
 
     expect(newGithub).toEqual({
       ...githubIssue,
@@ -45,9 +45,9 @@ describe('renaming title, and hoisting label name to category', () => {
       labels: [
         {
           ...githubIssue.labels[0],
-          name: 'Bug',
-        },
-      ],
-    })
-  })
-})
+          name: 'Bug'
+        }
+      ]
+    });
+  });
+});

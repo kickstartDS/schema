@@ -13,17 +13,6 @@
       "windows": { "runtimeExecutable": "nvs.cmd" },
       "osx": { "runtimeExecutable": "nvs" },
       "linux": { "runtimeExecutable": "nvs" }
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Cambria Jest tests",
-      "program": "${workspaceFolder}/tools/cambria/node_modules/@rushstack/heft/lib/start.js",
-      "cwd": "${workspaceFolder}/tools/cambria",
-      "args": ["--debug", "test", "--clean"],
-      "console": "integratedTerminal",
-      "sourceMaps": true,
-      "runtimeArgs": ["--experimental-vm-modules"]
     }
   ]
 }

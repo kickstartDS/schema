@@ -15,7 +15,7 @@ const { compare, applyPatch } = pkg
  *             a JSON Patch that sets every value in that document.
  * @param inputDoc a document to convert into a big JSON patch describing its full contents
  */
-export function importDoc(inputDoc: any): [JSONSchema7, Patch] {
+export function importDoc(inputDoc: { [key: string]: unknown }): [JSONSchema7, Patch] {
   const options: Options = {
     postProcessFnc: (type, schema, obj, defaultFnc) => ({
       ...defaultFnc(type, schema, obj),
@@ -47,11 +47,11 @@ export function importDoc(inputDoc: any): [JSONSchema7, Patch] {
 export function applyLensToDoc(
   lensSource: LensSource,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  inputDoc: any,
+  inputDoc: { [key: string]: unknown },
   inputSchema?: JSONSchema7,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  targetDoc?: any
-): any {
+  targetDoc?: { [key: string]: unknown }
+): { [key: string]: unknown } {
   const [impliedSchema, patchForOriginalDoc] = importDoc(inputDoc)
 
   if (inputSchema === undefined || inputSchema === null) {

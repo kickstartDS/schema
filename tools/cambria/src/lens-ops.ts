@@ -1,68 +1,68 @@
-import { JSONSchema7TypeName } from 'json-schema'
+import { JSONSchema7Type, JSONSchema7TypeName } from 'json-schema'
 
-export interface Property {
+export interface IProperty {
   name?: string
   type: JSONSchema7TypeName | JSONSchema7TypeName[]
-  default?: any
+  default?: JSONSchema7Type | undefined
   required?: boolean
-  items?: Property
+  items?: IProperty
 }
 
-export interface AddProperty extends Property {
+export interface IAddProperty extends IProperty {
   op: 'add'
 }
 
-export interface RemoveProperty extends Property {
+export interface IRemoveProperty extends IProperty {
   op: 'remove'
 }
 
-export interface RenameProperty {
+export interface IRenameProperty {
   op: 'rename'
   source: string
   destination: string
 }
 
-export interface HoistProperty {
+export interface IHoistProperty {
   op: 'hoist'
   name: string
   host: string
 }
 
-export interface PlungeProperty {
+export interface IPlungeProperty {
   op: 'plunge'
   name: string
   host: string
 }
-export interface WrapProperty {
+export interface IWrapProperty {
   op: 'wrap'
   name: string
 }
 
-export interface HeadProperty {
+export interface IHeadProperty {
   op: 'head'
   name: string
 }
 
-export interface LensIn {
+export interface ILensIn {
   op: 'in'
   name: string
   lens: LensSource
 }
 
-export interface LensMap {
+export interface ILensMap {
   op: 'map'
   lens: LensSource
 }
 
 // ideally this would be a tuple, but the typechecker
 // wouldn't let me assign a flipped array in the reverse lens op
-export type ValueMapping = { [key: string]: any }[]
+export type ValueMapping = { [key: string]: unknown }[]
 
 // Notes on value conversion:
 // - Types are optional, only needed if the type is actually changing
 // - We only support hardcoded mappings for the time being;
 //   can consider further conversions later
-export interface ConvertValue {
+export interface IConvertValue {
   op: 'convert'
   name: string
   mapping: ValueMapping
@@ -71,15 +71,15 @@ export interface ConvertValue {
 }
 
 export type LensOp =
-  | AddProperty
-  | RemoveProperty
-  | RenameProperty
-  | HoistProperty
-  | WrapProperty
-  | HeadProperty
-  | PlungeProperty
-  | LensIn
-  | LensMap
-  | ConvertValue
+  | IAddProperty
+  | IRemoveProperty
+  | IRenameProperty
+  | IHoistProperty
+  | IWrapProperty
+  | IHeadProperty
+  | IPlungeProperty
+  | ILensIn
+  | ILensMap
+  | IConvertValue
 
 export type LensSource = LensOp[]

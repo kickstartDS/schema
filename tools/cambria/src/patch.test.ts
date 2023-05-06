@@ -1,7 +1,7 @@
-import { Patch, applyLensToPatch, PatchOp, expandPatch } from '../src/patch.js'
-import { applyLensToDoc } from '../src/doc.js'
-import { updateSchema, schemaForLens } from '../src/json-schema.js'
-import { LensSource } from '../src/lens-ops.js'
+import { Patch, applyLensToPatch, PatchOp, expandPatch } from './patch.js'
+import { applyLensToDoc } from './doc.js'
+import { updateSchema, schemaForLens } from './json-schema.js'
+import { LensSource } from './lens-ops.js'
 import {
   renameProperty,
   addProperty,
@@ -12,13 +12,13 @@ import {
   wrapProperty,
   headProperty,
   convertValue,
-} from '../src/helpers.js'
+} from './helpers.js'
 
-import { reverseLens } from '../src/reverse.js'
+import { reverseLens } from './reverse.js'
 import { ReplaceOperation } from 'fast-json-patch'
 import { JSONSchema7 } from 'json-schema'
 
-export interface ProjectV1 {
+export interface IProjectV1 {
   title: string
   tasks: { title: string }[]
   complete: boolean
@@ -28,7 +28,7 @@ export interface ProjectV1 {
   }
 }
 
-export interface ProjectV2 {
+export interface IProjectV2 {
   name: string
   description: string
   issues: { title: string }[]
@@ -53,7 +53,7 @@ const lensSource: LensSource = [
   ),
 ]
 
-const projectV1Schema = <const>{
+const projectV1Schema = {
   $schema: 'http://json-schema.org/draft-07/schema',
   type: 'object' as const,
   additionalProperties: false,
@@ -77,7 +77,7 @@ const projectV1Schema = <const>{
       },
     },
   },
-}
+} as const
 
 // ======================================
 // Try sending a patch through the lens
@@ -550,14 +550,14 @@ describe('wrap (scalar to array)', () => {
 })
 
 describe('head (array to nullable scalar)', () => {
-  const docSchema = <const>{
+  const docSchema = {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object' as const,
     additionalProperties: false,
     properties: {
       assignee: { type: 'array', items: { type: 'string' } },
     },
-  }
+  } as const
   const lensSource: LensSource = [headProperty('assignee')]
 
   it('converts head set value into 0th element writes into its child', () => {
@@ -777,7 +777,7 @@ describe('patch expander', () => {
     ])
 
     // deepEqual returns true for {} === []; so we need to double check ourselves
-    const op = expandPatch(setObject)[0] as ReplaceOperation<any>
+    const op = expandPatch(setObject)[0] as ReplaceOperation<unknown>
     expect(Array.isArray(op.value)).toBeTruthy()
   })
 

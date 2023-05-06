@@ -1,7 +1,7 @@
 export { updateSchema, schemaForLens } from './json-schema.js'
 export { compile, applyLensToPatch, Patch, CompiledLens } from './patch.js'
 export { applyLensToDoc, importDoc } from './doc.js'
-export { LensSource, LensOp, Property } from './lens-ops.js'
+export { LensSource, LensOp, IProperty } from './lens-ops.js'
 export { defaultObjectForSchema } from './defaults.js'
 export { reverseLens } from './reverse.js'
 export {

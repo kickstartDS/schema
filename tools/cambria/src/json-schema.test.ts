@@ -1,5 +1,5 @@
 import { JSONSchema7 } from 'json-schema'
-import { updateSchema } from '../src/json-schema.js'
+import { updateSchema } from './json-schema.js'
 import {
   addProperty,
   inside,
@@ -10,7 +10,8 @@ import {
   plungeProperty,
   renameProperty,
   convertValue,
-} from '../src/helpers.js'
+} from './helpers.js'
+import { IProperty } from './lens-ops.js'
 
 describe('transforming a json schema', () => {
   const v1Schema = {
@@ -81,9 +82,9 @@ describe('transforming a json schema', () => {
     })
 
     it('fails when presented with invalid data', () => {
-      const badData: any = { garbage: 'input' }
+      const badData: { [key: string]: unknown } = { garbage: 'input' }
       expect(() => {
-        updateSchema(v1Schema, [addProperty(badData)])
+        updateSchema(v1Schema, [addProperty(badData as unknown as IProperty)])
       }).toThrow()
     })
   })
@@ -144,9 +145,9 @@ describe('transforming a json schema', () => {
     })
 
     it('fails when presented with invalid data', () => {
-      const badData: any = { garbage: 'input' }
+      const badData: { [key: string]: unknown } = { garbage: 'input' }
       expect(() => {
-        updateSchema(v1Schema, [addProperty(badData)])
+        updateSchema(v1Schema, [addProperty(badData as unknown as IProperty)])
       }).toThrow()
     })
   })

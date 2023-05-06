@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { JSONSchema7 } from 'json-schema'
-import { updateSchema } from '../src/json-schema.js'
+import { updateSchema } from './json-schema.js'
 import {
   addProperty,
   inside,
@@ -12,7 +12,7 @@ import {
   renameProperty,
   convertValue,
   removeProperty,
-} from '../src/helpers.js'
+} from './helpers.js'
 
 import {
   LensGraph,
@@ -20,7 +20,7 @@ import {
   registerLens,
   lensGraphSchemas,
   lensFromTo,
-} from '../src/lens-graph.js'
+} from './lens-graph.js'
 
 const LensMutoV1 = [addProperty({ name: 'title', type: 'string' })]
 const LensV1toV2 = [

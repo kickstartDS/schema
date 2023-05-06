@@ -1,6 +1,12 @@
 /* eslint-disable no-use-before-define */
 import pkg from 'fast-json-patch'
-import { JSONSchema7, JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema'
+import {
+  JSONSchema7,
+  JSONSchema7Definition,
+  JSONSchema7TypeName,
+  JSONSchema7Array,
+  JSONSchema7Object,
+} from 'json-schema'
 import { Patch } from './patch.js'
 
 const { applyPatch } = pkg
@@ -11,14 +17,22 @@ const { applyPatch } = pkg
  *  - otherwise use the first type in the array to pick a default from the table
  *  - otherwise just use the value to lookup in the table
  */
-const defaultValuesForType = {
+const defaultValuesForType: {
+  string: string
+  number: number
+  integer: number
+  boolean: boolean
+  array: JSONSchema7Array
+  object: JSONSchema7Object
+  null: undefined
+} = {
   string: '',
   number: 0,
   integer: 0,
   boolean: false,
   array: [],
   object: {},
-  null: null,
+  null: undefined,
 }
 export function defaultValuesByType(
   type: JSONSchema7TypeName | JSONSchema7TypeName[]

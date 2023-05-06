@@ -2,8 +2,8 @@
 // testing a complex doc + lens
 
 import githubIssue from './github-issue.json'
-import { applyLensToDoc } from '../src/doc.js'
-import { reverseLens } from '../src/reverse.js'
+import { applyLensToDoc } from './doc.js'
+import { reverseLens } from './reverse.js'
 
 describe('renaming title, and hoisting label name to category', () => {
   const lens = [

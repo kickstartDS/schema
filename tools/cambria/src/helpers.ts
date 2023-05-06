@@ -5,35 +5,35 @@
 import { JSONSchema7TypeName } from 'json-schema'
 import {
   LensSource,
-  LensMap,
-  LensIn,
-  Property,
-  AddProperty,
-  RemoveProperty,
-  RenameProperty,
-  HoistProperty,
-  PlungeProperty,
-  WrapProperty,
-  HeadProperty,
+  ILensMap,
+  ILensIn,
+  IProperty,
+  IAddProperty,
+  IRemoveProperty,
+  IRenameProperty,
+  IHoistProperty,
+  IPlungeProperty,
+  IWrapProperty,
+  IHeadProperty,
   ValueMapping,
-  ConvertValue,
+  IConvertValue,
 } from './lens-ops.js'
 
-export function addProperty(property: Property): AddProperty {
+export function addProperty(property: IProperty): IAddProperty {
   return {
     op: 'add',
     ...property,
   }
 }
 
-export function removeProperty(property: Property): RemoveProperty {
+export function removeProperty(property: IProperty): IRemoveProperty {
   return {
     op: 'remove',
     ...property,
   }
 }
 
-export function renameProperty(source: string, destination: string): RenameProperty {
+export function renameProperty(source: string, destination: string): IRenameProperty {
   return {
     op: 'rename',
     source,
@@ -41,7 +41,7 @@ export function renameProperty(source: string, destination: string): RenamePrope
   }
 }
 
-export function hoistProperty(host: string, name: string): HoistProperty {
+export function hoistProperty(host: string, name: string): IHoistProperty {
   return {
     op: 'hoist',
     host,
@@ -49,7 +49,7 @@ export function hoistProperty(host: string, name: string): HoistProperty {
   }
 }
 
-export function plungeProperty(host: string, name: string): PlungeProperty {
+export function plungeProperty(host: string, name: string): IPlungeProperty {
   return {
     op: 'plunge',
     host,
@@ -57,21 +57,21 @@ export function plungeProperty(host: string, name: string): PlungeProperty {
   }
 }
 
-export function wrapProperty(name: string): WrapProperty {
+export function wrapProperty(name: string): IWrapProperty {
   return {
     op: 'wrap',
     name,
   }
 }
 
-export function headProperty(name: string): HeadProperty {
+export function headProperty(name: string): IHeadProperty {
   return {
     op: 'head',
     name,
   }
 }
 
-export function inside(name: string, lens: LensSource): LensIn {
+export function inside(name: string, lens: LensSource): ILensIn {
   return {
     op: 'in',
     name,
@@ -79,7 +79,7 @@ export function inside(name: string, lens: LensSource): LensIn {
   }
 }
 
-export function map(lens: LensSource): LensMap {
+export function map(lens: LensSource): ILensMap {
   return {
     op: 'map',
     lens,
@@ -91,7 +91,7 @@ export function convertValue(
   mapping: ValueMapping,
   sourceType?: JSONSchema7TypeName,
   destinationType?: JSONSchema7TypeName
-): ConvertValue {
+): IConvertValue {
   return {
     op: 'convert',
     name,

@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "build": "heft build --clean",
-    "test": "heft test --clean"
+    "test": "NODE_OPTIONS=--experimental-vm-modules heft test --clean"
   },
   "dependencies": {
     "fast-json-patch": "^3.1.1",

@@ -11,7 +11,7 @@ export function reverseLens(lens: LensSource): LensSource {
     .map((l) => reverseLensOp(l));
 }
 
-const JSONSchema7TypeAny = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null'];
+const JSONSchema7TypeAny: string[] = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null'];
 
 function reverseLensOp(lensOp: LensOp): LensOp {
   switch (lensOp.op) {

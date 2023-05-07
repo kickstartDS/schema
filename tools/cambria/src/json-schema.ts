@@ -370,7 +370,7 @@ function hoistProperty(originalSchema: JSONSchema7, host: string, name: string):
           )})`
         );
       }
-      const { [name]: target, ...remainingProperties } = hostProperties;
+      const { [name]: _target, ...remainingProperties } = hostProperties;
       return {
         ...hostSchema,
         properties: remainingProperties,
@@ -395,7 +395,7 @@ function hoistProperty(originalSchema: JSONSchema7, host: string, name: string):
   });
 }
 
-function plungeProperty(schema: JSONSchema7, host: string, name: string) {
+function plungeProperty(schema: JSONSchema7, host: string, name: string): JSONSchema7 {
   // XXXX what should we do for missing child properties? error?
   const { properties = {} } = schema;
 
@@ -439,7 +439,7 @@ function plungeProperty(schema: JSONSchema7, host: string, name: string) {
   return schema;
 }
 
-function convertValue(schema: JSONSchema7, lensOp: IConvertValue) {
+function convertValue(schema: JSONSchema7, lensOp: IConvertValue): JSONSchema7 {
   const { name, destinationType, mapping } = lensOp;
   if (!destinationType) {
     return schema;
@@ -467,7 +467,7 @@ function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${x}`);
 }
 
-function applyLensOperation(schema: JSONSchema7, op: LensOp) {
+function applyLensOperation(schema: JSONSchema7, op: LensOp): JSONSchema7 {
   switch (op.op) {
     case 'add':
       return addProperty(schema, op);
@@ -492,7 +492,6 @@ function applyLensOperation(schema: JSONSchema7, op: LensOp) {
 
     default:
       assertNever(op); // exhaustiveness check
-      return null;
   }
 }
 export function updateSchema(schema: JSONSchema7, lens: LensSource): JSONSchema7 {

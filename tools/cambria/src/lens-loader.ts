@@ -2,7 +2,7 @@ import YAML from 'js-yaml';
 
 import { LensSource, LensOp } from './lens-ops.js';
 
-interface YAMLLens {
+interface IYAMLLens {
   lens: LensSource;
 }
 
@@ -22,12 +22,12 @@ const foldInOp = (lensOpJson: { [key: string]: any }): LensOp => {
   return op;
 };
 
-export function loadLens(rawLens: YAMLLens): LensSource {
+export function loadLens(rawLens: IYAMLLens): LensSource {
   return (rawLens.lens as LensSource).filter((o) => o !== null).map((lensOpJson) => foldInOp(lensOpJson));
 }
 
 export function loadYamlLens(lensData: string): LensSource {
-  const rawLens = YAML.load(lensData) as YAMLLens;
+  const rawLens = YAML.load(lensData) as IYAMLLens;
   if (!rawLens || typeof rawLens !== 'object') throw new Error('Error loading lens');
   if (!('lens' in rawLens)) throw new Error(`Expected top-level key 'lens' in YAML lens file`);
 

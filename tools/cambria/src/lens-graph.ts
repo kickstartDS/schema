@@ -7,12 +7,12 @@ import { LensSource, LensOp, updateSchema, reverseLens } from './index.js';
 
 const { alg, json } = pkg;
 
-export interface LensGraph {
+export interface ILensGraph {
   graph: Graph;
 }
 
-export function initLensGraph(): LensGraph {
-  const lensGraph: LensGraph = { graph: new Graph() };
+export function initLensGraph(): ILensGraph {
+  const lensGraph: ILensGraph = { graph: new Graph() };
 
   lensGraph.graph.setNode('mu', emptySchema);
   return lensGraph;
@@ -21,7 +21,12 @@ export function initLensGraph(): LensGraph {
 // Add a new lens to the schema graph.
 // If the "to" schema doesn't exist yet, registers the schema too.
 // Returns a copy of the graph with the new contents.
-export function registerLens({ graph }: LensGraph, from: string, to: string, lenses: LensSource): LensGraph {
+export function registerLens(
+  { graph }: ILensGraph,
+  from: string,
+  to: string,
+  lenses: LensSource
+): ILensGraph {
   // clone the graph to ensure this is a pure function
   graph = json.read(json.write(graph)); // (these are graphlib's jsons)
 
@@ -47,15 +52,15 @@ export function registerLens({ graph }: LensGraph, from: string, to: string, len
   return { graph };
 }
 
-export function lensGraphSchemas({ graph }: LensGraph): string[] {
+export function lensGraphSchemas({ graph }: ILensGraph): string[] {
   return graph.nodes();
 }
 
-export function lensGraphSchema({ graph }: LensGraph, schema: string): JSONSchema7 {
+export function lensGraphSchema({ graph }: ILensGraph, schema: string): JSONSchema7 {
   return graph.node(schema);
 }
 
-export function lensFromTo({ graph }: LensGraph, from: string, to: string): LensSource {
+export function lensFromTo({ graph }: ILensGraph, from: string, to: string): LensSource {
   if (!graph.hasNode(from)) {
     throw new Error(`couldn't find schema in graph: ${from}`);
   }

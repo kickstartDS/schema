@@ -1,15 +1,17 @@
-import { LensSource, LensOp } from './lens-ops.js'
+import { LensSource, LensOp } from './lens-ops.js';
 
 function assertNever(x: never): never {
-  throw new Error(`Unexpected object: ${x}`)
+  throw new Error(`Unexpected object: ${x}`);
 }
 
 export function reverseLens(lens: LensSource): LensSource {
   return lens
     .slice()
     .reverse()
-    .map((l) => reverseLensOp(l))
+    .map((l) => reverseLensOp(l));
 }
+
+const JSONSchema7TypeAny = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null'];
 
 function reverseLensOp(lensOp: LensOp): LensOp {
   switch (lensOp.op) {
@@ -17,60 +19,61 @@ function reverseLensOp(lensOp: LensOp): LensOp {
       return {
         ...lensOp,
         source: lensOp.destination,
-        destination: lensOp.source,
-      }
+        destination: lensOp.source
+      };
 
     case 'add': {
       return {
         ...lensOp,
-        op: 'remove',
-      }
+        op: 'remove'
+      };
     }
 
     case 'remove':
       return {
+        ...{ type: JSONSchema7TypeAny },
         ...lensOp,
-        op: 'add',
-      }
+        op: 'add'
+      };
 
     case 'wrap':
       return {
         ...lensOp,
-        op: 'head',
-      }
+        op: 'head'
+      };
     case 'head':
       return {
         ...lensOp,
-        op: 'wrap',
-      }
+        op: 'wrap'
+      };
 
     case 'in':
     case 'map':
-      return { ...lensOp, lens: reverseLens(lensOp.lens) }
+      return { ...lensOp, lens: reverseLens(lensOp.lens) };
 
     case 'hoist':
       return {
         ...lensOp,
-        op: 'plunge',
-      }
+        op: 'plunge'
+      };
     case 'plunge':
       return {
         ...lensOp,
-        op: 'hoist',
-      }
+        op: 'hoist'
+      };
     case 'convert': {
-      const mapping = [lensOp.mapping[1], lensOp.mapping[0]]
+      const mapping = [lensOp.mapping[1], lensOp.mapping[0]];
       const reversed = {
         ...lensOp,
         mapping,
         sourceType: lensOp.destinationType,
-        destinationType: lensOp.sourceType,
-      }
+        destinationType: lensOp.sourceType
+      };
 
-      return reversed
+      return reversed;
     }
 
     default:
-      return assertNever(lensOp) // exhaustiveness check
+      return assertNever(lensOp); // exhaustiveness check
   }
 }

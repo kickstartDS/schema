@@ -34,8 +34,10 @@ function addProperty(schema: JSONSchema7, property: IProperty): JSONSchema7 {
   const { name, items, required: isPropertyRequired } = property;
   let { type } = property;
 
-  if (!name || !type) {
+  if (!name) {
     throw new Error(`Missing property name in addProperty.\nFound:\n${JSON.stringify(property)}`);
+  } else if (!type) {
+    throw new Error(`Missing property type in addProperty.\nFound:\n${JSON.stringify(property)}`);
   }
 
   if (Array.isArray(type)) {
@@ -262,7 +264,7 @@ function removeNullSupport(prop: JSONSchema7): JSONSchema7 | undefined {
 
     prop = { ...prop, type: filterScalarOrArray(prop.type, (t) => t !== 'null') };
 
-    if (prop.default === null || prop.default === undefined) {
+    if (prop.default === null) {
       prop.default = defaultValuesByType(prop.type!); // the above always assigns a legal type
     }
   }
@@ -331,7 +333,7 @@ function headProperty(schema: JSONSchema7, op: IHeadProperty): JSONSchema7 {
         anyOf: [{ type: 'null' }, property.items as JSONSchema7Definition]
       }
     }
-  };
+  } as JSONSchema7;
 }
 
 function hoistProperty(originalSchema: JSONSchema7, host: string, name: string): JSONSchema7 {

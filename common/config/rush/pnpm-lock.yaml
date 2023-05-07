@@ -1,5 +1,10 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  to-json-schema@0.2.5:
+    hash: u5fqbpri2jteooscconww5uaqq
+    path: patches/to-json-schema@0.2.5.patch
+
 importers:
 
   .:
@@ -63,7 +68,7 @@ importers:
       graphlib: 2.1.8
       js-yaml: 4.1.0
       json-schema: 0.4.0
-      to-json-schema: 0.2.5
+      to-json-schema: 0.2.5_u5fqbpri2jteooscconww5uaqq
     devDependencies:
       '@json-editor/json-editor': 2.9.1
       '@rushstack/eslint-config': 3.2.0_3qfatcekpgbllh6uk5ivyhkbxq
@@ -4529,7 +4534,7 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /to-json-schema/0.2.5:
+  /to-json-schema/0.2.5_u5fqbpri2jteooscconww5uaqq:
     resolution: {integrity: sha512-jP1ievOee8pec3tV9ncxLSS48Bnw7DIybgy112rhMCEhf3K4uyVNZZHr03iQQBzbV5v5Hos+dlZRRyk6YSMNDw==}
     dependencies:
       lodash.isequal: 4.5.0
@@ -4539,6 +4544,7 @@ packages:
       lodash.without: 4.4.0
       lodash.xor: 4.5.0
     dev: false
+    patched: true
 
   /to-regex-range/5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}

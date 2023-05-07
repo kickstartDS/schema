@@ -178,7 +178,7 @@
    *
    * PNPM documentation: https://pnpm.io/package_json#pnpmpatcheddependencies
    */
-  "globalPatchedDependencies": {},
+  "globalPatchedDependencies": {"to-json-schema@0.2.5":"patches/to-json-schema@0.2.5.patch"},
 
   /**
    * (USE AT YOUR OWN RISK)  This is a free-form property bag that will be copied into

@@ -1,0 +1,13 @@
+diff --git a/lib/jsonSchemaHelpers.js b/lib/jsonSchemaHelpers.js
+index dc45df8b2b37b60d7bc5dcf1cb02f52cc14a90df..8ff3e3499c6a3e24a4616e1ce9f55e5b5d88fa81 100644
+--- a/lib/jsonSchemaHelpers.js
++++ b/lib/jsonSchemaHelpers.js
+@@ -17,7 +17,7 @@ var types = {
+     return typeof instance === 'boolean';
+   },
+   array: function testArray(instance) {
+-    return instance instanceof Array;
++    return Array.isArray(instance);
+   },
+   "null": function testNull(instance) {
+     return instance === null;

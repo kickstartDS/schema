@@ -1,0 +1,32 @@
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
+export declare const getSchemaRegistry: () => Ajv;
+export declare const addExplicitAnyOfs: (jsonSchema: JSONSchema7, ajv: Ajv) => JSONSchema7[];
+export declare const mergeAnyOfEnums: (schema: JSONSchema7, ajv: Ajv) => void;
+export declare const reduceSchemaAllOf: (schema: JSONSchema7, ajv: Ajv) => JSONSchema7;
+export declare const reduceSchemaAllOfs: (schema: JSONSchema7, ajv: Ajv) => void;
+export declare const addJsonSchema: (jsonSchema: JSONSchema7, ajv: Ajv) => JSONSchema7;
+export declare const layerRefs: (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[]) => void;
+export declare const addTypeInterfaces: (jsonSchemas: JSONSchema7[]) => void;
+export declare const inlineDefinitions: (jsonSchemas: JSONSchema7[]) => void;
+export declare const collectComponentInterfaces: (jsonSchemas: JSONSchema7[]) => Record<string, string[]>;
+export declare const collectReferencedSchemaIds: (jsonSchemas: JSONSchema7[], ajv: Ajv) => string[];
+export declare const loadSchemaPath: (schemaPath: string) => Promise<JSONSchema7>;
+export declare const getSchemasForGlob: (schemaGlob: string) => Promise<JSONSchema7[]>;
+export declare const processSchemaGlob: (schemaGlob: string, ajv: Ajv, typeResolution?: boolean) => Promise<string[]>;
+export declare const processSchemas: (jsonSchemas: JSONSchema7[], ajv: Ajv, typeResolution?: boolean) => Promise<string[]>;
+export declare const getLayeredRefId: (refId: string, reffingSchemaId: string, ajv: Ajv) => string;
+export declare const getSchemaName: (schemaId: string | undefined) => string;
+export declare const getSchemasForIds: (schemaIds: string[], ajv: Ajv) => JSONSchema7[];
+export declare const toArray: (x: JSONSchema7 | JSONSchema7[] | string | string[]) => any[];
+export declare const toSchema: (x: JSONSchema7 | string) => JSONSchema7;
+export declare const getCustomSchemaIds: (schemaIds: string[]) => string[];
+export declare const getUniqueSchemaIds: (schemaIds: string[]) => string[];
+export declare const capitalize: (s: string) => string;
+export declare const hashFieldName: (fieldName: string, optionalName?: string) => string;
+export declare const dedupe: (schema: JSONSchema7, optionalName?: string) => {
+    [key: string]: JSONSchema7Definition;
+} | undefined;
+export declare const dedupeDeep: (schema: JSONSchema7) => JSONSchema7;
+export declare const toPascalCase: (text: string) => string;
+export declare const clearAndUpper: (text: string) => string;
+//# sourceMappingURL=helpers.d.ts.map

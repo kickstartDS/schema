@@ -11,6 +11,10 @@
     {
       "name": "tools/cambria",
       "path": "../tools/cambria"
+    },
+    {
+      "name": "tools/jsonschema-utils",
+      "path": "../tools/jsonschema-utils"
     }
   ],
   "settings": {}

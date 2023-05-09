@@ -9,7 +9,7 @@ interface IYAMLLens {
 const foldInOp = (lensOpJson: { [key: string]: any }): LensOp => {
   const opName = Object.keys(lensOpJson)[0];
 
-  // the json format isJSONSchema7
+  // the json format is JSONSchema
   // {"<opName>": {opArgs}}
   // and the internal format is
   // {op: <opName>, ...opArgs}

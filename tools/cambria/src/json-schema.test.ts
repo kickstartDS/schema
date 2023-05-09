@@ -1,4 +1,4 @@
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 
 import {
   addProperty,
@@ -33,7 +33,7 @@ describe('transforming a json schema', () => {
       }
     },
     required: ['name', 'summary']
-  } as JSONSchema7; // need to convince typescript this is valid json schema
+  } as JSONSchema.Object; // need to convince typescript this is valid json schema
 
   describe('addProperty', () => {
     it('adds the property', () => {
@@ -118,8 +118,8 @@ describe('transforming a json schema', () => {
             { todo: false, inProgress: false, done: true },
             { false: 'todo', true: 'done' }
           ],
-          'string',
-          'boolean'
+          TypeName.String,
+          TypeName.Boolean
         )
       ]);
 

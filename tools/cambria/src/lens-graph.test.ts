@@ -1,17 +1,19 @@
+import { TypeName } from 'json-schema-typed/draft-07';
+
 import { addProperty, inside, hoistProperty } from './helpers.js';
 import { ILensGraph, initLensGraph, registerLens, lensGraphSchemas, lensFromTo } from './lens-graph.js';
 
-const LensMutoV1 = [addProperty({ name: 'title', type: 'string' })];
+const LensMutoV1 = [addProperty({ name: 'title', type: TypeName.String })];
 const LensV1toV2 = [
-  addProperty({ name: 'metadata', type: 'object' }),
+  addProperty({ name: 'metadata', type: TypeName.Object }),
   inside('metadata', [
-    addProperty({ name: 'createdAt', type: 'number' }),
-    addProperty({ name: 'updatedAt', type: 'number' })
+    addProperty({ name: 'createdAt', type: TypeName.Number }),
+    addProperty({ name: 'updatedAt', type: TypeName.Number })
   ])
 ];
 const LensV2toV3 = [
   hoistProperty('metadata', 'createdAt'),
-  addProperty({ name: 'metadata', type: 'object' })
+  addProperty({ name: 'metadata', type: TypeName.Object })
 ];
 
 const Lenses = [

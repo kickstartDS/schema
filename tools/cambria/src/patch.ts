@@ -1,5 +1,5 @@
 import { Operation } from 'fast-json-patch';
-import { JSONSchema7 } from 'json-schema';
+import { type JSONSchema } from 'json-schema-typed/draft-07';
 
 import { addDefaultValues } from './defaults.js';
 import { updateSchema } from './json-schema.js';
@@ -11,7 +11,7 @@ import { reverseLens } from './reverse.js';
 export type PatchOp = Operation;
 type MaybePatchOp = PatchOp | null;
 export type Patch = Operation[];
-export type CompiledLens = (patch: Patch, targetDoc: any) => Patch;
+export type CompiledLens = (patch: Patch, targetDoc: JSONSchema.Object) => Patch;
 
 function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${x}`);
@@ -37,7 +37,7 @@ export function compile(lensSource: LensSource): { right: CompiledLens; left: Co
 export function applyLensToPatch(
   lensSource: LensSource,
   patch: Patch,
-  patchSchema: JSONSchema7 // the json schema for the doc the patch was operating on
+  patchSchema: JSONSchema.Object // the json schema for the doc the patch was operating on
 ): Patch {
   // expand patches that set nested objects into scalar patches
   const expandedPatch: Patch = patch.map((op) => expandPatch(op)).flat();

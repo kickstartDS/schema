@@ -2,7 +2,7 @@
 // (we might write our own parser later, but at least for now
 // this avoids seeing the raw json...)
 
-import { JSONSchema7TypeName } from 'json-schema';
+import { TypeName } from 'json-schema-typed/draft-07';
 
 import {
   LensSource,
@@ -90,8 +90,8 @@ export function map(lens: LensSource): ILensMap {
 export function convertValue(
   name: string,
   mapping: ValueMapping,
-  sourceType?: JSONSchema7TypeName,
-  destinationType?: JSONSchema7TypeName
+  sourceType?: TypeName,
+  destinationType?: TypeName
 ): IConvertValue {
   return {
     op: 'convert',

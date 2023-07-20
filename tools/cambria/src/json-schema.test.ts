@@ -37,7 +37,7 @@ describe('transforming a json schema', () => {
 
   describe('addProperty', () => {
     it('adds the property', () => {
-      const newSchema = updateSchema(v1Schema, [addProperty({ name: 'description', type: 'string' })]);
+      const newSchema = updateSchema(v1Schema, [addProperty({ name: 'description', type: TypeName.String })]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
@@ -47,7 +47,7 @@ describe('transforming a json schema', () => {
 
     it('supports nullable fields', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'description', type: ['string', 'null'] })
+        addProperty({ name: 'description', type: [TypeName.String, TypeName.Null] })
       ]);
 
       expect(newSchema.properties).toEqual({
@@ -58,7 +58,7 @@ describe('transforming a json schema', () => {
 
     it('uses default value if provided', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'description', type: 'string', default: 'hi' })
+        addProperty({ name: 'description', type: TypeName.String, default: 'hi' })
       ]);
 
       expect(newSchema.properties).toEqual({
@@ -69,12 +69,12 @@ describe('transforming a json schema', () => {
 
     it('sets field as required', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'description', type: 'string', required: true })
+        addProperty({ name: 'description', type: TypeName.String, required: true })
       ]);
 
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
-        description: { type: 'string', default: '' }
+        description: { type: TypeName.String, default: '' }
       });
 
       expect(newSchema.required).toEqual([...(v1Schema.required || []), 'description']);
@@ -154,10 +154,10 @@ describe('transforming a json schema', () => {
   describe('inside', () => {
     it('adds new properties inside a key', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'metadata', type: 'object' }),
+        addProperty({ name: 'metadata', type: TypeName.Object }),
         inside('metadata', [
-          addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'updatedAt', type: 'number' })
+          addProperty({ name: 'createdAt', type: TypeName.Number }),
+          addProperty({ name: 'updatedAt', type: TypeName.Number })
         ])
       ]);
 
@@ -183,9 +183,9 @@ describe('transforming a json schema', () => {
 
     it('renames properties inside a key', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'metadata', type: 'object' }),
+        addProperty({ name: 'metadata', type: TypeName.Object }),
         inside('metadata', [
-          addProperty({ name: 'createdAt', type: 'number' }),
+          addProperty({ name: 'createdAt', type: TypeName.Number }),
           renameProperty('createdAt', 'created')
         ])
       ]);
@@ -217,11 +217,11 @@ describe('transforming a json schema', () => {
   describe('map', () => {
     it('adds new properties inside an array', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'tasks', type: 'array', items: { type: 'object' as const } }),
+        addProperty({ name: 'tasks', type: TypeName.Array, items: { type: TypeName.Object as const } }),
         inside('tasks', [
           map([
-            addProperty({ name: 'name', type: 'string' }),
-            addProperty({ name: 'description', type: 'string' })
+            addProperty({ name: 'name', type: TypeName.String }),
+            addProperty({ name: 'description', type: TypeName.String })
           ])
         ])
       ]);
@@ -252,9 +252,9 @@ describe('transforming a json schema', () => {
 
     it('renames properties inside an array', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'tasks', type: 'array', items: { type: 'object' as const } }),
+        addProperty({ name: 'tasks', type: TypeName.Array, items: { type: TypeName.Object as const } }),
         inside('tasks', [
-          map([addProperty({ name: 'name', type: 'string' }), renameProperty('name', 'title')])
+          map([addProperty({ name: 'name', type: TypeName.String }), renameProperty('name', 'title')])
         ])
       ]);
 
@@ -282,7 +282,7 @@ describe('transforming a json schema', () => {
   describe('headProperty', () => {
     it('can turn an array into a scalar', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'assignees', type: 'array', items: { type: 'string' as const } }),
+        addProperty({ name: 'assignees', type: TypeName.Array, items: { type: TypeName.String as const } }),
         headProperty('assignees')
       ]);
 
@@ -292,14 +292,14 @@ describe('transforming a json schema', () => {
       // https://github.com/ajv-validator/ajv/issues/276
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
-        assignees: { anyOf: [{ type: 'null' }, { type: 'string', default: '' }] }
+        assignees: { anyOf: [{ type: 'null' }, { type: TypeName.String, default: '' }] }
       });
     });
 
     it('can preserve schema information for an array of objects becoming a single object', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'assignees', type: 'array', items: { type: 'object' as const } }),
-        inside('assignees', [map([addProperty({ name: 'name', type: 'string' })])]),
+        addProperty({ name: 'assignees', type: TypeName.Array, items: { type: TypeName.Object as const } }),
+        inside('assignees', [map([addProperty({ name: 'name', type: TypeName.String })])]),
         headProperty('assignees')
       ]);
 
@@ -327,7 +327,7 @@ describe('transforming a json schema', () => {
   describe('wrapProperty', () => {
     it('can wrap a scalar into an array', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'assignee', type: ['string', 'null'] }),
+        addProperty({ name: 'assignee', type: [TypeName.String, TypeName.Null] }),
         wrapProperty('assignee')
       ]);
 
@@ -346,10 +346,10 @@ describe('transforming a json schema', () => {
 
     it.skip('can wrap an object into an array', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'assignee', type: ['object', 'null'] }),
+        addProperty({ name: 'assignee', type: [TypeName.Object, TypeName.Null] }),
         inside('assignee', [
-          addProperty({ name: 'id', type: 'string' }),
-          addProperty({ name: 'name', type: 'string' })
+          addProperty({ name: 'id', type: TypeName.String }),
+          addProperty({ name: 'name', type: TypeName.String })
         ]),
         wrapProperty('assignee')
       ]);
@@ -362,8 +362,8 @@ describe('transforming a json schema', () => {
           items: {
             type: 'object' as const,
             properties: {
-              name: { type: 'string', default: '' },
-              id: { type: 'string', default: '' }
+              name: { type: TypeName.String, default: '' },
+              id: { type: TypeName.String, default: '' }
             }
           }
         }
@@ -374,10 +374,10 @@ describe('transforming a json schema', () => {
   describe('hoistProperty', () => {
     it('hoists the property up in the schema', () => {
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'metadata', type: 'object' }),
+        addProperty({ name: 'metadata', type: TypeName.Object }),
         inside('metadata', [
-          addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'editedAt', type: 'number' })
+          addProperty({ name: 'createdAt', type: TypeName.Number }),
+          addProperty({ name: 'editedAt', type: TypeName.Number })
         ]),
         hoistProperty('metadata', 'createdAt')
       ]);
@@ -389,14 +389,14 @@ describe('transforming a json schema', () => {
           default: {},
           properties: {
             editedAt: {
-              type: 'number',
+              type: TypeName.Number,
               default: 0
             }
           },
           required: ['editedAt']
         },
         createdAt: {
-          type: 'number',
+          type: TypeName.Number,
           default: 0
         }
       });
@@ -405,10 +405,10 @@ describe('transforming a json schema', () => {
     it('hoists up an object with child properties', () => {
       // hoist up a details object out of metadata
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'metadata', type: 'object' }),
+        addProperty({ name: 'metadata', type: TypeName.Object }),
         inside('metadata', [
-          addProperty({ name: 'details', type: 'object' }),
-          inside('details', [addProperty({ name: 'title', type: 'string' })])
+          addProperty({ name: 'details', type: TypeName.Object }),
+          inside('details', [addProperty({ name: 'title', type: TypeName.String })])
         ]),
         hoistProperty('metadata', 'details')
       ]);
@@ -416,13 +416,13 @@ describe('transforming a json schema', () => {
       expect(newSchema.properties).toEqual({
         ...v1Schema.properties,
         metadata: {
-          type: 'object',
+          type: TypeName.Object,
           default: {},
           properties: {},
           required: []
         },
         details: {
-          type: 'object',
+          type: TypeName.Object,
           default: {},
           properties: {
             title: { type: 'string', default: '' }
@@ -437,10 +437,10 @@ describe('transforming a json schema', () => {
     it('plunges the property down in the schema', () => {
       // move the existing summary down into a metadata object
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'metadata', type: 'object' }),
+        addProperty({ name: 'metadata', type: TypeName.Object }),
         inside('metadata', [
-          addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'editedAt', type: 'number' })
+          addProperty({ name: 'createdAt', type: TypeName.Number }),
+          addProperty({ name: 'editedAt', type: TypeName.Number })
         ]),
         plungeProperty('metadata', 'summary')
       ]);
@@ -452,15 +452,15 @@ describe('transforming a json schema', () => {
           default: {},
           properties: {
             createdAt: {
-              type: 'number',
+              type: TypeName.Number,
               default: 0
             },
             editedAt: {
-              type: 'number',
+              type: TypeName.Number,
               default: 0
             },
             summary: {
-              type: 'string',
+              type: TypeName.String,
               default: ''
             }
           },
@@ -478,11 +478,11 @@ describe('transforming a json schema', () => {
     it.skip('plunges an object down with its child properties', () => {
       // plunge metadata object into a container object
       const newSchema = updateSchema(v1Schema, [
-        addProperty({ name: 'container', type: 'object' }),
-        addProperty({ name: 'metadata', type: 'object' }),
+        addProperty({ name: 'container', type: TypeName.Object }),
+        addProperty({ name: 'metadata', type: TypeName.Object }),
         inside('metadata', [
-          addProperty({ name: 'createdAt', type: 'number' }),
-          addProperty({ name: 'editedAt', type: 'number' })
+          addProperty({ name: 'createdAt', type: TypeName.Number }),
+          addProperty({ name: 'editedAt', type: TypeName.Number })
         ]),
         plungeProperty('container', 'metadata')
       ]);
@@ -495,15 +495,15 @@ describe('transforming a json schema', () => {
           required: ['metadata'],
           properties: {
             metadata: {
-              type: 'object',
+              type: TypeName.Object,
               default: {},
               properties: {
                 createdAt: {
-                  type: 'number',
+                  type: TypeName.Number,
                   default: 0
                 },
                 editedAt: {
-                  type: 'number',
+                  type: TypeName.Number,
                   default: 0
                 }
               },

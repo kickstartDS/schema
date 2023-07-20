@@ -413,7 +413,7 @@ describe('wrap (scalar to array)', () => {
     type: 'object' as const,
     additionalProperties: false,
     properties: {
-      assignee: { type: ['string' as const, 'null' as const] }
+      assignee: { type: [TypeName.String as const, TypeName.Null as const] }
     }
   };
   const lensSource: LensSource = [wrapProperty('assignee')];
@@ -493,7 +493,7 @@ describe('wrap (scalar to array)', () => {
       type: 'object' as const,
       additionalProperties: false,
       properties: {
-        assignee: { type: ['object', 'null'], properties: { name: { type: 'string' } } }
+        assignee: { type: [TypeName.Object, TypeName.Null], properties: { name: { type: 'string' } } }
       }
     };
 
@@ -651,7 +651,7 @@ describe('head (array to nullable scalar)', () => {
       type: 'object' as const,
       additionalProperties: false,
       properties: {
-        assignee: { type: ['string', 'null'] }
+        assignee: { type: [TypeName.String, TypeName.Null] }
       }
     };
 

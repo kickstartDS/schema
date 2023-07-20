@@ -1,9 +1,9 @@
-import { JSONSchema, TypeName } from 'json-schema-typed/draft-07';
+import { TypeName } from 'json-schema-typed/draft-07';
 
 export interface IProperty {
   name?: string;
   type: TypeName | TypeName[];
-  default?: JSONSchema.Interface | undefined;
+  default?: any;
   required?: boolean;
   items?: IProperty;
 }

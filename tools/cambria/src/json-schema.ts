@@ -29,7 +29,7 @@ function deepInspect(object: JSONSchema): string {
 
 // mutates the schema that is passed in
 // (should switch to a more functional style)
-function addProperty(schema: JSONSchema.Object, property: IProperty): JSONSchema.Object {
+function addProperty(schema: JSONSchema.Interface, property: IProperty): JSONSchema.Interface {
   const { properties: origProperties = {}, required: origRequired = [] } = schema;
   const { name, items, required: isPropertyRequired } = property;
   let { type } = property;
@@ -41,7 +41,7 @@ function addProperty(schema: JSONSchema.Object, property: IProperty): JSONSchema
   }
 
   if (Array.isArray(type)) {
-    type = type.map((t) => (t === null ? 'null' : t));
+    type = type.map((t) => (t === null ? TypeName.Null : t));
   }
 
   const arraylessPropertyDefinition = {
@@ -69,15 +69,15 @@ function addProperty(schema: JSONSchema.Object, property: IProperty): JSONSchema
 }
 
 function withNullable(
-  schema: JSONSchema.Object,
-  fn: (s: JSONSchema.Object) => JSONSchema.Object
-): JSONSchema.Object {
+  schema: JSONSchema.Interface,
+  fn: (s: JSONSchema.Interface) => JSONSchema.Interface
+): JSONSchema.Interface {
   if (schema.anyOf) {
     if (schema.anyOf.length !== 2) {
       throw new Error('We only support this operation on schemas with one type or a nullable type');
     }
 
-    const newSchema: JSONSchema.Object = {
+    const newSchema: JSONSchema.Interface = {
       ...schema,
       anyOf: schema.anyOf.map(db).map((s) => (s.type === 'null' ? s : fn(s)))
     };
@@ -88,7 +88,11 @@ function withNullable(
   }
 }
 
-function renameProperty(originalSchema: JSONSchema.Object, from: string, to: string): JSONSchema.Object {
+function renameProperty(
+  originalSchema: JSONSchema.Interface,
+  from: string,
+  to: string
+): JSONSchema.Interface {
   return withNullable(originalSchema, (schema) => {
     if (typeof schema !== 'object' || typeof schema.properties !== 'object') {
       throw new Error(`expected schema object, got ${JSON.stringify(schema)}`);
@@ -123,7 +127,7 @@ function renameProperty(originalSchema: JSONSchema.Object, from: string, to: str
 // remove a property from a schema
 // property name is _not_ in JSON Pointer, no leading slash here.
 // (yes, that's inconsistent with addPropertyToSchema, which is bad)
-function removeProperty(schema: JSONSchema.Object, removedPointer: string): JSONSchema.Object {
+function removeProperty(schema: JSONSchema.Interface, removedPointer: string): JSONSchema.Interface {
   const { properties = {}, required = [] } = schema;
   const removed = removedPointer;
   // we don't care about the `discarded` variable...
@@ -149,7 +153,8 @@ function schemaSupportsType(typeValue: JSONSchema.TypeValue, type: TypeName): bo
     return false;
   }
   if (!Array.isArray(typeValue)) {
-    typeValue = [typeValue];
+    const typeValues = [typeValue];
+    return typeValues.includes(type);
   }
 
   return typeValue.includes(type);
@@ -159,7 +164,11 @@ function schemaSupportsType(typeValue: JSONSchema.TypeValue, type: TypeName): bo
  * removes the horrible, obnoxious, and annoying case where JSON schemas can just be
  * "true" or "false" meaning the below definitions and screwing up my type checker
  */
-function db(s: JSONSchema): JSONSchema.Interface {
+function db(s: JSONSchema | undefined): JSONSchema.Interface {
+  if (s === undefined) {
+    console.log('TODO this shouldnt happen');
+    throw new Error("Undefined schema type not supported, can't pass through db");
+  }
   if (s === true) {
     return {};
   }
@@ -170,9 +179,22 @@ function db(s: JSONSchema): JSONSchema.Interface {
 }
 
 function supportsNull(schema: JSONSchema.Interface): boolean {
+  if (!schema.type) {
+    throw new Error("Undefined schema type not supported, can't check for null");
+  }
+
   return (
-    schemaSupportsType(schema.type, 'null') ||
-    !!schema.anyOf?.some((subSchema) => schemaSupportsType(db(subSchema).type, 'null'))
+    schemaSupportsType(schema.type, TypeName.Null) ||
+    !!schema.anyOf?.some((subSchema) => {
+      const definedSchema = db(subSchema);
+
+      if (!definedSchema.type) {
+        console.log('TODO this shouldnt happen');
+        throw new Error("Undefined schema type not supported, can't check for null");
+      }
+
+      return schemaSupportsType(definedSchema.type, TypeName.Null);
+    })
   );
 }
 
@@ -191,13 +213,27 @@ function findHost(schema: JSONSchema.Interface, name: string): JSONSchema.Interf
       return maybeHost;
     }
   }
-  throw new Error("Coudln't find the host for this data.");
+  throw new Error("Couldn't find the host for this data.");
 }
 
-function inSchema(schema: JSONSchema.Object, op: ILensIn): JSONSchema.Object {
+function onlyObject(schema: JSONSchema | undefined): JSONSchema.Object {
+  if (schema === undefined) {
+    throw new Error('Schema was undefined');
+  }
+  if (typeof schema === 'boolean') {
+    throw new Error(`Expected object, found boolean`);
+  }
+  if (schema.type !== 'object') {
+    throw new Error(`Expected object, found ${schema.type}`);
+  }
+
+  return schema as JSONSchema.Object;
+}
+
+function inSchema(schema: JSONSchema.Interface, op: ILensIn): JSONSchema.Interface {
   const properties = schema.properties
     ? schema.properties
-    : (schema.anyOf?.find((t) => typeof t === 'object' && t.properties)).properties;
+    : onlyObject(schema.anyOf?.find((t) => typeof t === 'object' && t.properties)).properties;
 
   if (!properties) {
     throw new Error("Cannot look 'in' an object that doesn't have properties.");
@@ -215,22 +251,23 @@ function inSchema(schema: JSONSchema.Object, op: ILensIn): JSONSchema.Object {
     throw new Error(`Expected to find property ${name} in ${Object.keys(properties || {})}`);
   }
 
-  const newProperties: JSONSchema.Interface = {
+  const newProperties: Record<string, JSONSchema> = {
     ...properties,
     [name]: updateSchema(host, lens)
   };
 
-  return {
+  const updatedSchema: JSONSchema = {
     ...schema,
     properties: newProperties
   };
+
+  return updatedSchema;
 }
 
 // TODO check this one!
 // type JSONSchema7Items = boolean | JSONSchema7 | JSONSchema7Definition[] | undefined;
-function validateSchemaItems(
-  items: JSONSchema.Interface[] | JSONSchema.Interface | boolean | undefined
-): JSONSchema.Interface {
+
+function validateSchemaItems(items: JSONSchema.Array['items']): JSONSchema.Array['items'] {
   if (Array.isArray(items)) {
     throw new Error('Cambria only supports consistent types for arrays.');
   }
@@ -240,14 +277,21 @@ function validateSchemaItems(
   return items;
 }
 
-function mapSchema(schema: JSONSchema.Interface, lens: LensSource): JSONSchema.Object {
+function mapSchema(schema: JSONSchema.Interface, lens: LensSource): JSONSchema.Interface {
   if (!lens) {
     throw new Error('Map requires a `lens` to map over the array.');
   }
   if (!schema.items) {
     throw new Error(`Map requires a schema with items to map over, ${deepInspect(schema)}`);
   }
-  return { ...schema, items: updateSchema(validateSchemaItems(schema.items), lens) };
+  if (typeof schema.items === 'boolean') {
+    throw new Error(``);
+  }
+  const validated = validateSchemaItems(schema.items);
+  if (!validated || typeof validated !== 'object' || Array.isArray(validated)) {
+    throw new Error(`Cambria only supports mapping over objects, found`);
+  }
+  return { ...schema, items: updateSchema(validated, lens) };
 }
 
 function filterScalarOrArray<T>(v: T | T[], cb: (t: T) => boolean): T | T[] {
@@ -267,11 +311,11 @@ function removeNullSupport(prop: JSONSchema.Interface): JSONSchema.Interface | u
     return prop;
   }
   if (prop.type) {
-    if (prop.type === 'null') {
+    if (prop.type === TypeName.Null) {
       return undefined;
     }
 
-    prop = { ...prop, type: filterScalarOrArray(prop.type, (t) => t !== 'null') };
+    prop = { ...prop, type: filterScalarOrArray(prop.type, (t) => t !== TypeName.Null) };
 
     if (prop.default === null) {
       prop.default = defaultValuesByType(prop.type!); // the above always assigns a legal type
@@ -291,7 +335,7 @@ function removeNullSupport(prop: JSONSchema.Interface): JSONSchema.Interface | u
   return prop;
 }
 
-function wrapProperty(schema: JSONSchema.Object, op: IWrapProperty): JSONSchema.Object {
+function wrapProperty(schema: JSONSchema.Interface, op: IWrapProperty): JSONSchema.Interface {
   if (!op.name) {
     throw new Error('Wrap property requires a `name` to identify what to wrap.');
   }
@@ -324,7 +368,7 @@ function wrapProperty(schema: JSONSchema.Object, op: IWrapProperty): JSONSchema.
   };
 }
 
-function headProperty(schema: JSONSchema.Object, op: IHeadProperty): JSONSchema.Object {
+function headProperty(schema: JSONSchema.Interface, op: IHeadProperty): JSONSchema.Interface {
   if (!op.name) {
     throw new Error('Head requires a `name` to identify what to take head from.');
   }
@@ -332,7 +376,11 @@ function headProperty(schema: JSONSchema.Object, op: IHeadProperty): JSONSchema.
     throw new Error(`Cannot head property '${op.name}' because it does not exist.`);
   }
 
-  const property = schema.properties[op.name];
+  const property = schema.properties[op.name] as JSONSchema.Array;
+
+  if (property.items === undefined || typeof property.items === 'boolean' || Array.isArray(property.items)) {
+    throw new Error(`Cannot head property '${op.name}' because it is not an array.`);
+  }
 
   return {
     ...schema,
@@ -345,7 +393,11 @@ function headProperty(schema: JSONSchema.Object, op: IHeadProperty): JSONSchema.
   };
 }
 
-function hoistProperty(originalSchema: JSONSchema.Object, host: string, name: string): JSONSchema.Object {
+function hoistProperty(
+  originalSchema: JSONSchema.Interface,
+  host: string,
+  name: string
+): JSONSchema.Interface {
   return withNullable(originalSchema, (schema) => {
     if (schema.properties === undefined) {
       throw new Error(`Can't hoist when root schema isn't an object`);
@@ -404,7 +456,7 @@ function hoistProperty(originalSchema: JSONSchema.Object, host: string, name: st
   });
 }
 
-function plungeProperty(schema: JSONSchema.Object, host: string, name: string): JSONSchema.Object {
+function plungeProperty(schema: JSONSchema.Interface, host: string, name: string): JSONSchema.Interface {
   // XXXX what should we do for missing child properties? error?
   const { properties = {} } = schema;
 
@@ -448,7 +500,7 @@ function plungeProperty(schema: JSONSchema.Object, host: string, name: string): 
   return schema;
 }
 
-function convertValue(schema: JSONSchema.Object, lensOp: IConvertValue): JSONSchema.Object {
+function convertValue(schema: JSONSchema.Interface, lensOp: IConvertValue): JSONSchema.Interface {
   const { name, destinationType, mapping } = lensOp;
   if (!destinationType) {
     return schema;
@@ -476,7 +528,7 @@ function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${x}`);
 }
 
-function applyLensOperation(schema: JSONSchema.Object, op: LensOp): JSONSchema.Object {
+function applyLensOperation(schema: JSONSchema.Interface, op: LensOp): JSONSchema.Interface {
   switch (op.op) {
     case 'add':
       return addProperty(schema, op);
@@ -503,14 +555,14 @@ function applyLensOperation(schema: JSONSchema.Object, op: LensOp): JSONSchema.O
       assertNever(op); // exhaustiveness check
   }
 }
-export function updateSchema(schema: JSONSchema.Object, lens: LensSource): JSONSchema.Object {
-  return lens.reduce((schema, op) => {
+export function updateSchema(schema: JSONSchema.Interface, lens: LensSource): JSONSchema.Interface {
+  return lens.reduce<JSONSchema.Interface>((schema, op) => {
     if (schema === undefined) throw new Error("Can't update undefined schema");
     return applyLensOperation(schema, op);
   }, schema);
 }
 
-export function schemaForLens(lens: LensSource): JSONSchema.Object {
+export function schemaForLens(lens: LensSource): JSONSchema.Interface {
   const emptySchema = {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object' as const,

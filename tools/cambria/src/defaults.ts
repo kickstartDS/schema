@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import pkg from 'fast-json-patch';
 import { JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 
@@ -41,7 +40,7 @@ export function defaultValuesByType(type: TypeName | TypeName[]): JSONSchema.Int
 }
 
 // Return a recursively filled-in default object for a given schema
-export function defaultObjectForSchema(schema: JSONSchema.Interface): JSONSchema.Interface {
+export function defaultObjectForSchema(schema: JSONSchema.Object): JSONSchema.Object {
   // By setting the root to empty object,
   // we kick off a recursive process that fills in the entire thing
   const initializeRootPatch = [
@@ -108,9 +107,9 @@ export function addDefaultValues(patch: Patch, schema: JSONSchema.Interface): Pa
 
 // given a json schema and a json path to an object field somewhere in that schema,
 // return the json schema for the object being pointed to
-function getPropertiesForPath(schema: JSONSchema.Object, path: string): JSONSchema.Object {
+function getPropertiesForPath(schema: JSONSchema.Interface, path: string): Record<string, JSONSchema> {
   const pathComponents = path.split('/').slice(1);
-  const { properties } = pathComponents.reduce((schema: JSONSchema.Object, pathSegment: string) => {
+  const reduced = pathComponents.reduce<JSONSchema.Interface>((schema, pathSegment): JSONSchema.Interface => {
     const types = Array.isArray(schema.type) ? schema.type : [schema.type];
     if (types.includes('object')) {
       const schemaForProperty = schema.properties && schema.properties[pathSegment];
@@ -123,11 +122,14 @@ function getPropertiesForPath(schema: JSONSchema.Object, path: string): JSONSche
         throw new Error('Expected array items to have types');
 
       // todo: revisit this "as", was a huge pain to get this past TS
-      return schema.items;
+      return schema.items as JSONSchema.Object;
     }
     throw new Error('Expected object or array in schema based on JSON Pointer');
   }, schema);
 
-  if (properties === undefined) return {};
-  return properties;
+  if (typeof reduced === 'boolean' || reduced.properties === undefined) {
+    return {};
+  }
+
+  return reduced.properties;
 }

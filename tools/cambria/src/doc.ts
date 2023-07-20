@@ -63,7 +63,7 @@ export function applyLensToDoc(
   // then we add in any existing fields on the target doc.
   // TODO: I think we need to deep merge here, can't just shallow merge?
   const outputSchema = updateSchema(inputSchema, lensSource);
-  const base = Object.assign(defaultObjectForSchema(outputSchema), targetDoc || {});
+  const base = Object.assign(defaultObjectForSchema(outputSchema as JSONSchema.Object), targetDoc || {});
 
   // return a doc based on the converted patch.
   // (start with either a specified baseDoc, or just empty doc)

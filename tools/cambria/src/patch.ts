@@ -17,7 +17,7 @@ function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${x}`);
 }
 
-function noNulls<T>(items: (T | null)[]) {
+function noNulls<T>(items: (T | null)[]): T[] {
   return items.filter((x): x is T => x !== null);
 }
 
@@ -37,7 +37,7 @@ export function compile(lensSource: LensSource): { right: CompiledLens; left: Co
 export function applyLensToPatch(
   lensSource: LensSource,
   patch: Patch,
-  patchSchema: JSONSchema.Object // the json schema for the doc the patch was operating on
+  patchSchema: JSONSchema.Interface // the json schema for the doc the patch was operating on
 ): Patch {
   // expand patches that set nested objects into scalar patches
   const expandedPatch: Patch = patch.map((op) => expandPatch(op)).flat();

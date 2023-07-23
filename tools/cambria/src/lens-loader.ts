@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import YAML from 'js-yaml';
 
 import { LensSource, LensOp } from './lens-ops.js';

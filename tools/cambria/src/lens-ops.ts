@@ -3,7 +3,7 @@ import { TypeName } from 'json-schema-typed/draft-07';
 export interface IProperty {
   name?: string;
   type: TypeName | TypeName[];
-  default?: any;
+  default?: unknown;
   required?: boolean;
   items?: IProperty;
 }

@@ -18,6 +18,7 @@ const defaultValuesForType: {
   [TypeName.Boolean]: boolean;
   [TypeName.Array]: object;
   [TypeName.Object]: object;
+  // eslint-disable-next-line @rushstack/no-new-null
   [TypeName.Null]: null;
 } = {
   [TypeName.String]: '',

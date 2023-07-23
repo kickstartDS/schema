@@ -1,3 +1,4 @@
+/* eslint-disable @rushstack/no-new-null */
 import { Operation } from 'fast-json-patch';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 
@@ -28,8 +29,9 @@ function noNulls<T>(items: (T | null)[]): T[] {
 // ... maybe also composeLens?
 export function compile(lensSource: LensSource): { right: CompiledLens; left: CompiledLens } {
   return {
-    right: (patch: Patch, targetDoc: any) => applyLensToPatch(lensSource, patch, targetDoc),
-    left: (patch: Patch, targetDoc: any) => applyLensToPatch(reverseLens(lensSource), patch, targetDoc)
+    right: (patch: Patch, targetDoc: JSONSchema.Interface) => applyLensToPatch(lensSource, patch, targetDoc),
+    left: (patch: Patch, targetDoc: JSONSchema.Interface) =>
+      applyLensToPatch(reverseLens(lensSource), patch, targetDoc)
   };
 }
 
@@ -211,13 +213,15 @@ function runLensOp(lensOp: LensOp, patchOp: MaybePatchOp): MaybePatchOp {
   return patchOp;
 }
 
+interface INestedPatchOpArray extends Array<INestedPatchOpArray | PatchOp> {}
+
 export function expandPatch(patchOp: PatchOp): PatchOp[] {
   // this only applies for add and replace ops; no expansion to do otherwise
   // todo: check the whole list of json patch verbs
   if (patchOp.op !== 'add' && patchOp.op !== 'replace') return [patchOp];
 
   if (patchOp.value && typeof patchOp.value === 'object') {
-    let result: any[] = [
+    let result: INestedPatchOpArray = [
       {
         op: patchOp.op,
         path: patchOp.path,
@@ -226,16 +230,18 @@ export function expandPatch(patchOp: PatchOp): PatchOp[] {
     ];
 
     result = result.concat(
-      Object.entries(patchOp.value).map(([key, value]) => {
-        return expandPatch({
-          op: patchOp.op,
-          path: `${patchOp.path}/${key}`,
-          value
-        });
-      })
+      Object.entries(patchOp.value)
+        .map(([key, value]) => {
+          return expandPatch({
+            op: patchOp.op,
+            path: `${patchOp.path}/${key}`,
+            value
+          });
+        })
+        .flat(2)
     );
 
-    return result.flat(Infinity);
+    return result.flat(2) as PatchOp[];
   }
   return [patchOp];
 }

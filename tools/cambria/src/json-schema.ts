@@ -267,14 +267,15 @@ function inSchema(schema: JSONSchema.Interface, op: ILensIn): JSONSchema.Interfa
 // TODO check this one!
 // type JSONSchema7Items = boolean | JSONSchema7 | JSONSchema7Definition[] | undefined;
 
-function validateSchemaItems(items: JSONSchema.Array['items']): JSONSchema.Array['items'] {
+function validateSchemaItems(items: JSONSchema.Array['items']): JSONSchema.Interface {
   if (Array.isArray(items)) {
     throw new Error('Cambria only supports consistent types for arrays.');
   }
   if (!items || items === true) {
     throw new Error(`Cambria requires a specific items definition, found ${items}.`);
   }
-  return items;
+
+  return items as JSONSchema.Interface;
 }
 
 function mapSchema(schema: JSONSchema.Interface, lens: LensSource): JSONSchema.Interface {
@@ -285,31 +286,31 @@ function mapSchema(schema: JSONSchema.Interface, lens: LensSource): JSONSchema.I
     throw new Error(`Map requires a schema with items to map over, ${deepInspect(schema)}`);
   }
   if (typeof schema.items === 'boolean') {
-    throw new Error(``);
+    throw new Error(`TODO add error`);
   }
   const validated = validateSchemaItems(schema.items);
   if (!validated || typeof validated !== 'object' || Array.isArray(validated)) {
-    throw new Error(`Cambria only supports mapping over objects, found`);
+    throw new Error(`Cambria only supports mapping over objects, found ${deepInspect(validated)}`);
   }
   return { ...schema, items: updateSchema(validated, lens) };
 }
 
-function filterScalarOrArray<T>(v: T | T[], cb: (t: T) => boolean): T | T[] {
-  if (!Array.isArray(v)) {
-    v = [v];
+function filterScalarOrArray(
+  v: JSONSchema.TypeValue,
+  cb: (t: JSONSchema.TypeValue) => boolean
+): JSONSchema.TypeValue | undefined {
+  if (Array.isArray(v)) {
+    v = v.filter(cb);
+    if (v.length === 1) {
+      return v[0];
+    }
+    return v;
   }
-  v = v.filter(cb);
-  if (v.length === 1) {
-    return v[0];
-  }
-  return v;
+  return cb(v) ? v : undefined;
 }
 
 // XXX: THIS SHOULD REMOVE DEFAULT: NULL
 function removeNullSupport(prop: JSONSchema.Interface): JSONSchema.Interface | undefined {
-  if (!supportsNull(prop)) {
-    return prop;
-  }
   if (prop.type) {
     if (prop.type === TypeName.Null) {
       return undefined;
@@ -317,13 +318,14 @@ function removeNullSupport(prop: JSONSchema.Interface): JSONSchema.Interface | u
 
     prop = { ...prop, type: filterScalarOrArray(prop.type, (t) => t !== TypeName.Null) };
 
-    if (prop.default === null) {
-      prop.default = defaultValuesByType(prop.type!); // the above always assigns a legal type
+    if (prop.type && prop.default === null) {
+      prop.default = defaultValuesByType(prop.type); // the above always assigns a legal type
     }
   }
 
   if (prop.anyOf) {
-    const newAnyOf = prop.anyOf.reduce((acc: JSONSchema.Interface[], s) => {
+    const oldAnyOf = prop.anyOf as JSONSchema.Interface[];
+    const newAnyOf = oldAnyOf.reduce<JSONSchema.Interface[]>((acc, s) => {
       const clean = removeNullSupport(db(s));
       return clean ? [...acc, clean] : acc;
     }, []);
@@ -387,7 +389,7 @@ function headProperty(schema: JSONSchema.Interface, op: IHeadProperty): JSONSche
     properties: {
       ...schema.properties,
       [op.name]: {
-        anyOf: [{ type: 'null' }, property.items]
+        anyOf: [{ type: 'null' }, property.items as JSONSchema.Interface]
       }
     }
   };

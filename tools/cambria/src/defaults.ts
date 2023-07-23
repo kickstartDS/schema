@@ -29,15 +29,25 @@ const defaultValuesForType: {
   [TypeName.Null]: null
 };
 
-export function defaultValuesByType(type: TypeName | TypeName[]): JSONSchema.Interface['default'] {
+export function defaultValuesByType(type: JSONSchema.TypeValue): JSONSchema.Interface['default'] {
   if (Array.isArray(type)) {
     if (type.includes(TypeName.Null)) {
       return null;
     }
-    return defaultValuesForType[type[0]];
+    return defaultValuesForType[type[0] as TypeName];
   }
-  return defaultValuesForType[type];
+  return defaultValuesForType[type as TypeName];
 }
+
+// export function defaultValuesByType(type: TypeName | TypeName[]): JSONSchema.Interface['default'] {
+//   if (Array.isArray(type)) {
+//     if (type.includes(TypeName.Null)) {
+//       return null;
+//     }
+//     return defaultValuesForType[type[0]];
+//   }
+//   return defaultValuesForType[type];
+// }
 
 // Return a recursively filled-in default object for a given schema
 export function defaultObjectForSchema(schema: JSONSchema.Object): JSONSchema.Object {

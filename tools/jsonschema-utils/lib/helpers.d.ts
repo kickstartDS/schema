@@ -1,5 +1,6 @@
+import Ajv from 'ajv';
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
-export declare const getSchemaRegistry: () => Ajv;
+export declare const getSchemaRegistry: () => typeof Ajv.default;
 export declare const addExplicitAnyOfs: (jsonSchema: JSONSchema7, ajv: Ajv) => JSONSchema7[];
 export declare const mergeAnyOfEnums: (schema: JSONSchema7, ajv: Ajv) => void;
 export declare const reduceSchemaAllOf: (schema: JSONSchema7, ajv: Ajv) => JSONSchema7;

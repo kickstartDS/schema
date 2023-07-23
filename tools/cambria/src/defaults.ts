@@ -1,12 +1,5 @@
-/* eslint-disable no-use-before-define */
 import pkg from 'fast-json-patch';
-import {
-  JSONSchema7,
-  JSONSchema7Definition,
-  JSONSchema7TypeName,
-  JSONSchema7Array,
-  JSONSchema7Object
-} from 'json-schema';
+import { JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 
 import { Patch } from './patch.js';
 
@@ -19,36 +12,46 @@ const { applyPatch } = pkg;
  *  - otherwise just use the value to lookup in the table
  */
 const defaultValuesForType: {
-  string: string;
-  number: number;
-  integer: number;
-  boolean: boolean;
-  array: JSONSchema7Array;
-  object: JSONSchema7Object;
-  null: undefined;
+  [TypeName.String]: string;
+  [TypeName.Number]: number;
+  [TypeName.Integer]: number;
+  [TypeName.Boolean]: boolean;
+  [TypeName.Array]: object;
+  [TypeName.Object]: object;
+  // eslint-disable-next-line @rushstack/no-new-null
+  [TypeName.Null]: null;
 } = {
-  string: '',
-  number: 0,
-  integer: 0,
-  boolean: false,
-  array: [],
-  object: {},
-  null: undefined
+  [TypeName.String]: '',
+  [TypeName.Number]: 0,
+  [TypeName.Integer]: 0,
+  [TypeName.Boolean]: false,
+  [TypeName.Array]: [],
+  [TypeName.Object]: {},
+  [TypeName.Null]: null
 };
-export function defaultValuesByType(
-  type: JSONSchema7TypeName | JSONSchema7TypeName[]
-): JSONSchema7['default'] {
+
+export function defaultValuesByType(type: JSONSchema.TypeValue): JSONSchema.Interface['default'] {
   if (Array.isArray(type)) {
-    if (type.includes('null')) {
+    if (type.includes(TypeName.Null)) {
       return null;
     }
-    return defaultValuesForType[type[0]];
+    return defaultValuesForType[type[0] as TypeName];
   }
-  return defaultValuesForType[type];
+  return defaultValuesForType[type as TypeName];
 }
 
+// export function defaultValuesByType(type: TypeName | TypeName[]): JSONSchema.Interface['default'] {
+//   if (Array.isArray(type)) {
+//     if (type.includes(TypeName.Null)) {
+//       return null;
+//     }
+//     return defaultValuesForType[type[0]];
+//   }
+//   return defaultValuesForType[type];
+// }
+
 // Return a recursively filled-in default object for a given schema
-export function defaultObjectForSchema(schema: JSONSchema7): JSONSchema7 {
+export function defaultObjectForSchema(schema: JSONSchema.Object): JSONSchema.Object {
   // By setting the root to empty object,
   // we kick off a recursive process that fills in the entire thing
   const initializeRootPatch = [
@@ -63,7 +66,7 @@ export function defaultObjectForSchema(schema: JSONSchema7): JSONSchema7 {
   return applyPatch({}, defaultsPatch).newDocument;
 }
 
-export function addDefaultValues(patch: Patch, schema: JSONSchema7): Patch {
+export function addDefaultValues(patch: Patch, schema: JSONSchema.Interface): Patch {
   return patch
     .map((op) => {
       const isMakeMap =
@@ -115,9 +118,9 @@ export function addDefaultValues(patch: Patch, schema: JSONSchema7): Patch {
 
 // given a json schema and a json path to an object field somewhere in that schema,
 // return the json schema for the object being pointed to
-function getPropertiesForPath(schema: JSONSchema7, path: string): { [key: string]: JSONSchema7Definition } {
+function getPropertiesForPath(schema: JSONSchema.Interface, path: string): Record<string, JSONSchema> {
   const pathComponents = path.split('/').slice(1);
-  const { properties } = pathComponents.reduce((schema: JSONSchema7, pathSegment: string) => {
+  const reduced = pathComponents.reduce<JSONSchema.Interface>((schema, pathSegment): JSONSchema.Interface => {
     const types = Array.isArray(schema.type) ? schema.type : [schema.type];
     if (types.includes('object')) {
       const schemaForProperty = schema.properties && schema.properties[pathSegment];
@@ -130,11 +133,14 @@ function getPropertiesForPath(schema: JSONSchema7, path: string): { [key: string
         throw new Error('Expected array items to have types');
 
       // todo: revisit this "as", was a huge pain to get this past TS
-      return schema.items as JSONSchema7;
+      return schema.items as JSONSchema.Object;
     }
     throw new Error('Expected object or array in schema based on JSON Pointer');
   }, schema);
 
-  if (properties === undefined) return {};
-  return properties;
+  if (typeof reduced === 'boolean' || reduced.properties === undefined) {
+    return {};
+  }
+
+  return reduced.properties;
 }

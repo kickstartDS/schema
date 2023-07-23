@@ -20,9 +20,9 @@
     "@rushstack/heft": "^0.50.4",
     "@rushstack/heft-node-rig": "^1.12.10",
     "@tsconfig/node16": "^1.0.3",
-    "@types/json-schema": "^7.0.11",
     "@types/node": "^18.16.4",
     "eslint": "^8.40.0",
+    "json-schema-typed": "~8.0.1",
     "typescript": "^5.0.4"
   },
   "engines": {

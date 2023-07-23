@@ -1,6 +1,8 @@
 // a quasi-integration test, converting a github doc to an arthropod doc--
 // testing a complex doc + lens
 
+import { TypeName } from 'json-schema-typed/draft-07';
+
 import { applyLensToDoc } from './doc.js';
 import githubIssue from './github-issue.json';
 import { reverseLens } from './reverse.js';
@@ -18,7 +20,7 @@ describe('renaming title, and hoisting label name to category', () => {
     {
       op: 'remove' as const,
       name: 'labels',
-      type: ['object' as const, 'null' as const]
+      type: [TypeName.Object as const, TypeName.Null as const]
     }
   ];
 

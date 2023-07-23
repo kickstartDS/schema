@@ -1,5 +1,5 @@
 import { ReplaceOperation } from 'fast-json-patch';
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 
 import { applyLensToDoc } from './doc.js';
 import {
@@ -41,15 +41,15 @@ export interface IProjectV2 {
 
 const lensSource: LensSource = [
   renameProperty('title', 'name'),
-  addProperty({ name: 'description', type: 'string', default: '' }),
+  addProperty({ name: 'description', type: TypeName.String, default: '' }),
   convertValue(
     'complete',
     [
       { false: 'todo', true: 'done' },
       { todo: false, inProgress: false, done: true }
     ],
-    'boolean',
-    'string'
+    TypeName.Boolean,
+    TypeName.String
   )
 ];
 
@@ -200,8 +200,8 @@ describe('value conversion', () => {
           { false: 'todo', true: 'done' },
           { todo: false, inProgress: false, done: true }
         ],
-        'boolean',
-        'string'
+        TypeName.Boolean,
+        TypeName.String
       )
     ];
 
@@ -408,12 +408,12 @@ describe('plunge (object)', () => {
 });
 
 describe('wrap (scalar to array)', () => {
-  const docSchema: JSONSchema7 = {
+  const docSchema: JSONSchema.Object = {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object' as const,
     additionalProperties: false,
     properties: {
-      assignee: { type: ['string' as const, 'null' as const] }
+      assignee: { type: [TypeName.String as const, TypeName.Null as const] }
     }
   };
   const lensSource: LensSource = [wrapProperty('assignee')];
@@ -488,12 +488,12 @@ describe('wrap (scalar to array)', () => {
   });
 
   it('converts nested values into 0th element writes into its child', () => {
-    const docSchema: JSONSchema7 = {
+    const docSchema: JSONSchema.Object = {
       $schema: 'http://json-schema.org/draft-07/schema',
       type: 'object' as const,
       additionalProperties: false,
       properties: {
-        assignee: { type: ['object', 'null'], properties: { name: { type: 'string' } } }
+        assignee: { type: [TypeName.Object, TypeName.Null], properties: { name: { type: 'string' } } }
       }
     };
 
@@ -646,12 +646,12 @@ describe('head (array to nullable scalar)', () => {
     // and is just a sanity check that the reverse isn't totally broken.
     // (could be also tested independently, but this is a nice backup)
 
-    const docSchema: JSONSchema7 = {
+    const docSchema: JSONSchema.Object = {
       $schema: 'http://json-schema.org/draft-07/schema',
       type: 'object' as const,
       additionalProperties: false,
       properties: {
-        assignee: { type: ['string', 'null'] }
+        assignee: { type: [TypeName.String, TypeName.Null] }
       }
     };
 
@@ -811,22 +811,22 @@ describe('patch expander', () => {
 describe('default value initialization', () => {
   // one lens that creates objects inside of arrays and other objects
   const v1Lens: LensSource = [
-    addProperty({ name: 'tags', type: 'array', items: { type: 'object' }, default: [] }),
+    addProperty({ name: 'tags', type: TypeName.Array, items: { type: TypeName.Object }, default: [] }),
     inside('tags', [
       map([
-        addProperty({ name: 'name', type: 'string', default: '' }),
-        addProperty({ name: 'color', type: 'string', default: '#ffffff' })
+        addProperty({ name: 'name', type: TypeName.String, default: '' }),
+        addProperty({ name: 'color', type: TypeName.String, default: '#ffffff' })
       ])
     ]),
-    addProperty({ name: 'metadata', type: 'object', default: {} }),
+    addProperty({ name: 'metadata', type: TypeName.Object, default: {} }),
     inside('metadata', [
-      addProperty({ name: 'title', type: 'string', default: '' }),
-      addProperty({ name: 'flags', type: 'object', default: {} }),
-      inside('flags', [addProperty({ name: 'O_CREATE', type: 'boolean', default: true })])
+      addProperty({ name: 'title', type: TypeName.String, default: '' }),
+      addProperty({ name: 'flags', type: TypeName.Object, default: {} }),
+      inside('flags', [addProperty({ name: 'O_CREATE', type: TypeName.Boolean, default: true })])
     ]),
     addProperty({
       name: 'assignee',
-      type: ['string', 'null']
+      type: [TypeName.String, TypeName.Null]
     })
   ];
 
@@ -922,7 +922,7 @@ describe('default value initialization', () => {
   it('works correctly when properties are spread across multiple lenses', () => {
     const v1Tov2Lens = [
       renameProperty('tags', 'labels'),
-      inside('labels', [map([addProperty({ name: 'important', type: 'boolean', default: false })])])
+      inside('labels', [map([addProperty({ name: 'important', type: TypeName.Boolean, default: false })])])
     ];
 
     const patchOp: PatchOp = {

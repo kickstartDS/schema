@@ -1,5 +1,6 @@
+/* eslint-disable @rushstack/no-new-null */
 import { Operation } from 'fast-json-patch';
-import { JSONSchema7 } from 'json-schema';
+import { type JSONSchema } from 'json-schema-typed/draft-07';
 
 import { addDefaultValues } from './defaults.js';
 import { updateSchema } from './json-schema.js';
@@ -11,13 +12,13 @@ import { reverseLens } from './reverse.js';
 export type PatchOp = Operation;
 type MaybePatchOp = PatchOp | null;
 export type Patch = Operation[];
-export type CompiledLens = (patch: Patch, targetDoc: any) => Patch;
+export type CompiledLens = (patch: Patch, targetDoc: JSONSchema.Object) => Patch;
 
 function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${x}`);
 }
 
-function noNulls<T>(items: (T | null)[]) {
+function noNulls<T>(items: (T | null)[]): T[] {
   return items.filter((x): x is T => x !== null);
 }
 
@@ -28,8 +29,9 @@ function noNulls<T>(items: (T | null)[]) {
 // ... maybe also composeLens?
 export function compile(lensSource: LensSource): { right: CompiledLens; left: CompiledLens } {
   return {
-    right: (patch: Patch, targetDoc: any) => applyLensToPatch(lensSource, patch, targetDoc),
-    left: (patch: Patch, targetDoc: any) => applyLensToPatch(reverseLens(lensSource), patch, targetDoc)
+    right: (patch: Patch, targetDoc: JSONSchema.Interface) => applyLensToPatch(lensSource, patch, targetDoc),
+    left: (patch: Patch, targetDoc: JSONSchema.Interface) =>
+      applyLensToPatch(reverseLens(lensSource), patch, targetDoc)
   };
 }
 
@@ -37,7 +39,7 @@ export function compile(lensSource: LensSource): { right: CompiledLens; left: Co
 export function applyLensToPatch(
   lensSource: LensSource,
   patch: Patch,
-  patchSchema: JSONSchema7 // the json schema for the doc the patch was operating on
+  patchSchema: JSONSchema.Interface // the json schema for the doc the patch was operating on
 ): Patch {
   // expand patches that set nested objects into scalar patches
   const expandedPatch: Patch = patch.map((op) => expandPatch(op)).flat();
@@ -211,13 +213,15 @@ function runLensOp(lensOp: LensOp, patchOp: MaybePatchOp): MaybePatchOp {
   return patchOp;
 }
 
+interface INestedPatchOpArray extends Array<INestedPatchOpArray | PatchOp> {}
+
 export function expandPatch(patchOp: PatchOp): PatchOp[] {
   // this only applies for add and replace ops; no expansion to do otherwise
   // todo: check the whole list of json patch verbs
   if (patchOp.op !== 'add' && patchOp.op !== 'replace') return [patchOp];
 
   if (patchOp.value && typeof patchOp.value === 'object') {
-    let result: any[] = [
+    let result: INestedPatchOpArray = [
       {
         op: patchOp.op,
         path: patchOp.path,
@@ -226,16 +230,18 @@ export function expandPatch(patchOp: PatchOp): PatchOp[] {
     ];
 
     result = result.concat(
-      Object.entries(patchOp.value).map(([key, value]) => {
-        return expandPatch({
-          op: patchOp.op,
-          path: `${patchOp.path}/${key}`,
-          value
-        });
-      })
+      Object.entries(patchOp.value)
+        .map(([key, value]) => {
+          return expandPatch({
+            op: patchOp.op,
+            path: `${patchOp.path}/${key}`,
+            value
+          });
+        })
+        .flat(2)
     );
 
-    return result.flat(Infinity);
+    return result.flat(2) as PatchOp[];
   }
   return [patchOp];
 }

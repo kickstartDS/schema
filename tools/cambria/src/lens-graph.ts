@@ -1,5 +1,5 @@
 import pkg, { Graph } from 'graphlib';
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema } from 'json-schema-typed/draft-07';
 
 import { emptySchema } from './json-schema.js';
 
@@ -56,7 +56,7 @@ export function lensGraphSchemas({ graph }: ILensGraph): string[] {
   return graph.nodes();
 }
 
-export function lensGraphSchema({ graph }: ILensGraph, schema: string): JSONSchema7 {
+export function lensGraphSchema({ graph }: ILensGraph, schema: string): JSONSchema.Object {
   return graph.node(schema);
 }
 

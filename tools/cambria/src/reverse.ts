@@ -1,3 +1,5 @@
+import { TypeName } from 'json-schema-typed/draft-07';
+
 import { LensSource, LensOp } from './lens-ops.js';
 
 function assertNever(x: never): never {
@@ -10,8 +12,6 @@ export function reverseLens(lens: LensSource): LensSource {
     .reverse()
     .map((l) => reverseLensOp(l));
 }
-
-const JSONSchema7TypeAny: string[] = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null'];
 
 function reverseLensOp(lensOp: LensOp): LensOp {
   switch (lensOp.op) {
@@ -31,7 +31,7 @@ function reverseLensOp(lensOp: LensOp): LensOp {
 
     case 'remove':
       return {
-        ...{ type: JSONSchema7TypeAny },
+        ...{ type: TypeName },
         ...lensOp,
         op: 'add'
       };

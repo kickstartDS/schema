@@ -2,13 +2,13 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema } from 'json-schema-typed/draft-07';
 
-import { loadYamlLens, updateSchema } from '@kickstartds/cambria';
+import { LensSource, loadYamlLens, updateSchema } from '@kickstartds/cambria';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const _dirname: string = path.dirname(fileURLToPath(import.meta.url));
 
-const headlineSchema = {
+const headlineSchema: JSONSchema.Object = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id: 'http://schema.kickstartds.com/base/headline.schema.json',
   title: 'Headline',
@@ -67,10 +67,10 @@ const headlineSchema = {
   },
   additionalProperties: false,
   required: ['content']
-} as JSONSchema7;
+};
 
-const lensData = await fs.readFile(path.resolve(__dirname, `../resources/headline.lens.yml`), 'utf-8');
-const lens = loadYamlLens(lensData);
-const updatedSchema = updateSchema(headlineSchema, lens);
+const lensData: string = await fs.readFile(path.resolve(_dirname, `../resources/headline.lens.yml`), 'utf-8');
+const lens: LensSource = loadYamlLens(lensData);
+const updatedSchema: JSONSchema.Interface = updateSchema(headlineSchema, lens);
 
 console.log('Updated headline.schema.json', updatedSchema);

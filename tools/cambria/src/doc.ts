@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import pkg from 'fast-json-patch';
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema } from 'json-schema-typed/draft-07';
 import toJSONSchema, { Options } from 'to-json-schema';
 
 import { defaultObjectForSchema } from './defaults.js';
@@ -15,7 +15,7 @@ const { compare, applyPatch } = pkg;
  *             a JSON Patch that sets every value in that document.
  * @param inputDoc a document to convert into a big JSON patch describing its full contents
  */
-export function importDoc(inputDoc: { [key: string]: unknown }): [JSONSchema7, Patch] {
+export function importDoc(inputDoc: { [key: string]: unknown }): [JSONSchema.Object, Patch] {
   const options: Options = {
     postProcessFnc: (type, schema, obj, defaultFnc) => ({
       ...defaultFnc(type, schema, obj),
@@ -29,7 +29,7 @@ export function importDoc(inputDoc: { [key: string]: unknown }): [JSONSchema7, P
     }
   };
 
-  const schema = toJSONSchema(inputDoc, options) as JSONSchema7;
+  const schema = toJSONSchema(inputDoc, options) as JSONSchema.Object;
   const patch = compare({}, inputDoc);
 
   return [schema, patch];
@@ -48,7 +48,7 @@ export function applyLensToDoc(
   lensSource: LensSource,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   inputDoc: { [key: string]: unknown },
-  inputSchema?: JSONSchema7,
+  inputSchema?: JSONSchema.Object,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   targetDoc?: { [key: string]: unknown }
 ): { [key: string]: unknown } {
@@ -63,7 +63,7 @@ export function applyLensToDoc(
   // then we add in any existing fields on the target doc.
   // TODO: I think we need to deep merge here, can't just shallow merge?
   const outputSchema = updateSchema(inputSchema, lensSource);
-  const base = Object.assign(defaultObjectForSchema(outputSchema), targetDoc || {});
+  const base = Object.assign(defaultObjectForSchema(outputSchema as JSONSchema.Object), targetDoc || {});
 
   // return a doc based on the converted patch.
   // (start with either a specified baseDoc, or just empty doc)

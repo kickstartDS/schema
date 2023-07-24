@@ -5,3 +5,4 @@ package-lock.json
 npm-debug.log
 temp
 yarn-error.log
+lib

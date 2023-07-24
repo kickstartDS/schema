@@ -1,11 +1,12 @@
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "./node_modules/@rushstack/heft-node-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
-    "preserveConstEnums": false,
-    "strictNullChecks": false,
-    "sourceMap": true,
-    "outDir": "dist"
-  },
-  "exclude": ["node_modules", "dist"],
-  "include": ["./src/**/*.ts"]
+    "lib": ["es2021"],
+    "target": "es2021",
+    "module": "node16",
+    "moduleResolution": "node16",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "types": ["heft-jest", "node"]
+  }
 }

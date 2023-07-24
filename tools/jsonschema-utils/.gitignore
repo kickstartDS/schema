@@ -1,7 +1,0 @@
-node_modules
-dist
-.env
-package-lock.json
-npm-debug.log
-temp
-yarn-error.log

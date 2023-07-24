@@ -9,7 +9,7 @@ import uppercamelcase from 'uppercamelcase';
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import Ajv from 'ajv/dist/core';
 import _ from 'lodash';
-import { createHash } from "crypto";
+import { createHash } from 'crypto';
 
 export const getSchemaRegistry = (): Ajv => {
   const ajv = new AjvConstructor({
@@ -20,15 +20,25 @@ export const getSchemaRegistry = (): Ajv => {
   }) as Ajv;
 
   // TODO update JSON Schema, clean up ignored formats
-  const ignoredFormats = ['image', 'video', 'color', 'markdown', 'id', 'date', 'uri', 'email', 'html', 'uuid', 'date-time'];
-  ignoredFormats.forEach((ignoredFormat) =>
-    ajv.addFormat(ignoredFormat, { validate: () => true })
-  );
+  const ignoredFormats = [
+    'image',
+    'video',
+    'color',
+    'markdown',
+    'id',
+    'date',
+    'uri',
+    'email',
+    'html',
+    'uuid',
+    'date-time'
+  ];
+  ignoredFormats.forEach((ignoredFormat) => ajv.addFormat(ignoredFormat, { validate: () => true }));
 
   ajv.addKeyword({
-    keyword: "faker",
-    schemaType: "string",
-    validate: () => true,
+    keyword: 'faker',
+    schemaType: 'string',
+    validate: () => true
   });
 
   return ajv;
@@ -47,10 +57,12 @@ export const addExplicitAnyOfs = (jsonSchema: JSONSchema7, ajv: Ajv): JSONSchema
         schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema7) => {
           if (anyOf.$ref) return anyOf;
 
-          const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentType}/${pointer.split('/').pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
+          const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentType}/${pointer
+            .split('/')
+            .pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
           const schemaAnyOf = {
             $id: schemaName,
-            $schema: "http://json-schema.org/draft-07/schema#",
+            $schema: 'http://json-schema.org/draft-07/schema#',
             ...anyOf,
             definitions: jsonSchema.definitions
           };
@@ -64,7 +76,7 @@ export const addExplicitAnyOfs = (jsonSchema: JSONSchema7, ajv: Ajv): JSONSchema
   });
 
   return schemaAnyOfs;
-}
+};
 
 export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): void => {
   traverse(schema, {
@@ -74,18 +86,19 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): void => {
       if (
         subSchema.anyOf &&
         subSchema.anyOf.length === 2 &&
-        subSchema.anyOf.every((anyOf: JSONSchema7) => (anyOf.type === 'string' && anyOf.enum) || (anyOf.$ref && anyOf.$ref.includes(`properties/${propertyName}`))) &&
-        (
-          (
-            rootSchema.allOf &&
-            rootSchema.allOf.length === 2 &&
-            rootSchema.allOf.some((allOf: JSONSchema7) => allOf.properties && (allOf.properties[propertyName] as JSONSchema7)?.anyOf)
-          ) || (
-            rootSchema.properties &&
+        subSchema.anyOf.every(
+          (anyOf: JSONSchema7) =>
+            (anyOf.type === 'string' && anyOf.enum) ||
+            (anyOf.$ref && anyOf.$ref.includes(`properties/${propertyName}`))
+        ) &&
+        ((rootSchema.allOf &&
+          rootSchema.allOf.length === 2 &&
+          rootSchema.allOf.some(
+            (allOf: JSONSchema7) => allOf.properties && (allOf.properties[propertyName] as JSONSchema7)?.anyOf
+          )) ||
+          (rootSchema.properties &&
             Object.keys(rootSchema.properties).length > 0 &&
-            rootSchema.properties[propertyName]
-          )
-        )
+            rootSchema.properties[propertyName]))
       ) {
         subSchema.type = subSchema.anyOf[0].type;
         subSchema.default = subSchema.anyOf[0].default;
@@ -98,12 +111,15 @@ export const mergeAnyOfEnums = (schema: JSONSchema7, ajv: Ajv): void => {
         }, []);
 
         if (rootSchema.allOf && rootSchema.allOf.some((allOf: JSONSchema7) => allOf.$ref)) {
-          delete (ajv.getSchema(rootSchema.allOf.find((allOf: JSONSchema7) => allOf.$ref).$ref).schema as JSONSchema7).properties[propertyName];
+          delete (
+            ajv.getSchema(rootSchema.allOf.find((allOf: JSONSchema7) => allOf.$ref).$ref)
+              .schema as JSONSchema7
+          ).properties[propertyName];
         }
 
         delete subSchema.anyOf;
       }
-    },
+    }
   });
 };
 
@@ -117,17 +133,17 @@ export const reduceSchemaAllOf = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 =>
   const reducedSchema = allOfs.reduce((finalSchema: JSONSchema7, allOf: JSONSchema7) => {
     const mergeSchemaAllOf = (allOf: JSONSchema7): JSONSchema7 => {
       if (!_.isUndefined(allOf.$ref)) {
-        const reffedSchema = _.cloneDeep(ajv.getSchema(
-          allOf.$ref.includes('#/definitions/') && !allOf.$ref.includes('http')
-            ? `${schema.$id}${allOf.$ref}`
-            : allOf.$ref
-        )?.schema as JSONSchema7);
+        const reffedSchema = _.cloneDeep(
+          ajv.getSchema(
+            allOf.$ref.includes('#/definitions/') && !allOf.$ref.includes('http')
+              ? `${schema.$id}${allOf.$ref}`
+              : allOf.$ref
+          )?.schema as JSONSchema7
+        );
 
         return _.merge(
-          reffedSchema.allOf
-            ? reduceSchemaAllOf(reffedSchema, ajv)
-            : _.merge(reffedSchema, finalSchema),
-          finalSchema,
+          reffedSchema.allOf ? reduceSchemaAllOf(reffedSchema, ajv) : _.merge(reffedSchema, finalSchema),
+          finalSchema
         );
       } else {
         reduceSchemaAllOfs(allOf, ajv);
@@ -136,10 +152,9 @@ export const reduceSchemaAllOf = (schema: JSONSchema7, ajv: Ajv): JSONSchema7 =>
     };
 
     return mergeSchemaAllOf(allOf);
-  }, { } as JSONSchema7);
+  }, {} as JSONSchema7);
 
-  if (schema.properties)
-    reducedSchema.properties = _.merge(schema.properties, reducedSchema.properties);
+  if (schema.properties) reducedSchema.properties = _.merge(schema.properties, reducedSchema.properties);
 
   mergeAnyOfEnums(reducedSchema, ajv);
 
@@ -153,8 +168,8 @@ export const reduceSchemaAllOfs = (schema: JSONSchema7, ajv: Ajv): void => {
         if (parentSchema && parentKeyword) {
           // if those two are equal, we're at the top level of the schema
           pointer.split('/').pop() === parentKeyword
-            ? parentSchema[parentKeyword] = reduceSchemaAllOf(subSchema, ajv)
-            : parentSchema[parentKeyword][pointer.split('/').pop()] = reduceSchemaAllOf(subSchema, ajv);
+            ? (parentSchema[parentKeyword] = reduceSchemaAllOf(subSchema, ajv))
+            : (parentSchema[parentKeyword][pointer.split('/').pop()] = reduceSchemaAllOf(subSchema, ajv));
         } else {
           schema.properties = reduceSchemaAllOf(subSchema, ajv).properties;
           delete schema.allOf;
@@ -194,7 +209,7 @@ export const layerRefs = (jsonSchemas: JSONSchema7[], kdsSchemas: JSONSchema7[])
             kdsSchemaFileName === customSchemaFileName &&
             (!customSchemaPathRest || (customSchemaPathRest && kdsSchemaPathRest === customSchemaPathRest))
           ) {
-              subSchema.$ref = jsonSchema.$id;
+            subSchema.$ref = jsonSchema.$id;
           }
         }
       });
@@ -212,7 +227,7 @@ export const addTypeInterfaces = (jsonSchemas: JSONSchema7[]): void => {
     }
 
     jsonSchema.properties.type = {
-      "const": getSchemaName(jsonSchema.$id)
+      const: getSchemaName(jsonSchema.$id)
     };
   });
 };
@@ -224,21 +239,22 @@ export const inlineDefinitions = (jsonSchemas: JSONSchema7[]): void => {
         if (subSchema.$ref && subSchema.$ref.includes('#/definitions/')) {
           if (subSchema.$ref.includes('http')) {
             if (parentKeyword === 'properties') {
-              parentSchema.properties[pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
-                jsonSchema.$id === subSchema.$ref.split('#').shift()
+              parentSchema.properties[pointer.split('/').pop()] = jsonSchemas.find(
+                (jsonSchema) => jsonSchema.$id === subSchema.$ref.split('#').shift()
               ).definitions[subSchema.$ref.split('/').pop()];
             } else if (parentKeyword === 'allOf') {
-              parentSchema.allOf[pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
-                jsonSchema.$id === subSchema.$ref.split('#').shift()
+              parentSchema.allOf[pointer.split('/').pop()] = jsonSchemas.find(
+                (jsonSchema) => jsonSchema.$id === subSchema.$ref.split('#').shift()
               ).definitions[subSchema.$ref.split('/').pop()];
             }
           } else {
-            parentSchema[parentKeyword][pointer.split('/').pop()] = rootSchema.definitions[subSchema.$ref.split('/').pop()];
+            parentSchema[parentKeyword][pointer.split('/').pop()] =
+              rootSchema.definitions[subSchema.$ref.split('/').pop()];
           }
         } else if (subSchema.$ref && subSchema.$ref.includes('#/properties/')) {
           if (parentKeyword === 'properties') {
-            parentSchema.properties[pointer.split('/').pop()] = jsonSchemas.find((jsonSchema) =>
-              jsonSchema.$id === subSchema.$ref.split('#').shift()
+            parentSchema.properties[pointer.split('/').pop()] = jsonSchemas.find(
+              (jsonSchema) => jsonSchema.$id === subSchema.$ref.split('#').shift()
             ).properties[subSchema.$ref.split('/').pop()];
           }
         }
@@ -259,7 +275,9 @@ export const collectComponentInterfaces = (jsonSchemas: JSONSchema7[]): Record<s
           subSchema.items.anyOf.length > 0 &&
           subSchema.items.anyOf.every((anyOf: JSONSchema7) => anyOf.$ref)
         ) {
-          const interfaceName = `${uppercamelcase(getSchemaName(jsonSchema.$id))}Component${uppercamelcase(pointer.split('/').pop())}`;
+          const interfaceName = `${uppercamelcase(getSchemaName(jsonSchema.$id))}Component${uppercamelcase(
+            pointer.split('/').pop()
+          )}`;
 
           subSchema.items.anyOf.forEach((anyOf: JSONSchema7) => {
             interfaceMap[anyOf.$ref] = interfaceMap[anyOf.$ref] || [];
@@ -267,7 +285,7 @@ export const collectComponentInterfaces = (jsonSchemas: JSONSchema7[]): Record<s
               interfaceMap[anyOf.$ref].push(interfaceName);
             }
           });
-        };
+        }
       }
     });
   });
@@ -305,14 +323,22 @@ export const loadSchemaPath = async (schemaPath: string): Promise<JSONSchema7> =
 
 export const getSchemasForGlob = async (schemaGlob: string): Promise<JSONSchema7[]> =>
   glob(schemaGlob).then((schemaPaths: string[]) =>
-    Promise.all(schemaPaths.map(async (schemaPath: string) => loadSchemaPath(schemaPath))));
+    Promise.all(schemaPaths.map(async (schemaPath: string) => loadSchemaPath(schemaPath)))
+  );
 
-export const processSchemaGlob = async (schemaGlob: string, ajv: Ajv, typeResolution: boolean = true): Promise<string[]> =>
-  processSchemas(await getSchemasForGlob(schemaGlob), ajv, typeResolution);
+export const processSchemaGlob = async (
+  schemaGlob: string,
+  ajv: Ajv,
+  typeResolution: boolean = true
+): Promise<string[]> => processSchemas(await getSchemasForGlob(schemaGlob), ajv, typeResolution);
 
-export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv, typeResolution: boolean = true): Promise<string[]> => {
+export const processSchemas = async (
+  jsonSchemas: JSONSchema7[],
+  ajv: Ajv,
+  typeResolution: boolean = true
+): Promise<string[]> => {
   // TODO this should go (`pathPrefix` / environment dependent paths)
-  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : ''
+  const pathPrefix = fs.existsSync('../dist/.gitkeep') ? '../' : '';
   // load all the schema files provided by `@kickstartDS` itself
   const schemaGlob = `${pathPrefix}**/node_modules/@kickstartds/*/(lib|cms)/**/*.(schema|definitions).json`;
   const kdsSchemas = await getSchemasForGlob(schemaGlob);
@@ -351,8 +377,7 @@ export const processSchemas = async (jsonSchemas: JSONSchema7[], ajv: Ajv, typeR
 
   // 5. return list of processed schema `$id`s.
   // Accessing the full schemas works through `ajv`
-  return [...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs]
-    .map((jsonSchema) => jsonSchema.$id);
+  return [...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs].map((jsonSchema) => jsonSchema.$id);
 };
 
 // TODO deprecated, should go after refactor
@@ -364,73 +389,84 @@ export const getLayeredRefId = (refId: string, reffingSchemaId: string, ajv: Ajv
   if (refId.includes('#/definitions/')) return refId;
 
   const component = path.basename(refId);
-  const layeredComponent = Object.keys(ajv.schemas).filter((schemaId) => schemaId.includes(component) && !schemaId.includes('schema.kickstartds.com'))
+  const layeredComponent = Object.keys(ajv.schemas).filter(
+    (schemaId) => schemaId.includes(component) && !schemaId.includes('schema.kickstartds.com')
+  );
 
-  return layeredComponent.length > 0 && (reffingSchemaId.includes('schema.kickstartds.com') || (!refId.includes('section.schema.json') && reffingSchemaId.includes('section.schema.json')))
+  return layeredComponent.length > 0 &&
+    (reffingSchemaId.includes('schema.kickstartds.com') ||
+      (!refId.includes('section.schema.json') && reffingSchemaId.includes('section.schema.json')))
     ? layeredComponent[0]
     : refId;
 };
 
 export const getSchemaName = (schemaId: string | undefined): string => {
-  return schemaId && schemaId.split('/').pop()?.split('.').shift() || '';
+  return (schemaId && schemaId.split('/').pop()?.split('.').shift()) || '';
 };
 
 export const getSchemasForIds = (schemaIds: string[], ajv: Ajv): JSONSchema7[] =>
-  schemaIds.map((schemaId) =>
-    ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7
-  );
+  schemaIds.map((schemaId) => ajv.getSchema<JSONSchema7>(schemaId).schema as JSONSchema7);
 
 // TODO deprecated, should go after refactor
-export const toArray = (x: JSONSchema7 | JSONSchema7[] | string | string[]): any[]  =>
+export const toArray = (x: JSONSchema7 | JSONSchema7[] | string | string[]): any[] =>
   x instanceof Array ? x : [x];
 
 // TODO deprecated, should go after refactor
-export const toSchema = (x: JSONSchema7 | string): JSONSchema7 =>
-  x instanceof Object ? x : JSON.parse(x);
+export const toSchema = (x: JSONSchema7 | string): JSONSchema7 => (x instanceof Object ? x : JSON.parse(x));
 
 export const getCustomSchemaIds = (schemaIds: string[]): string[] =>
   schemaIds.filter((schemaId) => !schemaId.startsWith('http://schema.kickstartds.com/'));
 
 export const getUniqueSchemaIds = (schemaIds: string[]): string[] => {
   const customSchemaIds = getCustomSchemaIds(schemaIds);
-  const unlayeredSchemaIds = schemaIds.filter((schemaId) =>
-    schemaId.startsWith('http://schema.kickstartds.com/') &&
-    !customSchemaIds.some((customSchemaId) => customSchemaId.endsWith(schemaId.split('/').pop()))
+  const unlayeredSchemaIds = schemaIds.filter(
+    (schemaId) =>
+      schemaId.startsWith('http://schema.kickstartds.com/') &&
+      !customSchemaIds.some((customSchemaId) => customSchemaId.endsWith(schemaId.split('/').pop()))
   );
 
   return [...customSchemaIds, ...unlayeredSchemaIds];
-}
+};
 
 export const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1);
 
 export const hashFieldName = (fieldName: string, optionalName?: string): string => {
   return fieldName.includes('___NODE')
-    ? `${fieldName.replace('___NODE', '')}__${createHash('md5').update(fieldName.replace('___NODE', '') + (optionalName || '')).digest('hex').substr(0,4)}___NODE`
-    : `${fieldName}__${createHash('md5').update(fieldName + (optionalName || '')).digest('hex').substr(0,4)}`;
+    ? `${fieldName.replace('___NODE', '')}__${createHash('md5')
+        .update(fieldName.replace('___NODE', '') + (optionalName || ''))
+        .digest('hex')
+        .substr(0, 4)}___NODE`
+    : `${fieldName}__${createHash('md5')
+        .update(fieldName + (optionalName || ''))
+        .digest('hex')
+        .substr(0, 4)}`;
 };
 
 // TODO pretty sure `fieldName === 'type'` shouldn't be hardcoded here
-export const dedupe = (schema: JSONSchema7, optionalName?: string): {
-  [key: string]: JSONSchema7Definition;
-} | undefined =>
+export const dedupe = (
+  schema: JSONSchema7,
+  optionalName?: string
+):
+  | {
+      [key: string]: JSONSchema7Definition;
+    }
+  | undefined =>
   _.mapKeys(schema.properties, (_prop: JSONSchema7Definition, fieldName: string) =>
-    (fieldName.includes('__') || fieldName === 'type') ? fieldName : hashFieldName(fieldName, optionalName)
+    fieldName.includes('__') || fieldName === 'type' ? fieldName : hashFieldName(fieldName, optionalName)
   );
 
 export const dedupeDeep = (schema: JSONSchema7): JSONSchema7 => {
   traverse(schema, {
     cb: (subSchema) => {
       if (subSchema.properties) {
-        subSchema.properties = dedupe(subSchema, getSchemaName(schema.$id))
+        subSchema.properties = dedupe(subSchema, getSchemaName(schema.$id));
       }
     }
   });
 
   return schema;
-}
+};
 
-export const toPascalCase = (text: string): string =>
-  text.replace(/(^\w|-\w)/g, clearAndUpper);
+export const toPascalCase = (text: string): string => text.replace(/(^\w|-\w)/g, clearAndUpper);
 
-export const clearAndUpper = (text: string): string =>
-  text.replace(/-/, " ").toUpperCase();
+export const clearAndUpper = (text: string): string => text.replace(/-/, ' ').toUpperCase();

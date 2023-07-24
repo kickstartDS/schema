@@ -1,28 +1,18 @@
 {
   "name": "@kickstartds/jsonschema-utils",
   "version": "2.4.6",
+  "license": "UNLICENSED",
+  "author": "Jonas Ulrich | ruhmesmeile GmbH",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "typescript": {
-    "definition": "dist/index.d.ts"
-  },
-  "buildOptions": {
-    "input": "./src/index.ts"
-  },
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "public"
-  },
   "scripts": {
     "build": "tsc -d",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jonas Ulrich | ruhmesmeile GmbH",
-  "license": "UNLICENSED",
   "dependencies": {
     "ajv": "^8.11.2",
     "fast-glob": "^3.2.12",
@@ -30,5 +20,15 @@
     "json-schema-traverse": "^1.0.0",
     "lodash": "^4.17.21",
     "uppercamelcase": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "typescript": {
+    "definition": "dist/index.d.ts"
   }
 }

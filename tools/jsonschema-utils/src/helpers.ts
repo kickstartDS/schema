@@ -1,9 +1,11 @@
-import { existsSync, promises } from 'fs';
+import { promises } from 'fs';
 import { createHash } from 'node:crypto';
 import { default as path } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import Ajv from 'ajv';
 import { default as glob } from 'fast-glob';
+import { resolve } from 'import-meta-resolve';
 import traverse from 'json-schema-traverse';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 import _ from 'lodash';
@@ -399,11 +401,21 @@ export async function processSchemas(
   ajv: MyAjv,
   typeResolution: boolean = true
 ): Promise<string[]> {
-  // TODO this should go (`pathPrefix` / environment dependent paths)
-  const pathPrefix = existsSync('../dist/.gitkeep') ? '../' : '';
-  // load all the schema files provided by `@kickstartDS` itself
-  const schemaGlob = `${pathPrefix}**/node_modules/@kickstartds/*/(lib|cms)/**/*.(schema|definitions).json`;
-  const kdsSchemas = await getSchemasForGlob(schemaGlob);
+  // load all the schema files provided by `@kickstartDS` itself...
+  const kdsSchemas = await ['base', 'blog', 'form', 'content'].reduce(
+    async (schemaPromises, moduleName: string) => {
+      const schemas = await schemaPromises;
+      const packagePath = path.dirname(
+        fileURLToPath(resolve(`@kickstartds/${moduleName}/package.json`, import.meta.url))
+      );
+      const schemaGlob = `${packagePath}/(lib|cms)/**/*.(schema|definitions).json`;
+      return schemas.concat(await getSchemasForGlob(schemaGlob));
+    },
+    Promise.resolve([] as JSONSchema.Interface[])
+  );
+
+  // ... and add page schema, too
+  kdsSchemas.push(await loadSchemaPath(fileURLToPath(resolve('../cms/page.schema.json', import.meta.url))));
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it

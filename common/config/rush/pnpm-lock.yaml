@@ -45,7 +45,7 @@ importers:
 
   ../../examples/converter:
     specifiers:
-      '@kickstartds/design-system': 2.5.0--canary.105.3029.0
+      '@kickstartds/design-system': ^2.5.13
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2netlifycms': workspace:*
       '@rushstack/eslint-config': ^3.2.0
@@ -60,12 +60,13 @@ importers:
       eslint-import-resolver-typescript: ~3.5.5
       eslint-plugin-import: ~2.27.5
       eslint-plugin-json-files: ~2.2.0
+      import-meta-resolve: ~3.0.0
       js-yaml: ^4.1.0
       json-schema-typed: ~8.0.1
       prettier: ^2.8.8
       typescript: ^5.0.4
     dependencies:
-      '@kickstartds/design-system': 2.5.0--canary.105.3029.0
+      '@kickstartds/design-system': 2.5.13_style-dictionary@3.8.0
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2netlifycms': link:../../tools/jsonschema2netlifycms
       ajv: 8.12.0
@@ -82,6 +83,7 @@ importers:
       eslint-import-resolver-typescript: 3.5.5_e43qr7ng6kygh3xxr4conxr2wi
       eslint-plugin-import: 2.27.5_eslint@8.40.0
       eslint-plugin-json-files: 2.2.0_eslint@8.40.0
+      import-meta-resolve: 3.0.0
       json-schema-typed: 8.0.1
       prettier: 2.8.8
       typescript: 5.0.4
@@ -143,6 +145,11 @@ importers:
 
   ../../tools/jsonschema-utils:
     specifiers:
+      '@kickstartds/base': ^2.0
+      '@kickstartds/blog': ^2.0
+      '@kickstartds/content': ^2.0
+      '@kickstartds/core': ^2.0
+      '@kickstartds/form': ^2.0
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
       '@rushstack/heft-jest-plugin': ~0.5.10
@@ -159,6 +166,7 @@ importers:
       eslint-plugin-import: ~2.27.5
       eslint-plugin-json-files: ~2.2.0
       fast-glob: ^3.2.12
+      import-meta-resolve: ~3.0.0
       json-schema-traverse: ^1.0.0
       json-schema-typed: ~8.0.1
       lodash: ^4.17.21
@@ -167,6 +175,11 @@ importers:
       typescript: ^5.0.4
       uppercamelcase: ^3.0.0
     dependencies:
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/blog': 2.2.0_a4e45qt7bhuathyttbin6ftaie
+      '@kickstartds/content': 2.1.0_a4e45qt7bhuathyttbin6ftaie
+      '@kickstartds/core': 2.2.0
+      '@kickstartds/form': 2.2.0_a4e45qt7bhuathyttbin6ftaie
       ajv: 8.12.0
       fast-glob: 3.2.12
       json-schema-traverse: 1.0.0
@@ -188,6 +201,7 @@ importers:
       eslint-import-resolver-typescript: 3.5.5_e43qr7ng6kygh3xxr4conxr2wi
       eslint-plugin-import: 2.27.5_eslint@8.40.0
       eslint-plugin-json-files: 2.2.0_eslint@8.40.0
+      import-meta-resolve: 3.0.0
       json-schema-typed: 8.0.1
       prettier: 2.8.8
       typescript: 5.0.4
@@ -351,13 +365,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/types': 7.21.5
-
-  /@babel/helper-module-imports/7.21.4:
-    resolution: {integrity: sha512-orajc5T2PsRYUN3ZryCEFeMDYwyw09c/pZeaQEZPH0MpKzSvn3e0uXsDBu3k03VI+9DBiRo+l22BfKTpKwa/Wg==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/types': 7.21.5
-    dev: false
 
   /@babel/helper-module-imports/7.22.5:
     resolution: {integrity: sha512-8Dl6+HD/cKifutF5qGd/8ZJi84QeAKh+CEe1sBzz8UayBBGg1dAIJrdHOcOM5b2MpzWL2yuotJTtGjETq0qjXg==}
@@ -1697,8 +1704,8 @@ packages:
       core-js: 3.30.1
     dev: true
 
-  /@kickstartds/base/2.0.3:
-    resolution: {integrity: sha512-b5oC9BdwokpmzktnUFUmVKGViR7TEhLgNgg3jnkvGF2r7s1n5sZA9FN4eJTUGYAv/y16bJK00d7ksH5O321YNA==}
+  /@kickstartds/base/2.0.4-next.5:
+    resolution: {integrity: sha512-UrvqCyTsU5xmVh14AgPuj5kUCBNOkQGgDhZy60jNvQqjn3SiXM47PmvF11gXDk4B3hsueICZGSdV4mYMB7HWrQ==}
     peerDependencies:
       react: ^17.0.2
     peerDependenciesMeta:
@@ -1737,8 +1744,8 @@ packages:
       vhtml: 2.2.0
     dev: false
 
-  /@kickstartds/blog/2.0.4-canary.1275.5555.0:
-    resolution: {integrity: sha512-goCJXVlLp8NJ5pODZfzeoJeeEFpXrqXJW2bpT/o2939lfCalas6JzgjclLHRwHCaSWWon5fubJyKo0fa9AmOgQ==}
+  /@kickstartds/blog/2.0.4-next.6:
+    resolution: {integrity: sha512-e0cKh9V0AaWmAefIAVem9fR/hjolUqxvVucZJljIBlDzULwbnuLctBG+9uvOlITyMs52xKHe04v0SYtrK8O0rA==}
     peerDependencies:
       react: ^17.0.2
     peerDependenciesMeta:
@@ -1755,8 +1762,25 @@ packages:
       - storybook-design-token
     dev: false
 
-  /@kickstartds/content/2.0.1--canary.48.37.0:
-    resolution: {integrity: sha512-is0QFXb1TyTZXwkRfTq8KgtyawtdYGzEwPKcXjtuBFyb995OiXFIBOwNpO48n7w5z5Ixv2/kn0hXCUs7gg9lzA==}
+  /@kickstartds/blog/2.2.0_a4e45qt7bhuathyttbin6ftaie:
+    resolution: {integrity: sha512-FcmwmfV8nLJCSfB1SQmuKQ2WWXy4YDw1/K5pSfRF5TWPyCVCWvkoE0xyI8HuqB1liqh8CtdVdw7SUyV3HVtJ+A==}
+    peerDependencies:
+      '@kickstartds/base': ^2.0.3
+      '@kickstartds/core': ^2.0.3
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/core': 2.2.0
+      classnames: 2.3.2
+      date-fns: 2.30.0
+    dev: false
+
+  /@kickstartds/content/2.0.1--canary.61.48.0:
+    resolution: {integrity: sha512-q4t9TFB9VrEuFdbYjOMV4bQU2lTj3xkihG6JkEHvNJJsUxthUAE7RS6ZNKxlAmcmNA/fO/NDLIq8r2C1yA/OQQ==}
     peerDependencies:
       react: ^17.0.2
     peerDependenciesMeta:
@@ -1764,8 +1788,8 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.22.6
-      '@kickstartds/base': 2.0.3
-      '@kickstartds/core': 2.0.3
+      '@kickstartds/base': 2.0.4-next.5
+      '@kickstartds/core': 2.0.4-next.2
       classnames: 2.3.2
       countup.js: 2.7.0
       lodash-es: 4.17.21
@@ -1776,8 +1800,26 @@ packages:
       - supports-color
     dev: false
 
-  /@kickstartds/core/2.0.3:
-    resolution: {integrity: sha512-RVbYt6v+t2lwabr31jEBMjtL7TltDZ5y4EkZnpb7KfeL8unR2DhXQibplhpuUlURzUr29IeRzkkDhpQ+1vGSbw==}
+  /@kickstartds/content/2.1.0_a4e45qt7bhuathyttbin6ftaie:
+    resolution: {integrity: sha512-ZV7FL8DF2GlfVmgLyHRXlurJ6NI8wWH1v6fdNb8ekXNH27SR7Oy0qL/b6mN8Sj1JYWr473M7POV12A453uuBOw==}
+    peerDependencies:
+      '@kickstartds/base': ^2.2.0
+      '@kickstartds/core': ^2.2.0
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/core': 2.2.0
+      classnames: 2.3.2
+      countup.js: 2.7.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@kickstartds/core/2.0.4-next.2:
+    resolution: {integrity: sha512-hN9EQR/1yKS65wWs15kPiRKNDjEix0gfT3EkmikS8cqhrJptst8ir+8BtSUCZGalOGqf3mB48dE/EYxxw/R22w==}
     peerDependencies:
       react: ^17.0.2
     peerDependenciesMeta:
@@ -1829,17 +1871,17 @@ packages:
       sass: 1.64.1
     dev: false
 
-  /@kickstartds/design-system/2.5.0--canary.105.3029.0:
-    resolution: {integrity: sha512-Xk6oE/v8i0qrN0mxC9OWg9pnE7jo1/G9e7SAWZwZkIKqoI//S67/UC9yAC7DzlZpGR1j+RCH9y+aWJfi/+SUsw==}
+  /@kickstartds/design-system/2.5.13_style-dictionary@3.8.0:
+    resolution: {integrity: sha512-XqUaA99lvYzjz5A5X41efhYQcIgiPp5r0tDhW+vk1pJaijTIEAZBxjZkuTAir6GUoNYQenhTvaN89P4dECMZ1g==}
     engines: {yarn: ^1.22.10}
     dependencies:
       '@bedrock-layout/primitives': 2.2.5_styled-components@5.3.11
-      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
-      '@kickstartds/blog': 2.0.4-canary.1275.5555.0
-      '@kickstartds/content': 2.0.1--canary.48.37.0
-      '@kickstartds/core': 2.2.0
-      '@kickstartds/form': 2.2.0_a4e45qt7bhuathyttbin6ftaie
-      '@kickstartds/style-dictionary': 2.0.0-canary.922.4919.0
+      '@kickstartds/base': 2.0.4-next.5
+      '@kickstartds/blog': 2.0.4-next.6
+      '@kickstartds/content': 2.0.1--canary.61.48.0
+      '@kickstartds/core': 2.0.4-next.2
+      '@kickstartds/form': 2.0.4-next.5
+      '@kickstartds/style-dictionary': 2.0.1-next.1_style-dictionary@3.8.0
       change-case: 4.1.2
       classnames: 2.3.2
       json-schema-to-typescript: 10.1.5
@@ -1855,7 +1897,25 @@ packages:
       - react-dom
       - react-is
       - storybook-design-token
+      - style-dictionary
       - supports-color
+    dev: false
+
+  /@kickstartds/form/2.0.4-next.5:
+    resolution: {integrity: sha512-U/j8YRkFFbd40y56t+MCMzHkxt2QUobCT8De2tkrQ91WabyD/rg8c46IBntV/YSVk5G1FvgUiMXP0t6pGkeu1g==}
+    peerDependencies:
+      react: ^17.0.2
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/core': 2.2.0
+      classnames: 2.3.2
+    transitivePeerDependencies:
+      - '@storybook/types'
+      - storybook-design-token
     dev: false
 
   /@kickstartds/form/2.2.0_a4e45qt7bhuathyttbin6ftaie:
@@ -1874,8 +1934,10 @@ packages:
       classnames: 2.3.2
     dev: false
 
-  /@kickstartds/style-dictionary/2.0.0-canary.922.4919.0:
-    resolution: {integrity: sha512-trXA37omFoGnVT9dDYAgo2lyu71UZa6r+cnOJ26i72T6jGHLG0dkgABJqXnj3UIJl5EkzFHRz1o+PFJQGKIlHA==}
+  /@kickstartds/style-dictionary/2.0.1-next.1_style-dictionary@3.8.0:
+    resolution: {integrity: sha512-VhfYNfzvUJtv2A8v7u/g0GOJTDy2w48+QCUJZq7CLW1oo1Jv8NAIYCurpQcRdoHoKODkp3GpPYltoLRAbmuuig==}
+    peerDependencies:
+      style-dictionary: ^3.7.0
     dependencies:
       '@babel/core': 7.21.8
       '@babel/preset-react': 7.22.5_@babel+core@7.21.8
@@ -1887,7 +1949,7 @@ packages:
       postcss: 8.4.27
       postcss-calc: 8.2.4_postcss@8.4.27
       postcss-colormin: 5.3.1_postcss@8.4.27
-      postcss-normalize-whitespace: 5.1.1_postcss@8.4.27
+      postcss-normalize-whitespace: 6.0.0_postcss@8.4.27
       postcss-sort-media-queries: 4.4.1_postcss@8.4.27
       style-dictionary: 3.8.0
       svgstore: 3.0.1
@@ -5010,6 +5072,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /import-meta-resolve/3.0.0:
+    resolution: {integrity: sha512-4IwhLhNNA8yy445rPjD/lWh++7hMDOml2eHtd58eG7h+qK3EryMuuRbsHGPikCoAgIkkDnckKfWSk2iDla/ejg==}
+    dev: true
+
   /imurmurhash/0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
@@ -6914,9 +6980,9 @@ packages:
       postcss-value-parser: 4.2.0
     dev: false
 
-  /postcss-normalize-whitespace/5.1.1_postcss@8.4.27:
-    resolution: {integrity: sha512-83ZJ4t3NUDETIHTa3uEg6asWjSBYL5EdkVB0sDncx9ERzOKBVJIUeDO9RyA9Zwtig8El1d79HBp0JEi8wvGQnA==}
-    engines: {node: ^10 || ^12 || >=14.0}
+  /postcss-normalize-whitespace/6.0.0_postcss@8.4.27:
+    resolution: {integrity: sha512-7cfE1AyLiK0+ZBG6FmLziJzqQCpTQY+8XjMhMAz8WSBSCsCNNUKujgIgjCAmDT3cJ+3zjTXFkoD15ZPsckArVw==}
+    engines: {node: ^14 || ^16 || >=18.0}
     peerDependencies:
       postcss: ^8.2.15
     dependencies:
@@ -7711,7 +7777,7 @@ packages:
       react-is:
         optional: true
     dependencies:
-      '@babel/helper-module-imports': 7.21.4
+      '@babel/helper-module-imports': 7.22.5
       '@babel/traverse': 7.21.5_supports-color@5.5.0
       '@emotion/is-prop-valid': 1.2.1
       '@emotion/stylis': 0.8.5

@@ -1,4 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { default as path } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { processSchemaGlob, getSchemaRegistry } from '@kickstartds/jsonschema-utils';
 import {
@@ -6,14 +8,17 @@ import {
   createConfig as createConfigNetlifyCMS,
   INetlifyCmsConfig
 } from '@kickstartds/jsonschema2netlifycms';
+import { resolve } from 'import-meta-resolve';
 import { dump as yamlDump, load as yamlLoad } from 'js-yaml';
 
 declare type MyAjv = import('ajv').default;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const pathPrefix = existsSync('../dist/.gitkeep') ? '../' : '';
-  const customGlob = `${pathPrefix}node_modules/@kickstartds/design-system/(dist|cms)/**/*.(schema|definitions).json`;
+  const packagePath = path.dirname(
+    fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
+  );
+  const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions).json`;
 
   // get shared ajv instance, pre-process schemas and get full
   // set of unique schemas. precondition for the following conversions
@@ -40,8 +45,6 @@ export function generateNetlifyCMS(
     configLocation &&
     existsSync(configLocation) &&
     (yamlLoad(readFileSync(configLocation, 'utf-8')) as INetlifyCmsConfig);
-
-  console.log(schemaIds, settingsSchemaIds);
 
   const pageFields = convertToNetlifyCMS({
     schemaIds,

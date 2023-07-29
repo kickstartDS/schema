@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@kickstartds/design-system": "2.5.0--canary.105.3029.0",
+    "@kickstartds/design-system": "^2.5.13",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2netlifycms": "workspace:*",
     "ajv": "^8.12.0",
@@ -34,6 +34,7 @@
     "eslint-import-resolver-typescript": "~3.5.5",
     "eslint-plugin-import": "~2.27.5",
     "eslint-plugin-json-files": "~2.2.0",
+    "import-meta-resolve": "~3.0.0",
     "json-schema-typed": "~8.0.1",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4"

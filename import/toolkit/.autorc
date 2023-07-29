@@ -1,0 +1,8 @@
+{
+  "author": "Lukas Mestel <lukas.mestel@kickstartds.com>",
+  "baseBranch": "master",
+  "plugins": [
+    "npm",
+    "released"
+  ]
+}

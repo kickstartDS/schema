@@ -1,0 +1,11 @@
+# ./.graphqlrc.yml
+schema: "./dist/page.graphql"
+extensions:
+  codegen:
+    generates:
+      ./dist/page.fragments.js:
+        plugins:
+          - "@kickstartds/graphql-cli-generate-fragments"
+      ./dist/page.graphql:
+        plugins:
+          - "@kickstartds/graphql-cli-add-gatsby-directives"

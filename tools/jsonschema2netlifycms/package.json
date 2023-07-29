@@ -1,0 +1,59 @@
+{
+  "name": "@kickstartds/jsonschema2netlifycms",
+  "version": "2.5.7",
+  "description": "Converts JSON schema to Netlify CMS admin config",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Jonas Ulrich",
+    "email": "jonas.ulrich@kickstartds.com"
+  },
+  "type": "module",
+  "exports": "./lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "heft build --clean",
+    "test": "NODE_OPTIONS=--experimental-vm-modules heft test --clean"
+  },
+  "dependencies": {
+    "@kickstartds/jsonschema-utils": "workspace:*",
+    "ajv": "^8.12.0",
+    "camelcase": "^7.0.0",
+    "lodash": "^4.17.21",
+    "object-traversal": "^1.0.1"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-config": "^3.2.0",
+    "@rushstack/heft": "^0.50.4",
+    "@rushstack/heft-jest-plugin": "~0.5.10",
+    "@rushstack/heft-node-rig": "^1.12.10",
+    "@types/gh-pages": "^3.2.1",
+    "@types/heft-jest": "1.0.3",
+    "@types/lodash": "~4.14.195",
+    "@types/node": "^18.16.4",
+    "@types/pluralize": "^0.0.29",
+    "@types/ramda": "^0.28.20",
+    "@types/uppercamelcase": "~3.0.0",
+    "@typescript-eslint/parser": "~5.59.2",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.40.0",
+    "eslint-import-resolver-typescript": "~3.5.5",
+    "eslint-plugin-import": "~2.27.5",
+    "eslint-plugin-json-files": "~2.2.0",
+    "gh-pages": "^4.0.0",
+    "json-schema-typed": "~8.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.8",
+    "tmp-promise": "^3.0.3",
+    "typescript": "^5.0.4"
+  },
+  "engines": {
+    "node": ">=18.16"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

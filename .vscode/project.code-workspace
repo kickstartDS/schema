@@ -9,9 +9,25 @@
       "path": "../examples/cambria"
     },
     {
+      "name": "examples/converter",
+      "path": "../examples/converter"
+    },
+    {
       "name": "tools/cambria",
       "path": "../tools/cambria"
+    },
+    {
+      "name": "tools/jsonschema-utils",
+      "path": "../tools/jsonschema-utils"
+    },
+    {
+      "name": "tools/jsonschema2netlifycms",
+      "path": "../tools/jsonschema2netlifycms"
     }
   ],
-  "settings": {}
+  "settings": {
+    "files.associations": {
+      "*.json": "jsonc"
+    }
+  }
 }

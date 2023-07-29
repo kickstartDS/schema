@@ -106,7 +106,15 @@
    * https://pnpm.io/package_json#pnpmpeerdependencyrules
    */
   "globalPeerDependencyRules": {
-    // "ignoreMissing": ["@eslint/*"],
+    "ignoreMissing": [
+      "@babel/core",
+      "@types/react",
+      "react-is",
+      "react",
+      "storybook-design-token",
+      "react-dom",
+      "@storybook/types"
+    ]
     // "allowedVersions": { "react": "17" },
     // "allowAny": ["@babel/*"]
   },
@@ -168,7 +176,7 @@
    * in the package.json file for individual Rush projects.
    */
   "globalAllowedDeprecatedVersions": {
-    // "request": "*"
+    "fsevents": "*"
   },
 
   /**

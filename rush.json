@@ -34,8 +34,26 @@
       "tags": ["tools"]
     },
     {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "projectFolder": "tools/jsonschema-utils",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
+      "packageName": "@kickstartds/jsonschema2netlifycms",
+      "projectFolder": "tools/jsonschema2netlifycms",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
       "packageName": "@kickstartds/cambria-example",
       "projectFolder": "examples/cambria",
+      "reviewCategory": "examples",
+      "tags": ["examples"]
+    },
+    {
+      "packageName": "@kickstartds/converter-example",
+      "projectFolder": "examples/converter",
       "reviewCategory": "examples",
       "tags": ["examples"]
     }

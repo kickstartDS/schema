@@ -1,0 +1,49 @@
+{
+  "name": "@kickstartds/graphql-cli-add-gatsby-directives",
+  "version": "1.2.0",
+  "description": "Plugin for graphql-cli to add Gatsby directives to a schema",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "restricted"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -d",
+    "pretest": "npm run build"
+  },
+  "author": "Jonas Ulrich <jonas.ulrich@kickstartds.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/debounce": "^1.2.1",
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^16.11.38",
+    "@types/yargs": "^17.0.10",
+    "contributor": "^0.1.25",
+    "debounce": "^1.2.1",
+    "graphql-config": "^4.3.1",
+    "typescript": "^4.7.3"
+  },
+  "peerDependencies": {
+    "graphql": "^15.8.0"
+  },
+  "dependencies": {
+    "@graphql-codegen/plugin-helpers": "^2.4.2",
+    "@graphql-codegen/visitor-plugin-common": "2.8.0",
+    "@tsconfig/node16": "^1.0.2",
+    "fs-extra": "^10.1.0",
+    "graphql": "^15.8.0",
+    "lodash": "^4.17.21",
+    "tslib": "~2.4.0"
+  }
+}

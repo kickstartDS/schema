@@ -2,9 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { JSONSchema } from 'json-schema-typed/draft-07';
-
 import { LensSource, loadYamlLens, updateSchema } from '@kickstartds/cambria';
+import { JSONSchema } from 'json-schema-typed/draft-07';
 
 const _dirname: string = path.dirname(fileURLToPath(import.meta.url));
 

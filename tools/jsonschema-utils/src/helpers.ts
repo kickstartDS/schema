@@ -1,12 +1,13 @@
+import { existsSync, promises } from 'fs';
 import { createHash } from 'node:crypto';
 import { default as path } from 'node:path';
 
 import Ajv from 'ajv';
 import { default as glob } from 'fast-glob';
-import { existsSync, readFile } from 'fs-extra';
 import traverse from 'json-schema-traverse';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 import _ from 'lodash';
+import { compose } from 'ramda';
 import uppercamelcase from 'uppercamelcase';
 
 declare type MyAjv = import('ajv').default;
@@ -95,7 +96,7 @@ export function mergeAnyOfEnums(schema: JSONSchema.Interface, ajv: MyAjv): void 
   traverse(schema, {
     cb: (subSchema, pointer, rootSchema) => {
       const propertyName = pointer.split('/').pop();
-      if (!propertyName) throw new Error('Failed to split a propertyName from a pointer');
+      if (!propertyName) return;
 
       if (
         subSchema.anyOf &&
@@ -192,7 +193,9 @@ export function reduceSchemaAllOf(schema: JSONSchema.Interface, ajv: MyAjv): JSO
         );
 
         return _.merge(
-          reffedSchema.allOf ? reduceSchemaAllOf(reffedSchema, ajv) : _.merge(reffedSchema, finalSchema),
+          reffedSchema && reffedSchema.allOf
+            ? reduceSchemaAllOf(reffedSchema, ajv)
+            : _.merge(reffedSchema, finalSchema),
           finalSchema
         );
       } else {
@@ -262,8 +265,7 @@ export function inlineDefinitions(jsonSchemas: JSONSchema.Interface[]): void {
   jsonSchemas.forEach((jsonSchema) => {
     traverse(jsonSchema, {
       cb: (subSchema, pointer, rootSchema, __parentPointer, parentKeyword, parentSchema) => {
-        if (!parentSchema || !parentKeyword)
-          throw new Error('Tried to traverse a JSON schema without parent schema or keyword');
+        if (!parentSchema || !parentKeyword) return;
 
         const propertyName = pointer.split('/').pop();
         if (!propertyName) throw new Error('Failed to split a propertyName from a pointer');
@@ -373,7 +375,9 @@ export function collectReferencedSchemaIds(jsonSchemas: JSONSchema.Interface[], 
 }
 
 export async function loadSchemaPath(schemaPath: string): Promise<JSONSchema.Interface> {
-  return readFile(schemaPath, 'utf-8').then((schema: string) => JSON.parse(schema) as JSONSchema.Interface);
+  return promises
+    .readFile(schemaPath, 'utf-8')
+    .then((schema: string) => JSON.parse(schema) as JSONSchema.Interface);
 }
 
 export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.Interface[]> {
@@ -554,4 +558,30 @@ export function toPascalCase(text: string): string {
 
 export function clearAndUpper(text: string): string {
   return text.replace(/-/, ' ').toUpperCase();
+}
+
+export function err(msg: string, propName?: string): Error {
+  return new Error(`jsonschema-utils: ${propName ? `Couldn't convert property ${propName}. ` : ''}${msg}`);
+}
+
+export function safeEnumKey(value: string): string {
+  const trim = (s: string): string => s.trim();
+  const isNum = (s: string): boolean => /^[0-9]/.test(s);
+  const safeNum = (s: string): string => (isNum(s) ? `VALUE_${s}` : s);
+  const convertComparators = (s: string): string => {
+    switch (s) {
+      case '<':
+        return 'LT';
+      case '<=':
+        return 'LTE';
+      case '>=':
+        return 'GTE';
+      case '>':
+        return 'GT';
+      default:
+        return s;
+    }
+  };
+  const sanitize = (s: string): string => s.replace(/[^_a-zA-Z0-9]/g, '_');
+  return compose(sanitize, convertComparators, safeNum, trim)(value);
 }

@@ -12,8 +12,7 @@ module.exports = {
     'import/resolver': {
       typescript: true,
       node: true
-    },
-    'import/ignore': ['node_modules/json-schema-typed/draft-07\\.js$']
+    }
   },
   plugins: ['json-files'],
   rules: {

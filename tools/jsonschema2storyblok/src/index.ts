@@ -1,6 +1,6 @@
 import {
   getSchemasForIds,
-  getSchemaForId,
+  // getSchemaForId,
   toPascalCase,
   getSchemaReducer,
   IProcessInterface,
@@ -13,43 +13,25 @@ import {
   IConvertParams,
   ITypeMapping,
   StoryblokElement,
-  IStoryblokSchemaElement
+  IStoryblokSchemaElement,
+  IStoryblokBlock
 } from './@types/index.js';
-import { createConfig } from './createConfig.js';
 
 const typeResolutionField: string = 'type';
 
 /**
  *  # TODO
  *
- *  - [ ] re-add configuration part, including types
  *  - [ ] add `pos` handling to get sensible order of fields
  *  - [ ] check required status `pos`, `max_length`, `required`, `default_value`, `description` in types
  */
 
-export { createConfig };
-
-// TODO check the generated NetlifyCmsField properties for all elements:
-// * required -> this is not functional yet... needs to be evaluated intelligently,
-//      because of schema nesting (schema > array > allOf > $ref > object, etc)
-// * hint -> may be affected by the same challenge as `required`
-// TODO move `getSchemaReducer`, `IProcessFn` and `safeEnumKey` to `jsonschema-utils`
-// TODO correct parameter documentation
 /**
  * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  */
-export function convert({ ajv, schemaPost }: IConvertParams): StoryblokElement[] {
-  const sectionSchema = getSchemaForId('http://kickstartds.com/section.schema.json', ajv);
-  const contentSchemaIds = (
-    (sectionSchema?.properties?.content as JSONSchema.Array)?.items as JSONSchema.Interface
-  )?.anyOf?.map((anyOfSchema) => (anyOfSchema as JSONSchema.Object).$ref as string);
-
-  if (!contentSchemaIds) {
-    throw new Error("Shouldn't happen");
-  }
-
-  return getSchemasForIds(contentSchemaIds, ajv).reduce(
+export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): StoryblokElement[] {
+  return getSchemasForIds(schemaIds, ajv).reduce(
     getSchemaReducer<StoryblokElement>({
       ajv,
       typeResolutionField,
@@ -129,8 +111,9 @@ function processObject({
       display_name: toPascalCase(name),
       key: name,
       type: basicMapping(subSchema)
-      // fields: fields
     };
+
+    if (fields) field.fields = fields as IStoryblokSchemaElement[];
 
     // TODO this is suspect, should expect an object here when in processObject
     if (subSchema.default) field.default_value = subSchema.default as string;
@@ -146,15 +129,20 @@ function processObject({
 function processRefArray({
   name,
   description,
-  rootSchema
-}: // fields
-IProcessInterface<StoryblokElement>): StoryblokElement {
+  rootSchema,
+  fields
+}: IProcessInterface<StoryblokElement>): StoryblokElement {
   const field: StoryblokElement = {
     display_name: toPascalCase(name),
     key: name,
-    type: 'bloks'
-    // types: fields
+    type: 'bloks',
+    restrict_type: '',
+    restrict_components: true,
+    component_whitelist:
+      (fields && fields.length > 0 && fields?.map((field) => (field as IStoryblokBlock).name)) || []
   };
+
+  field.fields = fields as IStoryblokSchemaElement[];
 
   if (description) field.description = description;
 

@@ -23,6 +23,10 @@
     {
       "name": "tools/jsonschema2netlifycms",
       "path": "../tools/jsonschema2netlifycms"
+    },
+    {
+      "name": "tools/jsonschema2storyblok",
+      "path": "../tools/jsonschema2storyblok"
     }
   ],
   "settings": {

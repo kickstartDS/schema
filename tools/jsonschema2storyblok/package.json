@@ -1,7 +1,7 @@
 {
-  "name": "@kickstartds/jsonschema2netlifycms",
-  "version": "2.5.7",
-  "description": "Converts JSON schema to Netlify CMS admin config",
+  "name": "@kickstartds/jsonschema2storyblok",
+  "version": "1.0.0",
+  "description": "Converts JSON schema to Storyblok component json definition",
   "license": "UNLICENSED",
   "author": {
     "name": "Jonas Ulrich",
@@ -41,6 +41,7 @@
     "eslint-plugin-json-files": "~2.2.0",
     "json-schema-typed": "~8.0.1",
     "prettier": "^2.8.8",
+    "storyblok-generate-ts": "~1.15.0",
     "typescript": "^5.0.4"
   },
   "engines": {

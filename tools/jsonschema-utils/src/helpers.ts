@@ -484,10 +484,12 @@ export function getSchemaName(schemaId: string | undefined): string {
   return (schemaId && schemaId.split('/').pop()?.split('.').shift()) || '';
 }
 
+export function getSchemaForId(schemaId: string, ajv: MyAjv): JSONSchema.Interface {
+  return ajv.getSchema<JSONSchema.Interface>(schemaId)?.schema as JSONSchema.Interface;
+}
+
 export function getSchemasForIds(schemaIds: string[], ajv: MyAjv): JSONSchema.Interface[] {
-  return schemaIds.map(
-    (schemaId) => ajv.getSchema<JSONSchema.Interface>(schemaId)?.schema as JSONSchema.Interface
-  );
+  return schemaIds.map((schemaId) => getSchemaForId(schemaId, ajv));
 }
 
 // TODO deprecated, should go after refactor

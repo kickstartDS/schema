@@ -46,6 +46,12 @@
       "tags": ["tools"]
     },
     {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "projectFolder": "tools/jsonschema2storyblok",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
       "packageName": "@kickstartds/cambria-example",
       "projectFolder": "examples/cambria",
       "reviewCategory": "examples",

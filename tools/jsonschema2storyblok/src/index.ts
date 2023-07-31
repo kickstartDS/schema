@@ -7,6 +7,7 @@ import {
   safeEnumKey
 } from '@kickstartds/jsonschema-utils';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
+import { traverse } from 'object-traversal';
 
 import {
   GenericType,
@@ -31,7 +32,7 @@ const typeResolutionField: string = 'type';
  * either as Javascript objects or as JSON text.
  */
 export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): StoryblokElement[] {
-  return getSchemasForIds(schemaIds, ajv).reduce(
+  const reduced = getSchemasForIds(schemaIds, ajv).reduce(
     getSchemaReducer<StoryblokElement>({
       ajv,
       typeResolutionField,
@@ -49,6 +50,23 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
     }),
     []
   );
+
+  const bloks: IStoryblokBlock[] = [];
+
+  traverse(
+    reduced,
+    ({ key, parent }) => {
+      if (key === 'bloks') {
+        bloks.push(parent?.bloks);
+        delete parent?.bloks;
+      }
+    },
+    {
+      cycleHandling: false
+    }
+  );
+
+  return reduced.concat(...bloks);
 }
 
 const mapping: ITypeMapping = {
@@ -142,7 +160,7 @@ function processRefArray({
       (fields && fields.length > 0 && fields?.map((field) => (field as IStoryblokBlock).name)) || []
   };
 
-  field.fields = fields as IStoryblokSchemaElement[];
+  field.bloks = fields as IStoryblokSchemaElement[];
 
   if (description) field.description = description;
 
@@ -155,15 +173,16 @@ function processObjectArray({
   name,
   description,
   subSchema,
-  rootSchema
-}: // fields
-IProcessInterface<StoryblokElement>): StoryblokElement {
+  rootSchema,
+  fields
+}: IProcessInterface<StoryblokElement>): StoryblokElement {
   const field: StoryblokElement = {
     display_name: toPascalCase(name),
     key: name,
     type: 'bloks'
-    // types: fields
   };
+
+  if (fields) field.fields = fields as IStoryblokSchemaElement[];
 
   // TODO this is suspect, should expect an object here when in processObject
   if (rootSchema.default) field.default_value = subSchema.default as string;
@@ -179,10 +198,10 @@ function processArray({
   name,
   description,
   subSchema,
-  rootSchema
-}: // arrayField
-IProcessInterface<StoryblokElement>): StoryblokElement {
-  const field: StoryblokElement = {
+  rootSchema,
+  arrayField
+}: IProcessInterface<StoryblokElement>): StoryblokElement {
+  const field: IStoryblokSchemaElement = {
     display_name: toPascalCase(name),
     key: name,
     type: 'bloks'
@@ -195,7 +214,8 @@ IProcessInterface<StoryblokElement>): StoryblokElement {
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  // if (arrayField && arrayField.fields) field.fields = arrayField.fields;
+  if (arrayField && (arrayField as IStoryblokSchemaElement).fields)
+    field.fields = (arrayField as IStoryblokSchemaElement).fields;
 
   return field;
 }
@@ -244,8 +264,6 @@ function processBasic({
     key: name,
     type
   };
-
-  // if (type === 'number') field.valueType = 'int';
 
   if (subSchema.default) field.default_value = subSchema.default as string;
 

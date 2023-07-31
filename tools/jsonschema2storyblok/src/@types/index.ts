@@ -68,6 +68,9 @@ export interface IStoryblokSchemaElement {
   default_value?: string;
   description?: string;
   fields?: IStoryblokSchemaElement[];
+  objectFields?: IStoryblokSchemaElement[];
+  objectArrayFields?: IStoryblokSchemaElement[];
+  arrayFields?: IStoryblokSchemaElement[];
   bloks?: IStoryblokSchemaElement[];
 }
 

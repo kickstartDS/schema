@@ -1,6 +1,5 @@
 import {
   getSchemasForIds,
-  // getSchemaForId,
   toPascalCase,
   getSchemaReducer,
   IProcessInterface,
@@ -8,6 +7,7 @@ import {
 } from '@kickstartds/jsonschema-utils';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 import { traverse } from 'object-traversal';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   GenericType,
@@ -53,6 +53,61 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
 
   const bloks: IStoryblokBlock[] = [];
 
+  // Group first layer into tabs
+  traverse(
+    reduced,
+    ({ key, value, parent }) => {
+      if (parent && key && value.objectFields && value.objectFields.length > 0 && value.type === 'bloks') {
+        const fields = (value.objectFields as IStoryblokSchemaElement[]).map((objectField) => {
+          return {
+            ...objectField,
+            key: `${value.key}_${objectField.key}`
+          };
+        });
+
+        const tabId = `tab-${uuidv4()}`;
+        parent[tabId] = {
+          display_name: value.display_name,
+          keys: fields.map((field) => field.key),
+          type: 'tab'
+        };
+        fields.forEach((field) => (parent[field.key] = field));
+
+        delete parent[key];
+      }
+    },
+    {
+      cycleHandling: false,
+      traversalType: 'breadth-first'
+    }
+  );
+
+  // Group second layer into sections
+  traverse(
+    reduced,
+    ({ key, value, parent }) => {
+      if (parent && key && value.objectFields && value.objectFields.length > 0 && value.type === 'bloks') {
+        const fields = (value.objectFields as IStoryblokSchemaElement[]).map((objectField) => {
+          return {
+            ...objectField,
+            key: `${value.key}_${objectField.key}`
+          };
+        });
+
+        parent[key] = {
+          keys: fields.map((field) => field.key),
+          type: 'section'
+        };
+        fields.forEach((field) => (parent[field.key] = field));
+      }
+    },
+    {
+      cycleHandling: false,
+      traversalType: 'breadth-first'
+    }
+  );
+
+  // Split out component bloks
   traverse(
     reduced,
     ({ key, parent }) => {
@@ -62,7 +117,8 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
       }
     },
     {
-      cycleHandling: false
+      cycleHandling: false,
+      traversalType: 'breadth-first'
     }
   );
 
@@ -131,7 +187,7 @@ function processObject({
       type: basicMapping(subSchema)
     };
 
-    if (fields) field.fields = fields as IStoryblokSchemaElement[];
+    if (fields) field.objectFields = fields as IStoryblokSchemaElement[];
 
     // TODO this is suspect, should expect an object here when in processObject
     if (subSchema.default) field.default_value = subSchema.default as string;
@@ -182,7 +238,7 @@ function processObjectArray({
     type: 'bloks'
   };
 
-  if (fields) field.fields = fields as IStoryblokSchemaElement[];
+  if (fields) field.objectArrayFields = fields as IStoryblokSchemaElement[];
 
   // TODO this is suspect, should expect an object here when in processObject
   if (rootSchema.default) field.default_value = subSchema.default as string;
@@ -215,7 +271,7 @@ function processArray({
   field.required = rootSchema.required?.includes(name) || false;
 
   if (arrayField && (arrayField as IStoryblokSchemaElement).fields)
-    field.fields = (arrayField as IStoryblokSchemaElement).fields;
+    field.arrayFields = (arrayField as IStoryblokSchemaElement).fields;
 
   return field;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   getSchemasForIds,
   toPascalCase,
@@ -61,7 +62,9 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
         const fields = (value.objectFields as IStoryblokSchemaElement[]).map((objectField) => {
           return {
             ...objectField,
-            key: `${value.key}_${objectField.key}`
+            key: `${value.key}_${
+              objectField.key || (objectField as StoryblokElement as IStoryblokBlock).name
+            }`
           };
         });
 
@@ -155,6 +158,8 @@ function basicMapping(property: JSONSchema.Interface): GenericType {
   return mapping[property.type as TypeName];
 }
 
+const componentGroups: Record<string, string> = {};
+
 function processObject({
   name,
   description,
@@ -165,13 +170,40 @@ function processObject({
   if (rootSchema.$id === subSchema.$id) {
     if (!fields) throw new Error('Missing fields on object to process');
 
+    const schemaElements: StoryblokElement[] = [];
+
+    (fields as IStoryblokBlock[]).forEach((field) => {
+      componentGroups[field.name] ||= uuidv4();
+
+      if (field.name) {
+        schemaElements.push({
+          display_name: toPascalCase(field.name),
+          key: field.name,
+          type: 'bloks',
+          restrict_type: 'groups',
+          restrict_components: true,
+          component_group_whitelist: [componentGroups[field.name]],
+          bloks: [
+            {
+              ...field,
+              component_group_uuid: componentGroups[field.name],
+              component_group_name: toPascalCase(field.name)
+            }
+          ]
+        });
+        return;
+      } else {
+        return schemaElements.push(field);
+      }
+    });
+
     const field: StoryblokElement = {
       name: name,
       display_name: toPascalCase(name),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       id: 0,
-      schema: (fields as IStoryblokSchemaElement[]).reduce((schema, field) => {
+      schema: (schemaElements as IStoryblokSchemaElement[]).reduce((schema, field) => {
         schema[field.key] = field;
         return schema;
       }, {} as Record<string, IStoryblokSchemaElement>),
@@ -206,17 +238,24 @@ function processRefArray({
   rootSchema,
   fields
 }: IProcessInterface<StoryblokElement>): StoryblokElement {
+  componentGroups[name] ||= uuidv4();
+
   const field: StoryblokElement = {
     display_name: toPascalCase(name),
     key: name,
     type: 'bloks',
-    restrict_type: '',
+    restrict_type: 'groups',
     restrict_components: true,
-    component_whitelist:
-      (fields && fields.length > 0 && fields?.map((field) => (field as IStoryblokBlock).name)) || []
+    component_group_whitelist: [componentGroups[name]]
   };
 
-  field.bloks = fields as IStoryblokSchemaElement[];
+  field.bloks = (fields as IStoryblokSchemaElement[]).map((field) => {
+    return {
+      ...field,
+      component_group_uuid: componentGroups[name],
+      component_group_name: toPascalCase(name)
+    };
+  });
 
   if (description) field.description = description;
 
@@ -270,8 +309,9 @@ function processArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  if (arrayField && (arrayField as IStoryblokSchemaElement).fields)
-    field.arrayFields = (arrayField as IStoryblokSchemaElement).fields;
+  const fields: IStoryblokSchemaElement[] | undefined = (arrayField as IStoryblokSchemaElement).objectFields;
+
+  if (fields && fields.length > 0) field.arrayFields = fields;
 
   return field;
 }

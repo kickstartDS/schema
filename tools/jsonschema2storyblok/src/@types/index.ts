@@ -45,6 +45,7 @@ export interface IStoryblokBlock {
   preset_id?: unknown;
   real_name: string;
   component_group_uuid?: unknown;
+  component_group_name?: string;
   color?: unknown;
   icon?: unknown;
 }
@@ -71,7 +72,7 @@ export interface IStoryblokSchemaElement {
   objectFields?: IStoryblokSchemaElement[];
   objectArrayFields?: IStoryblokSchemaElement[];
   arrayFields?: IStoryblokSchemaElement[];
-  bloks?: IStoryblokSchemaElement[];
+  bloks?: StoryblokElement[];
 }
 
 export interface IStoryblokSchemaElementOption {

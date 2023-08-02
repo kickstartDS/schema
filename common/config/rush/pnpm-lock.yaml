@@ -147,11 +147,6 @@ importers:
 
   ../../tools/jsonschema-utils:
     specifiers:
-      '@kickstartds/base': ^2.0
-      '@kickstartds/blog': ^2.0
-      '@kickstartds/content': ^2.0
-      '@kickstartds/core': ^2.0
-      '@kickstartds/form': ^2.0
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
       '@rushstack/heft-jest-plugin': ~0.5.10
@@ -177,11 +172,6 @@ importers:
       typescript: ^5.0.4
       uppercamelcase: ^3.0.0
     dependencies:
-      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
-      '@kickstartds/blog': 2.2.0_a4e45qt7bhuathyttbin6ftaie
-      '@kickstartds/content': 2.1.0_a4e45qt7bhuathyttbin6ftaie
-      '@kickstartds/core': 2.2.0
-      '@kickstartds/form': 2.2.0_a4e45qt7bhuathyttbin6ftaie
       ajv: 8.12.0
       fast-glob: 3.3.1
       json-schema-traverse: 1.0.0
@@ -1783,23 +1773,6 @@ packages:
       - storybook-design-token
     dev: false
 
-  /@kickstartds/blog/2.2.0_a4e45qt7bhuathyttbin6ftaie:
-    resolution: {integrity: sha512-FcmwmfV8nLJCSfB1SQmuKQ2WWXy4YDw1/K5pSfRF5TWPyCVCWvkoE0xyI8HuqB1liqh8CtdVdw7SUyV3HVtJ+A==}
-    peerDependencies:
-      '@kickstartds/base': ^2.0.3
-      '@kickstartds/core': ^2.0.3
-      react: ^17.0.2 || ^18.2.0
-    peerDependenciesMeta:
-      react:
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.22.6
-      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
-      '@kickstartds/core': 2.2.0
-      classnames: 2.3.2
-      date-fns: 2.30.0
-    dev: false
-
   /@kickstartds/content/2.0.1--canary.61.48.0:
     resolution: {integrity: sha512-q4t9TFB9VrEuFdbYjOMV4bQU2lTj3xkihG6JkEHvNJJsUxthUAE7RS6ZNKxlAmcmNA/fO/NDLIq8r2C1yA/OQQ==}
     peerDependencies:
@@ -1819,24 +1792,6 @@ packages:
       - '@types/react'
       - storybook-design-token
       - supports-color
-    dev: false
-
-  /@kickstartds/content/2.1.0_a4e45qt7bhuathyttbin6ftaie:
-    resolution: {integrity: sha512-ZV7FL8DF2GlfVmgLyHRXlurJ6NI8wWH1v6fdNb8ekXNH27SR7Oy0qL/b6mN8Sj1JYWr473M7POV12A453uuBOw==}
-    peerDependencies:
-      '@kickstartds/base': ^2.2.0
-      '@kickstartds/core': ^2.2.0
-      react: ^17.0.2 || ^18.2.0
-    peerDependenciesMeta:
-      react:
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.22.6
-      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
-      '@kickstartds/core': 2.2.0
-      classnames: 2.3.2
-      countup.js: 2.7.0
-      lodash-es: 4.17.21
     dev: false
 
   /@kickstartds/core/2.0.4-next.2:
@@ -1937,22 +1892,6 @@ packages:
     transitivePeerDependencies:
       - '@storybook/types'
       - storybook-design-token
-    dev: false
-
-  /@kickstartds/form/2.2.0_a4e45qt7bhuathyttbin6ftaie:
-    resolution: {integrity: sha512-dgiz9mVpRyY/ZWaUQ13cbO1g85SJFYstuHqDsnDNLRxxuydPZlKNZJH/5/46DGYK5rLcglh9gf7HFH8O4/93kA==}
-    peerDependencies:
-      '@kickstartds/base': ^2.0.3
-      '@kickstartds/core': ^2.0.3
-      react: ^17.0.2 || ^18.2.0
-    peerDependenciesMeta:
-      react:
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.22.6
-      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
-      '@kickstartds/core': 2.2.0
-      classnames: 2.3.2
     dev: false
 
   /@kickstartds/style-dictionary/2.0.1-next.1_style-dictionary@3.8.0:

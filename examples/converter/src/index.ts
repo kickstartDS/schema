@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { processSchemaGlob, getSchemaRegistry } from '@kickstartds/jsonschema-utils';
+import { processSchemaGlob, getSchemaRegistry, refract } from '@kickstartds/jsonschema-utils';
 import {
   convert as convertToNetlifyCMS,
   createConfig as createConfigNetlifyCMS,
@@ -34,7 +34,7 @@ declare type MyAjv = import('ajv').default;
     ajv
   );
 
-  generateStoryblok(['http://kickstartds.com/section.schema.json'], ajv);
+  await generateStoryblok(['http://kickstartds.com/section.schema.json'], ajv);
 })();
 
 export function generateNetlifyCMS(
@@ -74,13 +74,17 @@ export function generateNetlifyCMS(
   writeFileSync(configPath, configStringNetlify);
 }
 
-export function generateStoryblok(
+export async function generateStoryblok(
   schemaIds: string[],
   // settingsSchemaIds: string[],
   ajv: MyAjv,
   configPath: string = `dist/components.123456.json`
-): void {
+): Promise<void> {
   mkdirSync(path.dirname(configPath), { recursive: true });
+
+  const visualLensPath = fileURLToPath(resolve(`../resources/lenses/visual.lens.yml`, import.meta.url));
+  const result = await refract('http://kickstartds.com/visual.schema.json', visualLensPath, ajv);
+  console.log(result);
 
   const pageFields = convertToStoryblok({
     schemaIds,

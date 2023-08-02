@@ -18,6 +18,7 @@ module.exports = {
   plugins: ['json-files'],
   rules: {
     'no-unused-vars': 'off',
+    'import/namespace': 'off',
     '@typescript-eslint/no-unused-vars': [
       'warn', // or "error"
       {

@@ -1,7 +1,7 @@
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 import _ from 'lodash';
 
-import { err, getSchemaName } from './helpers.js';
+import { err, getSchemaName } from './helper.js';
 
 declare type MyAjv = import('ajv').default;
 

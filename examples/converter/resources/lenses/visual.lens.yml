@@ -1,0 +1,7 @@
+# Convert a kickstartDS Visual into a simpler format
+schemaName: Visual
+
+lens:
+  # remove unnecessary fields
+  - remove: { name: overlay }
+  - remove: { name: backgroundColor }

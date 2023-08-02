@@ -46,8 +46,8 @@ export interface IStoryblokBlock {
   real_name: string;
   component_group_uuid?: unknown;
   component_group_name?: string;
-  color?: unknown;
-  icon?: unknown;
+  color?: string;
+  icon?: string;
 }
 
 export interface IStoryblokSchemaElement {

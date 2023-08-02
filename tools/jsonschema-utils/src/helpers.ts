@@ -415,7 +415,9 @@ export async function processSchemas(
   );
 
   // ... and add page schema, too
-  kdsSchemas.push(await loadSchemaPath(fileURLToPath(resolve('../cms/page.schema.json', import.meta.url))));
+  kdsSchemas.push(
+    await loadSchemaPath(fileURLToPath(resolve('../resources/cms/page.schema.json', import.meta.url)))
+  );
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it

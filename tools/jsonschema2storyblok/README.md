@@ -11,6 +11,59 @@ Install with yarn:
 yarn add jsonschema2storyblok
 ```
 
+## Misc
+
+Available icons in Storyblok:
+
+```json
+[
+  "block-type-nested",
+  "block-type-content",
+  "block-type-universal",
+  "block-group",
+  "block-group",
+  "block-@",
+  "block-1-2block",
+  "block-add",
+  "block-arrow-pointer",
+  "block-block",
+  "block-buildin",
+  "block-center-m",
+  "block-comment",
+  "block-doc",
+  "block-dollar-sign",
+  "block-email",
+  "block-image",
+  "block-keyboard",
+  "block-locked",
+  "block-map-pin",
+  "block-mobile",
+  "block-monitor",
+  "block-paycard",
+  "block-resize-fc",
+  "block-cart",
+  "block-share",
+  "block-shield-2",
+  "block-shield",
+  "block-sticker",
+  "block-suitcase",
+  "block-table-2",
+  "block-table",
+  "block-tag",
+  "block-text-c",
+  "block-text-img-c",
+  "block-text-img-l",
+  "block-text-img-r-l",
+  "block-text-img-r",
+  "block-text-img-t-l",
+  "block-text-img-t-r",
+  "block-text-l",
+  "block-text-r",
+  "block-unlocked",
+  "block-wallet"
+]
+```
+
 ## Usage (TODO Fix, usage differs for Storyblok)
 
 You can convert a schema expressed as an object literal:

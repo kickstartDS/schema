@@ -21,6 +21,38 @@ import {
 
 const typeResolutionField: string = 'type';
 
+const icons: Record<string, string> = {
+  button: 'rectangle-horizontal',
+  section: 'gallery-vertical',
+  'tag-label': 'tag',
+  contact: 'contact',
+  'collapsible-box': 'unfold-vertical',
+  'content-box': 'gantt-chart-square',
+  headline: 'heading-1',
+  'text-media': 'block-text-img-l',
+  'teaser-box': 'kanban-square',
+  'teaser-row': 'rows',
+  'count-up': 'arrow-up-1-0',
+  'logo-tiles': 'layout-grid',
+  quote: 'quote',
+  'quotes-slider': 'quote',
+  related: 'milestone',
+  storytelling: 'clapperboard',
+  'visual-slider': 'image',
+  visual: 'image',
+  image: 'file-image',
+  'media-video': 'file-video',
+  'media-image': 'file-image',
+  'media-lazyimage': 'image-plus',
+  icon: 'chevron-right-circle',
+  lightboxImage: 'bring-to-front'
+};
+
+const colors: Record<string, string> = {
+  content: '#05566a',
+  media: '#FBCE41'
+};
+
 /**
  *  # TODO
  *
@@ -186,6 +218,8 @@ function processObject({
           bloks: [
             {
               ...field,
+              color: colors[field.name] || '#05566a',
+              icon: icons[field.name] || 'block-wallet',
               component_group_uuid: componentGroups[field.name],
               component_group_name: toPascalCase(field.name)
             }
@@ -249,9 +283,11 @@ function processRefArray({
     component_group_whitelist: [componentGroups[name]]
   };
 
-  field.bloks = (fields as IStoryblokSchemaElement[]).map((field) => {
+  field.bloks = (fields as IStoryblokBlock[]).map((field) => {
     return {
       ...field,
+      color: colors[name] || '#05566a',
+      icon: icons[field.name] || 'block-wallet',
       component_group_uuid: componentGroups[name],
       component_group_name: toPascalCase(name)
     };

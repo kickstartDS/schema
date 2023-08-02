@@ -415,7 +415,9 @@ export async function processSchemas(
   );
 
   // ... and add page schema, too
-  kdsSchemas.push(await loadSchemaPath(fileURLToPath(resolve('../cms/page.schema.json', import.meta.url))));
+  kdsSchemas.push(
+    await loadSchemaPath(fileURLToPath(resolve('../resources/cms/page.schema.json', import.meta.url)))
+  );
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it
@@ -484,10 +486,12 @@ export function getSchemaName(schemaId: string | undefined): string {
   return (schemaId && schemaId.split('/').pop()?.split('.').shift()) || '';
 }
 
+export function getSchemaForId(schemaId: string, ajv: MyAjv): JSONSchema.Interface {
+  return ajv.getSchema<JSONSchema.Interface>(schemaId)?.schema as JSONSchema.Interface;
+}
+
 export function getSchemasForIds(schemaIds: string[], ajv: MyAjv): JSONSchema.Interface[] {
-  return schemaIds.map(
-    (schemaId) => ajv.getSchema<JSONSchema.Interface>(schemaId)?.schema as JSONSchema.Interface
-  );
+  return schemaIds.map((schemaId) => getSchemaForId(schemaId, ajv));
 }
 
 // TODO deprecated, should go after refactor

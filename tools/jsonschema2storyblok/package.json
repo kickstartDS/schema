@@ -1,7 +1,7 @@
 {
-  "name": "@kickstartds/jsonschema2netlifycms",
-  "version": "2.5.7",
-  "description": "Converts JSON schema to Netlify CMS admin config",
+  "name": "@kickstartds/jsonschema2storyblok",
+  "version": "1.0.0",
+  "description": "Converts JSON schema to Storyblok component json definition",
   "license": "UNLICENSED",
   "author": {
     "name": "Jonas Ulrich",
@@ -22,7 +22,8 @@
     "ajv": "^8.12.0",
     "camelcase": "^7.0.0",
     "lodash": "^4.17.21",
-    "object-traversal": "^1.0.1"
+    "object-traversal": "^1.0.1",
+    "uuid": "~9.0.0"
   },
   "devDependencies": {
     "@rushstack/eslint-config": "^3.2.0",
@@ -34,6 +35,7 @@
     "@types/node": "^18.16.4",
     "@types/ramda": "^0.28.20",
     "@types/uppercamelcase": "~3.0.0",
+    "@types/uuid": "~9.0.2",
     "@typescript-eslint/parser": "~5.59.2",
     "eslint": "^8.40.0",
     "eslint-import-resolver-typescript": "~3.5.5",
@@ -41,6 +43,7 @@
     "eslint-plugin-json-files": "~2.2.0",
     "json-schema-typed": "~8.0.1",
     "prettier": "^2.8.8",
+    "storyblok-generate-ts": "~1.15.0",
     "typescript": "^5.0.4"
   },
   "engines": {

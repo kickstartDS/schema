@@ -2,6 +2,63 @@
 schemaName: Visual
 
 lens:
-  # remove unnecessary fields
   - remove: { name: overlay }
   - remove: { name: backgroundColor }
+  - remove: { name: height }
+  - remove: { name: inbox }
+  - remove: { name: skipButton }
+  - remove: { name: className }
+  - remove: { name: component }
+  - in:
+      name: media
+      lens:
+        - remove: { name: mode }
+        - remove: { name: video }
+        - in:
+            name: image
+            lens:
+              - remove: { name: srcMobile }
+              - remove: { name: srcTablet }
+              - remove: { name: srcDesktop }
+              - remove: { name: indent }
+  - in:
+      name: box
+      lens:
+        - remove: { name: enabled }
+        - in:
+            name: headline
+            lens:
+              - rename:
+                  source: content
+                  destination: headline-content
+        - hoist:
+            name: headline-content
+            host: headline
+        - remove: { name: headline }
+        - rename:
+            source: headline-content
+            destination: headline
+        - remove: { name: links }
+        - in:
+            name: link
+            lens:
+              - remove: { name: type }
+              - remove: { name: variant }
+              - remove: { name: inverted }
+              - remove: { name: size }
+              - remove: { name: iconBefore }
+              - remove: { name: iconAfter }
+              - remove: { name: fillAnimation }
+              - remove: { name: iconAnimation }
+              - remove: { name: value }
+              - remove: { name: name }
+              - remove: { name: disabled }
+              - remove: { name: className }
+              - remove: { name: component }
+              - remove: { name: typeProp }
+              - remove: { name: highlighted }
+              - remove: { name: deko }
+              - remove: { name: enabled }
+        - remove: { name: indent }
+        - remove: { name: horizontal }
+        - remove: { name: vertical }

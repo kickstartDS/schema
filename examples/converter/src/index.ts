@@ -84,7 +84,7 @@ export async function generateStoryblok(
 
   const visualLensPath = fileURLToPath(resolve(`../resources/lenses/visual.lens.yml`, import.meta.url));
   const result = await refract('http://kickstartds.com/visual.schema.json', visualLensPath, ajv);
-  console.log(result);
+  console.log(JSON.stringify(result, null, 2));
 
   const pageFields = convertToStoryblok({
     schemaIds,

@@ -227,12 +227,13 @@ function processObject({
         });
         return;
       } else {
-        return schemaElements.push(field);
+        schemaElements.push(field);
+        return;
       }
     });
 
     const field: StoryblokElement = {
-      name: name,
+      name,
       display_name: toPascalCase(name),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -327,29 +328,81 @@ function processObjectArray({
 
 function processArray({
   name,
-  description,
-  subSchema,
-  rootSchema,
+  // description,
+  // subSchema,
+  // rootSchema,
   arrayField
 }: IProcessInterface<StoryblokElement>): StoryblokElement {
-  const field: IStoryblokSchemaElement = {
+  if (name === 'ctaGroup') {
+    console.log('processArray arrayField', name, arrayField);
+  }
+  const fields: IStoryblokBlock[] | undefined = (arrayField as IStoryblokSchemaElement)
+    .objectFields as unknown as IStoryblokBlock[];
+
+  if (!fields) throw new Error('Missing fields in array');
+
+  const schemaElements: StoryblokElement[] = [];
+
+  (fields as IStoryblokBlock[]).forEach((field) => {
+    componentGroups[field.name] ||= uuidv4();
+
+    if (field.name) {
+      schemaElements.push({
+        display_name: toPascalCase(field.name),
+        key: field.name,
+        type: 'bloks',
+        restrict_type: 'groups',
+        restrict_components: true,
+        component_group_whitelist: [componentGroups[field.name]],
+        bloks: [
+          {
+            ...field,
+            color: colors[field.name] || '#05566a',
+            icon: icons[field.name] || 'block-wallet',
+            component_group_uuid: componentGroups[field.name],
+            component_group_name: toPascalCase(field.name)
+          }
+        ]
+      });
+      return;
+    } else {
+      schemaElements.push(field);
+      return;
+    }
+  });
+
+  const field: StoryblokElement = {
+    name,
     display_name: toPascalCase(name),
-    key: name,
-    type: 'bloks'
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    id: 0,
+    schema: (schemaElements as IStoryblokSchemaElement[]).reduce((schema, field) => {
+      schema[field.key] = field;
+      return schema;
+    }, {} as Record<string, IStoryblokSchemaElement>),
+    is_nestable: false,
+    real_name: toPascalCase(name)
   };
 
-  // TODO this is suspect, should expect an object here when in processObject
-  if (rootSchema.default) field.default_value = subSchema.default as string;
-
-  if (description) field.description = description;
-
-  field.required = rootSchema.required?.includes(name) || false;
-
-  const fields: IStoryblokSchemaElement[] | undefined = (arrayField as IStoryblokSchemaElement).objectFields;
-
-  if (fields && fields.length > 0) field.arrayFields = fields;
+  if (name === 'ctaGroup') {
+    console.log('processArray arrayField', name, field);
+  }
 
   return field;
+
+  // TODO this is suspect, should expect an object here when in processObject
+  // if (rootSchema.default) field.default_value = subSchema.default as string;
+
+  // if (description) field.description = description;
+
+  // field.required = rootSchema.required?.includes(name) || false;
+
+  // const fields: IStoryblokSchemaElement[] | undefined = (arrayField as IStoryblokSchemaElement).objectFields;
+
+  // if (fields && fields.length > 0) field.arrayFields = fields;
+
+  // return field;
 }
 
 function processEnum({

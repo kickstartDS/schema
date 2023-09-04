@@ -2,29 +2,29 @@
 schemaName: Visual
 
 lens:
-  - remove: { name: overlay }
-  - remove: { name: backgroundColor }
-  - remove: { name: height }
-  - remove: { name: inbox }
-  - remove: { name: skipButton }
-  - remove: { name: className }
-  - remove: { name: component }
+  - remove: { name: overlay, type: string }
+  - remove: { name: backgroundColor, type: string }
+  - remove: { name: height, type: string }
+  - remove: { name: inbox, type: string }
+  - remove: { name: skipButton, type: string }
+  - remove: { name: className, type: string }
+  - remove: { name: component, type: string }
   - in:
       name: media
       lens:
-        - remove: { name: mode }
-        - remove: { name: video }
+        - remove: { name: mode, type: string }
+        - remove: { name: video, type: string }
         - in:
             name: image
             lens:
-              - remove: { name: srcMobile }
-              - remove: { name: srcTablet }
-              - remove: { name: srcDesktop }
-              - remove: { name: indent }
+              - remove: { name: srcMobile, type: string }
+              - remove: { name: srcTablet, type: string }
+              - remove: { name: srcDesktop, type: string }
+              - remove: { name: indent, type: string }
   - in:
       name: box
       lens:
-        - remove: { name: enabled }
+        - remove: { name: enabled, type: string }
         - in:
             name: headline
             lens:
@@ -34,31 +34,31 @@ lens:
         - hoist:
             name: headline-content
             host: headline
-        - remove: { name: headline }
+        - remove: { name: headline, type: string }
         - rename:
             source: headline-content
             destination: headline
-        - remove: { name: links }
+        - remove: { name: links, type: string }
         - in:
             name: link
             lens:
-              - remove: { name: type }
-              - remove: { name: variant }
-              - remove: { name: inverted }
-              - remove: { name: size }
-              - remove: { name: iconBefore }
-              - remove: { name: iconAfter }
-              - remove: { name: fillAnimation }
-              - remove: { name: iconAnimation }
-              - remove: { name: value }
-              - remove: { name: name }
-              - remove: { name: disabled }
-              - remove: { name: className }
-              - remove: { name: component }
-              - remove: { name: typeProp }
-              - remove: { name: highlighted }
-              - remove: { name: deko }
-              - remove: { name: enabled }
-        - remove: { name: indent }
-        - remove: { name: horizontal }
-        - remove: { name: vertical }
+              - remove: { name: type, type: string }
+              - remove: { name: variant, type: string }
+              - remove: { name: inverted, type: string }
+              - remove: { name: size, type: string }
+              - remove: { name: iconBefore, type: string }
+              - remove: { name: iconAfter, type: string }
+              - remove: { name: fillAnimation, type: string }
+              - remove: { name: iconAnimation, type: string }
+              - remove: { name: value, type: string }
+              - remove: { name: name, type: string }
+              - remove: { name: disabled, type: string }
+              - remove: { name: className, type: string }
+              - remove: { name: component, type: string }
+              - remove: { name: typeProp, type: string }
+              - remove: { name: highlighted, type: string }
+              - remove: { name: deko, type: string }
+              - remove: { name: enabled, type: string }
+        - remove: { name: indent, type: string }
+        - remove: { name: horizontal, type: string }
+        - remove: { name: vertical, type: string }

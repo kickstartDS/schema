@@ -1,8 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { processSchemaGlob, getSchemaRegistry, refract } from '@kickstartds/jsonschema-utils';
+import { loadYamlLens, applyLensToDoc, reverseLens, defaultObjectForSchema } from '@kickstartds/cambria';
+import {
+  processSchemaGlob,
+  processSchemaGlobs,
+  getSchemaRegistry
+  // refract
+} from '@kickstartds/jsonschema-utils';
 import {
   convert as convertToNetlifyCMS,
   createConfig as createConfigNetlifyCMS,
@@ -11,30 +18,65 @@ import {
 import { convert as convertToStoryblok } from '@kickstartds/jsonschema2storyblok';
 import { resolve } from 'import-meta-resolve';
 import { dump as yamlDump, load as yamlLoad } from 'js-yaml';
+import { JSONSchema } from 'json-schema-typed/draft-07';
 
 declare type MyAjv = import('ajv').default;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const packagePath = path.dirname(
-    fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
+  // const packagePath = path.dirname(
+  //   fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
+  // );
+  // const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions).json`;
+
+  // // get shared ajv instance, pre-process schemas and get full
+  // // set of unique schemas. precondition for the following conversions
+  // const ajv = getSchemaRegistry();
+  // await processSchemaGlob(customGlob, ajv);
+
+  // // generate `NetlifyCmsField` fields and write `NetlifyCmsConfig` to disk
+  // // uses custom `section.schema.json` to generate a section-based config
+  // generateNetlifyCMS(
+  //   ['http://schema.kickstartds.com/page.schema.json'],
+  //   ['http://kickstartds.com/cms/header.schema.json', 'http://kickstartds.com/cms/footer.schema.json'],
+  //   ajv
+  // );
+
+  // await generateStoryblok(
+  //   [
+  //     'http://kickstartds.com/section.schema.json',
+  //     'http://kickstartds.com/cms/header.schema.json',
+  //     'http://kickstartds.com/cms/footer.schema.json',
+  //     'http://schema.kickstartds.com/page.schema.json'
+  //   ],
+  //   ajv
+  // );
+
+  const packagePathEnergyUi = path.dirname(
+    fileURLToPath(resolve(`@energyui/design-system/package.json`, import.meta.url))
   );
-  const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions).json`;
+  const energyUiGlob = `${packagePathEnergyUi}/(dist|cms)/**/*.(schema|definitions).json`;
 
-  // get shared ajv instance, pre-process schemas and get full
-  // set of unique schemas. precondition for the following conversions
-  const ajv = getSchemaRegistry();
-  await processSchemaGlob(customGlob, ajv);
-
-  // generate `NetlifyCmsField` fields and write `NetlifyCmsConfig` to disk
-  // uses custom `section.schema.json` to generate a section-based config
-  generateNetlifyCMS(
-    ['http://schema.kickstartds.com/page.schema.json'],
-    ['http://kickstartds.com/cms/header.schema.json', 'http://kickstartds.com/cms/footer.schema.json'],
-    ajv
+  const packagePathEnergyUiCore = path.dirname(
+    fileURLToPath(resolve(`@energyui/design-system-core/package.json`, import.meta.url))
   );
+  const energyUiCoreGlob = `${packagePathEnergyUiCore}/src/**/*.(schema|definitions).json`;
 
-  await generateStoryblok(['http://kickstartds.com/section.schema.json'], ajv);
+  const energyUiAjv = getSchemaRegistry();
+  await processSchemaGlobs([energyUiGlob, energyUiCoreGlob], energyUiAjv);
+
+  await generateStoryblok(
+    [
+      'http://energyui.de/visual.schema.json',
+      'http://energyui.de/price-finder.schema.json',
+      'http://energyui.de/text-images.schema.json',
+      'http://energyui.de/cta.schema.json',
+      'http://energyui.de/html.schema.json'
+      // 'http://energyui.de/header.schema.json'
+      // 'http://energyui.de/footer.schema.json'
+    ],
+    energyUiAjv
+  );
 })();
 
 export function generateNetlifyCMS(
@@ -82,14 +124,54 @@ export async function generateStoryblok(
 ): Promise<void> {
   mkdirSync(path.dirname(configPath), { recursive: true });
 
-  const visualLensPath = fileURLToPath(resolve(`../resources/lenses/visual.lens.yml`, import.meta.url));
-  const result = await refract('http://kickstartds.com/visual.schema.json', visualLensPath, ajv);
-  console.log(JSON.stringify(result, null, 2));
+  // const visualLensPath = fileURLToPath(resolve(`../resources/lenses/visual.lens.yml`, import.meta.url));
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const result = await refract('http://kickstartds.com/visual.schema.json', visualLensPath, ajv);
+  // console.log(JSON.stringify(result, null, 2));
+
+  // const lensData = readFileSync(visualLensPath, 'utf-8');
+  // const lens = loadYamlLens(lensData);
+
+  // console.log(lens);
+
+  // const tmp = {
+  //   type: 'visual',
+  //   media: {
+  //     image: {
+  //       src: 'https://www.kickstartds.com/logo.svg',
+  //       alt: 'Logo'
+  //     }
+  //   },
+  //   box: {
+  //     headline: 'This is a headline',
+  //     text: 'Some body text',
+  //     link: {
+  //       label: 'Click me',
+  //       href: 'https://www.kickstartDS.com/',
+  //       newTab: false
+  //     },
+  //     background: 'https://www.kickstartDS.com/lovo.svg',
+  //     inverted: false
+  //   }
+  // };
+
+  // console.log('lens', JSON.stringify(lens, null, 2));
+  // console.log('reverse lense', JSON.stringify(reverseLens(lens), null, 2));
+
+  // const visualSchema = ajv.getSchema('http://kickstartds.com/visual.schema.json')!
+  //   .schema as JSONSchema.Object;
+  // const defaults = defaultObjectForSchema(visualSchema);
+  // console.log(defaults);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const reverse = applyLensToDoc(reverseLens(lens), tmp, undefined, defaults);
 
   const pageFields = convertToStoryblok({
     schemaIds,
     ajv
   });
+
+  // console.log(reverse);
 
   // const settingsFields = convertToStoryblok({
   //   schemaIds,

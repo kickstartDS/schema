@@ -8,6 +8,7 @@ import { default as glob } from 'fast-glob';
 import { resolve } from 'import-meta-resolve';
 import traverse from 'json-schema-traverse';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
+import { get } from 'jsonpointer';
 import _ from 'lodash';
 import { compose } from 'ramda';
 import uppercamelcase from 'uppercamelcase';
@@ -304,8 +305,7 @@ export function inlineDefinitions(jsonSchemas: JSONSchema.Interface[]): void {
             if (!originalSchema || !originalSchema.properties)
               throw new Error("Couldn't find original schema to pull properties from");
 
-            parentSchema.properties[propertyName] =
-              originalSchema.properties[subSchema.$ref.split('/').pop()];
+            parentSchema.properties[propertyName] = get(originalSchema, subSchema.$ref.split('#').pop());
           }
         }
       }
@@ -396,6 +396,21 @@ export async function processSchemaGlob(
   return processSchemas(await getSchemasForGlob(schemaGlob), ajv, typeResolution);
 }
 
+export async function processSchemaGlobs(
+  schemaGlobs: string[],
+  ajv: MyAjv,
+  typeResolution: boolean = true
+): Promise<string[]> {
+  return processSchemas(
+    await schemaGlobs.reduce(async (schemasPromise, schemaGlob) => {
+      const schemas: JSONSchema.Interface[] = await schemasPromise;
+      return schemas.concat(await getSchemasForGlob(schemaGlob));
+    }, Promise.resolve([] as JSONSchema.Interface[])),
+    ajv,
+    typeResolution
+  );
+}
+
 export async function processSchemas(
   jsonSchemas: JSONSchema.Interface[],
   ajv: MyAjv,
@@ -421,7 +436,6 @@ export async function processSchemas(
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it
-
   // 1. pre-process, before schemas enter `ajv`
   layerRefs(jsonSchemas, kdsSchemas);
   if (typeResolution) addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);

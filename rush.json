@@ -40,6 +40,12 @@
       "tags": ["tools"]
     },
     {
+      "packageName": "@kickstartds/jsonschema2types",
+      "projectFolder": "tools/jsonschema2types",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
       "packageName": "@kickstartds/jsonschema2netlifycms",
       "projectFolder": "tools/jsonschema2netlifycms",
       "reviewCategory": "tools",
@@ -54,6 +60,12 @@
     {
       "packageName": "@kickstartds/cambria-example",
       "projectFolder": "examples/cambria",
+      "reviewCategory": "examples",
+      "tags": ["examples"]
+    },
+    {
+      "packageName": "@kickstartds/types-example",
+      "projectFolder": "examples/types",
       "reviewCategory": "examples",
       "tags": ["examples"]
     },

@@ -235,7 +235,7 @@ export function layerRefs(jsonSchemas: JSONSchema.Interface[], kdsSchemas: JSONS
           const customSchemaFileName = customSchemaURLPathParts.pop();
 
           const kdsSchemaPathRest = kdsSchemaURLPathParts.pop();
-          const customSchemaPathRest = kdsSchemaURLPathParts.pop();
+          const customSchemaPathRest = customSchemaURLPathParts.pop();
 
           if (
             kdsSchemaFileName === customSchemaFileName &&

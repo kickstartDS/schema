@@ -6,6 +6,7 @@
     "module": "node16",
     "moduleResolution": "node16",
     "declaration": true,
-    "types": ["node"]
+    "types": ["node"],
+    "sourceMap": true
   }
 }

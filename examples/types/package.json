@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@kickstartds/design-system": "^2.5.13",
+    "@kickstartds/design-system": "^2.5.17",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2types": "workspace:*"
   },

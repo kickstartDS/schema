@@ -7,6 +7,7 @@
     "moduleResolution": "node16",
     "resolveJsonModule": true,
     "declaration": true,
-    "types": ["heft-jest", "node"]
+    "types": ["heft-jest", "node"],
+    "sourceMap": true
   }
 }

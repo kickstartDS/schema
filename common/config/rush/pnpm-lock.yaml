@@ -96,6 +96,7 @@ importers:
   ../../examples/types:
     specifiers:
       '@kickstartds/design-system': ^2.5.17
+      '@kickstartds/ds-agency': ^1.0.16
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2types': workspace:*
       '@rushstack/eslint-config': ^3.2.0
@@ -114,6 +115,7 @@ importers:
       typescript: ^5.0.4
     dependencies:
       '@kickstartds/design-system': 2.5.17_style-dictionary@3.8.0
+      '@kickstartds/ds-agency': 1.0.16_@bedrock-layout+css@2.2.9
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2types': link:../../tools/jsonschema2types
     devDependencies:
@@ -359,7 +361,7 @@ importers:
   ../../tools/jsonschema2types:
     specifiers:
       '@bcherny/json-schema-ref-parser': 10.0.5-fork
-      '@kickstartds/json-schema-to-typescript': ~13.1.14
+      '@kickstartds/json-schema-to-typescript': ~13.1.16
       '@kickstartds/jsonschema-utils': workspace:*
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
@@ -387,7 +389,7 @@ importers:
       object-traversal: 1.0.1
     devDependencies:
       '@bcherny/json-schema-ref-parser': 10.0.5-fork_3kjedzphb7h2xej4u7dazz5yki
-      '@kickstartds/json-schema-to-typescript': 13.1.14
+      '@kickstartds/json-schema-to-typescript': 13.1.16
       '@rushstack/eslint-config': 3.3.2_7haavtekmro7ptbnqmctjaodju
       '@rushstack/heft': 0.50.7_@types+node@18.17.1
       '@rushstack/heft-jest-plugin': 0.5.13_jhpc37zt54d4kfnyxzbbd4s4s4
@@ -928,6 +930,22 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/appboundary/3.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-eQ90yfR30O5IoVd/Q7hIDTfuCj7GvY2TMBHwt+QLQsXGiRzadWcwATILnBlipa4ykWEwkjLTHASGKOgcC8J0gw==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/center': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/center/2.7.2_styled-components@5.3.11:
     resolution: {integrity: sha512-LRwsbVD+iIqeB2vK4zaSJAhMoQAeVbV7Yw/coQjmUKZIl3Azl8acp/SR3VQc83ueaLsAmvq/rcdrmFASgLuIOg==}
     peerDependencies:
@@ -941,6 +959,21 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/center/3.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-+Ripqo+MRLTOyH+/ScbwPLgYdoK/tdRLGnsfL1Gs86zczQXgiSGYU33D4n0JB4CZZuj9jzm9GS2wh9QBTcf/8w==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/column-drop/2.1.2_styled-components@5.3.11:
     resolution: {integrity: sha512-dy/dIwqjSIzE6On41tVA8wKoeJx95w0vrAwQ3bHU/Ebn2773GDkWoWZRmr8mvEe2cNE2WBlu0a3FL3VZx7uWag==}
     peerDependencies:
@@ -952,6 +985,21 @@ packages:
     dependencies:
       '@bedrock-layout/spacing-constants': 2.9.0_styled-components@5.3.11
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/column-drop/3.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-DsbY5T+khzKZ+0RFaIfofRXXd610dXwyvY6tTWNBOdZX+znk2f2R9rAkWUaZ0FFcI4BAZ9bwcyCrXtawuzArYA==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/columns/2.7.4_styled-components@5.3.11:
@@ -971,6 +1019,21 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/columns/3.1.10_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-zrAsQjQxcs6IHRsfDeiOfPRAqqc31HoontlHSqU3oDWFxNmtx6YwcvekPGkSW5YVbWNsqLPbOS+O83BPNB6G3A==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/cover/2.5.2_styled-components@5.3.11:
     resolution: {integrity: sha512-8Fd/Qg6iKhvsf4q5m1TuxcljfVo87u2x1Vwc85Dg4OAHlMpUvMKPEgI9JvsmbF6XvYxzwP5CI7GJITOwskWU0A==}
     peerDependencies:
@@ -982,6 +1045,21 @@ packages:
     dependencies:
       '@bedrock-layout/spacing-constants': 2.9.0_styled-components@5.3.11
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/cover/3.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-PFDoZHTSBxq8urZqJepOpvVM3F5Fnxvo0Q7FQGMUPySzYITG1mTel7bXrXMRk51ijrQdvmw/FAPN5EmD7R/DOA==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/css-reset/1.5.2_styled-components@5.3.11:
@@ -997,6 +1075,10 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/css/2.2.9:
+    resolution: {integrity: sha512-s3uBH7ko2z5bxP4YXU7kaz082gwfRN79mXo8dAu+FNph4Jx7/3E7wAwhHxF7X8KCqX/+XrnIZ9haWJ3XPA3GZQ==}
+    dev: false
+
   /@bedrock-layout/frame/2.5.2_styled-components@5.3.11:
     resolution: {integrity: sha512-qBQpug8mbIxAQG7YeHKLElGL/VrJmAhxBeniAoouGZmg/vmmYKIzrzuD0KNMVzhiLIBAZnyQtxxBrm0lnalB1w==}
     peerDependencies:
@@ -1008,6 +1090,21 @@ packages:
     dependencies:
       '@bedrock-layout/spacing-constants': 2.9.0_styled-components@5.3.11
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/frame/3.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-kvx/YlVBLvGCWDwSYbgEzVkQ1qI8s/qbIUIPKhoqGbqIYYRQqeVk53PIcJA0igJlJAnkcThzQv9HTT7/jO8DdQ==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/grid/3.1.2_styled-components@5.3.11:
@@ -1023,6 +1120,21 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/grid/4.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-TU4hUVUdiRNDAZqu6Dtzrg0Y0YfApj+yOOtQ7hyizF+aLR1QLWd1VVZueg/EzDpXOJoklSzNXx+87tinGAW+tw==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/inline-cluster/2.7.2_styled-components@5.3.11:
     resolution: {integrity: sha512-6lKnOp2kozcozeANWKk0XSaBPKybT0eb4ZtLjsxamA4Sk5kaYQMeVKi8iBRkoNujUQ7I5igtrTmYqhA6qOKKKA==}
     peerDependencies:
@@ -1034,6 +1146,21 @@ packages:
     dependencies:
       '@bedrock-layout/spacing-constants': 2.9.0_styled-components@5.3.11
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/inline-cluster/3.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-eBsJNIZa0UoxfXKOnu1vC+gXjQlIT2Xw7dzN1jxKKINlSJhOQFzyryDQtfnTkrjWXGq3lbOt/Xiw5ZYWxYDEXA==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/inline/3.1.2_styled-components@5.3.11:
@@ -1048,6 +1175,21 @@ packages:
       '@bedrock-layout/inline-cluster': 2.7.2_styled-components@5.3.11
       '@bedrock-layout/spacing-constants': 2.9.0_styled-components@5.3.11
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/inline/4.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-QZsLctAPpyebHmE5dXb63WdKS6OcBnRDei1qY3/aseeEX5qkiy7rAbWdb3B/o8dUyFs0qoLLQc1RABxBz/sjaA==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/masonry-grid/3.2.3_styled-components@5.3.11:
@@ -1065,6 +1207,23 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/masonry-grid/4.2.3_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-wTO25d4KO44ocCLcK03norVJw56tHS1/PwsNos9ALHrM4u4zHmsF3qIVlCEBOSV2cRYzC3R8eVsQOrEJdhmdeA==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/grid': 4.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      '@bedrock-layout/use-resize-observer': 2.0.6_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/padbox/2.4.2_styled-components@5.3.11:
     resolution: {integrity: sha512-u8ESgAsDYl4Mh8QuQhOM7mOZztAETTsHn0vSXkB80ArmEAoyRZj/Ier0pjOAAt9Y9CngcF7NuP+x52ASXwyrRQ==}
     peerDependencies:
@@ -1076,6 +1235,21 @@ packages:
     dependencies:
       '@bedrock-layout/spacing-constants': 2.9.0_styled-components@5.3.11
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/padbox/3.2.1_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-ZzNIgi9W3Tckp7mEAz7qSRQQyOALFxCHMVU2GW6GMFhpgGDnU6NASL3sqWvODtkM4xSXljPFLMvBakm1Gvzgfg==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/primitives/2.2.5_styled-components@5.3.11:
@@ -1112,6 +1286,40 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/primitives/3.0.24_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-+fLFoktwvDNfFzdFnW5rRB/AZLLUPQFR/p4LLlD64nkkicfVWzYjMYmQOkklQ2sLGia6yDUEDMlbP20cv5A6kA==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/appboundary': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/center': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/column-drop': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/columns': 3.1.10_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/cover': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/frame': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/grid': 4.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/inline': 4.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/inline-cluster': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/masonry-grid': 4.2.3_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/padbox': 3.2.1_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/reel': 2.1.9_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/register-resize-callback': 2.0.3
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/split': 3.1.10_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/stack': 3.1.9_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      '@bedrock-layout/use-container-query': 2.0.6_react@18.2.0
+      '@bedrock-layout/use-forwarded-ref': 2.0.6_react@18.2.0
+      '@bedrock-layout/use-resize-observer': 2.0.6_react@18.2.0
+      '@bedrock-layout/use-stateful-ref': 2.0.6_react@18.2.0
+      react: 18.2.0
+    transitivePeerDependencies:
+      - '@bedrock-layout/css'
+    dev: false
+
   /@bedrock-layout/reel/1.4.2_styled-components@5.3.11:
     resolution: {integrity: sha512-8l9tRoOhpIKFr+WksQvG8K7Yv0yA/foecpx+5y6ZSacWFqYg+tNbJ6p8GIycwn5HwqaZwGxxJJP+X7I5C3ItYQ==}
     peerDependencies:
@@ -1125,8 +1333,27 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/reel/2.1.9_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-aNmNFztKfYmK3NXoMET5L8YESjvNjJ5s2KdYpxfNILZ6U8a6+eWc2m1pX5wyw/lTEHagMtNRnQBq8oG2AeaaZg==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/register-resize-callback/1.2.1:
     resolution: {integrity: sha512-u3F57pVooayCUr3RcmUOMLVSoVIT10Dq8robX1WmtvAoSjbTXr7ASvJCti2dCREP1XbwunxupOP/HAL/jRxPeA==}
+    dev: false
+
+  /@bedrock-layout/register-resize-callback/2.0.3:
+    resolution: {integrity: sha512-fyVix+XBAzIoKoSC1bwS5mYEJcR+EBL3fOVFbliut8Rxm1AQmqCjWMiS/izfMrmyEbuGGJUcBqNExVANG/OAlw==}
     dev: false
 
   /@bedrock-layout/spacing-constants/2.9.0_styled-components@5.3.11:
@@ -1139,6 +1366,18 @@ packages:
         optional: true
     dependencies:
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/spacing-constants/3.2.5_react@18.2.0:
+    resolution: {integrity: sha512-RjjVRDbq0nNX+qK3G9Wrm+ckzSWvO9iyuB9ztFaeduAESZ1hGKzPTML2fnhHtFTJbNC/mwKybNhGGMTc2BAwdA==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      open-props: 1.5.15
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/split/2.8.2_styled-components@5.3.11:
@@ -1154,6 +1393,21 @@ packages:
       styled-components: 5.3.11
     dev: false
 
+  /@bedrock-layout/split/3.1.10_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-Sk8Qyl8PXcjrGD3UGgKTPL7+Maf6dwRfae+KgL/Lnqj4xWe8S/xqjJRNBJqfiRKbTauR+ckNBioBskWj6r0bQg==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/stack/2.5.3_styled-components@5.3.11:
     resolution: {integrity: sha512-/QBWRZyJ/jXr0Wg1Hx5cXvHFRXIqnaLNxFKnY1dWeelC9g+J9pAXGG3q0fUxJojxPVfjKUiUP7HEdbu5vTs7kA==}
     peerDependencies:
@@ -1165,6 +1419,21 @@ packages:
     dependencies:
       '@bedrock-layout/spacing-constants': 2.9.0_styled-components@5.3.11
       styled-components: 5.3.11
+    dev: false
+
+  /@bedrock-layout/stack/3.1.9_mgd732mskqzh36wswn66qdyfee:
+    resolution: {integrity: sha512-Sz0cZJJlzcdIajDMkedKHNcsa5eYAG/Cfhe+q9iolT6X9eoJghr10R30ObJ3c0xHkPsryqI9naq3ANuFD+86Tw==}
+    peerDependencies:
+      '@bedrock-layout/css': ^2.1.0
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/css': 2.2.9
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@bedrock-layout/type-utils': 0.1.3_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/type-utils/0.0.12:
@@ -1185,6 +1454,17 @@ packages:
         optional: true
     dev: false
 
+  /@bedrock-layout/type-utils/0.1.3_react@18.2.0:
+    resolution: {integrity: sha512-j9QktmFQBEWjoGuF67KCrMeVY3ypAlc9BkAuKewDz/YeydSUE7pyMt+K1HbsIQpyNP4rZ4si6zHzX5uwtpRk3Q==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/use-container-query/1.7.1:
     resolution: {integrity: sha512-CvpkBnsUckCxw83MZ6SdHCWJKZH+7hUcSIVjHuc+U8j45IthLsO740es/6thKaPOLWLeFpyuZA0XVQco8+k0nA==}
     peerDependencies:
@@ -1196,6 +1476,19 @@ packages:
       '@bedrock-layout/use-resize-observer': 1.4.1
     dev: false
 
+  /@bedrock-layout/use-container-query/2.0.6_react@18.2.0:
+    resolution: {integrity: sha512-Yu/7JZjsmDbB0RnSeJvcqA0mUgJV04rJUReibTvkugQFeD2jEtLqMuw/fHbxzIpHClBkv7qOPOJmDtfbbBN8sw==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/use-forwarded-ref': 2.0.6_react@18.2.0
+      '@bedrock-layout/use-resize-observer': 2.0.6_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/use-forwarded-ref/1.6.1:
     resolution: {integrity: sha512-GD9A9AFLzFNjr7k6fgerSqxfwDWl+wsPS11PErOKe1zkVz0y7RGC9gzlOiX/JrgpyB3NFHWIuGtoOQqifJQQpw==}
     peerDependencies:
@@ -1205,6 +1498,18 @@ packages:
         optional: true
     dependencies:
       '@bedrock-layout/use-stateful-ref': 1.4.1
+    dev: false
+
+  /@bedrock-layout/use-forwarded-ref/2.0.6_react@18.2.0:
+    resolution: {integrity: sha512-4d0+qhb8SwSecA9KU9/yw6P6eBqdOETyqXyN2hUszRnp0of3NmAGGR3xdBB6m4uXYdOQeqvHtZHn6JLi/IZ1MQ==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/use-stateful-ref': 2.0.6_react@18.2.0
+      react: 18.2.0
     dev: false
 
   /@bedrock-layout/use-resize-observer/1.4.1:
@@ -1219,6 +1524,19 @@ packages:
       '@bedrock-layout/use-stateful-ref': 1.4.1
     dev: false
 
+  /@bedrock-layout/use-resize-observer/2.0.6_react@18.2.0:
+    resolution: {integrity: sha512-miN3Sg3JtdQe6RUCode+W0E4lbNAo50O2QzMrAw9jyGSxyTFcWJj10QtufwGHCrtvwc4vqj6tEO/pe/avDJ0jA==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@bedrock-layout/register-resize-callback': 2.0.3
+      '@bedrock-layout/use-stateful-ref': 2.0.6_react@18.2.0
+      react: 18.2.0
+    dev: false
+
   /@bedrock-layout/use-stateful-ref/1.4.1:
     resolution: {integrity: sha512-4eKO2KdQEXcR5LI4QcxqlJykJUDQJWDeWYAukIn6sRQYoabcfI5kDl61PUi6FR6o8VFgQ8IEP7HleKqWlSe8SQ==}
     peerDependencies:
@@ -1226,6 +1544,17 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+    dev: false
+
+  /@bedrock-layout/use-stateful-ref/2.0.6_react@18.2.0:
+    resolution: {integrity: sha512-phAVuYThs+xdYAhbah2/OONFa9R11PEempmU+Fh8P+GTExcbnJHS1MM6ObNlO76xphgayfUy/WVxuLPM1bQSNg==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@emotion/is-prop-valid/1.2.1:
@@ -1861,6 +2190,24 @@ packages:
       vhtml: 2.2.0
     dev: false
 
+  /@kickstartds/base/2.3.0-canary.1457.6116.0_4cbuzmrvesxoywv3qovwtffodm:
+    resolution: {integrity: sha512-iXGAd1jAFaRiZwY7Mx6jCfjiutZAywY9W/6ScQIDhtMc+JrDKJGsntD5py1pHY1Tk8Imq7gWDwqDmFXnCq1Y2Q==}
+    peerDependencies:
+      '@kickstartds/core': ^2.0.3
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@kickstartds/core': 2.3.0-canary.1457.6116.0
+      classnames: 2.3.2
+      focus-visible: 5.2.0
+      markdown-to-jsx: 7.2.1
+      photoswipe: 5.3.8
+      vhtml: 2.2.0
+    dev: false
+
   /@kickstartds/blog/2.0.4-next.6:
     resolution: {integrity: sha512-e0cKh9V0AaWmAefIAVem9fR/hjolUqxvVucZJljIBlDzULwbnuLctBG+9uvOlITyMs52xKHe04v0SYtrK8O0rA==}
     peerDependencies:
@@ -1894,6 +2241,24 @@ packages:
       '@kickstartds/core': 2.2.0
       classnames: 2.3.2
       date-fns: 2.30.0
+    dev: false
+
+  /@kickstartds/blog/2.3.0-canary.1457.6116.0_2fghtgt3tdsxpphiswcyzfeeou:
+    resolution: {integrity: sha512-93yDMhw44ME+WV12g7Y6CNqUvS9ltU+jQkKtBqwA0pw/SDWZWFDFnI4BX4QEMmqsOnijIPrYbaCaTrRXmoAHKA==}
+    peerDependencies:
+      '@kickstartds/base': ^2.0.3
+      '@kickstartds/core': ^2.0.3
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@kickstartds/base': 2.3.0-canary.1457.6116.0_4cbuzmrvesxoywv3qovwtffodm
+      '@kickstartds/core': 2.3.0-canary.1457.6116.0
+      classnames: 2.3.2
+      date-fns: 2.30.0
+      react: 18.2.0
     dev: false
 
   /@kickstartds/content/2.0.1--canary.61.48.0:
@@ -1933,6 +2298,25 @@ packages:
       classnames: 2.3.2
       countup.js: 2.7.0
       lodash-es: 4.17.21
+    dev: false
+
+  /@kickstartds/content/2.2.0-next.0_2fghtgt3tdsxpphiswcyzfeeou:
+    resolution: {integrity: sha512-v9xRtKd4EQZW4XVg02+xq4YVzUDonul3CVyjM6DpDWkLfCvlfKflmG83d8bD1bXecxEkatGIVKL8CyV4xe1uMg==}
+    peerDependencies:
+      '@kickstartds/base': ^2.2.0
+      '@kickstartds/core': ^2.2.0
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@kickstartds/base': 2.3.0-canary.1457.6116.0_4cbuzmrvesxoywv3qovwtffodm
+      '@kickstartds/core': 2.3.0-canary.1457.6116.0
+      classnames: 2.3.2
+      countup.js: 2.7.0
+      lodash-es: 4.17.21
+      react: 18.2.0
     dev: false
 
   /@kickstartds/core/2.0.4-next.2:
@@ -1988,6 +2372,34 @@ packages:
       sass: 1.64.1
     dev: false
 
+  /@kickstartds/core/2.3.0-canary.1457.6116.0:
+    resolution: {integrity: sha512-uw2RUzwjW+QCv5B84xdam6d1wsCUvmD/7f9xf48KA+xL7NCQnqJasY6NLO5Cch+SoeN7Y1lscUNwCpd/iUCI5Q==}
+    peerDependencies:
+      '@storybook/types': ^7.0.5
+      react: ^17.0.2 || ^18.2.0
+      storybook-design-token: 3.0.0-beta.3
+    peerDependenciesMeta:
+      '@storybook/types':
+        optional: true
+      react:
+        optional: true
+      storybook-design-token:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      bourbon: 7.3.0
+      classnames: 2.3.2
+      del: 6.1.1
+      dependency-graph: 0.11.0
+      esbuild: 0.17.19
+      fast-glob: 3.3.1
+      fs-extra: 11.1.1
+      json-schema: 0.4.0
+      lazysizes: 5.3.2
+      pubsub-js: 1.9.4
+      sass: 1.64.1
+    dev: false
+
   /@kickstartds/design-system/2.5.17_style-dictionary@3.8.0:
     resolution: {integrity: sha512-Kqm2vaurPGgRJaiElWDsWG6qxX/IZJ0eepenIW2alJBygo8cWGaa9lVYft7k8X4NsfakkDYPxshvgnas87UbzQ==}
     engines: {yarn: ^1.22.10}
@@ -2015,6 +2427,29 @@ packages:
       - react-is
       - storybook-design-token
       - style-dictionary
+      - supports-color
+    dev: false
+
+  /@kickstartds/ds-agency/1.0.16_@bedrock-layout+css@2.2.9:
+    resolution: {integrity: sha512-T+eD+qUKFFhPAsb0tBZLCBSKeBojnXNJJWr0TV4xv8ilZkSt89Sg5pPEgQPKXp+Nb8ahg+3AECM4MRiGz72irQ==}
+    dependencies:
+      '@bedrock-layout/primitives': 3.0.24_mgd732mskqzh36wswn66qdyfee
+      '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
+      '@kickstartds/base': 2.3.0-canary.1457.6116.0_4cbuzmrvesxoywv3qovwtffodm
+      '@kickstartds/blog': 2.3.0-canary.1457.6116.0_2fghtgt3tdsxpphiswcyzfeeou
+      '@kickstartds/content': 2.2.0-next.0_2fghtgt3tdsxpphiswcyzfeeou
+      '@kickstartds/core': 2.3.0-canary.1457.6116.0
+      '@kickstartds/form': 2.3.0-canary.1457.6116.0_2fghtgt3tdsxpphiswcyzfeeou
+      classnames: 2.3.2
+      lazysizes: 5.3.2
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-markdown: 8.0.7_react@18.2.0
+    transitivePeerDependencies:
+      - '@bedrock-layout/css'
+      - '@storybook/types'
+      - '@types/react'
+      - storybook-design-token
       - supports-color
     dev: false
 
@@ -2051,8 +2486,25 @@ packages:
       classnames: 2.3.2
     dev: false
 
-  /@kickstartds/json-schema-to-typescript/13.1.14:
-    resolution: {integrity: sha512-ARBtWucC5+HszyPOKUMeIvPYTnhLtLkVxFWqiKohTPMtofJBkgQKVwoLw5FRz/nr8jOJGDrZVFsO5fRo7Lid9A==}
+  /@kickstartds/form/2.3.0-canary.1457.6116.0_2fghtgt3tdsxpphiswcyzfeeou:
+    resolution: {integrity: sha512-zVeaRRNPCqIFh92iTVKAfCvvF85LNv9Zi40bkAXu9A8DJYXq61XcIChiusBkvXi9QRPReQJfZ4LEJaLXL0A6BA==}
+    peerDependencies:
+      '@kickstartds/base': ^2.0.3
+      '@kickstartds/core': ^2.0.3
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@kickstartds/base': 2.3.0-canary.1457.6116.0_4cbuzmrvesxoywv3qovwtffodm
+      '@kickstartds/core': 2.3.0-canary.1457.6116.0
+      classnames: 2.3.2
+      react: 18.2.0
+    dev: false
+
+  /@kickstartds/json-schema-to-typescript/13.1.16:
+    resolution: {integrity: sha512-XZWk0mjDeTPP6oDcPjOd0R4NZRHTwl4aXTDNxYa3RaBy8Hg9wXnYn2JghZ6Na6e8UZABhBXZ4EjHuvTPqEpg7A==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     dependencies:
@@ -6695,6 +7147,10 @@ packages:
       mimic-fn: 4.0.0
     dev: true
 
+  /open-props/1.5.15:
+    resolution: {integrity: sha512-LwkMUm7xr7C2qt7RE1rEyAt8OTHDE2QSvWM3g2B6OCHkj+wsWhwi5unuiobM/bOWX253WjS1GmMuY36E2v0amQ==}
+    dev: false
+
   /open/9.1.0:
     resolution: {integrity: sha512-OS+QTnw1/4vrf+9hh1jc1jnYjzSG4ttTBB8UxOwAnInG3Uo4ssetzC1ihqaIHjLJnA5GGlRl6QlZXOTQhRBUvg==}
     engines: {node: '>=14.16'}
@@ -7085,6 +7541,19 @@ packages:
       react: 15.4.2
     dev: false
 
+  /react-dom/18.2.0_react@18.2.0:
+    resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
+    peerDependencies:
+      react: ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      loose-envify: 1.4.0
+      react: 18.2.0
+      scheduler: 0.23.0
+    dev: false
+
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -7121,6 +7590,37 @@ packages:
       - supports-color
     dev: false
 
+  /react-markdown/8.0.7_react@18.2.0:
+    resolution: {integrity: sha512-bvWbzG4MtOU62XqBx3Xx+zB2raaFFsq4mYiAzfjXJMEz2sixgeAfraA3tvzULF02ZdOMUOKTBFFaZJDDrq+BJQ==}
+    peerDependencies:
+      '@types/react': '>=16'
+      react: '>=16'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/hast': 2.3.5
+      '@types/prop-types': 15.7.5
+      '@types/unist': 2.0.7
+      comma-separated-tokens: 2.0.3
+      hast-util-whitespace: 2.0.1
+      prop-types: 15.8.1
+      property-information: 6.2.0
+      react: 18.2.0
+      react-is: 18.2.0
+      remark-parse: 10.0.2
+      remark-rehype: 10.1.0
+      space-separated-tokens: 2.0.2
+      style-to-object: 0.4.1
+      unified: 10.1.2
+      unist-util-visit: 4.1.2
+      vfile: 5.3.7
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /react/15.4.2:
     resolution: {integrity: sha512-qfWUqdaiZjHlmsWI9Cvw9UvugnxluSsEoSOeykOiB37xQokYpxNqdQizNsAqVQvrNz4I8Pf7wCfB5g+ocvJS8Q==}
     engines: {node: '>=0.10.0'}
@@ -7128,6 +7628,13 @@ packages:
       fbjs: 0.8.18
       loose-envify: 1.4.0
       object-assign: 4.1.1
+    dev: false
+
+  /react/18.2.0:
+    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
     dev: false
 
   /read-pkg-up/1.0.1:
@@ -7390,6 +7897,12 @@ packages:
       chokidar: 3.5.3
       immutable: 4.3.1
       source-map-js: 1.0.2
+    dev: false
+
+  /scheduler/0.23.0:
+    resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
+    dependencies:
+      loose-envify: 1.4.0
     dev: false
 
   /semver/5.7.2:

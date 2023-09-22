@@ -217,6 +217,38 @@ export function reduceSchemaAllOf(schema: JSONSchema.Interface, ajv: MyAjv): JSO
   return reducedSchema;
 }
 
+export function shouldLayer(schemaId: string, targetSchemaId: string): boolean {
+  const targetSchemaURL = new URL(targetSchemaId);
+  const layeringSchemaURL = new URL(schemaId);
+
+  const targetSchemaURLPathParts = targetSchemaURL.pathname.split('/');
+  const layeringSchemaURLPathParts = layeringSchemaURL.pathname.split('/');
+
+  const targetSchemaFileName = targetSchemaURLPathParts.pop();
+  const layeringSchemaFileName = layeringSchemaURLPathParts.pop();
+
+  const targetSchemaPathRest = targetSchemaURLPathParts.pop();
+  const layeringSchemaPathRest = layeringSchemaURLPathParts.pop();
+
+  const shouldLayer =
+    targetSchemaFileName === layeringSchemaFileName &&
+    ((layeringSchemaPathRest && targetSchemaPathRest === layeringSchemaPathRest) || !layeringSchemaPathRest);
+
+  return shouldLayer;
+}
+
+export function isLayering(schemaId: string, targetSchemaIds: string[]): boolean {
+  return targetSchemaIds.some((targetSchemaId) => shouldLayer(schemaId, targetSchemaId));
+}
+
+export function layeredSchemaId(schemaId: string, targetSchemaIds: string[]): string {
+  const layeredId = targetSchemaIds.find((targetSchemaId) => shouldLayer(schemaId, targetSchemaId));
+
+  if (!layeredId) throw new Error('Tried getting a layered id, for a schema that is not layering');
+
+  return layeredId;
+}
+
 export function layerRefs(jsonSchemas: JSONSchema.Interface[], kdsSchemas: JSONSchema.Interface[]): void {
   jsonSchemas.forEach((jsonSchema) => {
     kdsSchemas.forEach((kdsSchema) => {
@@ -225,22 +257,7 @@ export function layerRefs(jsonSchemas: JSONSchema.Interface[], kdsSchemas: JSONS
           if (!subSchema.$ref || !subSchema.$ref.includes('http')) return;
           if (!jsonSchema.$id) throw new Error('Found a schema without $id, which is unsupported');
 
-          const kdsSchemaURL = new URL(jsonSchema.$id);
-          const customSchemaURL = new URL(subSchema.$ref);
-
-          const kdsSchemaURLPathParts = kdsSchemaURL.pathname.split('/');
-          const customSchemaURLPathParts = customSchemaURL.pathname.split('/');
-
-          const kdsSchemaFileName = kdsSchemaURLPathParts.pop();
-          const customSchemaFileName = customSchemaURLPathParts.pop();
-
-          const kdsSchemaPathRest = kdsSchemaURLPathParts.pop();
-          const customSchemaPathRest = customSchemaURLPathParts.pop();
-
-          if (
-            kdsSchemaFileName === customSchemaFileName &&
-            (!customSchemaPathRest || (customSchemaPathRest && kdsSchemaPathRest === customSchemaPathRest))
-          ) {
+          if (shouldLayer(jsonSchema.$id, subSchema.$ref)) {
             subSchema.$ref = jsonSchema.$id;
           }
         }
@@ -476,28 +493,12 @@ export async function processSchemas(
   return collectedSchemaIds;
 }
 
-// TODO deprecated, should go after refactor
-export function getLayeredRefId(refId: string, reffingSchemaId: string, ajv: MyAjv): string {
-  if (!refId.includes('schema.kickstartds.com')) return refId;
-
-  // TODO this needs to actually be handled (definitions could theoretically be overwritten, too)
-  // should go away anyways, though, with the removing of `getLayeredRefId` (-> helpers.ts pre-processing step)
-  if (refId.includes('#/definitions/')) return refId;
-
-  const component = path.basename(refId);
-  const layeredComponent = Object.keys(ajv.schemas).filter(
-    (schemaId) => schemaId.includes(component) && !schemaId.includes('schema.kickstartds.com')
-  );
-
-  return layeredComponent.length > 0 &&
-    (reffingSchemaId.includes('schema.kickstartds.com') ||
-      (!refId.includes('section.schema.json') && reffingSchemaId.includes('section.schema.json')))
-    ? layeredComponent[0]
-    : refId;
-}
-
 export function getSchemaName(schemaId: string | undefined): string {
   return (schemaId && schemaId.split('/').pop()?.split('.').shift()) || '';
+}
+
+export function getSchemaModule(schemaId: string | undefined): string {
+  return (schemaId && schemaId.split('/')[3]) || '';
 }
 
 export function getSchemaForId(schemaId: string, ajv: MyAjv): JSONSchema.Interface {
@@ -506,16 +507,6 @@ export function getSchemaForId(schemaId: string, ajv: MyAjv): JSONSchema.Interfa
 
 export function getSchemasForIds(schemaIds: string[], ajv: MyAjv): JSONSchema.Interface[] {
   return schemaIds.map((schemaId) => getSchemaForId(schemaId, ajv));
-}
-
-// TODO deprecated, should go after refactor
-export function toArray(x: JSONSchema.Interface | JSONSchema.Interface[] | string | string[]): unknown[] {
-  return x instanceof Array ? x : [x];
-}
-
-// TODO deprecated, should go after refactor
-export function toSchema(x: JSONSchema.Interface | string): JSONSchema.Interface {
-  return x instanceof Object ? x : JSON.parse(x);
 }
 
 export function getCustomSchemaIds(schemaIds: string[]): string[] {

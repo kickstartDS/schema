@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@bcherny/json-schema-ref-parser": "10.0.5-fork",
-    "@kickstartds/json-schema-to-typescript": "~13.1.14",
+    "@kickstartds/json-schema-to-typescript": "~13.1.16",
     "@rushstack/eslint-config": "^3.2.0",
     "@rushstack/heft": "^0.50.4",
     "@rushstack/heft-jest-plugin": "~0.5.10",

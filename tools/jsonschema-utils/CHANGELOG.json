@@ -1,0 +1,17 @@
+{
+  "name": "@kickstartds/jsonschema-utils",
+  "entries": [
+    {
+      "version": "2.4.10",
+      "tag": "@kickstartds/jsonschema-utils_v2.4.10",
+      "date": "Sun, 24 Sep 2023 13:58:19 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix layering, add some utility functions"
+          }
+        ]
+      }
+    }
+  ]
+}

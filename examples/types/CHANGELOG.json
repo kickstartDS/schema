@@ -1,0 +1,25 @@
+{
+  "name": "@kickstartds/types-example",
+  "entries": [
+    {
+      "version": "1.1.0",
+      "tag": "@kickstartds/types-example_v1.1.0",
+      "date": "Sun, 24 Sep 2023 13:58:19 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "add example of types conversion"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.4.10`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2types\" to `1.1.0`"
+          }
+        ]
+      }
+    }
+  ]
+}

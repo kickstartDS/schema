@@ -1,0 +1,17 @@
+{
+  "name": "@kickstartds/cambria",
+  "entries": [
+    {
+      "version": "1.0.2",
+      "tag": "@kickstartds/cambria_v1.0.2",
+      "date": "Sun, 24 Sep 2023 13:58:19 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "remove patch definition"
+          }
+        ]
+      }
+    }
+  ]
+}

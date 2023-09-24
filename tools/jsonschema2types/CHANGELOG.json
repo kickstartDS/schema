@@ -1,0 +1,22 @@
+{
+  "name": "@kickstartds/jsonschema2types",
+  "entries": [
+    {
+      "version": "1.1.0",
+      "tag": "@kickstartds/jsonschema2types_v1.1.0",
+      "date": "Sun, 24 Sep 2023 13:58:19 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "add first version of converter"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.4.10`"
+          }
+        ]
+      }
+    }
+  ]
+}

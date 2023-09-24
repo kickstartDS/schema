@@ -1,11 +1,11 @@
-# Change Log - @kickstartds/jsonschema-utils
+# Change Log - @kickstartds/types-example
 
 This log was last generated on Sun, 24 Sep 2023 13:58:19 GMT and should not be manually modified.
 
-## 2.4.10
+## 1.1.0
 Sun, 24 Sep 2023 13:58:19 GMT
 
-### Patches
+### Minor changes
 
-- fix layering, add some utility functions
+- add example of types conversion
 

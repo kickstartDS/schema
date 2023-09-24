@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2types",
   "entries": [
     {
+      "version": "1.1.1",
+      "tag": "@kickstartds/jsonschema2types_v1.1.1",
+      "date": "Sun, 24 Sep 2023 20:33:36 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "don't write files, return record of generated types"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.0",
       "tag": "@kickstartds/jsonschema2types_v1.1.0",
       "date": "Sun, 24 Sep 2023 13:58:19 GMT",

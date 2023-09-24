@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/types-example",
+      "comment": "write files in example code now",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/types-example"
+}

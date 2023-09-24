@@ -111,6 +111,7 @@ importers:
       eslint-plugin-json-files: ~2.2.0
       import-meta-resolve: ~3.0.0
       json-schema-typed: ~8.0.1
+      pascal-case: ^3.1.2
       prettier: ^2.8.8
       typescript: ^5.0.4
     dependencies:
@@ -131,6 +132,7 @@ importers:
       eslint-plugin-json-files: 2.2.0_eslint@8.50.0
       import-meta-resolve: 3.0.0
       json-schema-typed: 8.0.1
+      pascal-case: 3.1.2
       prettier: 2.8.8
       typescript: 5.2.2
 
@@ -2154,6 +2156,24 @@ packages:
       - supports-color
     dev: false
 
+  /@kickstartds/base/2.2.0_@kickstartds+core@2.2.0:
+    resolution: {integrity: sha512-r6y24lO0wGb6Cffh1wD1irIZukvwdaWgxLnRUgXDKhyRacq2AVqNzFYm0N+ONlphvQxVbz8+UySfMojIq3rl8Q==}
+    peerDependencies:
+      '@kickstartds/core': ^2.0.3
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/core': 2.2.0
+      classnames: 2.3.2
+      focus-visible: 5.2.0
+      markdown-to-jsx: 7.3.2
+      photoswipe: 5.4.1
+      vhtml: 2.2.0
+    dev: false
+
   /@kickstartds/base/2.3.0-canary.1457.6134.0_csr3ojkgoyupmsr3ttihnzezaa:
     resolution: {integrity: sha512-XB5y+nzgydmcr4RYT3GVW1/HZSPpwI5ygGvUJYg3tWu/5eAdoIZCNP0WAL8Sfw7/Yl8/+6TG3v8My1xv7Va18w==}
     peerDependencies:
@@ -2181,15 +2201,13 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.22.15
-      '@kickstartds/base': 2.0.4-next.5
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
       '@kickstartds/core': 2.2.0
       classnames: 2.3.2
       date-fns: 2.30.0
     transitivePeerDependencies:
       - '@storybook/types'
-      - '@types/react'
       - storybook-design-token
-      - supports-color
     dev: false
 
   /@kickstartds/blog/2.3.0-canary.1457.6134.0_icoklxzolwd42p7jpuchqzifyq:
@@ -2393,14 +2411,12 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.22.15
-      '@kickstartds/base': 2.0.4-next.5
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
       '@kickstartds/core': 2.2.0
       classnames: 2.3.2
     transitivePeerDependencies:
       - '@storybook/types'
-      - '@types/react'
       - storybook-design-token
-      - supports-color
     dev: false
 
   /@kickstartds/form/2.3.0-canary.1457.6134.0_icoklxzolwd42p7jpuchqzifyq:

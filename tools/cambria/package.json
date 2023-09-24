@@ -47,10 +47,5 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "to-json-schema@0.2.5": "patches/to-json-schema@0.2.5.patch"
-    }
   }
 }

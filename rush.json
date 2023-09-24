@@ -37,7 +37,8 @@
       "packageName": "@kickstartds/jsonschema-utils",
       "projectFolder": "tools/jsonschema-utils",
       "reviewCategory": "tools",
-      "tags": ["tools"]
+      "tags": ["tools"],
+      "shouldPublish": true
     },
     {
       "packageName": "@kickstartds/jsonschema2types",

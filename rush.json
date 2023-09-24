@@ -31,7 +31,8 @@
       "packageName": "@kickstartds/cambria",
       "projectFolder": "tools/cambria",
       "reviewCategory": "tools",
-      "tags": ["tools"]
+      "tags": ["tools"],
+      "shouldPublish": true
     },
     {
       "packageName": "@kickstartds/jsonschema-utils",
@@ -44,37 +45,43 @@
       "packageName": "@kickstartds/jsonschema2types",
       "projectFolder": "tools/jsonschema2types",
       "reviewCategory": "tools",
-      "tags": ["tools"]
+      "tags": ["tools"],
+      "shouldPublish": true
     },
     {
       "packageName": "@kickstartds/jsonschema2netlifycms",
       "projectFolder": "tools/jsonschema2netlifycms",
       "reviewCategory": "tools",
-      "tags": ["tools"]
+      "tags": ["tools"],
+      "shouldPublish": true
     },
     {
       "packageName": "@kickstartds/jsonschema2storyblok",
       "projectFolder": "tools/jsonschema2storyblok",
       "reviewCategory": "tools",
-      "tags": ["tools"]
+      "tags": ["tools"],
+      "shouldPublish": true
     },
     {
       "packageName": "@kickstartds/cambria-example",
       "projectFolder": "examples/cambria",
       "reviewCategory": "examples",
-      "tags": ["examples"]
+      "tags": ["examples"],
+      "shouldPublish": true
     },
     {
       "packageName": "@kickstartds/types-example",
       "projectFolder": "examples/types",
       "reviewCategory": "examples",
-      "tags": ["examples"]
+      "tags": ["examples"],
+      "shouldPublish": true
     },
     {
       "packageName": "@kickstartds/converter-example",
       "projectFolder": "examples/converter",
       "reviewCategory": "examples",
-      "tags": ["examples"]
+      "tags": ["examples"],
+      "shouldPublish": true
     }
   ]
 }

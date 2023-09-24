@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/types-example",
+      "comment": "add example of types conversion",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/types-example"
+}

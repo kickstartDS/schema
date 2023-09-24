@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2types",
+      "comment": "add first version of converter",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2types"
+}

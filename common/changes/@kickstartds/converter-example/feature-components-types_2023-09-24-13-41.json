@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/converter-example",
+      "comment": "update design system version used",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/converter-example"
+}

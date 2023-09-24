@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "remove patch definition",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

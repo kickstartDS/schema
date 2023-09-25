@@ -376,12 +376,12 @@ importers:
       prettier: ^2.8.8
       typescript: ^5.0.4
     dependencies:
+      '@kickstartds/json-schema-to-typescript': 13.1.16
       '@kickstartds/jsonschema-utils': link:../jsonschema-utils
       ajv: 8.12.0
       object-traversal: 1.0.1
     devDependencies:
       '@bcherny/json-schema-ref-parser': 10.0.5-fork_3kjedzphb7h2xej4u7dazz5yki
-      '@kickstartds/json-schema-to-typescript': 13.1.16
       '@rushstack/eslint-config': 3.3.4_jk7qbkaijtltyu4ajmze3dfiwa
       '@rushstack/heft': 0.50.7_@types+node@18.17.19
       '@rushstack/heft-jest-plugin': 0.5.13_4uhzylbxzmctbkkxsst42zcpoy
@@ -896,7 +896,6 @@ packages:
       '@types/json-schema': 7.0.13
       call-me-maybe: 1.0.2
       js-yaml: 4.1.0
-    dev: true
     patched: true
 
   /@bcoe/v8-coverage/0.2.3:
@@ -2454,7 +2453,7 @@ packages:
       minimist: 1.2.8
       mkdirp: 1.0.4
       prettier: 2.8.8
-    dev: true
+    dev: false
 
   /@kickstartds/style-dictionary/2.0.1-next.1_style-dictionary@3.8.0:
     resolution: {integrity: sha512-VhfYNfzvUJtv2A8v7u/g0GOJTDy2w48+QCUJZq7CLW1oo1Jv8NAIYCurpQcRdoHoKODkp3GpPYltoLRAbmuuig==}
@@ -2797,7 +2796,6 @@ packages:
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 18.17.19
-    dev: true
 
   /@types/glob/8.1.0:
     resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
@@ -2866,7 +2864,7 @@ packages:
     resolution: {integrity: sha512-ZTcmhiI3NNU7dEvWLZJkzG6ao49zOIjEgIE0RgV7wbPxU0f2xT3VSAHw2gmst8swH6V0YkLRGp4qPlX/6I90MQ==}
     dependencies:
       '@types/lodash': 4.14.199
-    dev: true
+    dev: false
 
   /@types/lodash/4.14.199:
     resolution: {integrity: sha512-Vrjz5N5Ia4SEzWWgIVwnHNEnb1UE1XMkvY5DGXrAeOGE9imk0hgTHh5GyDjLDJi9OTCn9oo9dXH1uToK1VRfrg==}
@@ -5200,7 +5198,6 @@ packages:
     dependencies:
       '@types/glob': 7.2.0
       glob: 7.2.3
-    dev: true
 
   /glob/7.0.6:
     resolution: {integrity: sha512-f8c0rE8JiCxpa52kWPAOa3ZaYEnzofDzCQLCn3Vdk0Z5OVLq3BsRFJI4S4ykpeVW6QMGBUkMeUpoEgWnMTnw5Q==}
@@ -6515,6 +6512,7 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
 
   /lodash.assign/4.2.0:
     resolution: {integrity: sha512-hFuH8TY+Yji7Eja3mGiuAxBqLagejScbG8GbG0j6o9vzn0YL14My+ktnqtZgFTosKymC9/44wP6s7xyuLfnClw==}

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2types",
+      "comment": "move dependencies from devDependencies",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2types"
+}

@@ -18,13 +18,13 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules heft test --clean"
   },
   "dependencies": {
+    "@kickstartds/json-schema-to-typescript": "~13.1.16",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "ajv": "^8.12.0",
     "object-traversal": "^1.0.1"
   },
   "devDependencies": {
     "@bcherny/json-schema-ref-parser": "10.0.5-fork",
-    "@kickstartds/json-schema-to-typescript": "~13.1.16",
     "@rushstack/eslint-config": "^3.2.0",
     "@rushstack/heft": "^0.50.4",
     "@rushstack/heft-jest-plugin": "~0.5.10",

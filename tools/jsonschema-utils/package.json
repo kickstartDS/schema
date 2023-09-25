@@ -19,7 +19,9 @@
   "dependencies": {
     "ajv": "^8.12.0",
     "fast-glob": "^3.2.12",
+    "import-meta-resolve": "~3.0.0",
     "json-schema-traverse": "^1.0.0",
+    "jsonpointer": "~5.0.1",
     "lodash": "^4.17.21",
     "ramda": "^0.28.0",
     "uppercamelcase": "^3.0.0"
@@ -39,9 +41,7 @@
     "eslint-import-resolver-typescript": "~3.5.5",
     "eslint-plugin-import": "~2.27.5",
     "eslint-plugin-json-files": "~2.2.0",
-    "import-meta-resolve": "~3.0.0",
     "json-schema-typed": "~8.0.1",
-    "jsonpointer": "~5.0.1",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4"
   },

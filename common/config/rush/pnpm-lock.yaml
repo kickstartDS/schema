@@ -353,7 +353,7 @@ importers:
   ../../tools/jsonschema2types:
     specifiers:
       '@bcherny/json-schema-ref-parser': 10.0.5-fork
-      '@kickstartds/json-schema-to-typescript': ~13.1.16
+      '@kickstartds/json-schema-to-typescript': ~13.1.20
       '@kickstartds/jsonschema-utils': workspace:*
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
@@ -376,7 +376,7 @@ importers:
       prettier: ^2.8.8
       typescript: ^5.0.4
     dependencies:
-      '@kickstartds/json-schema-to-typescript': 13.1.16
+      '@kickstartds/json-schema-to-typescript': 13.1.20
       '@kickstartds/jsonschema-utils': link:../jsonschema-utils
       ajv: 8.12.0
       object-traversal: 1.0.1
@@ -2435,8 +2435,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@kickstartds/json-schema-to-typescript/13.1.16:
-    resolution: {integrity: sha512-XZWk0mjDeTPP6oDcPjOd0R4NZRHTwl4aXTDNxYa3RaBy8Hg9wXnYn2JghZ6Na6e8UZABhBXZ4EjHuvTPqEpg7A==}
+  /@kickstartds/json-schema-to-typescript/13.1.20:
+    resolution: {integrity: sha512-do4QWO27yULWjRTv0+tKKZlLVoQp98J35YURKUWhNTUq81REGqOYT8v0OD16tGGrVh8CQ0FILmsLQVRvQSIrbg==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     dependencies:

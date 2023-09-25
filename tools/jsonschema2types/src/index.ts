@@ -5,7 +5,12 @@ import { pascalCase } from 'pascal-case';
 
 declare type MyAjv = import('ajv').default;
 
-export async function createTypes(schemaIds: string[], ajv: MyAjv): Promise<Record<string, string>> {
+export async function createTypes(
+  schemaIds: string[],
+  renderImportName: (schemaId: string) => string,
+  renderImportStatement: (schemaId: string) => string,
+  ajv: MyAjv
+): Promise<Record<string, string>> {
   const generatedTypings: Record<string, string> = {};
   const schemas = getSchemasForIds(schemaIds, ajv);
 
@@ -24,7 +29,9 @@ export async function createTypes(schemaIds: string[], ajv: MyAjv): Promise<Reco
           resolve: {
             external: false
           }
-        }
+        },
+        renderImportName,
+        renderImportStatement
       }
     );
 

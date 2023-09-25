@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2types",
+      "comment": "make import path naming configurable",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2types"
+}

@@ -18,7 +18,7 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules heft test --clean"
   },
   "dependencies": {
-    "@kickstartds/json-schema-to-typescript": "~13.1.16",
+    "@kickstartds/json-schema-to-typescript": "~13.1.20",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "ajv": "^8.12.0",
     "object-traversal": "^1.0.1"

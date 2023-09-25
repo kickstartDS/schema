@@ -18,6 +18,16 @@ import { resolve } from 'import-meta-resolve';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 import { pascalCase } from 'pascal-case';
 
+const renderImportName = (schemaId: string): string => {
+  return `${pascalCase(getSchemaName(schemaId))}Props`;
+};
+
+const renderImportStatement = (schemaId: string): string => {
+  return `import type { ${pascalCase(getSchemaName(schemaId))}Props } from '@kickstartds/${getSchemaModule(
+    schemaId
+  )}/lib/${getSchemaName(schemaId)}/typing'`;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const packagePath = path.dirname(
@@ -37,7 +47,12 @@ import { pascalCase } from 'pascal-case';
     kdsSchemaIds.some((kdsSchemaId) => shouldLayer(schemaId, kdsSchemaId))
   );
 
-  const layeredTypes = await createTypes([...unlayeredSchemaIds, ...layeredSchemaIds], ajv);
+  const layeredTypes = await createTypes(
+    [...unlayeredSchemaIds, ...layeredSchemaIds],
+    renderImportName,
+    renderImportStatement,
+    ajv
+  );
 
   mkdirSync('dist', { recursive: true });
 

@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Mon, 25 Sep 2023 13:21:10 GMT and should not be manually modified.
+This log was last generated on Mon, 25 Sep 2023 14:22:48 GMT and should not be manually modified.
+
+## 2.4.12
+Mon, 25 Sep 2023 14:22:48 GMT
+
+### Patches
+
+- added resources folder to published files
 
 ## 2.4.11
 Mon, 25 Sep 2023 13:21:10 GMT

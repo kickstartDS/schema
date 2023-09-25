@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.4.12",
+      "tag": "@kickstartds/jsonschema-utils_v2.4.12",
+      "date": "Mon, 25 Sep 2023 14:22:48 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "added resources folder to published files"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.4.11",
       "tag": "@kickstartds/jsonschema-utils_v2.4.11",
       "date": "Mon, 25 Sep 2023 13:21:10 GMT",

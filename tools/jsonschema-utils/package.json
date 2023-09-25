@@ -10,7 +10,8 @@
   "exports": "./lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "resources"
   ],
   "scripts": {
     "build": "heft build --clean",

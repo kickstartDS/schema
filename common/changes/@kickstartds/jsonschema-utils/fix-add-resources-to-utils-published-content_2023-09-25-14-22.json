@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "added resources folder to published files",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

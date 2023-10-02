@@ -93,6 +93,47 @@ importers:
       prettier: 2.8.8
       typescript: 5.2.2
 
+  ../../examples/dereference:
+    specifiers:
+      '@kickstartds/design-system': ^2.5.17
+      '@kickstartds/ds-agency': ^1.0.16
+      '@kickstartds/jsonschema-utils': workspace:*
+      '@rushstack/eslint-config': ^3.2.0
+      '@rushstack/heft': ^0.50.4
+      '@rushstack/heft-node-rig': ^1.12.10
+      '@tsconfig/node16': ^1.0.3
+      '@types/node': ^18.16.4
+      '@typescript-eslint/parser': ~5.59.2
+      eslint: ^8.40.0
+      eslint-import-resolver-typescript: ~3.5.5
+      eslint-plugin-import: ~2.27.5
+      eslint-plugin-json-files: ~2.2.0
+      import-meta-resolve: ~3.0.0
+      json-schema-typed: ~8.0.1
+      pascal-case: ^3.1.2
+      prettier: ^2.8.8
+      typescript: ^5.0.4
+    dependencies:
+      '@kickstartds/design-system': 2.5.20_style-dictionary@3.8.0
+      '@kickstartds/ds-agency': 1.0.24_@bedrock-layout+css@2.2.9
+      '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
+    devDependencies:
+      '@rushstack/eslint-config': 3.3.4_jk7qbkaijtltyu4ajmze3dfiwa
+      '@rushstack/heft': 0.50.7_@types+node@18.17.19
+      '@rushstack/heft-node-rig': 1.13.1_4uhzylbxzmctbkkxsst42zcpoy
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 18.17.19
+      '@typescript-eslint/parser': 5.59.11_jk7qbkaijtltyu4ajmze3dfiwa
+      eslint: 8.50.0
+      eslint-import-resolver-typescript: 3.5.5_zrnq6ei67hrtflifkbyrtlhy34
+      eslint-plugin-import: 2.27.5_eslint@8.50.0
+      eslint-plugin-json-files: 2.2.0_eslint@8.50.0
+      import-meta-resolve: 3.0.0
+      json-schema-typed: 8.0.1
+      pascal-case: 3.1.2
+      prettier: 2.8.8
+      typescript: 5.2.2
+
   ../../examples/types:
     specifiers:
       '@kickstartds/design-system': ^2.5.17
@@ -193,6 +234,12 @@ importers:
 
   ../../tools/jsonschema-utils:
     specifiers:
+      '@bcherny/json-schema-ref-parser': 10.0.5-fork
+      '@kickstartds/base': ^2.0
+      '@kickstartds/blog': ^2.0
+      '@kickstartds/content': ^2.0
+      '@kickstartds/core': ^2.0
+      '@kickstartds/form': ^2.0
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
       '@rushstack/heft-jest-plugin': ~0.5.10
@@ -219,6 +266,12 @@ importers:
       typescript: ^5.0.4
       uppercamelcase: ^3.0.0
     dependencies:
+      '@bcherny/json-schema-ref-parser': 10.0.5-fork_3kjedzphb7h2xej4u7dazz5yki
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/blog': 2.2.0_a4e45qt7bhuathyttbin6ftaie
+      '@kickstartds/content': 2.1.0_a4e45qt7bhuathyttbin6ftaie
+      '@kickstartds/core': 2.2.0
+      '@kickstartds/form': 2.2.0_a4e45qt7bhuathyttbin6ftaie
       ajv: 8.12.0
       fast-glob: 3.3.1
       import-meta-resolve: 3.0.0
@@ -1979,7 +2032,7 @@ packages:
       '@bcoe/v8-coverage': 0.2.3
       '@jest/console': 29.7.0
       '@jest/test-result': 29.7.0
-      '@jest/transform': 29.5.0
+      '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       '@jridgewell/trace-mapping': 0.3.19
       '@types/node': 18.17.19
@@ -2209,6 +2262,23 @@ packages:
       - storybook-design-token
     dev: false
 
+  /@kickstartds/blog/2.2.0_a4e45qt7bhuathyttbin6ftaie:
+    resolution: {integrity: sha512-FcmwmfV8nLJCSfB1SQmuKQ2WWXy4YDw1/K5pSfRF5TWPyCVCWvkoE0xyI8HuqB1liqh8CtdVdw7SUyV3HVtJ+A==}
+    peerDependencies:
+      '@kickstartds/base': ^2.0.3
+      '@kickstartds/core': ^2.0.3
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/core': 2.2.0
+      classnames: 2.3.2
+      date-fns: 2.30.0
+    dev: false
+
   /@kickstartds/blog/2.3.0-canary.1457.6134.0_icoklxzolwd42p7jpuchqzifyq:
     resolution: {integrity: sha512-3fr7DkycKMi8Qrw5dZpSeZrnQSrK23PzndzqZuG/BhRoPwV1zhxh0M9KQyqoVGo1PJTD+/s4RtDGDIGcEyEgKg==}
     peerDependencies:
@@ -2246,6 +2316,24 @@ packages:
       - '@types/react'
       - storybook-design-token
       - supports-color
+    dev: false
+
+  /@kickstartds/content/2.1.0_a4e45qt7bhuathyttbin6ftaie:
+    resolution: {integrity: sha512-ZV7FL8DF2GlfVmgLyHRXlurJ6NI8wWH1v6fdNb8ekXNH27SR7Oy0qL/b6mN8Sj1JYWr473M7POV12A453uuBOw==}
+    peerDependencies:
+      '@kickstartds/base': ^2.2.0
+      '@kickstartds/core': ^2.2.0
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/core': 2.2.0
+      classnames: 2.3.2
+      countup.js: 2.8.0
+      lodash-es: 4.17.21
     dev: false
 
   /@kickstartds/content/2.2.0--canary.150.90.0_icoklxzolwd42p7jpuchqzifyq:
@@ -2416,6 +2504,22 @@ packages:
     transitivePeerDependencies:
       - '@storybook/types'
       - storybook-design-token
+    dev: false
+
+  /@kickstartds/form/2.2.0_a4e45qt7bhuathyttbin6ftaie:
+    resolution: {integrity: sha512-dgiz9mVpRyY/ZWaUQ13cbO1g85SJFYstuHqDsnDNLRxxuydPZlKNZJH/5/46DGYK5rLcglh9gf7HFH8O4/93kA==}
+    peerDependencies:
+      '@kickstartds/base': ^2.0.3
+      '@kickstartds/core': ^2.0.3
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/base': 2.2.0_@kickstartds+core@2.2.0
+      '@kickstartds/core': 2.2.0
+      classnames: 2.3.2
     dev: false
 
   /@kickstartds/form/2.3.0-canary.1457.6134.0_icoklxzolwd42p7jpuchqzifyq:
@@ -5867,10 +5971,10 @@ packages:
       glob: 7.2.3
       graceful-fs: 4.2.11
       jest-circus: 29.7.0
-      jest-environment-node: 29.5.0
+      jest-environment-node: 29.7.0
       jest-get-type: 29.6.3
       jest-regex-util: 29.6.3
-      jest-resolve: 29.5.0
+      jest-resolve: 29.7.0
       jest-runner: 29.7.0
       jest-util: 29.7.0
       jest-validate: 29.7.0
@@ -6141,7 +6245,7 @@ packages:
       '@babel/traverse': 7.22.20
       '@babel/types': 7.22.19
       '@jest/expect-utils': 29.7.0
-      '@jest/transform': 29.5.0
+      '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       '@types/babel__traverse': 7.20.2
       '@types/prettier': 2.7.3

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "comment": "initial commit for dereference example",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/dereference-example"
+}

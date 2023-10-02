@@ -82,6 +82,13 @@
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true
+    },
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "projectFolder": "examples/dereference",
+      "reviewCategory": "examples",
+      "tags": ["examples"],
+      "shouldPublish": true
     }
   ]
 }

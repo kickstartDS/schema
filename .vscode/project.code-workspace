@@ -17,6 +17,10 @@
       "path": "../examples/converter"
     },
     {
+      "name": "examples/dereference",
+      "path": "../examples/dereference"
+    },
+    {
       "name": "tools/cambria",
       "path": "../tools/cambria"
     },

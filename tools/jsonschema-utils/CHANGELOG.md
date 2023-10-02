@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Mon, 25 Sep 2023 14:22:48 GMT and should not be manually modified.
+This log was last generated on Mon, 02 Oct 2023 09:50:58 GMT and should not be manually modified.
+
+## 2.4.13
+Mon, 02 Oct 2023 09:50:58 GMT
+
+### Patches
+
+- added dereferencing command for JSON Schema
 
 ## 2.4.12
 Mon, 25 Sep 2023 14:22:48 GMT

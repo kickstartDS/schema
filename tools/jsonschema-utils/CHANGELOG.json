@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.4.13",
+      "tag": "@kickstartds/jsonschema-utils_v2.4.13",
+      "date": "Mon, 02 Oct 2023 09:50:58 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "added dereferencing command for JSON Schema"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.4.12",
       "tag": "@kickstartds/jsonschema-utils_v2.4.12",
       "date": "Mon, 25 Sep 2023 14:22:48 GMT",

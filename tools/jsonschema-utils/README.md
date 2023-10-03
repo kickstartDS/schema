@@ -2,7 +2,7 @@
 
 ## This package
 
-Contains utilities used and needed to process and handle **kickstartDS** component **JSON Schema** / [component API](https://www.kickstartds.com/docs/foundations/components/component-api)s
+Contains utilities used and needed to process and handle **kickstartDS** component **JSON Schema** / [component API](https://www.kickstartds.com/docs/foundations/components/component-api)
 
 ## kickstartDS
 

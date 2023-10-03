@@ -16,7 +16,7 @@ import { resolve } from 'import-meta-resolve';
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
   );
-  const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions).json`;
+  const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
   const schemaIds = await processSchemaGlob(customGlob, ajv, false);

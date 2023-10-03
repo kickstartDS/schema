@@ -17,7 +17,7 @@ export async function dereference(schemaIds: string[], ajv: MyAjv): Promise<Reco
       resolve: {
         ajv: {
           order: 1,
-          canRead: new RegExp(`^http.*\.(?:schema|definitions)\.json$`),
+          canRead: new RegExp(`^http.*\.(?:schema|definitions|interface)\.json$`),
           async read(file: $RefParser.FileInfo) {
             const schema = ajv.getSchema(file.url)?.schema;
             if (schema) return schema;

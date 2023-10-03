@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.4.14",
+      "tag": "@kickstartds/jsonschema-utils_v2.4.14",
+      "date": "Tue, 03 Oct 2023 12:46:28 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "loading of interfaces, only load installed modules"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.4.13",
       "tag": "@kickstartds/jsonschema-utils_v2.4.13",
       "date": "Mon, 02 Oct 2023 09:50:58 GMT",

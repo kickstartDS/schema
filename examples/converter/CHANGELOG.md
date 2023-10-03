@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/converter-example
 
-This log was last generated on Mon, 02 Oct 2023 09:50:58 GMT and should not be manually modified.
+This log was last generated on Tue, 03 Oct 2023 12:46:28 GMT and should not be manually modified.
+
+## 1.0.6
+Tue, 03 Oct 2023 12:46:28 GMT
+
+_Version update only_
 
 ## 1.0.5
 Mon, 02 Oct 2023 09:50:58 GMT

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "comment": "load interfaces, too",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/dereference-example"
+}

@@ -231,6 +231,7 @@ export function shouldLayer(schemaId: string, targetSchemaId: string): boolean {
   const layeringSchemaPathRest = layeringSchemaURLPathParts.pop();
 
   const shouldLayer =
+    targetSchemaURL.toString() !== `${layeringSchemaURL.origin}${layeringSchemaURL.pathname}` &&
     targetSchemaFileName === layeringSchemaFileName &&
     ((layeringSchemaPathRest && targetSchemaPathRest === layeringSchemaPathRest) || !layeringSchemaPathRest);
 

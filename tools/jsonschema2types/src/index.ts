@@ -1,4 +1,4 @@
-import { compile } from '@kickstartds/json-schema-to-typescript';
+import { compile, Options } from '@kickstartds/json-schema-to-typescript';
 import { getSchemaName, getSchemasForIds } from '@kickstartds/jsonschema-utils';
 import { JSONSchema4 } from 'json-schema';
 import { pascalCase } from 'pascal-case';
@@ -9,7 +9,8 @@ export async function createTypes(
   schemaIds: string[],
   renderImportName: (schemaId: string) => string,
   renderImportStatement: (schemaId: string) => string,
-  ajv: MyAjv
+  ajv: MyAjv,
+  options?: Partial<Options>
 ): Promise<Record<string, string>> {
   const generatedTypings: Record<string, string> = {};
   const schemas = getSchemasForIds(schemaIds, ajv);
@@ -31,7 +32,8 @@ export async function createTypes(
           }
         },
         renderImportName,
-        renderImportStatement
+        renderImportStatement,
+        ...options
       }
     );
 

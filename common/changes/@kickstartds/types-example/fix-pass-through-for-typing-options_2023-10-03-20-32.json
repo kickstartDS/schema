@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/types-example",
+      "comment": "add demo for new pass-through options",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/types-example"
+}

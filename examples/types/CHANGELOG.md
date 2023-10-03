@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/types-example
 
-This log was last generated on Tue, 03 Oct 2023 13:03:14 GMT and should not be manually modified.
+This log was last generated on Tue, 03 Oct 2023 20:33:03 GMT and should not be manually modified.
+
+## 1.1.9
+Tue, 03 Oct 2023 20:33:03 GMT
+
+### Patches
+
+- add demo for new pass-through options
 
 ## 1.1.8
 Tue, 03 Oct 2023 13:03:14 GMT

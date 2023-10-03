@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2types
 
-This log was last generated on Tue, 03 Oct 2023 13:03:14 GMT and should not be manually modified.
+This log was last generated on Tue, 03 Oct 2023 20:33:03 GMT and should not be manually modified.
+
+## 1.1.9
+Tue, 03 Oct 2023 20:33:03 GMT
+
+### Patches
+
+- pass through options to json-schema-to-typescript
 
 ## 1.1.8
 Tue, 03 Oct 2023 13:03:14 GMT

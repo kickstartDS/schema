@@ -438,11 +438,15 @@ export async function processSchemas(
   const kdsSchemas = await ['base', 'blog', 'form', 'content'].reduce(
     async (schemaPromises, moduleName: string) => {
       const schemas = await schemaPromises;
-      const packagePath = path.dirname(
-        fileURLToPath(resolve(`@kickstartds/${moduleName}/package.json`, import.meta.url))
-      );
-      const schemaGlob = `${packagePath}/(lib|cms)/**/*.(schema|definitions).json`;
-      return schemas.concat(await getSchemasForGlob(schemaGlob));
+      try {
+        const packagePath = path.dirname(
+          fileURLToPath(resolve(`@kickstartds/${moduleName}/package.json`, import.meta.url))
+        );
+        const schemaGlob = `${packagePath}/(lib|cms)/**/*.(schema|definitions|interface).json`;
+        return schemas.concat(await getSchemasForGlob(schemaGlob));
+      } catch (error) {
+        return schemas;
+      }
     },
     Promise.resolve([] as JSONSchema.Interface[])
   );

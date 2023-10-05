@@ -2,6 +2,26 @@
   "name": "@kickstartds/types-example",
   "entries": [
     {
+      "version": "1.1.10",
+      "tag": "@kickstartds/types-example_v1.1.10",
+      "date": "Thu, 05 Oct 2023 10:51:41 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "update to newest ds-agency"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.4.16`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2types\" to `1.1.10`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.9",
       "tag": "@kickstartds/types-example_v1.1.9",
       "date": "Tue, 03 Oct 2023 20:33:03 GMT",

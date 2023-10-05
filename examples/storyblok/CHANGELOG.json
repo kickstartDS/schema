@@ -1,0 +1,25 @@
+{
+  "name": "@kickstartds/storyblok-example",
+  "entries": [
+    {
+      "version": "1.0.8",
+      "tag": "@kickstartds/storyblok-example_v1.0.8",
+      "date": "Thu, 05 Oct 2023 10:51:41 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add example for storyblok conversion"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.4.16`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2storyblok\" to `1.0.8`"
+          }
+        ]
+      }
+    }
+  ]
+}

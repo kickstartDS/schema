@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Tue, 03 Oct 2023 13:03:14 GMT and should not be manually modified.
+This log was last generated on Thu, 05 Oct 2023 10:51:41 GMT and should not be manually modified.
+
+## 2.4.16
+Thu, 05 Oct 2023 10:51:41 GMT
+
+### Patches
+
+- handle more array cases in reducer
 
 ## 2.4.15
 Tue, 03 Oct 2023 13:03:14 GMT

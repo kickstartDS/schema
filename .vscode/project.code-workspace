@@ -21,6 +21,10 @@
       "path": "../examples/dereference"
     },
     {
+      "name": "examples/storyblok",
+      "path": "../examples/storyblok"
+    },
+    {
       "name": "tools/cambria",
       "path": "../tools/cambria"
     },

@@ -339,6 +339,20 @@ function processArray({
   const fields: IStoryblokBlock[] | undefined = (arrayField as IStoryblokSchemaElement)
     .objectFields as unknown as IStoryblokBlock[];
 
+  // TODO this probably generates empty arrays somewhere
+  // Can include stuff like :
+  //   `{ display_name: 'Tags', key: 'tags', type: 'text', required: false }`
+  // for the array field, e.g. in:
+  // http://schema.mydesignsystem.com/blog-head.schema.json
+  if ((arrayField as IStoryblokSchemaElement).type === 'text') {
+    const stringArrayField: StoryblokElement = {
+      display_name: (arrayField as IStoryblokSchemaElement).display_name,
+      type: 'array',
+      key: (arrayField as IStoryblokSchemaElement).key
+    };
+    return stringArrayField;
+  }
+
   if (!fields) throw new Error('Missing fields in array');
 
   const schemaElements: StoryblokElement[] = [];

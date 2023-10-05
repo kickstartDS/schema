@@ -60,7 +60,7 @@ export function getSchemaReducer<T>({
     const validatorFunction = ajv.getSchema(id);
 
     if (!validatorFunction || !validatorFunction.schema)
-      throw new Error("Couldn't find schema for specified id string");
+      throw new Error(`Couldn't find schema for specified id string: ${id}`);
 
     return schemaPost
       ? schemaPost(validatorFunction.schema as JSONSchema.Interface)

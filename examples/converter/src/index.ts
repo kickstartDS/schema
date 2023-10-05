@@ -19,7 +19,7 @@ declare type MyAjv = import('ajv').default;
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
   );
-  const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions).json`;
+  const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   // get shared ajv instance, pre-process schemas and get full
   // set of unique schemas. precondition for the following conversions

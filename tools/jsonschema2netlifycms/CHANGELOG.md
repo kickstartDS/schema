@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/jsonschema2netlifycms
 
-This log was last generated on Thu, 05 Oct 2023 10:51:41 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Oct 2023 13:08:52 GMT and should not be manually modified.
+
+## 2.5.16
+Fri, 06 Oct 2023 13:08:52 GMT
+
+_Version update only_
 
 ## 2.5.15
 Thu, 05 Oct 2023 10:51:41 GMT

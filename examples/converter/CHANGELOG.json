@@ -2,6 +2,24 @@
   "name": "@kickstartds/converter-example",
   "entries": [
     {
+      "version": "1.0.9",
+      "tag": "@kickstartds/converter-example_v1.0.9",
+      "date": "Fri, 06 Oct 2023 13:08:52 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.4.17`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2netlifycms\" to `2.5.16`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2storyblok\" to `1.0.9`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.8",
       "tag": "@kickstartds/converter-example_v1.0.8",
       "date": "Thu, 05 Oct 2023 10:51:41 GMT",

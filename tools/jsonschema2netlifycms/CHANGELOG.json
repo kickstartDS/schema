@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2netlifycms",
   "entries": [
     {
+      "version": "2.5.16",
+      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.16",
+      "date": "Fri, 06 Oct 2023 13:08:52 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.4.17`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.5.15",
       "tag": "@kickstartds/jsonschema2netlifycms_v2.5.15",
       "date": "Thu, 05 Oct 2023 10:51:41 GMT",

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.4.17",
+      "tag": "@kickstartds/jsonschema-utils_v2.4.17",
+      "date": "Fri, 06 Oct 2023 13:08:52 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "cleans up inlineDefinitions function"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.4.16",
       "tag": "@kickstartds/jsonschema-utils_v2.4.16",
       "date": "Thu, 05 Oct 2023 10:51:41 GMT",

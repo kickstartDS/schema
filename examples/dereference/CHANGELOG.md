@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Thu, 05 Oct 2023 10:51:41 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Oct 2023 13:08:52 GMT and should not be manually modified.
+
+## 1.1.0
+Fri, 06 Oct 2023 13:08:52 GMT
+
+### Minor changes
+
+- adds full set of dereferencing scenarios
 
 ## 1.0.4
 Thu, 05 Oct 2023 10:51:41 GMT

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2netlifycms",
+      "comment": "update used utils version",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2netlifycms"
+}

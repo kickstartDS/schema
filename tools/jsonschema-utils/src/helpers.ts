@@ -4,6 +4,7 @@ import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import Ajv from 'ajv';
+import { kebabCase, pascalCase } from 'change-case';
 import { default as glob } from 'fast-glob';
 import { resolve } from 'import-meta-resolve';
 import traverse from 'json-schema-traverse';
@@ -11,7 +12,6 @@ import { type JSONSchema } from 'json-schema-typed/draft-07';
 import { get } from 'jsonpointer';
 import _ from 'lodash';
 import { compose } from 'ramda';
-import uppercamelcase from 'uppercamelcase';
 
 declare type MyAjv = import('ajv').default;
 
@@ -61,22 +61,21 @@ export function addExplicitAnyOfs(jsonSchema: JSONSchema.Interface, ajv: MyAjv):
   const schemaAnyOfs: JSONSchema.Interface[] = [];
 
   traverse(jsonSchema, {
-    cb: (schema, pointer, rootSchema) => {
+    cb: (schema, __pointer, rootSchema) => {
       if (schema.items && schema.items.anyOf) {
         if (!rootSchema.$id)
           throw new Error('Found a root schema without $id, but every schema processed needs an unique $id');
 
         const componentPath = rootSchema.$id.split('/');
         const componentType = path.basename(rootSchema.$id).split('.')[0];
-        const componentName = uppercamelcase(componentType);
 
         schema.items.anyOf = schema.items.anyOf.map((anyOf: JSONSchema.Interface) => {
           if (anyOf.$ref) return anyOf;
           if (!anyOf.title) throw new Error('Found an anyOf schema without title, which is not supported');
 
-          const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentType}/${pointer
-            .split('/')
-            .pop()}-${anyOf.title.replace(componentName, '').toLowerCase()}.interface.json`;
+          const schemaName = `http://schema.kickstartds.com/${componentPath[3]}/${componentType}/${kebabCase(
+            anyOf.title
+          )}.interface.json`;
           const schemaAnyOf = {
             $id: schemaName,
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -338,7 +337,7 @@ export function collectComponentInterfaces(jsonSchemas: JSONSchema.Interface[]):
           subSchema.items.anyOf.length > 0 &&
           subSchema.items.anyOf.every((anyOf: JSONSchema.Interface) => anyOf.$ref)
         ) {
-          const interfaceName = `${uppercamelcase(getSchemaName(jsonSchema.$id))}Component${uppercamelcase(
+          const interfaceName = `${pascalCase(getSchemaName(jsonSchema.$id))}Component${pascalCase(
             propertyName
           )}`;
 

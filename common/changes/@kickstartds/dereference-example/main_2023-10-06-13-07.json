@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "comment": "adds full set of dereferencing scenarios",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/dereference-example"
+}

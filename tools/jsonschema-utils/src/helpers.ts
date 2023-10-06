@@ -162,7 +162,6 @@ export function reduceSchemaAllOfs(schema: JSONSchema.Interface, ajv: MyAjv): vo
 
           if (!propertyName) throw new Error('Failed to split a propertyName from a pointer');
 
-          // if those two are equal, we're at the top level of the schema
           if (propertyName === parentKeyword) {
             parentSchema[parentKeyword] = reduceSchemaAllOf(subSchema, ajv);
           } else {
@@ -177,10 +176,6 @@ export function reduceSchemaAllOfs(schema: JSONSchema.Interface, ajv: MyAjv): vo
   });
 }
 
-// this method should potentially be replaced by something "more"
-// standard, like: https://github.com/mokkabonna/json-schema-merge-allof
-// may result in handling all of those combinations of edge cases
-// ourselves, otherwise
 export function reduceSchemaAllOf(schema: JSONSchema.Interface, ajv: MyAjv): JSONSchema.Interface {
   const allOfs = schema.allOf as JSONSchema.Interface[];
 
@@ -282,7 +277,7 @@ export function addTypeInterfaces(jsonSchemas: JSONSchema.Interface[]): void {
   });
 }
 
-export function inlineDefinitions(jsonSchemas: JSONSchema.Interface[]): void {
+export function inlineReferences(jsonSchemas: JSONSchema.Interface[]): void {
   jsonSchemas.forEach((jsonSchema) => {
     traverse(jsonSchema, {
       cb: (subSchema, pointer, rootSchema, __parentPointer, parentKeyword, parentSchema) => {
@@ -291,39 +286,36 @@ export function inlineDefinitions(jsonSchemas: JSONSchema.Interface[]): void {
         const propertyName = pointer.split('/').pop();
         if (!propertyName) throw new Error('Failed to split a propertyName from a pointer');
 
-        if (subSchema.$ref && subSchema.$ref.includes('#/definitions/')) {
-          if (subSchema.$ref.includes('http')) {
-            if (parentKeyword === 'properties') {
-              const originalSchema = jsonSchemas.find(
-                (jsonSchema) => jsonSchema.$id === subSchema.$ref.split('#').shift()
-              );
-              if (!originalSchema || !originalSchema.definitions)
-                throw new Error("Couldn't find original schema to pull definitions from");
+        if (subSchema.$ref) {
+          const schemaPointer = subSchema.$ref.split('#').pop();
+          const schemaId = subSchema.$ref.split('#').shift();
 
-              parentSchema.properties[propertyName] =
-                originalSchema.definitions[subSchema.$ref.split('/').pop()];
-            } else if (parentKeyword === 'allOf') {
-              const originalSchema = jsonSchemas.find(
-                (jsonSchema) => jsonSchema.$id === subSchema.$ref.split('#').shift()
-              );
-              if (!originalSchema || !originalSchema.definitions)
-                throw new Error("Couldn't find original schema to pull definitions from");
+          if (schemaPointer.startsWith('/definitions/')) {
+            if (schemaId.startsWith('http')) {
+              if (parentKeyword === 'properties') {
+                const originalSchema = jsonSchemas.find((jsonSchema) => jsonSchema.$id === schemaId);
+                if (!originalSchema || !originalSchema.definitions)
+                  throw new Error("Couldn't find original schema to pull definitions from");
 
-              parentSchema.allOf[propertyName] = originalSchema.definitions[subSchema.$ref.split('/').pop()];
+                parentSchema.properties[propertyName] = get(originalSchema, schemaPointer);
+              } else if (parentKeyword === 'allOf') {
+                const originalSchema = jsonSchemas.find((jsonSchema) => jsonSchema.$id === schemaId);
+                if (!originalSchema || !originalSchema.definitions)
+                  throw new Error("Couldn't find original schema to pull definitions from");
+
+                parentSchema.allOf[propertyName] = get(originalSchema, schemaPointer);
+              }
+            } else {
+              parentSchema[parentKeyword][propertyName] = get(rootSchema, schemaPointer);
             }
-          } else {
-            parentSchema[parentKeyword][propertyName] =
-              rootSchema.definitions[subSchema.$ref.split('/').pop()];
-          }
-        } else if (subSchema.$ref && subSchema.$ref.includes('#/properties/')) {
-          if (parentKeyword === 'properties') {
-            const originalSchema = jsonSchemas.find(
-              (jsonSchema) => jsonSchema.$id === subSchema.$ref.split('#').shift()
-            );
-            if (!originalSchema || !originalSchema.properties)
-              throw new Error("Couldn't find original schema to pull properties from");
+          } else if (schemaPointer.startsWith('/properties/')) {
+            if (parentKeyword === 'properties') {
+              const originalSchema = jsonSchemas.find((jsonSchema) => jsonSchema.$id === schemaId);
+              if (!originalSchema || !originalSchema.properties)
+                throw new Error("Couldn't find original schema to pull properties from");
 
-            parentSchema.properties[propertyName] = get(originalSchema, subSchema.$ref.split('#').pop());
+              parentSchema.properties[propertyName] = get(originalSchema, schemaPointer);
+            }
           }
         }
       }
@@ -461,16 +453,16 @@ export async function processSchemas(
   // 1. pre-process, before schemas enter `ajv`
   layerRefs(jsonSchemas, kdsSchemas);
   if (typeResolution) addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);
-  inlineDefinitions([...jsonSchemas, ...kdsSchemas]);
+  inlineReferences([...jsonSchemas, ...kdsSchemas]);
 
   // 2. add all schemas to ajv for the following processing steps
-  [...kdsSchemas, ...jsonSchemas].forEach((schema) => {
+  [...jsonSchemas, ...kdsSchemas].forEach((schema) => {
     addJsonSchema(schema, ajv);
   });
 
   // 3. "compile" JSON Schema composition keywords (`anyOf`, `allOf`)
   const schemaAnyOfs: JSONSchema.Interface[] = [];
-  [...kdsSchemas, ...jsonSchemas].forEach((schema) => {
+  [...jsonSchemas, ...kdsSchemas].forEach((schema) => {
     reduceSchemaAllOfs(schema, ajv);
     mergeAnyOfEnums(schema, ajv);
 

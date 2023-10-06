@@ -16,8 +16,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@kickstartds/base": "^2.3.0-next.3",
+    "@kickstartds/blog": "^2.3.0-next.3",
+    "@kickstartds/content": "^2.2.0-next.2",
+    "@kickstartds/core": "^2.3.0-next.3",
     "@kickstartds/design-system": "^2.5.17",
     "@kickstartds/ds-agency": "^1.0.40",
+    "@kickstartds/form": "^2.3.0-next.3",
     "@kickstartds/jsonschema-utils": "workspace:*"
   },
   "devDependencies": {

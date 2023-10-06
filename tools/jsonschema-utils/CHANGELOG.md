@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Fri, 06 Oct 2023 13:08:52 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Oct 2023 13:43:55 GMT and should not be manually modified.
+
+## 2.4.18
+Fri, 06 Oct 2023 13:43:55 GMT
+
+### Patches
+
+- fix naming of generated interface schemas
 
 ## 2.4.17
 Fri, 06 Oct 2023 13:08:52 GMT

@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/converter-example",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Example use showing full conversion of JSON Schema files",
   "license": "UNLICENSED",
   "author": {

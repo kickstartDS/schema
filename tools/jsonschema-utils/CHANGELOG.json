@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.4.18",
+      "tag": "@kickstartds/jsonschema-utils_v2.4.18",
+      "date": "Fri, 06 Oct 2023 13:43:55 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix naming of generated interface schemas"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.4.17",
       "tag": "@kickstartds/jsonschema-utils_v2.4.17",
       "date": "Fri, 06 Oct 2023 13:08:52 GMT",

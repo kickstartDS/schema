@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2netlifycms",
-  "version": "2.5.17",
+  "version": "2.5.18",
   "description": "Converts JSON schema to Netlify CMS admin config",
   "license": "UNLICENSED",
   "author": {

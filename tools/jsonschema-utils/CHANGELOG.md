@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Fri, 06 Oct 2023 13:43:55 GMT and should not be manually modified.
+This log was last generated on Sat, 07 Oct 2023 18:54:59 GMT and should not be manually modified.
+
+## 2.5.0
+Sat, 07 Oct 2023 18:54:59 GMT
+
+### Minor changes
+
+- add modules option to schema processing fns
 
 ## 2.4.18
 Fri, 06 Oct 2023 13:43:55 GMT

@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/types-example
 
-This log was last generated on Fri, 06 Oct 2023 13:43:55 GMT and should not be manually modified.
+This log was last generated on Sat, 07 Oct 2023 18:54:59 GMT and should not be manually modified.
+
+## 1.1.13
+Sat, 07 Oct 2023 18:54:59 GMT
+
+_Version update only_
 
 ## 1.1.12
 Fri, 06 Oct 2023 13:43:55 GMT

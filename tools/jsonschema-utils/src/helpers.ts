@@ -400,15 +400,17 @@ export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.
 export async function processSchemaGlob(
   schemaGlob: string,
   ajv: MyAjv,
-  typeResolution: boolean = true
+  typeResolution: boolean = true,
+  modules: string[] = ['base', 'blog', 'form', 'content']
 ): Promise<string[]> {
-  return processSchemas(await getSchemasForGlob(schemaGlob), ajv, typeResolution);
+  return processSchemas(await getSchemasForGlob(schemaGlob), ajv, typeResolution, modules);
 }
 
 export async function processSchemaGlobs(
   schemaGlobs: string[],
   ajv: MyAjv,
-  typeResolution: boolean = true
+  typeResolution: boolean = true,
+  modules: string[] = ['base', 'blog', 'form', 'content']
 ): Promise<string[]> {
   return processSchemas(
     await schemaGlobs.reduce(async (schemasPromise, schemaGlob) => {
@@ -416,31 +418,30 @@ export async function processSchemaGlobs(
       return schemas.concat(await getSchemasForGlob(schemaGlob));
     }, Promise.resolve([] as JSONSchema.Interface[])),
     ajv,
-    typeResolution
+    typeResolution,
+    modules
   );
 }
 
 export async function processSchemas(
   jsonSchemas: JSONSchema.Interface[],
   ajv: MyAjv,
-  typeResolution: boolean = true
+  typeResolution: boolean = true,
+  modules: string[] = ['base', 'blog', 'form', 'content']
 ): Promise<string[]> {
   // load all the schema files provided by `@kickstartDS` itself...
-  const kdsSchemas = await ['base', 'blog', 'form', 'content'].reduce(
-    async (schemaPromises, moduleName: string) => {
-      const schemas = await schemaPromises;
-      try {
-        const packagePath = path.dirname(
-          fileURLToPath(resolve(`@kickstartds/${moduleName}/package.json`, import.meta.url))
-        );
-        const schemaGlob = `${packagePath}/(lib|cms)/**/*.(schema|definitions|interface).json`;
-        return schemas.concat(await getSchemasForGlob(schemaGlob));
-      } catch (error) {
-        return schemas;
-      }
-    },
-    Promise.resolve([] as JSONSchema.Interface[])
-  );
+  const kdsSchemas = await modules.reduce(async (schemaPromises, moduleName: string) => {
+    const schemas = await schemaPromises;
+    try {
+      const packagePath = path.dirname(
+        fileURLToPath(resolve(`@kickstartds/${moduleName}/package.json`, import.meta.url))
+      );
+      const schemaGlob = `${packagePath}/(lib|cms)/**/*.(schema|definitions|interface).json`;
+      return schemas.concat(await getSchemasForGlob(schemaGlob));
+    } catch (error) {
+      return schemas;
+    }
+  }, Promise.resolve([] as JSONSchema.Interface[]));
 
   // ... and add page schema, too
   kdsSchemas.push(

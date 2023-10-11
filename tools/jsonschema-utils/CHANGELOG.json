@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.5.1",
+      "tag": "@kickstartds/jsonschema-utils_v2.5.1",
+      "date": "Wed, 11 Oct 2023 11:51:20 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "update to next release of kickstartDS"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.5.0",
       "tag": "@kickstartds/jsonschema-utils_v2.5.0",
       "date": "Sat, 07 Oct 2023 18:54:59 GMT",

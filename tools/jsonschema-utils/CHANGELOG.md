@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Sat, 07 Oct 2023 18:54:59 GMT and should not be manually modified.
+This log was last generated on Wed, 11 Oct 2023 11:51:20 GMT and should not be manually modified.
+
+## 2.5.1
+Wed, 11 Oct 2023 11:51:20 GMT
+
+### Patches
+
+- update to next release of kickstartDS
 
 ## 2.5.0
 Sat, 07 Oct 2023 18:54:59 GMT

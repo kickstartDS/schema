@@ -16,13 +16,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@kickstartds/base": "^2.3.0-next.3",
-    "@kickstartds/blog": "^2.3.0-next.3",
-    "@kickstartds/content": "^2.2.0-next.2",
-    "@kickstartds/core": "^2.3.0-next.3",
     "@kickstartds/design-system": "^2.5.17",
-    "@kickstartds/ds-agency": "^1.0.40",
-    "@kickstartds/form": "^2.3.0-next.3",
+    "@kickstartds/ds-agency": "^1.0.54",
     "@kickstartds/jsonschema-utils": "workspace:*"
   },
   "devDependencies": {
@@ -41,6 +36,13 @@
     "pascal-case": "^3.1.2",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4"
+  },
+  "peerDependencies": {
+    "@kickstartds/base": "^3.0.0-next.1",
+    "@kickstartds/blog": "^3.0.0-next.1",
+    "@kickstartds/content": "^3.0.0-next.1",
+    "@kickstartds/core": "^3.0.0-next.1",
+    "@kickstartds/form": "^3.0.0-next.1"
   },
   "engines": {
     "node": ">=14.16"

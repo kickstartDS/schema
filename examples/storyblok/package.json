@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@kickstartds/design-system": "^2.5.17",
-    "@kickstartds/ds-agency": "^1.0.40",
+    "@kickstartds/ds-agency": "^1.0.54",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2storyblok": "workspace:*",
     "ajv": "^8.12.0",

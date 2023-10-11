@@ -353,6 +353,13 @@ function processArray({
     return stringArrayField;
   }
 
+  if (
+    (arrayField as IStoryblokBlock).schema &&
+    Object.keys((arrayField as IStoryblokBlock).schema).length > 0
+  ) {
+    return arrayField as IStoryblokBlock;
+  }
+
   if (!fields) throw new Error('Missing fields in array');
 
   const schemaElements: StoryblokElement[] = [];

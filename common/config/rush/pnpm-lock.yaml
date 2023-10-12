@@ -95,8 +95,13 @@ importers:
 
   ../../examples/dereference:
     specifiers:
+      '@kickstartds/base': ^3.0.0-next.1
+      '@kickstartds/blog': ^3.0.0-next.1
+      '@kickstartds/content': ^3.0.0-next.1
+      '@kickstartds/core': ^3.0.0-next.1
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^1.0.54
+      '@kickstartds/ds-agency': 2.0.0--canary.27.454.0
+      '@kickstartds/form': ^3.0.0-next.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
@@ -114,8 +119,13 @@ importers:
       prettier: ^2.8.8
       typescript: ^5.0.4
     dependencies:
+      '@kickstartds/base': 3.0.0-next.1_io64xy35fgckemvcsj7uifwvoq
+      '@kickstartds/blog': 3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di
+      '@kickstartds/content': 3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di
+      '@kickstartds/core': 3.0.0-next.1
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.8.0
-      '@kickstartds/ds-agency': 1.0.54_@bedrock-layout+css@2.2.9
+      '@kickstartds/ds-agency': 2.0.0--canary.27.454.0_@bedrock-layout+css@2.2.9
+      '@kickstartds/form': 3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
     devDependencies:
       '@rushstack/eslint-config': 3.3.4_jk7qbkaijtltyu4ajmze3dfiwa
@@ -137,7 +147,7 @@ importers:
   ../../examples/storyblok:
     specifiers:
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^1.0.54
+      '@kickstartds/ds-agency': 2.0.0--canary.27.454.0
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2storyblok': workspace:*
       '@rushstack/eslint-config': ^3.2.0
@@ -159,7 +169,7 @@ importers:
       typescript: ^5.0.4
     dependencies:
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.8.0
-      '@kickstartds/ds-agency': 1.0.54_@bedrock-layout+css@2.2.9
+      '@kickstartds/ds-agency': 2.0.0--canary.27.454.0_@bedrock-layout+css@2.2.9
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2storyblok': link:../../tools/jsonschema2storyblok
       ajv: 8.12.0
@@ -184,7 +194,7 @@ importers:
   ../../examples/types:
     specifiers:
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^1.0.54
+      '@kickstartds/ds-agency': 2.0.0--canary.27.454.0
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2types': workspace:*
       '@rushstack/eslint-config': ^3.2.0
@@ -204,7 +214,7 @@ importers:
       typescript: ^5.0.4
     dependencies:
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.8.0
-      '@kickstartds/ds-agency': 1.0.54_@bedrock-layout+css@2.2.9
+      '@kickstartds/ds-agency': 2.0.0--canary.27.454.0_@bedrock-layout+css@2.2.9
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2types': link:../../tools/jsonschema2types
     devDependencies:
@@ -282,6 +292,11 @@ importers:
   ../../tools/jsonschema-utils:
     specifiers:
       '@bcherny/json-schema-ref-parser': 10.0.5-fork
+      '@kickstartds/base': ^3.0.0-next.1
+      '@kickstartds/blog': ^3.0.0-next.1
+      '@kickstartds/content': ^3.0.0-next.1
+      '@kickstartds/core': ^3.0.0-next.1
+      '@kickstartds/form': ^3.0.0-next.1
       '@rushstack/eslint-config': ^3.2.0
       '@rushstack/heft': ^0.50.4
       '@rushstack/heft-jest-plugin': ~0.5.10
@@ -308,6 +323,11 @@ importers:
       typescript: ^5.0.4
     dependencies:
       '@bcherny/json-schema-ref-parser': 10.0.5-fork_3kjedzphb7h2xej4u7dazz5yki
+      '@kickstartds/base': 3.0.0-next.1_io64xy35fgckemvcsj7uifwvoq
+      '@kickstartds/blog': 3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di
+      '@kickstartds/content': 3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di
+      '@kickstartds/core': 3.0.0-next.1
+      '@kickstartds/form': 3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di
       ajv: 8.12.0
       change-case: 5.0.2
       fast-glob: 3.3.1
@@ -2253,21 +2273,40 @@ packages:
       vhtml: 2.2.0
     dev: false
 
-  /@kickstartds/base/2.3.0-next.3_pykf2zpmzdqlhfu6zyyerjui4m:
-    resolution: {integrity: sha512-MRmO2Wrk6IYWLZcRY9RolpB4ALtDWHtpwXKva84DCEh7zhOqYUbuI7yqJsfVrIor7FVvBXLxJwU2g4BJgvhGKQ==}
+  /@kickstartds/base/3.0.0-next.1_io64xy35fgckemvcsj7uifwvoq:
+    resolution: {integrity: sha512-MUzlsp9l3PF3C/TTBs11pPm1Bfjp0FKtzcE2Ln4ift338E5h3AuOrdenV19qARSYCnEj3VdsdC8/uA1Omc/Icg==}
     peerDependencies:
-      '@kickstartds/core': ^2.0.3
+      '@kickstartds/core': ^3.0.0-next.0
       react: ^17.0.2 || ^18.2.0
     peerDependenciesMeta:
       react:
         optional: true
     dependencies:
       '@babel/runtime': 7.22.15
-      '@kickstartds/core': 2.3.0-next.3
+      '@kickstartds/core': 3.0.0-next.1
       classnames: 2.3.2
       focus-visible: 5.2.0
       markdown-to-jsx: 7.3.2
       photoswipe: 5.4.1
+      vhtml: 2.2.0
+    dev: false
+
+  /@kickstartds/base/3.0.0-next.1_ltmtvhvr7ui6ds7rjkocfld23y:
+    resolution: {integrity: sha512-MUzlsp9l3PF3C/TTBs11pPm1Bfjp0FKtzcE2Ln4ift338E5h3AuOrdenV19qARSYCnEj3VdsdC8/uA1Omc/Icg==}
+    peerDependencies:
+      '@kickstartds/core': ^3.0.0-next.0
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/core': 3.0.0-next.1_react@18.2.0
+      classnames: 2.3.2
+      focus-visible: 5.2.0
+      markdown-to-jsx: 7.3.2_react@18.2.0
+      photoswipe: 5.4.1
+      react: 18.2.0
       vhtml: 2.2.0
     dev: false
 
@@ -2289,19 +2328,36 @@ packages:
       - storybook-design-token
     dev: false
 
-  /@kickstartds/blog/2.3.0-next.3_wd5lmri4yf7vivogpapjkngu4u:
-    resolution: {integrity: sha512-aamCLKb5znyYqlK/CaT7WQirjtTPZRIJ+Tdrx0b3OOQrsZtrHkh/73fjXx+VtKnQXweDJlwPYUhcpkEggnWPsQ==}
+  /@kickstartds/blog/3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di:
+    resolution: {integrity: sha512-zmZ0cE+bOBqFzih2zYBe1i2AvTndwQhjUt7qQ90Xq/qc+ldX6evU1UiFmDhCWMmbkB9IEnl9BfHNC38N33zHog==}
     peerDependencies:
-      '@kickstartds/base': ^2.0.3
-      '@kickstartds/core': ^2.0.3
+      '@kickstartds/base': ^3.0.0-next.0
+      '@kickstartds/core': ^3.0.0-next.0
       react: ^17.0.2 || ^18.2.0
     peerDependenciesMeta:
       react:
         optional: true
     dependencies:
       '@babel/runtime': 7.22.15
-      '@kickstartds/base': 2.3.0-next.3_pykf2zpmzdqlhfu6zyyerjui4m
-      '@kickstartds/core': 2.3.0-next.3
+      '@kickstartds/base': 3.0.0-next.1_io64xy35fgckemvcsj7uifwvoq
+      '@kickstartds/core': 3.0.0-next.1
+      classnames: 2.3.2
+      date-fns: 2.30.0
+    dev: false
+
+  /@kickstartds/blog/3.0.0-next.1_jloo7glgnbv2mrwteojmo5rmuu:
+    resolution: {integrity: sha512-zmZ0cE+bOBqFzih2zYBe1i2AvTndwQhjUt7qQ90Xq/qc+ldX6evU1UiFmDhCWMmbkB9IEnl9BfHNC38N33zHog==}
+    peerDependencies:
+      '@kickstartds/base': ^3.0.0-next.0
+      '@kickstartds/core': ^3.0.0-next.0
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/base': 3.0.0-next.1_ltmtvhvr7ui6ds7rjkocfld23y
+      '@kickstartds/core': 3.0.0-next.1_react@18.2.0
       classnames: 2.3.2
       date-fns: 2.30.0
       react: 18.2.0
@@ -2328,19 +2384,37 @@ packages:
       - supports-color
     dev: false
 
-  /@kickstartds/content/2.2.0-next.2_wd5lmri4yf7vivogpapjkngu4u:
-    resolution: {integrity: sha512-e+It3XKf64UpJA6yLtSIdvfq9BaeJgirajAYvunHxhiGBGzG09Du0DHi2D0swtkM/m2nX34ZX2Cv5+tVls7IDg==}
+  /@kickstartds/content/3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di:
+    resolution: {integrity: sha512-yt3MtjUm3Umf5TKgfgzAv0mamwHvtPU/2zPD6yFDEtXyQnTwUUlsZHfGU2xKg7FM1T/IYW45gXzXQeO9r8Xekg==}
     peerDependencies:
-      '@kickstartds/base': 2.3.0-next.3
-      '@kickstartds/core': 2.3.0-next.3
+      '@kickstartds/base': ^3.0.0-next.1
+      '@kickstartds/core': ^3.0.0-next.1
       react: ^17.0.2 || ^18.2.0
     peerDependenciesMeta:
       react:
         optional: true
     dependencies:
       '@babel/runtime': 7.22.15
-      '@kickstartds/base': 2.3.0-next.3_pykf2zpmzdqlhfu6zyyerjui4m
-      '@kickstartds/core': 2.3.0-next.3
+      '@kickstartds/base': 3.0.0-next.1_io64xy35fgckemvcsj7uifwvoq
+      '@kickstartds/core': 3.0.0-next.1
+      classnames: 2.3.2
+      countup.js: 2.8.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@kickstartds/content/3.0.0-next.1_jloo7glgnbv2mrwteojmo5rmuu:
+    resolution: {integrity: sha512-yt3MtjUm3Umf5TKgfgzAv0mamwHvtPU/2zPD6yFDEtXyQnTwUUlsZHfGU2xKg7FM1T/IYW45gXzXQeO9r8Xekg==}
+    peerDependencies:
+      '@kickstartds/base': ^3.0.0-next.1
+      '@kickstartds/core': ^3.0.0-next.1
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/base': 3.0.0-next.1_ltmtvhvr7ui6ds7rjkocfld23y
+      '@kickstartds/core': 3.0.0-next.1_react@18.2.0
       classnames: 2.3.2
       countup.js: 2.8.0
       lodash-es: 4.17.21
@@ -2400,8 +2474,8 @@ packages:
       sass: 1.68.0
     dev: false
 
-  /@kickstartds/core/2.3.0-next.3:
-    resolution: {integrity: sha512-Z8LBP2sCQuXoW9PWu7ulAh6kZsAcgkYJEv3MhHHR+cB90VW3JFoyVL5kbeGvwEKzlHEt0h2j1PtnUHC65O2tRA==}
+  /@kickstartds/core/3.0.0-next.1:
+    resolution: {integrity: sha512-E1IvLE+b+bwVRTsTZxAdZTjZNF6ptQY93YjhwwQHrfp7Lb0DqHwRReXQsJAXFDyHEAmXjScLLsxhO8rjSwfq8A==}
     peerDependencies:
       '@storybook/types': ^7.0.5
       react: ^17.0.2 || ^18.2.0
@@ -2425,6 +2499,35 @@ packages:
       json-schema: 0.4.0
       lazysizes: 5.3.2
       pubsub-js: 1.9.4
+      sass: 1.68.0
+    dev: false
+
+  /@kickstartds/core/3.0.0-next.1_react@18.2.0:
+    resolution: {integrity: sha512-E1IvLE+b+bwVRTsTZxAdZTjZNF6ptQY93YjhwwQHrfp7Lb0DqHwRReXQsJAXFDyHEAmXjScLLsxhO8rjSwfq8A==}
+    peerDependencies:
+      '@storybook/types': ^7.0.5
+      react: ^17.0.2 || ^18.2.0
+      storybook-design-token: 3.0.0-beta.3
+    peerDependenciesMeta:
+      '@storybook/types':
+        optional: true
+      react:
+        optional: true
+      storybook-design-token:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      bourbon: 7.3.0
+      classnames: 2.3.2
+      del: 6.1.1
+      dependency-graph: 0.11.0
+      esbuild: 0.17.19
+      fast-glob: 3.3.1
+      fs-extra: 11.1.1
+      json-schema: 0.4.0
+      lazysizes: 5.3.2
+      pubsub-js: 1.9.4
+      react: 18.2.0
       sass: 1.68.0
     dev: false
 
@@ -2458,16 +2561,16 @@ packages:
       - supports-color
     dev: false
 
-  /@kickstartds/ds-agency/1.0.54_@bedrock-layout+css@2.2.9:
-    resolution: {integrity: sha512-cQJk+hFVuUgx98MkpwP/yYMIWST2N1gEddnSnTxwd0MtB4N83rajjH8fW+4/uFrLKZSXkC0Xh4n27GCFi+kB5A==}
+  /@kickstartds/ds-agency/2.0.0--canary.27.454.0_@bedrock-layout+css@2.2.9:
+    resolution: {integrity: sha512-qleXYJqmezc0ni+EYfSBu5CB2RqY3CEzcfUqZ0xURDUHzhKjRRV+9dRpQ8k/J5cinuO6dsghYKiUDqczoiERjg==}
     dependencies:
       '@bedrock-layout/primitives': 3.0.24_mgd732mskqzh36wswn66qdyfee
       '@bedrock-layout/spacing-constants': 3.2.5_react@18.2.0
-      '@kickstartds/base': 2.3.0-next.3_pykf2zpmzdqlhfu6zyyerjui4m
-      '@kickstartds/blog': 2.3.0-next.3_wd5lmri4yf7vivogpapjkngu4u
-      '@kickstartds/content': 2.2.0-next.2_wd5lmri4yf7vivogpapjkngu4u
-      '@kickstartds/core': 2.3.0-next.3
-      '@kickstartds/form': 2.3.0-next.3_wd5lmri4yf7vivogpapjkngu4u
+      '@kickstartds/base': 3.0.0-next.1_ltmtvhvr7ui6ds7rjkocfld23y
+      '@kickstartds/blog': 3.0.0-next.1_jloo7glgnbv2mrwteojmo5rmuu
+      '@kickstartds/content': 3.0.0-next.1_jloo7glgnbv2mrwteojmo5rmuu
+      '@kickstartds/core': 3.0.0-next.1_react@18.2.0
+      '@kickstartds/form': 3.0.0-next.1_jloo7glgnbv2mrwteojmo5rmuu
       classnames: 2.3.2
       lazysizes: 5.3.2
       react: 18.2.0
@@ -2498,19 +2601,35 @@ packages:
       - storybook-design-token
     dev: false
 
-  /@kickstartds/form/2.3.0-next.3_wd5lmri4yf7vivogpapjkngu4u:
-    resolution: {integrity: sha512-KE17RDp6tyZv6lozQ3paiLg4M5464m8lYD6G1vvuRCV8OOXLuW+JByeYWIXj0kNDWayfCEDAJV5KB3EXOZAXAg==}
+  /@kickstartds/form/3.0.0-next.1_bjv64pznrbxmgk4pnn5sjjy6di:
+    resolution: {integrity: sha512-qiGaA/Ul91jPmVkKfsXUUSxZCCJQ4O3QeT1AuJKqZGYUrzC19eyi7fb/q6+RqmhCLxgm2MTHW/iyh0Q7c69YqQ==}
     peerDependencies:
-      '@kickstartds/base': ^2.0.3
-      '@kickstartds/core': ^2.0.3
+      '@kickstartds/base': ^3.0.0-next.0
+      '@kickstartds/core': ^3.0.0-next.0
       react: ^17.0.2 || ^18.2.0
     peerDependenciesMeta:
       react:
         optional: true
     dependencies:
       '@babel/runtime': 7.22.15
-      '@kickstartds/base': 2.3.0-next.3_pykf2zpmzdqlhfu6zyyerjui4m
-      '@kickstartds/core': 2.3.0-next.3
+      '@kickstartds/base': 3.0.0-next.1_io64xy35fgckemvcsj7uifwvoq
+      '@kickstartds/core': 3.0.0-next.1
+      classnames: 2.3.2
+    dev: false
+
+  /@kickstartds/form/3.0.0-next.1_jloo7glgnbv2mrwteojmo5rmuu:
+    resolution: {integrity: sha512-qiGaA/Ul91jPmVkKfsXUUSxZCCJQ4O3QeT1AuJKqZGYUrzC19eyi7fb/q6+RqmhCLxgm2MTHW/iyh0Q7c69YqQ==}
+    peerDependencies:
+      '@kickstartds/base': ^3.0.0-next.0
+      '@kickstartds/core': ^3.0.0-next.0
+      react: ^17.0.2 || ^18.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@kickstartds/base': 3.0.0-next.1_ltmtvhvr7ui6ds7rjkocfld23y
+      '@kickstartds/core': 3.0.0-next.1_react@18.2.0
       classnames: 2.3.2
       react: 18.2.0
     dev: false
@@ -6682,6 +6801,18 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+    dev: false
+
+  /markdown-to-jsx/7.3.2_react@18.2.0:
+    resolution: {integrity: sha512-B+28F5ucp83aQm+OxNrPkS8z0tMKaeHiy0lHJs3LqCyDQFtWuenaIrkaVTgAm1pf1AU85LXltva86hlaT17i8Q==}
+    engines: {node: '>= 10'}
+    peerDependencies:
+      react: '>= 0.14.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /mdast-util-definitions/5.1.2:

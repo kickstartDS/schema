@@ -1,3 +1,3 @@
 export * from './helpers.js';
-export * from './schemaReducer.js';
+export * from './reduce.js';
 export * from './dereference.js';

@@ -11,7 +11,7 @@ declare type MyAjv = import('ajv').default;
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const packagePath = path.dirname(
-    fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
+    fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
   );
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 

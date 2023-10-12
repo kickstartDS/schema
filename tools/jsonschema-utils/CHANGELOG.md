@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Wed, 11 Oct 2023 11:51:20 GMT and should not be manually modified.
+This log was last generated on Thu, 12 Oct 2023 12:44:39 GMT and should not be manually modified.
+
+## 2.5.2
+Thu, 12 Oct 2023 12:44:39 GMT
+
+### Patches
+
+- rename reducer on filesystem
 
 ## 2.5.1
 Wed, 11 Oct 2023 11:51:20 GMT

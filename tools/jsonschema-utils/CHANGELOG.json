@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.5.2",
+      "tag": "@kickstartds/jsonschema-utils_v2.5.2",
+      "date": "Thu, 12 Oct 2023 12:44:39 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "rename reducer on filesystem"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.5.1",
       "tag": "@kickstartds/jsonschema-utils_v2.5.1",
       "date": "Wed, 11 Oct 2023 11:51:20 GMT",

@@ -397,20 +397,28 @@ export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.
   );
 }
 
+export interface IProcessingOptions {
+  typeResolution: boolean;
+  modules: string[];
+}
+
+export const defaultProcessingOptions: IProcessingOptions = {
+  typeResolution: true,
+  modules: ['base', 'blog', 'form', 'content']
+};
+
 export async function processSchemaGlob(
   schemaGlob: string,
   ajv: MyAjv,
-  typeResolution: boolean = true,
-  modules: string[] = ['base', 'blog', 'form', 'content']
+  options?: Partial<IProcessingOptions>
 ): Promise<string[]> {
-  return processSchemas(await getSchemasForGlob(schemaGlob), ajv, typeResolution, modules);
+  return processSchemas(await getSchemasForGlob(schemaGlob), ajv, options);
 }
 
 export async function processSchemaGlobs(
   schemaGlobs: string[],
   ajv: MyAjv,
-  typeResolution: boolean = true,
-  modules: string[] = ['base', 'blog', 'form', 'content']
+  options?: Partial<IProcessingOptions>
 ): Promise<string[]> {
   return processSchemas(
     await schemaGlobs.reduce(async (schemasPromise, schemaGlob) => {
@@ -418,17 +426,16 @@ export async function processSchemaGlobs(
       return schemas.concat(await getSchemasForGlob(schemaGlob));
     }, Promise.resolve([] as JSONSchema.Interface[])),
     ajv,
-    typeResolution,
-    modules
+    options
   );
 }
 
 export async function processSchemas(
   jsonSchemas: JSONSchema.Interface[],
   ajv: MyAjv,
-  typeResolution: boolean = true,
-  modules: string[] = ['base', 'blog', 'form', 'content']
+  options?: Partial<IProcessingOptions>
 ): Promise<string[]> {
+  const { modules, typeResolution } = _.merge(defaultProcessingOptions, options);
   // load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas = await modules.reduce(async (schemaPromises, moduleName: string) => {
     const schemas = await schemaPromises;
@@ -463,7 +470,7 @@ export async function processSchemas(
   // 3. "compile" JSON Schema composition keywords (`anyOf`, `allOf`)
   const schemaAnyOfs: JSONSchema.Interface[] = [];
   [...jsonSchemas, ...kdsSchemas].forEach((schema) => {
-    reduceSchemaAllOfs(schema, ajv);
+    // reduceSchemaAllOfs(schema, ajv);
     mergeAnyOfEnums(schema, ajv);
 
     // 3. schema-local `anyOf` parts get split into distinct

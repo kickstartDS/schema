@@ -18,7 +18,7 @@ async function dereferenceDsAgency(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, false);
+  const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
   const dereferencedSchemas = await dereference(customSchemaIds, ajv);
@@ -40,7 +40,7 @@ async function dereferenceKds(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, false);
+  const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
   const dereferencedSchemas = await dereference(customSchemaIds, ajv);
@@ -63,7 +63,7 @@ async function dereferenceCore(): Promise<void> {
     const customGlob: string = `${packagePath}/lib/**/!(_)*.(schema|definitions|interface).json`;
 
     const ajv = getSchemaRegistry();
-    const schemaIds = await processSchemaGlob(customGlob, ajv, false);
+    const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
     const moduleSchemaIds = schemaIds.filter((schemaId) =>
       schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
     );

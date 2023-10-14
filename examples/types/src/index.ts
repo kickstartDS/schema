@@ -36,7 +36,7 @@ const renderImportStatement = (schemaId: string): string => {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, false);
+  const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
   const kdsSchemaIds = schemaIds.filter((schemaId) => schemaId.includes('schema.kickstartds.com'));
 
   const customSchemaIds = getCustomSchemaIds(schemaIds);

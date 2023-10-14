@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/types-example",
+      "comment": "Use updated jsonschema-utils with processing options",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/types-example"
+}

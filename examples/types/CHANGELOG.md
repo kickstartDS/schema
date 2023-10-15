@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/types-example
 
-This log was last generated on Thu, 12 Oct 2023 12:44:39 GMT and should not be manually modified.
+This log was last generated on Sun, 15 Oct 2023 10:08:47 GMT and should not be manually modified.
+
+## 1.1.16
+Sun, 15 Oct 2023 10:08:47 GMT
+
+### Patches
+
+- Use updated jsonschema-utils with processing options
 
 ## 1.1.15
 Thu, 12 Oct 2023 12:44:39 GMT

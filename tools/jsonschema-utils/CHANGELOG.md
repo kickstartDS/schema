@@ -1,6 +1,18 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Thu, 12 Oct 2023 12:44:39 GMT and should not be manually modified.
+This log was last generated on Sun, 15 Oct 2023 10:08:47 GMT and should not be manually modified.
+
+## 2.6.0
+Sun, 15 Oct 2023 10:08:47 GMT
+
+### Minor changes
+
+- Adds processing options for additionalProperties handling
+
+### Patches
+
+- Add processing options interface
+- Add additional processing flags
 
 ## 2.5.2
 Thu, 12 Oct 2023 12:44:39 GMT

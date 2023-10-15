@@ -2,6 +2,23 @@
   "name": "@kickstartds/dereference-example",
   "entries": [
     {
+      "version": "1.1.5",
+      "tag": "@kickstartds/dereference-example_v1.1.5",
+      "date": "Sun, 15 Oct 2023 10:08:47 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Use updated jsonschema-utils with processing options"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.6.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.4",
       "tag": "@kickstartds/dereference-example_v1.1.4",
       "date": "Thu, 12 Oct 2023 12:44:39 GMT",

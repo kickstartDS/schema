@@ -423,12 +423,24 @@ export interface IProcessingOptions {
   typeResolution: boolean;
   modules: string[];
   additionalProperties: 'keep' | 'fillTrue' | 'fillFalse' | 'forceFalse';
+  loadPageSchema: boolean;
+  mergeAllOf: boolean;
+  mergeAnyOf: boolean;
+  layerRefs: boolean;
+  inlineReferences: boolean;
+  addExplicitAnyOfs: boolean;
 }
 
 export const defaultProcessingOptions: IProcessingOptions = {
   typeResolution: true,
   modules: ['base', 'blog', 'form', 'content'],
-  additionalProperties: 'forceFalse'
+  additionalProperties: 'forceFalse',
+  loadPageSchema: true,
+  mergeAllOf: true,
+  mergeAnyOf: true,
+  layerRefs: true,
+  inlineReferences: true,
+  addExplicitAnyOfs: true
 };
 
 export async function processSchemaGlob(
@@ -459,32 +471,46 @@ export async function processSchemas(
   ajv: MyAjv,
   options?: Partial<IProcessingOptions>
 ): Promise<string[]> {
-  const { modules, typeResolution, additionalProperties } = _.merge(defaultProcessingOptions, options);
+  const {
+    modules,
+    typeResolution,
+    additionalProperties,
+    loadPageSchema: shouldLoadPageSchema,
+    mergeAllOf: shouldMergeAllOf,
+    mergeAnyOf: shouldMergeAnyOf,
+    layerRefs: shouldLayerRefs,
+    inlineReferences: shouldInlineReferences,
+    addExplicitAnyOfs: shouldAddExlicitAnyOfs
+  } = _.merge(defaultProcessingOptions, options);
   // load all the schema files provided by `@kickstartDS` itself...
-  const kdsSchemas = await modules.reduce(async (schemaPromises, moduleName: string) => {
-    const schemas = await schemaPromises;
-    try {
-      const packagePath = path.dirname(
-        fileURLToPath(resolve(`@kickstartds/${moduleName}/package.json`, import.meta.url))
-      );
-      const schemaGlob = `${packagePath}/(lib|cms)/**/*.(schema|definitions|interface).json`;
-      return schemas.concat(await getSchemasForGlob(schemaGlob));
-    } catch (error) {
-      return schemas;
-    }
-  }, Promise.resolve([] as JSONSchema.Interface[]));
+  const kdsSchemas =
+    modules.length > 0
+      ? await modules.reduce(async (schemaPromises, moduleName: string) => {
+          const schemas = await schemaPromises;
+          try {
+            const packagePath = path.dirname(
+              fileURLToPath(resolve(`@kickstartds/${moduleName}/package.json`, import.meta.url))
+            );
+            const schemaGlob = `${packagePath}/(lib|cms)/**/*.(schema|definitions|interface).json`;
+            return schemas.concat(await getSchemasForGlob(schemaGlob));
+          } catch (error) {
+            return schemas;
+          }
+        }, Promise.resolve([] as JSONSchema.Interface[]))
+      : [];
 
   // ... and add page schema, too
-  kdsSchemas.push(
-    await loadSchemaPath(fileURLToPath(resolve('../resources/cms/page.schema.json', import.meta.url)))
-  );
+  if (shouldLoadPageSchema)
+    kdsSchemas.push(
+      await loadSchemaPath(fileURLToPath(resolve('../resources/cms/page.schema.json', import.meta.url)))
+    );
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it
   // 1. pre-process, before schemas enter `ajv`
-  layerRefs(jsonSchemas, kdsSchemas);
+  if (shouldLayerRefs) layerRefs(jsonSchemas, kdsSchemas);
   if (typeResolution) addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);
-  inlineReferences([...jsonSchemas, ...kdsSchemas]);
+  if (shouldInlineReferences) inlineReferences([...jsonSchemas, ...kdsSchemas]);
   if (additionalProperties !== 'keep')
     processAdditionalProperties([...jsonSchemas, ...kdsSchemas], additionalProperties);
 
@@ -496,21 +522,22 @@ export async function processSchemas(
   // 3. "compile" JSON Schema composition keywords (`anyOf`, `allOf`)
   const schemaAnyOfs: JSONSchema.Interface[] = [];
   [...jsonSchemas, ...kdsSchemas].forEach((schema) => {
-    // reduceSchemaAllOfs(schema, ajv);
-    mergeAnyOfEnums(schema, ajv);
+    if (shouldMergeAllOf) reduceSchemaAllOfs(schema, ajv);
+    if (shouldMergeAnyOf) mergeAnyOfEnums(schema, ajv);
 
     // 3. schema-local `anyOf` parts get split into distinct
     // schemas, with their own unique `$id` for referencing.
     // all generated schemas get added to `ajv` automatically
-    schemaAnyOfs.push(...addExplicitAnyOfs(schema, ajv));
+    if (shouldAddExlicitAnyOfs) schemaAnyOfs.push(...addExplicitAnyOfs(schema, ajv));
   });
 
   // 4. process new schemas, resulting from adding the distinct
   // `anyOf`s in the step before
   if (typeResolution) addTypeInterfaces(schemaAnyOfs);
-  schemaAnyOfs.forEach((schemaAnyOf) => {
-    reduceSchemaAllOfs(schemaAnyOf, ajv);
-  });
+  if (shouldAddExlicitAnyOfs)
+    schemaAnyOfs.forEach((schemaAnyOf) => {
+      reduceSchemaAllOfs(schemaAnyOf, ajv);
+    });
 
   // 5. return list of processed schema `$id`s.
   // Accessing the full schemas works through `ajv`

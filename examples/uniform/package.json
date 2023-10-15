@@ -1,0 +1,53 @@
+{
+  "name": "@kickstartds/uniform-example",
+  "version": "1.0.0",
+  "description": "Example use showing full conversion of JSON Schema files to importable Uniform configuration",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Jonas Ulrich",
+    "email": "jonas.ulrich@kickstartds.com"
+  },
+  "type": "module",
+  "exports": "./lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "heft build --clean",
+    "start": "node lib/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@kickstartds/design-system": "^2.5.17",
+    "@kickstartds/ds-agency": "2.0.0--canary.27.454.0",
+    "@kickstartds/jsonschema-utils": "workspace:*",
+    "@kickstartds/jsonschema2uniform": "workspace:*",
+    "ajv": "^8.12.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-config": "^3.2.0",
+    "@rushstack/heft": "^0.50.4",
+    "@rushstack/heft-node-rig": "^1.12.10",
+    "@tsconfig/node16": "^1.0.3",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^18.16.4",
+    "@typescript-eslint/parser": "~5.59.2",
+    "eslint": "^8.40.0",
+    "eslint-import-resolver-typescript": "~3.5.5",
+    "eslint-plugin-import": "~2.27.5",
+    "eslint-plugin-json-files": "~2.2.0",
+    "import-meta-resolve": "~3.0.0",
+    "json-schema-typed": "~8.0.1",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4"
+  },
+  "peerDependencies": {
+    "@kickstartds/base": "^3.0.0-next.1",
+    "@kickstartds/blog": "^3.0.0-next.1",
+    "@kickstartds/content": "^3.0.0-next.1",
+    "@kickstartds/core": "^3.0.0-next.1",
+    "@kickstartds/form": "^3.0.0-next.1"
+  },
+  "engines": {
+    "node": ">=14.16"
+  }
+}

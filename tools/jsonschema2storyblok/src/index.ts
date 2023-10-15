@@ -333,9 +333,6 @@ function processArray({
   // rootSchema,
   arrayField
 }: IProcessInterface<StoryblokElement>): StoryblokElement {
-  if (name === 'ctaGroup') {
-    console.log('processArray arrayField', name, arrayField);
-  }
   const fields: IStoryblokBlock[] | undefined = (arrayField as IStoryblokSchemaElement)
     .objectFields as unknown as IStoryblokBlock[];
 

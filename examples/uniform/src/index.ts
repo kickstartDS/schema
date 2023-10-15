@@ -3,7 +3,7 @@ import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { processSchemaGlob, getSchemaRegistry, getCustomSchemaIds } from '@kickstartds/jsonschema-utils';
-import { convert as convertToStoryblok } from '@kickstartds/jsonschema2storyblok';
+import { convert as convertToUniform } from '@kickstartds/jsonschema2uniform';
 import { resolve } from 'import-meta-resolve';
 
 declare type MyAjv = import('ajv').default;
@@ -20,7 +20,7 @@ async function convertDsAgency(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  generateStoryblok(
+  generateUniform(
     customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
     ajv
   );
@@ -40,10 +40,10 @@ async function convertKds(): Promise<void> {
 
   mkdirSync('dist/kds', { recursive: true });
 
-  generateStoryblok(
+  generateUniform(
     customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
     ajv,
-    `dist/kds/components.123456.json`
+    `dist/kds/uniform.json`
   );
 }
 
@@ -62,27 +62,27 @@ async function convertCore(): Promise<void> {
 
     mkdirSync(`dist/${module}`, { recursive: true });
 
-    generateStoryblok(
+    generateUniform(
       customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
       ajv,
-      `dist/${module}/components.123456.json`
+      `dist/${module}/uniform.json`
     );
   }
 }
 
-export function generateStoryblok(
+export function generateUniform(
   schemaIds: string[],
   ajv: MyAjv,
-  configPath: string = `dist/components.123456.json`
+  configPath: string = `dist/uniform.json`
 ): void {
   mkdirSync(path.dirname(configPath), { recursive: true });
 
-  const pageFields = convertToStoryblok({
+  const uniformComponents = convertToUniform({
     schemaIds,
     ajv
   });
 
-  const configStringStoryblok = JSON.stringify({ components: pageFields }, null, 2);
+  const configStringStoryblok = JSON.stringify({ components: uniformComponents }, null, 2);
   writeFileSync(configPath, configStringStoryblok);
 }
 

@@ -1,0 +1,85 @@
+{
+  "id": "allthethings",
+  "name": "ALLTHETHINGS",
+  "icon": "screen",
+  "parameters": [
+    {
+      "id": "checkboxParameter",
+      "name": "Checkbox parameter",
+      "type": "checkbox",
+      "helpText": "Some help text",
+      "typeConfig": null
+    },
+    {
+      "id": "numberParameter",
+      "name": "Number parameter",
+      "type": "number",
+      "helpText": "Some help text",
+      "typeConfig": {
+        "max": "6",
+        "min": "1",
+        "decimal": true,
+        "required": true,
+        "decimalPlaces": "3"
+      }
+    },
+    {
+      "id": "dropdownListParameter",
+      "name": "Dropdown List parameter",
+      "type": "select",
+      "helpText": "Some help text",
+      "typeConfig": {
+        "options": [
+          {
+            "text": "Left",
+            "value": "left"
+          },
+          {
+            "text": "Center",
+            "value": "Center"
+          },
+          {
+            "text": "Right",
+            "value": "right"
+          }
+        ],
+        "required": true
+      }
+    },
+    {
+      "id": "textParameter",
+      "name": "Text parameter",
+      "type": "text",
+      "helpText": "Some help text",
+      "typeConfig": {
+        "required": true,
+        "multiline": true,
+        "linesCount": "5"
+      }
+    }
+  ],
+  "useTeamPermissions": true,
+  "slots": [
+    {
+      "id": "firstSlot",
+      "name": "First slot",
+      "maxComponents": 3,
+      "minComponents": 1,
+      "allowedComponents": ["allthethings"],
+      "inheritAllowedComponents": false
+    }
+  ],
+  "canBeComposition": false,
+  "created": "2022-10-06T18:10:36.244962+00:00",
+  "updated": "2022-10-06T18:15:35.748702+00:00",
+  "variants": [
+    {
+      "id": "someDefaultVariant",
+      "name": "Some default variant"
+    },
+    {
+      "id": "anotherVariant",
+      "name": "Another variant"
+    }
+  ]
+}

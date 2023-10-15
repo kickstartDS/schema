@@ -25,6 +25,10 @@
       "path": "../examples/storyblok"
     },
     {
+      "name": "examples/uniform",
+      "path": "../examples/uniform"
+    },
+    {
       "name": "tools/cambria",
       "path": "../tools/cambria"
     },
@@ -43,11 +47,16 @@
     {
       "name": "tools/jsonschema2types",
       "path": "../tools/jsonschema2types"
+    },
+    {
+      "name": "tools/jsonschema2uniform",
+      "path": "../tools/jsonschema2uniform"
     }
   ],
   "settings": {
     "files.associations": {
       "*.json": "jsonc"
-    }
+    },
+    "typescript.tsdk": "tools/jsonschema2uniform/node_modules/typescript/lib"
   }
 }

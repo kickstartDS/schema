@@ -63,6 +63,13 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@kickstartds/jsonschema2uniform",
+      "projectFolder": "tools/jsonschema2uniform",
+      "reviewCategory": "tools",
+      "tags": ["tools"],
+      "shouldPublish": true
+    },
+    {
       "packageName": "@kickstartds/cambria-example",
       "projectFolder": "examples/cambria",
       "reviewCategory": "examples",
@@ -93,6 +100,13 @@
     {
       "packageName": "@kickstartds/storyblok-example",
       "projectFolder": "examples/storyblok",
+      "reviewCategory": "examples",
+      "tags": ["examples"],
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@kickstartds/uniform-example",
+      "projectFolder": "examples/uniform",
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true

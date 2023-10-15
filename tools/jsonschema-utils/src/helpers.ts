@@ -322,6 +322,25 @@ export function inlineReferences(jsonSchemas: JSONSchema.Interface[]): void {
   });
 }
 
+export function processAdditionalProperties(
+  jsonSchemas: JSONSchema.Interface[],
+  additionalProperties: IProcessingOptions['additionalProperties']
+): void {
+  jsonSchemas.forEach((jsonSchema) => {
+    traverse(jsonSchema, {
+      cb: (subSchema) => {
+        if (subSchema.type && subSchema.type === 'object') {
+          if (additionalProperties === 'forceFalse') subSchema.additionalProperties = false;
+          else if (subSchema.additionalProperties === undefined && additionalProperties === 'fillFalse')
+            subSchema.additionalProperties = false;
+          else if (subSchema.additionalProperties === undefined && additionalProperties === 'fillTrue')
+            subSchema.additionalProperties = true;
+        }
+      }
+    });
+  });
+}
+
 export function collectComponentInterfaces(jsonSchemas: JSONSchema.Interface[]): Record<string, string[]> {
   const interfaceMap: Record<string, string[]> = {};
 
@@ -397,14 +416,19 @@ export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.
   );
 }
 
+// Ideas:
+// - `loadPageSchema`
+// - `mergeAllof`
 export interface IProcessingOptions {
   typeResolution: boolean;
   modules: string[];
+  additionalProperties: 'keep' | 'fillTrue' | 'fillFalse' | 'forceFalse';
 }
 
 export const defaultProcessingOptions: IProcessingOptions = {
   typeResolution: true,
-  modules: ['base', 'blog', 'form', 'content']
+  modules: ['base', 'blog', 'form', 'content'],
+  additionalProperties: 'forceFalse'
 };
 
 export async function processSchemaGlob(
@@ -435,7 +459,7 @@ export async function processSchemas(
   ajv: MyAjv,
   options?: Partial<IProcessingOptions>
 ): Promise<string[]> {
-  const { modules, typeResolution } = _.merge(defaultProcessingOptions, options);
+  const { modules, typeResolution, additionalProperties } = _.merge(defaultProcessingOptions, options);
   // load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas = await modules.reduce(async (schemaPromises, moduleName: string) => {
     const schemas = await schemaPromises;
@@ -461,6 +485,8 @@ export async function processSchemas(
   layerRefs(jsonSchemas, kdsSchemas);
   if (typeResolution) addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);
   inlineReferences([...jsonSchemas, ...kdsSchemas]);
+  if (additionalProperties !== 'keep')
+    processAdditionalProperties([...jsonSchemas, ...kdsSchemas], additionalProperties);
 
   // 2. add all schemas to ajv for the following processing steps
   [...jsonSchemas, ...kdsSchemas].forEach((schema) => {

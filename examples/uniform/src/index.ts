@@ -50,20 +50,22 @@ async function convertKds(): Promise<void> {
 async function convertCore(): Promise<void> {
   for (const module of ['base', 'blog', 'content', 'core', 'form']) {
     const packagePath = path.dirname(
-      fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
+      fileURLToPath(resolve(`@kickstartds/${module}/package.json`, import.meta.url))
     );
-    const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
+    const customGlob = `${packagePath}/lib/**/*.(schema|definitions|interface).json`;
 
     // get shared ajv instance, pre-process schemas and get full
     // set of unique schemas. precondition for the following conversions
     const ajv = getSchemaRegistry();
     const schemaIds = await processSchemaGlob(customGlob, ajv);
-    const customSchemaIds = getCustomSchemaIds(schemaIds);
+    const moduleSchemaIds = schemaIds.filter((schemaId) =>
+      schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
+    );
 
     mkdirSync(`dist/${module}`, { recursive: true });
 
     generateUniform(
-      customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
+      moduleSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
       ajv,
       `dist/${module}/uniform.json`
     );

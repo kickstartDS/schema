@@ -33,6 +33,8 @@ const unrequireParameters = (component: UniformComponent): void => {
       return;
     }
 
+    // TODO this forced type could possibly be replaced by another union type for all
+    // the current Param types (`TextParamConfig`, `SelectParamConfiguration`, etc)
     (parameter.typeConfig as { required: boolean }).required = false;
   });
 };

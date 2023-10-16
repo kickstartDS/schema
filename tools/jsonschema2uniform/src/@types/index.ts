@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 
-import { components } from './uniform-components.js';
+import { IComponents } from './uniform-components.js';
 
 declare type MyAjv = import('ajv').default;
 
@@ -11,7 +11,7 @@ export interface IConvertParams {
   schemaPost?: (schema: JSONSchema.Interface) => JSONSchema.Interface;
 }
 
-export type UniformComponent = components['schemas']['ComponentDefinition'];
+export type UniformComponent = IComponents['schemas']['ComponentDefinition'];
 
 export type UniformComponentParameter = NonNullable<UniformComponent['parameters']>[0];
 

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2uniform",
+      "comment": "Update to current types",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2uniform"
+}

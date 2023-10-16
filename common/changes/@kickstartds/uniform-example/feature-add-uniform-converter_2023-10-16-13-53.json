@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/uniform-example",
+      "comment": "Update to converter with new types",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/uniform-example"
+}

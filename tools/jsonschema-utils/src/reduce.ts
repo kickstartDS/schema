@@ -91,25 +91,25 @@ export function getSchemaReducer<T>({
 
     // oneOf?
     if (!_.isUndefined(schema.oneOf)) {
-      console.log('schema with oneOf', schema);
+      console.log('schema with oneOf', schema, outerSchema.$id);
       throw err(`The type oneOf on property ${name} is not supported.`);
     }
 
     // anyOf?
     else if (!_.isUndefined(schema.anyOf)) {
-      console.log('schema with anyOf', schema);
+      console.log('schema with anyOf', schema, outerSchema.$id);
       throw err(`The type anyOf on property ${name} is not supported.`);
     }
 
     // allOf?
     else if (!_.isUndefined(schema.allOf)) {
-      console.log('schema with allOf', schema);
+      console.log('schema with allOf', propName, schema, parentSchema, outerSchema.$id);
       throw err(`The type allOf on property ${name} is not supported.`);
     }
 
     // not?
     else if (!_.isUndefined(schema.not)) {
-      console.log('schema with not', schema);
+      console.log('schema with not', schema, outerSchema.$id);
       throw err(`The type not on property ${name} is not supported.`);
     }
 

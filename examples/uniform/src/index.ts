@@ -6,24 +6,25 @@ import { processSchemaGlob, getSchemaRegistry, getCustomSchemaIds } from '@kicks
 import { convert as convertToUniform } from '@kickstartds/jsonschema2uniform';
 import { resolve } from 'import-meta-resolve';
 
-declare type MyAjv = import('ajv').default;
-
 async function convertDsAgency(): Promise<void> {
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
   );
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
-  // get shared ajv instance, pre-process schemas and get full
-  // set of unique schemas. precondition for the following conversions
   const ajv = getSchemaRegistry();
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  generateUniform(
-    customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
+  mkdirSync('dist/agency', { recursive: true });
+
+  const uniformComponents = convertToUniform({
+    schemaIds: customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
     ajv
-  );
+  });
+
+  const configStringUniform = JSON.stringify({ components: uniformComponents }, null, 2);
+  writeFileSync('dist/agency/uniform.json', configStringUniform);
 }
 
 async function convertKds(): Promise<void> {
@@ -32,60 +33,44 @@ async function convertKds(): Promise<void> {
   );
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
-  // get shared ajv instance, pre-process schemas and get full
-  // set of unique schemas. precondition for the following conversions
   const ajv = getSchemaRegistry();
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
   mkdirSync('dist/kds', { recursive: true });
 
-  generateUniform(
-    customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
-    ajv,
-    `dist/kds/uniform.json`
-  );
+  const uniformComponents = convertToUniform({
+    schemaIds: customSchemaIds,
+    ajv
+  });
+
+  const configStringUniform = JSON.stringify({ components: uniformComponents }, null, 2);
+  writeFileSync('dist/kds/uniform.json', configStringUniform);
 }
 
 async function convertCore(): Promise<void> {
-  for (const module of ['base', 'blog', 'content', 'core', 'form']) {
+  for (const module of ['base', 'blog', 'content', 'form']) {
     const packagePath = path.dirname(
       fileURLToPath(resolve(`@kickstartds/${module}/package.json`, import.meta.url))
     );
     const customGlob = `${packagePath}/lib/**/*.(schema|definitions|interface).json`;
 
-    // get shared ajv instance, pre-process schemas and get full
-    // set of unique schemas. precondition for the following conversions
     const ajv = getSchemaRegistry();
     const schemaIds = await processSchemaGlob(customGlob, ajv);
     const moduleSchemaIds = schemaIds.filter((schemaId) =>
       schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
     );
 
+    const uniformComponents = convertToUniform({
+      schemaIds: moduleSchemaIds.filter((schemaId) => !schemaId.includes('table.schema.json')),
+      ajv
+    });
+
     mkdirSync(`dist/${module}`, { recursive: true });
 
-    generateUniform(
-      moduleSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
-      ajv,
-      `dist/${module}/uniform.json`
-    );
+    const configStringUniform = JSON.stringify({ components: uniformComponents }, null, 2);
+    writeFileSync(`dist/${module}/uniform.json`, configStringUniform);
   }
-}
-
-export function generateUniform(
-  schemaIds: string[],
-  ajv: MyAjv,
-  configPath: string = `dist/uniform.json`
-): void {
-  mkdirSync(path.dirname(configPath), { recursive: true });
-
-  const uniformComponents = convertToUniform({
-    schemaIds,
-    ajv
-  });
-
-  const configStringStoryblok = JSON.stringify({ components: uniformComponents }, null, 2);
-  writeFileSync(configPath, configStringStoryblok);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/converter-example",
+      "comment": "Add debug configuration",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/converter-example"
+}

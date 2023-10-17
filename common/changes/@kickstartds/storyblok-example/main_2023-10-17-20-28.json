@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "Use update jsonschema utils",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "Create schema dependency graph, and sort for processing",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

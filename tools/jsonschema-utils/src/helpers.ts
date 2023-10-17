@@ -12,6 +12,7 @@ import { type JSONSchema } from 'json-schema-typed/draft-07';
 import { get } from 'jsonpointer';
 import _ from 'lodash';
 import { compose } from 'ramda';
+import { DirectedAcyclicGraph } from 'typescript-graph';
 
 declare type MyAjv = import('ajv').default;
 
@@ -416,9 +417,36 @@ export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.
   );
 }
 
-// Ideas:
-// - `loadPageSchema`
-// - `mergeAllof`
+export function getSchemaGraph(
+  jsonSchemas: JSONSchema.Interface[]
+): DirectedAcyclicGraph<JSONSchema.Interface> {
+  const graph = new DirectedAcyclicGraph<JSONSchema.Interface>((n: JSONSchema.Interface) => {
+    if (!n.$id) throw new Error('Schema without $id while getting schema graph');
+    return n.$id.replace(/#.*$/g, '');
+  });
+
+  jsonSchemas.forEach((jsonSchema) => {
+    if (!jsonSchema.$id) throw new Error('Schema without id in graph generation');
+    if (!graph.getNode(jsonSchema.$id)) graph.insert(jsonSchema);
+    traverse(jsonSchema, {
+      cb: (subSchema) => {
+        if (subSchema.$ref && subSchema.$ref.includes('http')) {
+          if (!jsonSchema.$id) throw new Error('Schema without id in graph generation');
+          const reffedSchema = jsonSchemas.find(
+            (schema) => schema.$id === subSchema.$ref.replace(/#.*$/g, '')
+          );
+          if (!reffedSchema || !reffedSchema.$id)
+            throw new Error("Couldn't find a reffed schema in schema graph generation");
+          if (!graph.getNode(reffedSchema.$id)) graph.insert(reffedSchema);
+          graph.addEdge(jsonSchema.$id, reffedSchema.$id);
+        }
+      }
+    });
+  });
+
+  return graph;
+}
+
 export interface IProcessingOptions {
   typeResolution: boolean;
   modules: string[];
@@ -505,23 +533,29 @@ export async function processSchemas(
       await loadSchemaPath(fileURLToPath(resolve('../resources/cms/page.schema.json', import.meta.url)))
     );
 
+  const allSchemas = [...jsonSchemas, ...kdsSchemas].filter(
+    (value: JSONSchema.Interface, index, self) => self.findIndex((v) => v.$id === value.$id) === index
+  );
+
+  const schemaGraph = getSchemaGraph(allSchemas);
+  const sortedSchemas = schemaGraph.topologicallySortedNodes().reverse();
+
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it
   // 1. pre-process, before schemas enter `ajv`
   if (shouldLayerRefs) layerRefs(jsonSchemas, kdsSchemas);
-  if (typeResolution) addTypeInterfaces([...jsonSchemas, ...kdsSchemas]);
-  if (shouldInlineReferences) inlineReferences([...jsonSchemas, ...kdsSchemas]);
-  if (additionalProperties !== 'keep')
-    processAdditionalProperties([...jsonSchemas, ...kdsSchemas], additionalProperties);
+  if (typeResolution) addTypeInterfaces(sortedSchemas);
+  if (shouldInlineReferences) inlineReferences(sortedSchemas);
+  if (additionalProperties !== 'keep') processAdditionalProperties(sortedSchemas, additionalProperties);
 
   // 2. add all schemas to ajv for the following processing steps
-  [...jsonSchemas, ...kdsSchemas].forEach((schema) => {
+  sortedSchemas.forEach((schema) => {
     addJsonSchema(schema, ajv);
   });
 
   // 3. "compile" JSON Schema composition keywords (`anyOf`, `allOf`)
   const schemaAnyOfs: JSONSchema.Interface[] = [];
-  [...jsonSchemas, ...kdsSchemas].forEach((schema) => {
+  sortedSchemas.forEach((schema) => {
     if (shouldMergeAllOf) reduceSchemaAllOfs(schema, ajv);
     if (shouldMergeAnyOf) mergeAnyOfEnums(schema, ajv);
 
@@ -534,14 +568,14 @@ export async function processSchemas(
   // 4. process new schemas, resulting from adding the distinct
   // `anyOf`s in the step before
   if (typeResolution) addTypeInterfaces(schemaAnyOfs);
-  if (shouldAddExlicitAnyOfs)
+  if (shouldAddExlicitAnyOfs && shouldMergeAllOf)
     schemaAnyOfs.forEach((schemaAnyOf) => {
       reduceSchemaAllOfs(schemaAnyOf, ajv);
     });
 
   // 5. return list of processed schema `$id`s.
   // Accessing the full schemas works through `ajv`
-  const collectedSchemaIds = [...jsonSchemas, ...kdsSchemas, ...schemaAnyOfs]
+  const collectedSchemaIds = [...sortedSchemas, ...schemaAnyOfs]
     .filter((jsonSchema) => jsonSchema && jsonSchema.$id)
     .map((jsonSchema) => jsonSchema.$id || '');
 

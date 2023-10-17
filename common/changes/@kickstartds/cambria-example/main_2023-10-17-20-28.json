@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria-example",
+      "comment": "Add debug configuration",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria-example"
+}

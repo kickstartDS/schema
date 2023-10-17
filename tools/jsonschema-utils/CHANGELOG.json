@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.7.0",
+      "tag": "@kickstartds/jsonschema-utils_v2.7.0",
+      "date": "Tue, 17 Oct 2023 20:29:19 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Create schema dependency graph, and sort for processing"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.6.0",
       "tag": "@kickstartds/jsonschema-utils_v2.6.0",
       "date": "Sun, 15 Oct 2023 10:08:47 GMT",

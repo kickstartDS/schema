@@ -1,7 +1,7 @@
 {
-  "name": "@kickstartds/converter-example",
-  "version": "1.0.15",
-  "description": "Example use showing full conversion of JSON Schema files",
+  "name": "@kickstartds/netlifycms-example",
+  "version": "1.1.0",
+  "description": "Example use showing full conversion of JSON Schema files to importable Netlify CMS configuration",
   "license": "UNLICENSED",
   "author": {
     "name": "Jonas Ulrich",
@@ -17,9 +17,9 @@
   },
   "dependencies": {
     "@kickstartds/design-system": "^2.5.17",
+    "@kickstartds/ds-agency": "2.0.0--canary.27.454.0",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2netlifycms": "workspace:*",
-    "@kickstartds/jsonschema2storyblok": "workspace:*",
     "ajv": "^8.12.0",
     "js-yaml": "^4.1.0"
   },
@@ -39,6 +39,13 @@
     "json-schema-typed": "~8.0.1",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4"
+  },
+  "peerDependencies": {
+    "@kickstartds/base": "^3.0.0-next.1",
+    "@kickstartds/blog": "^3.0.0-next.1",
+    "@kickstartds/content": "^3.0.0-next.1",
+    "@kickstartds/core": "^3.0.0-next.1",
+    "@kickstartds/form": "^3.0.0-next.1"
   },
   "engines": {
     "node": ">=14.16"

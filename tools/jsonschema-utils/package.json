@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema-utils",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "license": "UNLICENSED",
   "author": {
     "name": "Jonas Ulrich",
@@ -26,7 +26,8 @@
     "json-schema-traverse": "^1.0.0",
     "jsonpointer": "~5.0.1",
     "lodash": "^4.17.21",
-    "ramda": "^0.28.0"
+    "ramda": "^0.28.0",
+    "typescript-graph": "^0.3.0"
   },
   "devDependencies": {
     "@rushstack/eslint-config": "^3.2.0",

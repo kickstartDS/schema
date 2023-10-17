@@ -84,8 +84,8 @@
       "shouldPublish": true
     },
     {
-      "packageName": "@kickstartds/converter-example",
-      "projectFolder": "examples/converter",
+      "packageName": "@kickstartds/netlifycms-example",
+      "projectFolder": "examples/netlifycms",
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true

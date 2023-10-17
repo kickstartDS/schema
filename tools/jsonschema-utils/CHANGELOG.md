@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Sun, 15 Oct 2023 10:08:47 GMT and should not be manually modified.
+This log was last generated on Tue, 17 Oct 2023 20:29:19 GMT and should not be manually modified.
+
+## 2.7.0
+Tue, 17 Oct 2023 20:29:19 GMT
+
+### Minor changes
+
+- Create schema dependency graph, and sort for processing
 
 ## 2.6.0
 Sun, 15 Oct 2023 10:08:47 GMT

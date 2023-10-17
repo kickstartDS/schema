@@ -8,6 +8,9 @@
     "resolveJsonModule": true,
     "declaration": true,
     "types": ["heft-jest", "node"],
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "typescript-graph": ["./node_modules/typescript-graph/dist/types/index.d.ts"]
+    }
   }
 }

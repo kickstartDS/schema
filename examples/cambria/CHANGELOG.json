@@ -2,6 +2,18 @@
   "name": "@kickstartds/cambria-example",
   "entries": [
     {
+      "version": "1.0.3",
+      "tag": "@kickstartds/cambria-example_v1.0.3",
+      "date": "Tue, 17 Oct 2023 20:29:19 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add debug configuration"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.2",
       "tag": "@kickstartds/cambria-example_v1.0.2",
       "date": "Sun, 24 Sep 2023 13:58:19 GMT",

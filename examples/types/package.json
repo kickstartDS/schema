@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/types-example",
-  "version": "1.1.16",
+  "version": "1.2.0",
   "description": "Example use of the component type generation",
   "license": "UNLICENSED",
   "author": {
@@ -37,6 +37,13 @@
     "pascal-case": "^3.1.2",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4"
+  },
+  "peerDependencies": {
+    "@kickstartds/base": "^3.0.0-next.1",
+    "@kickstartds/blog": "^3.0.0-next.1",
+    "@kickstartds/content": "^3.0.0-next.1",
+    "@kickstartds/core": "^3.0.0-next.1",
+    "@kickstartds/form": "^3.0.0-next.1"
   },
   "engines": {
     "node": ">=14.16"

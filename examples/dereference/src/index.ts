@@ -1,5 +1,5 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
-import path from 'node:path';
+import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -21,13 +21,16 @@ async function dereferenceDsAgency(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  const dereferencedSchemas = await dereference(customSchemaIds, ajv);
+  const dereferencedSchemas = await dereference(
+    customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
+    ajv
+  );
 
-  mkdirSync('dist/ds-agency', { recursive: true });
+  mkdirSync('dist/agency', { recursive: true });
 
   for (const schemaId of Object.keys(dereferencedSchemas)) {
     writeFileSync(
-      `dist/ds-agency/${getSchemaName(schemaId)}.schema.json`,
+      `dist/agency/${getSchemaName(schemaId)}.schema.json`,
       JSON.stringify(dereferencedSchemas[schemaId], null, 2)
     );
   }
@@ -56,7 +59,7 @@ async function dereferenceKds(): Promise<void> {
 }
 
 async function dereferenceCore(): Promise<void> {
-  for (const module of ['base', 'blog', 'content', 'core', 'form']) {
+  for (const module of ['base', 'blog', 'content', 'form']) {
     const packagePath = path.dirname(
       fileURLToPath(resolve(`@kickstartds/${module}/package.json`, import.meta.url))
     );

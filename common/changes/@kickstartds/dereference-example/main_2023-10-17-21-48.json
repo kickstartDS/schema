@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "comment": "Align all examples",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/dereference-example"
+}

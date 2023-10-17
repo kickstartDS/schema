@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/types-example",
+      "comment": "Align all examples",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/types-example"
+}

@@ -13,8 +13,8 @@
       "path": "../examples/types"
     },
     {
-      "name": "examples/converter",
-      "path": "../examples/converter"
+      "name": "examples/netlifycms",
+      "path": "../examples/netlifycms"
     },
     {
       "name": "examples/dereference",

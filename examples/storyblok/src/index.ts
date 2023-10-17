@@ -16,14 +16,14 @@ async function convertDsAgency(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  mkdirSync('dist/agency', { recursive: true });
-
-  const pageFields = convertToStoryblok({
+  const components = convertToStoryblok({
     schemaIds: customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
     ajv
   });
 
-  const configStringStoryblok = JSON.stringify({ components: pageFields }, null, 2);
+  mkdirSync('dist/agency', { recursive: true });
+
+  const configStringStoryblok = JSON.stringify({ components }, null, 2);
   writeFileSync(`dist/agency/components.123456.json`, configStringStoryblok);
 }
 
@@ -37,14 +37,14 @@ async function convertKds(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  mkdirSync('dist/kds', { recursive: true });
-
-  const pageFields = convertToStoryblok({
+  const components = convertToStoryblok({
     schemaIds: customSchemaIds,
     ajv
   });
 
-  const configStringStoryblok = JSON.stringify({ components: pageFields }, null, 2);
+  mkdirSync('dist/kds', { recursive: true });
+
+  const configStringStoryblok = JSON.stringify({ components }, null, 2);
   writeFileSync(`dist/kds/components.123456.json`, configStringStoryblok);
 }
 
@@ -61,14 +61,14 @@ async function convertCore(): Promise<void> {
       schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
     );
 
-    mkdirSync(`dist/${module}`, { recursive: true });
-
-    const pageFields = convertToStoryblok({
+    const components = convertToStoryblok({
       schemaIds: moduleSchemaIds.filter((schemaId) => !schemaId.includes('table.schema.json')),
       ajv
     });
 
-    const configStringStoryblok = JSON.stringify({ components: pageFields }, null, 2);
+    mkdirSync(`dist/${module}`, { recursive: true });
+
+    const configStringStoryblok = JSON.stringify({ components }, null, 2);
     writeFileSync(`dist/${module}/components.123456.json`, configStringStoryblok);
   }
 }

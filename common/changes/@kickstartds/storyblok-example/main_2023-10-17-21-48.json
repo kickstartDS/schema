@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "Align all examples",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

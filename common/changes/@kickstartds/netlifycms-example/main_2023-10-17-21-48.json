@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/netlifycms-example",
+      "comment": "Align all examples",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/netlifycms-example"
+}

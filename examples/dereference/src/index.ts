@@ -11,7 +11,7 @@ import {
 } from '@kickstartds/jsonschema-utils';
 import { resolve } from 'import-meta-resolve';
 
-async function dereferenceDsAgency(): Promise<void> {
+async function convertDsAgency(): Promise<void> {
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
   );
@@ -36,7 +36,7 @@ async function dereferenceDsAgency(): Promise<void> {
   }
 }
 
-async function dereferenceKds(): Promise<void> {
+async function convertKds(): Promise<void> {
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
   );
@@ -58,7 +58,7 @@ async function dereferenceKds(): Promise<void> {
   }
 }
 
-async function dereferenceCore(): Promise<void> {
+async function convertCore(): Promise<void> {
   for (const module of ['base', 'blog', 'content', 'form']) {
     const packagePath = path.dirname(
       fileURLToPath(resolve(`@kickstartds/${module}/package.json`, import.meta.url))
@@ -86,7 +86,7 @@ async function dereferenceCore(): Promise<void> {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  await dereferenceDsAgency();
-  await dereferenceKds();
-  await dereferenceCore();
+  await convertDsAgency();
+  await convertKds();
+  await convertCore();
 })();

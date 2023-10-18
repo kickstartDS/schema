@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2uniform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Converts JSON schema to Uniform component json definition",
   "license": "UNLICENSED",
   "author": {

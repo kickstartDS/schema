@@ -1,0 +1,30 @@
+{
+  "name": "@kickstartds/uniform-example",
+  "entries": [
+    {
+      "version": "1.1.0",
+      "tag": "@kickstartds/uniform-example_v1.1.0",
+      "date": "Wed, 18 Oct 2023 09:12:21 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Initial usage example of Uniform converter"
+          },
+          {
+            "comment": "Update to converter with new types"
+          }
+        ],
+        "minor": [
+          {
+            "comment": "Align with other update example uses"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2uniform\" to `1.0.1`"
+          }
+        ]
+      }
+    }
+  ]
+}

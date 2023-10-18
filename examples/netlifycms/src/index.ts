@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 

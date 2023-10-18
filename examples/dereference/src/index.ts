@@ -63,7 +63,7 @@ async function convertCore(): Promise<void> {
     const packagePath = path.dirname(
       fileURLToPath(resolve(`@kickstartds/${module}/package.json`, import.meta.url))
     );
-    const customGlob: string = `${packagePath}/lib/**/!(_)*.(schema|definitions|interface).json`;
+    const customGlob: string = `${packagePath}/lib/**/*.(schema|definitions|interface).json`;
 
     const ajv = getSchemaRegistry();
     const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });

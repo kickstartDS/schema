@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "comment": "Update glob to be aligned with other examples",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/dereference-example"
+}

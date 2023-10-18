@@ -5,30 +5,6 @@
       "path": "../"
     },
     {
-      "name": "examples/cambria",
-      "path": "../examples/cambria"
-    },
-    {
-      "name": "examples/types",
-      "path": "../examples/types"
-    },
-    {
-      "name": "examples/netlifycms",
-      "path": "../examples/netlifycms"
-    },
-    {
-      "name": "examples/dereference",
-      "path": "../examples/dereference"
-    },
-    {
-      "name": "examples/storyblok",
-      "path": "../examples/storyblok"
-    },
-    {
-      "name": "examples/uniform",
-      "path": "../examples/uniform"
-    },
-    {
       "name": "tools/cambria",
       "path": "../tools/cambria"
     },
@@ -51,6 +27,30 @@
     {
       "name": "tools/jsonschema2uniform",
       "path": "../tools/jsonschema2uniform"
+    },
+    {
+      "name": "examples/cambria",
+      "path": "../examples/cambria"
+    },
+    {
+      "name": "examples/dereference",
+      "path": "../examples/dereference"
+    },
+    {
+      "name": "examples/netlifycms",
+      "path": "../examples/netlifycms"
+    },
+    {
+      "name": "examples/storyblok",
+      "path": "../examples/storyblok"
+    },
+    {
+      "name": "examples/types",
+      "path": "../examples/types"
+    },
+    {
+      "name": "examples/uniform",
+      "path": "../examples/uniform"
     }
   ],
   "settings": {

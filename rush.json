@@ -42,13 +42,6 @@
       "shouldPublish": true
     },
     {
-      "packageName": "@kickstartds/jsonschema2types",
-      "projectFolder": "tools/jsonschema2types",
-      "reviewCategory": "tools",
-      "tags": ["tools"],
-      "shouldPublish": true
-    },
-    {
       "packageName": "@kickstartds/jsonschema2netlifycms",
       "projectFolder": "tools/jsonschema2netlifycms",
       "reviewCategory": "tools",
@@ -58,6 +51,13 @@
     {
       "packageName": "@kickstartds/jsonschema2storyblok",
       "projectFolder": "tools/jsonschema2storyblok",
+      "reviewCategory": "tools",
+      "tags": ["tools"],
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@kickstartds/jsonschema2types",
+      "projectFolder": "tools/jsonschema2types",
       "reviewCategory": "tools",
       "tags": ["tools"],
       "shouldPublish": true
@@ -77,8 +77,8 @@
       "shouldPublish": true
     },
     {
-      "packageName": "@kickstartds/types-example",
-      "projectFolder": "examples/types",
+      "packageName": "@kickstartds/dereference-example",
+      "projectFolder": "examples/dereference",
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true
@@ -91,15 +91,15 @@
       "shouldPublish": true
     },
     {
-      "packageName": "@kickstartds/dereference-example",
-      "projectFolder": "examples/dereference",
+      "packageName": "@kickstartds/storyblok-example",
+      "projectFolder": "examples/storyblok",
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true
     },
     {
-      "packageName": "@kickstartds/storyblok-example",
-      "projectFolder": "examples/storyblok",
+      "packageName": "@kickstartds/types-example",
+      "projectFolder": "examples/types",
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true

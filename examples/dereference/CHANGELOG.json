@@ -2,6 +2,18 @@
   "name": "@kickstartds/dereference-example",
   "entries": [
     {
+      "version": "1.2.1",
+      "tag": "@kickstartds/dereference-example_v1.2.1",
+      "date": "Wed, 18 Oct 2023 09:49:48 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Update glob to be aligned with other examples"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.2.0",
       "tag": "@kickstartds/dereference-example_v1.2.0",
       "date": "Tue, 17 Oct 2023 21:48:32 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Tue, 17 Oct 2023 21:48:32 GMT and should not be manually modified.
+This log was last generated on Wed, 18 Oct 2023 09:49:48 GMT and should not be manually modified.
+
+## 1.2.1
+Wed, 18 Oct 2023 09:49:48 GMT
+
+### Patches
+
+- Update glob to be aligned with other examples
 
 ## 1.2.0
 Tue, 17 Oct 2023 21:48:32 GMT

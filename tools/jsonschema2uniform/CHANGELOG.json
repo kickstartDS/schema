@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2uniform",
   "entries": [
     {
+      "version": "1.0.3",
+      "tag": "@kickstartds/jsonschema2uniform_v1.0.3",
+      "date": "Thu, 26 Oct 2023 21:35:49 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "re-export used types"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.2",
       "tag": "@kickstartds/jsonschema2uniform_v1.0.2",
       "date": "Thu, 26 Oct 2023 21:26:21 GMT",

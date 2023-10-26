@@ -18,6 +18,7 @@ import {
   IStoryblokSchemaElement,
   IStoryblokBlock
 } from './@types/index.js';
+export * from './@types/index.js';
 
 const typeResolutionField: string = 'type';
 

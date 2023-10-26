@@ -19,6 +19,7 @@ import {
   UniformSlot
 } from './@types/index.js';
 import { nameToId } from './utils.js';
+export * from './@types/index.js';
 
 const typeResolutionField: string = 'type';
 

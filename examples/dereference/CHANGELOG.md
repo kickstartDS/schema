@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Wed, 18 Oct 2023 09:49:48 GMT and should not be manually modified.
+This log was last generated on Thu, 26 Oct 2023 13:32:53 GMT and should not be manually modified.
+
+## 1.2.2
+Thu, 26 Oct 2023 13:32:53 GMT
+
+### Patches
+
+- Extract common processing options
 
 ## 1.2.1
 Wed, 18 Oct 2023 09:49:48 GMT

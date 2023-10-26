@@ -2,6 +2,18 @@
   "name": "@kickstartds/types-example",
   "entries": [
     {
+      "version": "1.2.1",
+      "tag": "@kickstartds/types-example_v1.2.1",
+      "date": "Thu, 26 Oct 2023 13:32:53 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Extract common processing options"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.2.0",
       "tag": "@kickstartds/types-example_v1.2.0",
       "date": "Tue, 17 Oct 2023 21:48:32 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/types-example
 
-This log was last generated on Tue, 17 Oct 2023 21:48:32 GMT and should not be manually modified.
+This log was last generated on Thu, 26 Oct 2023 13:32:53 GMT and should not be manually modified.
+
+## 1.2.1
+Thu, 26 Oct 2023 13:32:53 GMT
+
+### Patches
+
+- Extract common processing options
 
 ## 1.2.0
 Tue, 17 Oct 2023 21:48:32 GMT

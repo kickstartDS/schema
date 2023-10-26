@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "fix return type on dereference task",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

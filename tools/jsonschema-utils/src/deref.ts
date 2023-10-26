@@ -5,9 +5,12 @@ import { getSchemasForIds } from './helpers.js';
 
 declare type MyAjv = import('ajv').default;
 
-export async function dereference(schemaIds: string[], ajv: MyAjv): Promise<Record<string, JSONSchema>> {
+export async function dereference(
+  schemaIds: string[],
+  ajv: MyAjv
+): Promise<Record<string, JSONSchema.Interface>> {
   const parser = new $RefParser();
-  const dereferencedSchemas: Record<string, JSONSchema> = {};
+  const dereferencedSchemas: Record<string, JSONSchema.Interface> = {};
   const schemas = getSchemasForIds(schemaIds, ajv);
 
   for (const schema of schemas) {
@@ -26,7 +29,7 @@ export async function dereference(schemaIds: string[], ajv: MyAjv): Promise<Reco
       }
     });
 
-    dereferencedSchemas[schema.$id] = dereferenced as JSONSchema;
+    dereferencedSchemas[schema.$id] = dereferenced as JSONSchema.Interface;
   }
 
   return dereferencedSchemas;

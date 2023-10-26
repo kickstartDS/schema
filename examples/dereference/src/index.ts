@@ -7,9 +7,14 @@ import {
   getSchemaName,
   getSchemaRegistry,
   processSchemaGlob,
-  dereference
+  dereference,
+  IProcessingOptions
 } from '@kickstartds/jsonschema-utils';
 import { resolve } from 'import-meta-resolve';
+
+const processingConfiguration: Partial<IProcessingOptions> = {
+  typeResolution: false
+};
 
 async function convertDsAgency(): Promise<void> {
   const packagePath = path.dirname(
@@ -18,7 +23,7 @@ async function convertDsAgency(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
+  const schemaIds = await processSchemaGlob(customGlob, ajv, processingConfiguration);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
   const dereferencedSchemas = await dereference(
@@ -43,7 +48,7 @@ async function convertKds(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
+  const schemaIds = await processSchemaGlob(customGlob, ajv, processingConfiguration);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
   const dereferencedSchemas = await dereference(customSchemaIds, ajv);
@@ -66,7 +71,7 @@ async function convertCore(): Promise<void> {
     const customGlob: string = `${packagePath}/lib/**/*.(schema|definitions|interface).json`;
 
     const ajv = getSchemaRegistry();
-    const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
+    const schemaIds = await processSchemaGlob(customGlob, ajv, processingConfiguration);
     const moduleSchemaIds = schemaIds.filter((schemaId) =>
       schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
     );

@@ -3,6 +3,7 @@ import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
+  IProcessingOptions,
   getCustomSchemaIds,
   getSchemaModule,
   getSchemaName,
@@ -28,6 +29,11 @@ const renderImportStatement = (schemaId: string): string => {
   )}/lib/${getSchemaName(schemaId)}/typing'`;
 };
 
+const processingConfiguration: Partial<IProcessingOptions> = {
+  typeResolution: false,
+  mergeAllOf: false
+};
+
 async function convertDsAgency(): Promise<void> {
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
@@ -35,7 +41,7 @@ async function convertDsAgency(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
+  const schemaIds = await processSchemaGlob(customGlob, ajv, processingConfiguration);
   const kdsSchemaIds = schemaIds.filter((schemaId) => schemaId.includes('schema.kickstartds.com'));
 
   const customSchemaIds = getCustomSchemaIds(schemaIds);
@@ -87,7 +93,7 @@ async function convertKds(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
+  const schemaIds = await processSchemaGlob(customGlob, ajv, processingConfiguration);
   const kdsSchemaIds = schemaIds.filter((schemaId) => schemaId.includes('schema.kickstartds.com'));
 
   const customSchemaIds = getCustomSchemaIds(schemaIds);
@@ -140,7 +146,7 @@ async function convertCore(): Promise<void> {
     const customGlob = `${packagePath}/lib/**/*.(schema|definitions|interface).json`;
 
     const ajv = getSchemaRegistry();
-    const schemaIds = await processSchemaGlob(customGlob, ajv, { typeResolution: false });
+    const schemaIds = await processSchemaGlob(customGlob, ajv, processingConfiguration);
     const kdsSchemaIds = schemaIds.filter((schemaId) => schemaId.includes('schema.kickstartds.com'));
 
     const customSchemaIds = getCustomSchemaIds(schemaIds);

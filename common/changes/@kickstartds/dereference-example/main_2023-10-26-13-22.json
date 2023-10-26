@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "comment": "Extract common processing options",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/dereference-example"
+}

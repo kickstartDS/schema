@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Thu, 26 Oct 2023 13:32:53 GMT and should not be manually modified.
+This log was last generated on Thu, 26 Oct 2023 21:26:21 GMT and should not be manually modified.
+
+## 1.2.3
+Thu, 26 Oct 2023 21:26:21 GMT
+
+### Patches
+
+- remove unused dependency
 
 ## 1.2.2
 Thu, 26 Oct 2023 13:32:53 GMT

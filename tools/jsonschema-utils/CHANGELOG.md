@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Tue, 17 Oct 2023 20:29:19 GMT and should not be manually modified.
+This log was last generated on Thu, 26 Oct 2023 21:26:21 GMT and should not be manually modified.
+
+## 2.7.1
+Thu, 26 Oct 2023 21:26:21 GMT
+
+### Patches
+
+- fix return type on dereference task
 
 ## 2.7.0
 Tue, 17 Oct 2023 20:29:19 GMT

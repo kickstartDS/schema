@@ -2,6 +2,21 @@
   "name": "@kickstartds/netlifycms-example",
   "entries": [
     {
+      "version": "1.1.1",
+      "tag": "@kickstartds/netlifycms-example_v1.1.1",
+      "date": "Thu, 26 Oct 2023 21:26:21 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.7.1`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2netlifycms\" to `2.5.23`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.0",
       "tag": "@kickstartds/netlifycms-example_v1.1.0",
       "date": "Tue, 17 Oct 2023 21:48:32 GMT",

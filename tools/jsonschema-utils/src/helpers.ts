@@ -315,6 +315,13 @@ export function inlineReferences(jsonSchemas: JSONSchema.Interface[]): void {
                 throw new Error("Couldn't find original schema to pull properties from");
 
               parentSchema.properties[propertyName] = get(originalSchema, schemaPointer);
+            } else if (parentKeyword === 'allOf') {
+              const originalSchema = jsonSchemas.find((jsonSchema) => jsonSchema.$id === schemaId);
+              if (!originalSchema || !originalSchema.properties)
+                throw new Error("Couldn't find original schema to pull properties from");
+
+              const index = Number(pointer.split('/').pop());
+              parentSchema.allOf[index] = get(originalSchema, schemaPointer);
             }
           }
         }

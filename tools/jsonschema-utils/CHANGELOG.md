@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Thu, 26 Oct 2023 21:26:21 GMT and should not be manually modified.
+This log was last generated on Sun, 29 Oct 2023 11:05:45 GMT and should not be manually modified.
+
+## 2.8.0
+Sun, 29 Oct 2023 11:05:45 GMT
+
+### Minor changes
+
+- Also inline $ref pointer in allOfs
 
 ## 2.7.1
 Thu, 26 Oct 2023 21:26:21 GMT

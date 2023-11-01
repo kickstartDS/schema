@@ -158,11 +158,9 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
     }
   );
 
-  return reduced.concat(
-    bloks.filter((value, index, self) => {
-      return self.findIndex((v) => v.name === value.name) === index;
-    })
-  );
+  return (reduced as IStoryblokBlock[]).concat(bloks).filter((value, index, self) => {
+    return self.findIndex((v) => v.name === value.name) === index;
+  });
 }
 
 const mapping: ITypeMapping = {

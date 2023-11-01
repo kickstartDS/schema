@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "Update slicing of Storyblok bloks",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

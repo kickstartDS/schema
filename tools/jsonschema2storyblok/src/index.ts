@@ -223,7 +223,6 @@ function processObject({
           bloks: [
             {
               ...field,
-              name: `${name}_${field.name}`,
               color: colors[field.name] || '#05566a',
               icon: icons[field.name] || 'block-wallet',
               component_group_uuid: componentGroups[field.name],
@@ -293,7 +292,6 @@ function processRefArray({
   field.bloks = (fields as IStoryblokBlock[]).map((field) => {
     return {
       ...field,
-      name: `${name}_${field.name}`,
       color: colors[name] || '#05566a',
       icon: icons[field.name] || 'block-wallet',
       component_group_uuid: componentGroups[name],
@@ -321,10 +319,7 @@ function processObjectArray({
     type: 'bloks'
   };
 
-  if (fields)
-    field.objectArrayFields = (fields as IStoryblokSchemaElement[]).map((field) => {
-      return { ...field, name: `${name}_${field.key}` };
-    });
+  if (fields) field.objectArrayFields = fields as IStoryblokSchemaElement[];
 
   // TODO this is suspect, should expect an object here when in processObject
   if (rootSchema.default) field.default_value = subSchema.default as string;
@@ -385,7 +380,6 @@ function processArray({
         bloks: [
           {
             ...field,
-            name: `${name}_${field.name}`,
             color: colors[field.name] || '#05566a',
             icon: icons[field.name] || 'block-wallet',
             component_group_uuid: componentGroups[field.name],

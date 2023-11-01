@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.0.23",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.0.23",
+      "date": "Wed, 01 Nov 2023 22:21:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Filter to unique elements in converter"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.22",
       "tag": "@kickstartds/jsonschema2storyblok_v1.0.22",
       "date": "Wed, 01 Nov 2023 22:17:41 GMT",

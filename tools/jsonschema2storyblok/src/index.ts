@@ -158,7 +158,7 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
     }
   );
 
-  return (reduced as IStoryblokBlock[]).concat(bloks).filter((value, index, self) => {
+  return [...(reduced as IStoryblokBlock[]).concat(bloks)].filter((value, index, self) => {
     return self.findIndex((v) => v.name === value.name) === index;
   });
 }

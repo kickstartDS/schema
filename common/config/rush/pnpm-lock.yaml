@@ -67,7 +67,6 @@ importers:
       eslint-plugin-import: ~2.27.5
       eslint-plugin-json-files: ~2.2.0
       import-meta-resolve: ~3.0.0
-      json-schema-typed: ~8.0.1
       pascal-case: ^3.1.2
       prettier: ^2.8.8
       typescript: ^5.0.4
@@ -92,7 +91,6 @@ importers:
       eslint-plugin-import: 2.27.5_eslint@8.50.0
       eslint-plugin-json-files: 2.2.0_eslint@8.50.0
       import-meta-resolve: 3.0.0
-      json-schema-typed: 8.0.1
       pascal-case: 3.1.2
       prettier: 2.8.8
       typescript: 5.2.2

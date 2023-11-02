@@ -85,7 +85,7 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
     []
   );
 
-  const bloks: IStoryblokBlock[] = [];
+  const nestedBloks: IStoryblokBlock[] = [];
 
   // Group first layer into tabs
   traverse(
@@ -148,7 +148,7 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
     reduced,
     ({ key, parent }) => {
       if (key === 'bloks') {
-        bloks.push(...parent?.bloks);
+        nestedBloks.push(...parent?.bloks);
         delete parent?.bloks;
       }
     },
@@ -158,9 +158,19 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
     }
   );
 
-  return [...(reduced as IStoryblokBlock[]).concat(bloks)].filter((value, index, self) => {
-    return self.findIndex((v) => v.name === value.name) === index;
-  });
+  for (const nestedBlok of nestedBloks) {
+    const blok = (reduced as IStoryblokBlock[]).find((b) => b.name === nestedBlok.name);
+    if (blok) {
+      blok.color = nestedBlok.color;
+      blok.component_group_name = nestedBlok.component_group_name;
+      blok.component_group_uuid = nestedBlok.component_group_uuid;
+      blok.icon = nestedBlok.icon;
+    } else {
+      reduced.push(nestedBlok);
+    }
+  }
+
+  return reduced;
 }
 
 const mapping: ITypeMapping = {

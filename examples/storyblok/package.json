@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/storyblok-example",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Example use showing full conversion of JSON Schema files to importable Storyblok configuration",
   "license": "UNLICENSED",
   "author": {

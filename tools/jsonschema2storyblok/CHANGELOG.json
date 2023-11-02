@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.0.25",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.0.25",
+      "date": "Thu, 02 Nov 2023 09:42:54 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Merge different bloks correctly"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.24",
       "tag": "@kickstartds/jsonschema2storyblok_v1.0.24",
       "date": "Wed, 01 Nov 2023 23:02:38 GMT",

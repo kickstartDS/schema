@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2storyblok",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Converts JSON schema to Storyblok component json definition",
   "license": "UNLICENSED",
   "author": {

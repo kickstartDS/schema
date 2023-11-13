@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+// Storyblok types stem from here: https://github.com/dohomi/storyblok-generate-ts/blob/master/src/typings.ts
+// Related Storyblok docs:
+// - https://www.storyblok.com/docs/api/management#core-resources/components/components
+// - https://www.storyblok.com/docs/schema-configuration
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 
 declare type MyAjv = import('ajv').default;
@@ -25,9 +29,8 @@ export type GenericType =
   | 'asset'
   | 'multiasset'
   | 'multilink'
-  | 'table';
-
-export type StoryblokElement = IStoryblokBlock | IStoryblokSchemaElement;
+  | 'table'
+  | 'tab';
 
 export interface IStoryblokBlock {
   name: string;
@@ -45,38 +48,37 @@ export interface IStoryblokBlock {
   preset_id?: unknown;
   real_name: string;
   component_group_uuid?: unknown;
-  component_group_name?: string;
-  color?: string;
-  icon?: string;
+  component_group_name?: string; // undocumented
+  color?: string; // undocumented
+  icon?: string; // undocumented
 }
 
 export interface IStoryblokSchemaElement {
+  id: number;
   type: GenericType;
-  pos?: number;
-  key: string;
+  pos: number;
+  key: string; // undocumented
+  keys?: string[];
   use_uuid?: boolean;
   source?: 'internal' | 'external' | 'internal_stories' | 'internal_languages';
   options?: IStoryblokSchemaElementOption[];
-  filter_content_type?: string[];
+  filter_content_type?: string[]; // sus
   restrict_components?: boolean;
   component_whitelist?: string[];
-  component_group_whitelist?: string[];
-  restrict_type?: 'groups' | '';
-  exclude_empty_option?: boolean;
+  component_group_whitelist?: string[]; // undocumented
+  restrict_type?: 'groups' | ''; // sus
+  exclude_empty_option?: boolean; // sus
   max_length?: string;
   required?: boolean;
   display_name: string;
   default_value?: string;
   description?: string;
-  fields?: IStoryblokSchemaElement[];
+
   objectFields?: IStoryblokSchemaElement[];
-  objectArrayFields?: IStoryblokSchemaElement[];
-  arrayFields?: IStoryblokSchemaElement[];
-  bloks?: StoryblokElement[];
 }
 
 export interface IStoryblokSchemaElementOption {
-  _uid?: string;
+  _uid: string;
   name: string;
   value: string;
 }

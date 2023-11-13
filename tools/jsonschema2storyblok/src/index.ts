@@ -4,17 +4,19 @@ import {
   toPascalCase,
   getSchemaReducer,
   IProcessInterface,
-  safeEnumKey
+  safeEnumKey,
+  IReducerResult,
+  IProcessFnResult,
+  IProcessFnMultipleResult
 } from '@kickstartds/jsonschema-utils';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
-import { traverse } from 'object-traversal';
+// import { traverse } from 'object-traversal';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
   GenericType,
   IConvertParams,
   ITypeMapping,
-  StoryblokElement,
   IStoryblokSchemaElement,
   IStoryblokBlock
 } from './@types/index.js';
@@ -58,21 +60,29 @@ const colors: Record<string, string> = {
  *  # TODO
  *
  *  - [ ] add `pos` handling to get sensible order of fields
+ *  - [ ] check descriptions, defaults, examples and required status for all fields
+ *  - [ ] fix wrong `id`s, currently all set to `0`
  *  - [ ] check required status `pos`, `max_length`, `required`, `default_value`, `description` in types
+ *  - [ ] block type for components seems to be unset after import (should be set to `Nestable block` for all components except for templates, which should be set to `Content type block`)
  */
 
 /**
  * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  */
-export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): StoryblokElement[] {
+export function convert({
+  schemaIds,
+  ajv,
+  schemaPost
+}: IConvertParams): IReducerResult<IStoryblokBlock, IStoryblokBlock> {
   const reduced = getSchemasForIds(schemaIds, ajv).reduce(
-    getSchemaReducer<StoryblokElement>({
+    getSchemaReducer<IStoryblokSchemaElement, IStoryblokBlock, IStoryblokBlock>({
       ajv,
       typeResolutionField,
       buildDescription,
       safeEnumKey,
       basicMapping,
+      processComponent,
       processObject,
       processRefArray,
       processObjectArray,
@@ -80,44 +90,18 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
       processEnum,
       processConst,
       processBasic,
-      schemaPost
+      schemaPost,
+      isField,
+      isComponent,
+      isTemplate
     }),
-    []
-  );
-
-  const nestedBloks: IStoryblokBlock[] = [];
-
-  // Group first layer into tabs
-  traverse(
-    reduced,
-    ({ key, value, parent }) => {
-      if (parent && key && value.objectFields && value.objectFields.length > 0 && value.type === 'bloks') {
-        const fields = (value.objectFields as IStoryblokSchemaElement[]).map((objectField) => {
-          return {
-            ...objectField,
-            key: `${value.key}_${
-              objectField.key || (objectField as StoryblokElement as IStoryblokBlock).name
-            }`
-          };
-        });
-
-        const tabId = `tab-${uuidv4()}`;
-        parent[tabId] = {
-          display_name: value.display_name,
-          keys: fields.map((field) => field.key),
-          type: 'tab'
-        };
-        fields.forEach((field) => (parent[field.key] = field));
-
-        delete parent[key];
-      }
-    },
     {
-      cycleHandling: false,
-      traversalType: 'breadth-first'
+      components: [],
+      templates: []
     }
   );
 
+  /*
   // Group second layer into sections
   traverse(
     reduced,
@@ -142,33 +126,7 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): Storybl
       traversalType: 'breadth-first'
     }
   );
-
-  // Split out component bloks
-  traverse(
-    reduced,
-    ({ key, parent }) => {
-      if (key === 'bloks') {
-        nestedBloks.push(...parent?.bloks);
-        delete parent?.bloks;
-      }
-    },
-    {
-      cycleHandling: false,
-      traversalType: 'breadth-first'
-    }
-  );
-
-  for (const nestedBlok of nestedBloks) {
-    const blok = (reduced as IStoryblokBlock[]).find((b) => b.name === nestedBlok.name);
-    if (blok) {
-      blok.color = nestedBlok.color;
-      blok.component_group_name = nestedBlok.component_group_name;
-      blok.component_group_uuid = nestedBlok.component_group_uuid;
-      blok.icon = nestedBlok.icon;
-    } else {
-      reduced.push(nestedBlok);
-    }
-  }
+  }*/
 
   return reduced;
 }
@@ -182,6 +140,21 @@ const mapping: ITypeMapping = {
   [TypeName.Null]: 'text',
   [TypeName.Number]: 'number'
 };
+
+function isField(object: IStoryblokSchemaElement | IStoryblokBlock): object is IStoryblokSchemaElement {
+  return (object as IStoryblokSchemaElement).key !== undefined;
+}
+
+function isComponent(object: IStoryblokSchemaElement | IStoryblokBlock): object is IStoryblokBlock {
+  return (
+    ((object as IStoryblokBlock).is_root === undefined || (object as IStoryblokBlock).is_root === false) &&
+    (object as IStoryblokBlock).id !== undefined
+  );
+}
+
+function isTemplate(object: IStoryblokSchemaElement | IStoryblokBlock): object is IStoryblokBlock {
+  return (object as IStoryblokBlock).is_root === true;
+}
 
 function basicMapping(property: JSONSchema.Interface): GenericType {
   if (property.type === 'string' && property.enum && property.enum.length) {
@@ -205,78 +178,103 @@ function basicMapping(property: JSONSchema.Interface): GenericType {
 
 const componentGroups: Record<string, string> = {};
 
+function processComponent({
+  name,
+  fields
+}: IProcessInterface<IStoryblokSchemaElement>): IReducerResult<IStoryblokBlock, IStoryblokBlock> {
+  if (!fields) throw new Error('Missing fields on component to process');
+
+  const bloks: IStoryblokBlock[] = [];
+  bloks.push({
+    name,
+    display_name: toPascalCase(name),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    id: 0,
+    schema: fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+      schema[field.key] = field;
+      return schema;
+    }, {}),
+    is_nestable: false,
+    real_name: toPascalCase(name)
+  });
+
+  return { components: bloks, templates: [] };
+}
+
 function processObject({
   name,
   description,
+  parentSchema,
   subSchema,
-  rootSchema,
   fields
-}: IProcessInterface<StoryblokElement>): StoryblokElement {
-  if (rootSchema.$id === subSchema.$id) {
-    if (!fields) throw new Error('Missing fields on object to process');
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnMultipleResult<
+  IStoryblokSchemaElement,
+  IStoryblokBlock,
+  IStoryblokBlock
+> {
+  if (parentSchema && parentSchema.type === 'array') {
+    componentGroups[name] ||= uuidv4();
 
-    const schemaElements: StoryblokElement[] = [];
+    const field: IStoryblokSchemaElement = {
+      id: 0,
+      pos: 0,
+      display_name: toPascalCase(name),
+      key: name,
+      type: 'bloks',
+      restrict_type: 'groups',
+      restrict_components: true,
+      component_group_whitelist: [componentGroups[name]]
+    };
 
-    (fields as IStoryblokBlock[]).forEach((field) => {
-      componentGroups[field.name] ||= uuidv4();
+    if (!fields || (fields && !(fields.length > 0))) throw new Error("Can't process object without fields");
 
-      if (field.name) {
-        schemaElements.push({
-          display_name: toPascalCase(field.name),
-          key: field.name,
-          type: 'bloks',
-          restrict_type: 'groups',
-          restrict_components: true,
-          component_group_whitelist: [componentGroups[field.name]],
-          bloks: [
-            {
-              ...field,
-              color: colors[field.name] || '#05566a',
-              icon: icons[field.name] || 'block-wallet',
-              component_group_uuid: componentGroups[field.name],
-              component_group_name: toPascalCase(field.name)
-            }
-          ]
-        });
-        return;
-      } else {
-        schemaElements.push(field);
-        return;
-      }
-    });
-
-    const field: StoryblokElement = {
+    const blok: IStoryblokBlock = {
       name,
       display_name: toPascalCase(name),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       id: 0,
-      schema: (schemaElements as IStoryblokSchemaElement[]).reduce((schema, field) => {
-        schema[field.key] = field;
-        return schema;
-      }, {} as Record<string, IStoryblokSchemaElement>),
+      schema:
+        fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+          schema[field.key] = field;
+          return schema;
+        }, {}) || [],
       is_nestable: false,
-      real_name: toPascalCase(name)
+      real_name: toPascalCase(name),
+      color: colors[name] || '#05566a',
+      icon: icons[name] || 'block-wallet',
+      component_group_uuid: componentGroups[name],
+      component_group_name: toPascalCase(name)
     };
-
-    return field;
-  } else {
-    const field: StoryblokElement = {
-      display_name: toPascalCase(name),
-      key: name,
-      type: basicMapping(subSchema)
-    };
-
-    if (fields) field.objectFields = fields as IStoryblokSchemaElement[];
-
-    // TODO this is suspect, should expect an object here when in processObject
-    if (subSchema.default) field.default_value = subSchema.default as string;
 
     if (description) field.description = description;
 
-    field.required = subSchema.required?.includes(name) || false;
+    return { field, components: [blok], templates: [] };
+  } else {
+    const tabId = `tab-${uuidv4()}`;
+    const tab: IStoryblokSchemaElement = {
+      id: 0,
+      pos: 0,
+      display_name: toPascalCase(name),
+      key: tabId,
+      keys: [],
+      type: 'tab'
+    };
 
-    return field;
+    fields?.forEach((field) => {
+      field.key = `${name}_${field.key}`;
+      tab.keys?.push(field.key);
+    });
+
+    // TODO this is suspect, should expect an object here when in processObject
+    if (subSchema.default) tab.default_value = subSchema.default;
+
+    if (description) tab.description = description;
+
+    tab.required = subSchema.required?.includes(name) || false;
+
+    return { field: tab, fields, components: [], templates: [] };
   }
 }
 
@@ -285,10 +283,16 @@ function processRefArray({
   description,
   rootSchema,
   fields
-}: IProcessInterface<StoryblokElement>): StoryblokElement {
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
+  IStoryblokSchemaElement,
+  IStoryblokBlock,
+  IStoryblokBlock
+> {
   componentGroups[name] ||= uuidv4();
 
-  const field: StoryblokElement = {
+  const field: IStoryblokSchemaElement = {
+    id: 0,
+    pos: 0,
     display_name: toPascalCase(name),
     key: name,
     type: 'bloks',
@@ -297,7 +301,12 @@ function processRefArray({
     component_group_whitelist: [componentGroups[name]]
   };
 
-  field.bloks = (fields as IStoryblokBlock[]).map((field) => {
+  const componentFields: IStoryblokBlock[] = [];
+  fields?.forEach((field) => {
+    if (isComponent(field)) componentFields.push(field);
+  });
+
+  const bloks = componentFields?.map((field) => {
     return {
       ...field,
       color: colors[name] || '#05566a',
@@ -311,129 +320,64 @@ function processRefArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: bloks, templates: [] };
 }
 
 function processObjectArray({
   name,
   description,
   subSchema,
-  rootSchema,
-  fields
-}: IProcessInterface<StoryblokElement>): StoryblokElement {
-  const field: StoryblokElement = {
+  rootSchema
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
+  IStoryblokSchemaElement,
+  IStoryblokBlock,
+  IStoryblokBlock
+> {
+  const field: IStoryblokSchemaElement = {
+    id: 0,
+    pos: 0,
     display_name: toPascalCase(name),
     key: name,
     type: 'bloks'
   };
 
-  if (fields) field.objectArrayFields = fields as IStoryblokSchemaElement[];
+  // TODO need to add components, too
 
   // TODO this is suspect, should expect an object here when in processObject
-  if (rootSchema.default) field.default_value = subSchema.default as string;
+  if (rootSchema.default) field.default_value = subSchema.default;
 
   if (description) field.description = description;
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
 function processArray({
-  name,
-  // description,
-  // subSchema,
-  // rootSchema,
   arrayField
-}: IProcessInterface<StoryblokElement>): StoryblokElement {
-  const fields: IStoryblokBlock[] | undefined = (arrayField as IStoryblokSchemaElement)
-    .objectFields as unknown as IStoryblokBlock[];
-
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
+  IStoryblokSchemaElement,
+  IStoryblokBlock,
+  IStoryblokBlock
+> {
+  if (!arrayField) throw new Error('Missing array fields in conversion');
   // TODO this probably generates empty arrays somewhere
   // Can include stuff like :
   //   `{ display_name: 'Tags', key: 'tags', type: 'text', required: false }`
   // for the array field, e.g. in:
   // http://schema.mydesignsystem.com/blog-head.schema.json
-  if ((arrayField as IStoryblokSchemaElement).type === 'text') {
-    const stringArrayField: StoryblokElement = {
-      display_name: (arrayField as IStoryblokSchemaElement).display_name,
+  if (arrayField?.type === 'text') {
+    const stringArrayField: IStoryblokSchemaElement = {
+      id: 0,
+      pos: 0,
+      display_name: arrayField.display_name,
       type: 'array',
-      key: (arrayField as IStoryblokSchemaElement).key
+      key: arrayField.key
     };
-    return stringArrayField;
+    return { field: stringArrayField, components: [], templates: [] };
   }
 
-  if (
-    (arrayField as IStoryblokBlock).schema &&
-    Object.keys((arrayField as IStoryblokBlock).schema).length > 0
-  ) {
-    return arrayField as IStoryblokBlock;
-  }
-
-  if (!fields) throw new Error('Missing fields in array');
-
-  const schemaElements: StoryblokElement[] = [];
-
-  (fields as IStoryblokBlock[]).forEach((field) => {
-    componentGroups[field.name] ||= uuidv4();
-
-    if (field.name) {
-      schemaElements.push({
-        display_name: toPascalCase(field.name),
-        key: field.name,
-        type: 'bloks',
-        restrict_type: 'groups',
-        restrict_components: true,
-        component_group_whitelist: [componentGroups[field.name]],
-        bloks: [
-          {
-            ...field,
-            color: colors[field.name] || '#05566a',
-            icon: icons[field.name] || 'block-wallet',
-            component_group_uuid: componentGroups[field.name],
-            component_group_name: toPascalCase(field.name)
-          }
-        ]
-      });
-      return;
-    } else {
-      schemaElements.push(field);
-      return;
-    }
-  });
-
-  const field: StoryblokElement = {
-    name,
-    display_name: toPascalCase(name),
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    id: 0,
-    schema: (schemaElements as IStoryblokSchemaElement[]).reduce((schema, field) => {
-      schema[field.key] = field;
-      return schema;
-    }, {} as Record<string, IStoryblokSchemaElement>),
-    is_nestable: false,
-    real_name: toPascalCase(name)
-  };
-
-  if (name === 'ctaGroup') {
-    console.log('processArray arrayField', name, field);
-  }
-
-  return field;
-
-  // TODO this is suspect, should expect an object here when in processObject
-  // if (rootSchema.default) field.default_value = subSchema.default as string;
-
-  // if (description) field.description = description;
-
-  // field.required = rootSchema.required?.includes(name) || false;
-
-  // const fields: IStoryblokSchemaElement[] | undefined = (arrayField as IStoryblokSchemaElement).objectFields;
-
-  // if (fields && fields.length > 0) field.arrayFields = fields;
-
-  // return field;
+  return { field: arrayField, components: [], templates: [] };
 }
 
 function processEnum({
@@ -441,8 +385,14 @@ function processEnum({
   description,
   subSchema,
   options
-}: IProcessInterface<StoryblokElement>): StoryblokElement {
-  const field: StoryblokElement = {
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
+  IStoryblokSchemaElement,
+  IStoryblokBlock,
+  IStoryblokBlock
+> {
+  const field: IStoryblokSchemaElement = {
+    id: 0,
+    pos: 0,
     display_name: toPascalCase(name),
     key: name,
     type: 'option'
@@ -454,17 +404,23 @@ function processEnum({
 
   if (options) {
     field.options = options.map((option) => {
-      return { name: option.label, value: option.value };
+      return { name: option.label, value: option.value, _uid: uuidv4() };
     });
   }
 
   field.required = subSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
-function processConst({ subSchema }: IProcessInterface<StoryblokElement>): StoryblokElement {
-  return getInternalTypeDefinition(subSchema.const as string);
+function processConst({
+  subSchema
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
+  IStoryblokSchemaElement,
+  IStoryblokBlock,
+  IStoryblokBlock
+> {
+  return { field: getInternalTypeDefinition(subSchema.const), components: [], templates: [] };
 }
 
 function processBasic({
@@ -472,26 +428,34 @@ function processBasic({
   description,
   subSchema,
   rootSchema
-}: IProcessInterface<StoryblokElement>): StoryblokElement {
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
+  IStoryblokSchemaElement,
+  IStoryblokBlock,
+  IStoryblokBlock
+> {
   const type = basicMapping(subSchema);
 
-  const field: StoryblokElement = {
+  const field: IStoryblokSchemaElement = {
+    id: 0,
+    pos: 0,
     display_name: toPascalCase(name),
     key: name,
     type
   };
 
-  if (subSchema.default) field.default_value = subSchema.default as string;
+  if (subSchema.default) field.default_value = subSchema.default;
 
   if (description) field.description = description;
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
-function getInternalTypeDefinition(type: string): StoryblokElement {
+function getInternalTypeDefinition(type: string): IStoryblokSchemaElement {
   return {
+    id: 0,
+    pos: 0,
     display_name: toPascalCase(typeResolutionField),
     key: typeResolutionField,
     type: 'text',

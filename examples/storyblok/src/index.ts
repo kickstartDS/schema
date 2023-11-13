@@ -16,7 +16,7 @@ async function convertDsAgency(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  const components = convertToStoryblok({
+  const { components } = convertToStoryblok({
     schemaIds: customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
     ajv
   });
@@ -37,7 +37,7 @@ async function convertKds(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  const components = convertToStoryblok({
+  const { components } = convertToStoryblok({
     schemaIds: customSchemaIds,
     ajv
   });
@@ -61,7 +61,7 @@ async function convertCore(): Promise<void> {
       schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
     );
 
-    const components = convertToStoryblok({
+    const { components } = convertToStoryblok({
       schemaIds: moduleSchemaIds.filter((schemaId) => !schemaId.includes('table.schema.json')),
       ajv
     });

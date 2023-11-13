@@ -2,7 +2,6 @@
 
 This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Storyblok admin config.yml]().
 
-
 ## Installation
 
 Install with yarn:
@@ -10,6 +9,10 @@ Install with yarn:
 ```
 yarn add jsonschema2storyblok
 ```
+
+## Types
+
+The types used are based on https://github.com/dohomi/storyblok-generate-ts/blob/master/src/typings.ts
 
 ## Misc
 

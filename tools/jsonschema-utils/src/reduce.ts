@@ -5,47 +5,72 @@ import { err, getSchemaName } from './helpers.js';
 
 declare type MyAjv = import('ajv').default;
 
-export interface IProcessInterface<T> {
+export interface IProcessInterface<Field> {
   name: string;
   description: string;
   subSchema: JSONSchema.Interface;
   rootSchema: JSONSchema.Interface;
   parentSchema?: JSONSchema.Interface;
-  fields?: T[];
-  arrayField?: T;
+  fields?: Field[];
+  arrayField?: Field;
   options?: {
     label: string;
     value: string;
   }[];
 }
 
-export interface IProcessFn<T> {
-  (options: IProcessInterface<T>): T;
+export interface IReducerResult<Component, Template> {
+  components: Component[];
+  templates: Template[];
 }
 
-export interface ISchemaReducerOptions<T> {
+export interface IProcessFnResult<Field, Component, Template> extends IReducerResult<Component, Template> {
+  field: Field;
+}
+
+export interface IProcessFnMultipleResult<Field, Component, Template>
+  extends IProcessFnResult<Field, Component, Template> {
+  fields?: Field[];
+}
+
+export interface IProcessFn<Field, Component, Template> {
+  (options: IProcessInterface<Field>): IProcessFnResult<Field, Component, Template>;
+}
+
+export interface IProcessFnMultiple<Field, Component, Template> {
+  (options: IProcessInterface<Field>): IProcessFnMultipleResult<Field, Component, Template>;
+}
+
+export interface ISchemaReducerOptions<Field, Component, Template> {
   ajv: MyAjv;
   typeResolutionField: string;
   buildDescription: (d: JSONSchema.Interface) => string;
   safeEnumKey: (value: string) => string;
   basicMapping: (property: JSONSchema.Interface) => string;
-  processObject: IProcessFn<T>;
-  processRefArray: IProcessFn<T>;
-  processObjectArray: IProcessFn<T>;
-  processArray: IProcessFn<T>;
-  processEnum: IProcessFn<T>;
-  processConst: IProcessFn<T>;
-  processBasic: IProcessFn<T>;
+  processComponent: (object: IProcessInterface<Field>) => IReducerResult<Component, Template>;
+  processObject: IProcessFnMultiple<Field, Component, Template>;
+  processRefArray: IProcessFn<Field, Component, Template>;
+  processObjectArray: IProcessFn<Field, Component, Template>;
+  processArray: IProcessFn<Field, Component, Template>;
+  processEnum: IProcessFn<Field, Component, Template>;
+  processConst: IProcessFn<Field, Component, Template>;
+  processBasic: IProcessFn<Field, Component, Template>;
   schemaPost?: (schema: JSONSchema.Interface) => JSONSchema.Interface;
   getSchemaFn?: (id: string) => JSONSchema.Interface;
+  isField: (object: Field | Component | Template) => object is Field;
+  isComponent: (object: Field | Component | Template) => object is Component;
+  isTemplate: (object: Field | Component | Template) => object is Template;
 }
 
-export function getSchemaReducer<T>({
+// TODO layer those types, so it's possible to use `getSchemaReducer`
+// with only 1 or 2 of those types, when they match (e.g. Netlify CMS)
+export function getSchemaReducer<FieldType, ComponentType, TemplateType>({
   ajv,
   typeResolutionField,
   buildDescription,
   safeEnumKey,
   basicMapping,
+  processComponent,
   processObject,
   processRefArray,
   processObjectArray,
@@ -55,7 +80,13 @@ export function getSchemaReducer<T>({
   processBasic,
   schemaPost,
   getSchemaFn
-}: ISchemaReducerOptions<T>): (knownTypes: T[], schema: JSONSchema.Interface) => T[] {
+}: // isField,
+// isComponent,
+// isTemplate
+ISchemaReducerOptions<FieldType, ComponentType, TemplateType>): (
+  knownObjects: IReducerResult<ComponentType, TemplateType>,
+  schema: JSONSchema.Interface
+) => IReducerResult<ComponentType, TemplateType> {
   function getSchema(id: string): JSONSchema.Interface {
     const validatorFunction = ajv.getSchema(id);
 
@@ -67,23 +98,55 @@ export function getSchemaReducer<T>({
       : (validatorFunction.schema as JSONSchema.Interface);
   }
 
-  function schemaReducer(knownTypes: T[], schema: JSONSchema.Interface): T[] {
+  function schemaReducer(
+    knownObjects: IReducerResult<ComponentType, TemplateType>,
+    schema: JSONSchema.Interface
+  ): IReducerResult<ComponentType, TemplateType> {
     const $id = schema.$id;
     if (_.isUndefined($id)) throw err('Schema does not have an `$id` property.');
 
     const typeName = getSchemaName($id);
     const clonedSchema = schemaPost ? schemaPost(_.cloneDeep(schema)) : _.cloneDeep(schema);
 
-    knownTypes.push(buildType(typeName, clonedSchema, clonedSchema));
-    return knownTypes;
+    buildComponent(typeName, clonedSchema, knownObjects);
+    return knownObjects;
+  }
+
+  function buildComponent(
+    name: string,
+    schema: JSONSchema.Interface,
+    knownObjects: IReducerResult<ComponentType, TemplateType> = { components: [], templates: [] }
+  ): void {
+    const description = buildDescription(schema);
+
+    const { components, templates } = processComponent({
+      name,
+      description,
+      subSchema: schema,
+      rootSchema: schema,
+      fields: !_.isEmpty(schema.properties)
+        ? _.reduce<JSONSchema.Interface, FieldType[]>(
+            schema.properties,
+            (acc, prop: JSONSchema.Interface, fieldName) => {
+              const objectSchema = _.cloneDeep(prop);
+              return acc.concat(buildType(fieldName, objectSchema, schema, knownObjects, schema));
+            },
+            []
+          )
+        : []
+    });
+
+    knownObjects.components.push(...components);
+    knownObjects.templates.push(...templates);
   }
 
   function buildType(
     propName: string,
     schema: JSONSchema.Interface,
     outerSchema: JSONSchema.Interface,
+    knownObjects: IReducerResult<ComponentType, TemplateType> = { components: [], templates: [] },
     parentSchema?: JSONSchema.Interface
-  ): T {
+  ): FieldType | FieldType[] {
     const name = propName;
 
     // all of the following JSON Schema composition keywords need to
@@ -117,22 +180,34 @@ export function getSchemaReducer<T>({
     else if (schema.type === 'object') {
       const description = buildDescription(schema);
 
-      const fields = (): T[] =>
-        !_.isEmpty(schema.properties)
-          ? _.map<JSONSchema.Interface, T>(schema.properties, (prop: JSONSchema.Interface, fieldName) => {
-              const objectSchema = _.cloneDeep(prop);
-
-              return buildType(fieldName, objectSchema, outerSchema, schema);
-            })
-          : [];
-
-      return processObject({
+      const {
+        field,
+        fields = [],
+        components,
+        templates
+      } = processObject({
         name,
         description,
         subSchema: schema,
         rootSchema: outerSchema,
-        fields: fields()
+        parentSchema,
+        fields: !_.isEmpty(schema.properties)
+          ? _.reduce<JSONSchema.Interface, FieldType[]>(
+              schema.properties,
+              (acc, prop: JSONSchema.Interface, fieldName) => {
+                const objectSchema = _.cloneDeep(prop);
+                return acc.concat(buildType(fieldName, objectSchema, outerSchema, knownObjects, schema));
+              },
+              []
+            )
+          : []
       });
+
+      knownObjects.components.push(...components);
+      knownObjects.templates.push(...templates);
+      fields.push(field);
+
+      return fields;
     }
 
     // array?
@@ -144,33 +219,61 @@ export function getSchemaReducer<T>({
 
         if (isRefArray) {
           const description = buildDescription(outerSchema);
-          const fieldConfigs = arraySchemas.map((arraySchema) => {
+          const fieldConfigs = arraySchemas.reduce<FieldType[]>((prev, arraySchema) => {
             if (!arraySchema.$ref) throw new Error('Found array entry without $ref in ref array');
 
             const resolvedSchema = getSchemaFn ? getSchemaFn(arraySchema.$ref) : getSchema(arraySchema.$ref);
-            return buildType(getSchemaName(resolvedSchema.$id), resolvedSchema, resolvedSchema, parentSchema);
-          });
+            return prev.concat(
+              buildType(
+                getSchemaName(resolvedSchema.$id),
+                resolvedSchema,
+                resolvedSchema,
+                knownObjects,
+                parentSchema
+              )
+            );
+          }, []);
 
-          return processRefArray({
+          const { field, components, templates } = processRefArray({
             name,
             description,
             subSchema: schema,
             rootSchema: outerSchema,
             fields: fieldConfigs
           });
+
+          knownObjects.components.push(...components);
+          knownObjects.templates.push(...templates);
+
+          return field;
         } else if (isObjectArray) {
           const description = buildDescription(outerSchema);
-          const fieldConfigs = arraySchemas.map((arraySchema) =>
-            buildType(arraySchema.title?.toLowerCase() || '', arraySchema, outerSchema, parentSchema)
+          const fieldConfigs = arraySchemas.reduce<FieldType[]>(
+            (prev, arraySchema) =>
+              prev.concat(
+                buildType(
+                  arraySchema.title?.toLowerCase() || '',
+                  arraySchema,
+                  outerSchema,
+                  knownObjects,
+                  parentSchema
+                )
+              ),
+            []
           );
 
-          return processObjectArray({
+          const { field, components, templates } = processObjectArray({
             name,
             description,
             subSchema: schema,
             rootSchema: outerSchema,
             fields: fieldConfigs
           });
+
+          knownObjects.components.push(...components);
+          knownObjects.templates.push(...templates);
+
+          return field;
         } else {
           throw err(`Incompatible anyOf declaration for array with type ${schema.type} on property ${name}.`);
         }
@@ -188,19 +291,29 @@ export function getSchemaReducer<T>({
             getSchemaName(resolvedSchema.$id),
             resolvedSchema,
             resolvedSchema,
-            parentSchema
+            knownObjects,
+            schema
           );
         } else {
-          fieldConfig = buildType(name, arraySchema, outerSchema, parentSchema);
+          fieldConfig = buildType(name, arraySchema, outerSchema, knownObjects, schema);
         }
 
-        return processArray({
+        if (Array.isArray(fieldConfig) && fieldConfig.length !== 1) {
+          throw new Error('Only single array items allowed currently');
+        }
+
+        const { field, components, templates } = processArray({
           name,
           description,
           subSchema: schema,
           rootSchema: outerSchema,
-          arrayField: fieldConfig
+          arrayField: Array.isArray(fieldConfig) ? fieldConfig[0] : fieldConfig
         });
+
+        knownObjects.components.push(...components);
+        knownObjects.templates.push(...templates);
+
+        return field;
       }
     }
 
@@ -215,7 +328,7 @@ export function getSchemaReducer<T>({
         };
       });
 
-      return processEnum({
+      const { field, components, templates } = processEnum({
         name,
         description,
         subSchema: schema,
@@ -223,13 +336,17 @@ export function getSchemaReducer<T>({
         options,
         parentSchema
       });
+
+      knownObjects.components.push(...components);
+      knownObjects.templates.push(...templates);
+
+      return field;
     }
 
     // ref?
     else if (!_.isUndefined(schema.$ref)) {
       const reffedSchema = getSchemaFn ? getSchemaFn(schema.$ref) : getSchema(schema.$ref);
-
-      return buildType(name, reffedSchema, reffedSchema, parentSchema);
+      return buildType(name, reffedSchema, reffedSchema, knownObjects, parentSchema);
     }
 
     // const?
@@ -241,13 +358,36 @@ export function getSchemaReducer<T>({
         throw err(`The const keyword, not on property ${typeResolutionField}, is not supported.`);
       }
 
-      return processConst({ name, description, subSchema: schema, rootSchema: outerSchema, parentSchema });
+      const { field, components, templates } = processConst({
+        name,
+        description,
+        subSchema: schema,
+        rootSchema: outerSchema,
+        parentSchema
+      });
+
+      knownObjects.components.push(...components);
+      knownObjects.templates.push(...templates);
+
+      return field;
     }
 
     // basic?
     else if (basicMapping(schema)) {
       const description = buildDescription(schema);
-      return processBasic({ name, description, subSchema: schema, rootSchema: outerSchema, parentSchema });
+
+      const { field, components, templates } = processBasic({
+        name,
+        description,
+        subSchema: schema,
+        rootSchema: outerSchema,
+        parentSchema
+      });
+
+      knownObjects.components.push(...components);
+      knownObjects.templates.push(...templates);
+
+      return field;
     }
 
     // ¯\_(ツ)_/¯

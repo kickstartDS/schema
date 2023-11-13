@@ -49,6 +49,13 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "projectFolder": "tools/jsonschema2stackbit",
+      "reviewCategory": "tools",
+      "tags": ["tools"],
+      "shouldPublish": true
+    },
+    {
       "packageName": "@kickstartds/jsonschema2storyblok",
       "projectFolder": "tools/jsonschema2storyblok",
       "reviewCategory": "tools",

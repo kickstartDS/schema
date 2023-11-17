@@ -64,6 +64,7 @@ const colors: Record<string, string> = {
  *  - [ ] fix wrong `id`s, currently all set to `0`
  *  - [ ] check required status `pos`, `max_length`, `required`, `default_value`, `description` in types
  *  - [ ] block type for components seems to be unset after import (should be set to `Nestable block` for all components except for templates, which should be set to `Content type block`)
+ *  - [ ] add all root components to Components group used in Section
  */
 
 /**
@@ -398,7 +399,7 @@ function processEnum({
     type: 'option'
   };
 
-  if (subSchema.default) field.default_value = safeEnumKey(subSchema.default as string);
+  if (subSchema.default) field.default_value = safeEnumKey(subSchema.default);
 
   if (description) field.description = description;
 

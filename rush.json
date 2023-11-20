@@ -98,6 +98,13 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@kickstartds/stackbit-example",
+      "projectFolder": "examples/stackbit",
+      "reviewCategory": "examples",
+      "tags": ["examples"],
+      "shouldPublish": true
+    },
+    {
       "packageName": "@kickstartds/storyblok-example",
       "projectFolder": "examples/storyblok",
       "reviewCategory": "examples",

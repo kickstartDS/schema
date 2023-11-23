@@ -113,7 +113,7 @@ function processComponent({
 
   const objects: ObjectModel[] = [];
   objects.push({
-    name,
+    name: name.replace('-', '_'),
     label: toPascalCase(name),
     description,
     type: 'object',
@@ -235,10 +235,13 @@ function processArray({
   if (arrayField.type === 'cross-reference') throw new Error('Error type cross-reference');
 
   if (arrayField.type === 'object') {
+    const { name, label, description, ...listField } = arrayField;
     const field: FieldList = {
       name,
+      label,
+      description,
       type: 'list',
-      items: arrayField
+      items: listField
     };
 
     return { field, components: [], templates: [] };

@@ -1,0 +1,25 @@
+{
+  "name": "@kickstartds/stackbit-example",
+  "entries": [
+    {
+      "version": "1.2.9",
+      "tag": "@kickstartds/stackbit-example_v1.2.9",
+      "date": "Thu, 23 Nov 2023 21:05:30 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "initial version of example"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.9.0`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2stackbit\" to `1.0.1`"
+          }
+        ]
+      }
+    }
+  ]
+}

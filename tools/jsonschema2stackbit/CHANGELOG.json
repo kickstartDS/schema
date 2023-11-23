@@ -1,0 +1,22 @@
+{
+  "name": "@kickstartds/jsonschema2stackbit",
+  "entries": [
+    {
+      "version": "1.0.1",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.0.1",
+      "date": "Thu, 23 Nov 2023 21:05:30 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "initial version of converter"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.9.0`"
+          }
+        ]
+      }
+    }
+  ]
+}

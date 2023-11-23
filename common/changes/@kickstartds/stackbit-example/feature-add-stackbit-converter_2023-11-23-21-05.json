@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/stackbit-example",
+      "comment": "initial version of example",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/stackbit-example"
+}

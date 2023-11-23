@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "update example to use reworked converter",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

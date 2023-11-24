@@ -3,7 +3,10 @@ import {
   getSchemasForIds,
   toPascalCase,
   getSchemaReducer,
-  IProcessInterface
+  IProcessInterface,
+  IReducerResult,
+  IProcessFnMultipleResult,
+  IProcessFnResult
 } from '@kickstartds/jsonschema-utils';
 import { capitalCase, sentenceCase } from 'change-case';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
@@ -112,33 +115,57 @@ let extraComponents: Map<string, UniformComponent> = new Map();
  * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  */
-export const convert = ({ schemaIds, ajv, schemaPost }: IConvertParams): UniformComponent[] => {
+export const convert = ({
+  schemaIds,
+  ajv,
+  schemaPost
+}: IConvertParams): IReducerResult<UniformComponent, UniformComponent> => {
   extraComponents = new Map();
 
-  return [
-    ...flattenNestedComponentObjects(
-      getSchemasForIds(schemaIds, ajv).reduce(
-        getSchemaReducer<UniformElement>({
-          ajv,
-          typeResolutionField,
-          buildDescription,
-          safeEnumKey: (key) => key,
-          basicMapping,
-          processObject,
-          processRefArray,
-          processObjectArray,
-          processArray,
-          processEnum,
-          processConst,
-          processBasic,
-          schemaPost
-        }),
-        []
-      )
-    ),
-    ...Array.from(extraComponents.values())
-  ];
+  const reduced = getSchemasForIds(schemaIds, ajv).reduce(
+    getSchemaReducer<UniformComponent, UniformComponent, UniformElement>({
+      ajv,
+      typeResolutionField,
+      buildDescription,
+      safeEnumKey: (key) => key,
+      basicMapping,
+      processComponent,
+      processObject,
+      processRefArray,
+      processObjectArray,
+      processArray,
+      processEnum,
+      processConst,
+      processBasic,
+      schemaPost,
+      isField,
+      isComponent,
+      isTemplate
+    }),
+    { components: [], templates: [] }
+  );
+
+  return {
+    components: [
+      ...flattenNestedComponentObjects(reduced.components),
+      ...Array.from(extraComponents.values())
+    ],
+    templates: []
+  };
 };
+
+// TODO this is incomplete
+function isField(object: UniformComponent | UniformComponentParameter): object is UniformComponentParameter {
+  return (object as UniformComponentParameter).type !== undefined;
+}
+
+function isComponent(object: UniformComponent | UniformComponentParameter): object is UniformComponent {
+  return !(object as UniformComponent).canBeComposition || true;
+}
+
+function isTemplate(object: UniformComponent | UniformComponentParameter): object is UniformComponent {
+  return (object as UniformComponent).canBeComposition || false;
+}
 
 function basicMapping(property: JSONSchema.Interface): string {
   if (property.type === 'string' && property.enum && property.enum.length) {
@@ -176,7 +203,39 @@ function basicMapping(property: JSONSchema.Interface): string {
   return '';
 }
 
-function processObject({ name, fields }: IProcessInterface<UniformElement>): UniformElement {
+function processComponent({
+  name,
+  fields
+}: IProcessInterface<UniformElement>): IReducerResult<UniformElement, UniformElement> {
+  if (!fields) throw new Error('Missing fields on object to process');
+
+  const objects: UniformComponent[] = [];
+  objects.push({
+    id: nameToId(name),
+    name: capitalCase(name),
+    // TODO Look into how we want to set the icon, or just default to some more
+    // sensible default?
+    icon: 'screen',
+    parameters: fields.filter((field): field is UniformComponentParameter => {
+      return !field.hasOwnProperty('allowedComponents');
+    }),
+    canBeComposition: false,
+    slots: fields.filter((field): field is UniformSlot => {
+      return field.hasOwnProperty('allowedComponents');
+    })
+  });
+
+  return { components: objects, templates: [] };
+}
+
+function processObject({
+  name,
+  fields
+}: IProcessInterface<UniformElement>): IProcessFnMultipleResult<
+  UniformElement,
+  UniformElement,
+  UniformElement
+> {
   if (!fields) throw new Error('Missing fields on object to process');
 
   const component: UniformComponent = {
@@ -194,10 +253,13 @@ function processObject({ name, fields }: IProcessInterface<UniformElement>): Uni
     })
   };
 
-  return component;
+  return { field: component, components: [], templates: [] };
 }
 
-function processRefArray({ name, fields }: IProcessInterface<UniformElement>): UniformElement {
+function processRefArray({
+  name,
+  fields
+}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement, UniformElement, UniformElement> {
   if (!fields) throw new Error('Missing fields on array to process');
   // This will return a slot instead of a component parameter. Later on in
   // processObject function we extract those slots from fields into actual slots
@@ -209,7 +271,7 @@ function processRefArray({ name, fields }: IProcessInterface<UniformElement>): U
     inheritAllowedComponents: false
   };
 
-  return slot;
+  return { field: slot, components: [], templates: [] };
 }
 
 function processObjectArray({
@@ -218,7 +280,7 @@ function processObjectArray({
 // subSchema,
 // rootSchema,
 // fields
-IProcessInterface<UniformElement>): UniformElement {
+IProcessInterface<UniformElement>): IProcessFnResult<UniformElement, UniformElement, UniformElement> {
   // TODO should try to get by without that forced type
   // const field: ObjectType<false> = {
   //   name: name.replace(/-/g, '_'),
@@ -240,7 +302,7 @@ IProcessInterface<UniformElement>): UniformElement {
   // if (description)
   //   field.description = description;
 
-  return { name } as UniformElement;
+  return { field: { name } as UniformElement, components: [], templates: [] };
 }
 
 function processArray({
@@ -248,7 +310,7 @@ function processArray({
   subSchema,
   arrayField,
   rootSchema
-}: IProcessInterface<UniformElement>): UniformElement {
+}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement, UniformElement, UniformElement> {
   if (!arrayField) throw new Error('Missing array field on process array');
   // const field: ObjectType<false> = {
   //   name: name.replace(/-/g, '_'),
@@ -304,7 +366,7 @@ function processArray({
     } as UniformComponent);
   }
 
-  return slot;
+  return { field: slot, components: [], templates: [] };
 }
 
 function processEnum({
@@ -313,26 +375,32 @@ function processEnum({
   subSchema,
   options,
   parentSchema
-}: IProcessInterface<UniformElement>): UniformElement {
+}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement, UniformElement, UniformElement> {
   return {
-    id: subSchema.$id ?? name,
-    name: sentenceCase(subSchema.title || toPascalCase(name)),
-    helpText: description,
-    type: 'select',
-    typeConfig: {
-      required: parentSchema?.required?.includes(name),
-      options: options?.map((option) => {
-        return {
-          text: option.label,
-          value: option.value
-        };
-      })
-    } as SelectParamConfiguration
+    field: {
+      id: subSchema.$id ?? name,
+      name: sentenceCase(subSchema.title || toPascalCase(name)),
+      helpText: description,
+      type: 'select',
+      typeConfig: {
+        required: parentSchema?.required?.includes(name),
+        options: options?.map((option) => {
+          return {
+            text: option.label,
+            value: option.value
+          };
+        })
+      } as SelectParamConfiguration
+    },
+    components: [],
+    templates: []
   };
 }
 
-function processConst(props: IProcessInterface<UniformElement>): UniformElement {
-  return processBasic(props);
+function processConst(
+  props: IProcessInterface<UniformElement>
+): IProcessFnResult<UniformElement, UniformElement, UniformElement> {
+  return { field: processBasic(props).field, components: [], templates: [] };
 }
 
 function processBasic({
@@ -340,9 +408,13 @@ function processBasic({
   description,
   subSchema,
   parentSchema
-}: IProcessInterface<UniformElement>): UniformElement {
+}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement, UniformElement, UniformElement> {
   if (!parentSchema) throw new Error('Missing parent schema in basic processing');
-  return scalarMapping(subSchema, name, description, parentSchema);
+  return {
+    field: scalarMapping(subSchema, name, description, parentSchema).field,
+    components: [],
+    templates: []
+  };
 }
 
 function scalarMapping(
@@ -350,7 +422,7 @@ function scalarMapping(
   propertyName: string,
   description: string,
   parentSchema: JSONSchema.Interface
-): UniformComponentParameter {
+): IProcessFnResult<UniformElement, UniformElement, UniformElement> {
   const baseProps: Pick<UniformComponentParameter, 'id' | 'name' | 'helpText'> = {
     id: property.$id ?? propertyName,
     name: sentenceCase(property.title || toPascalCase(propertyName)),
@@ -445,44 +517,60 @@ function scalarMapping(
     const isImage = property.format && property.format === 'image';
 
     return {
-      ...baseProps,
-      type: 'text',
-      typeConfig: {
-        required: parentSchema.required?.includes(propertyName),
-        // A very hacky way to detect whether it should be multiline or not :D
-        multiline: !isImage && typeof property.default === 'string' && property.default.length > 30
-      } as TextParamConfig
+      field: {
+        ...baseProps,
+        type: 'text',
+        typeConfig: {
+          required: parentSchema.required?.includes(propertyName),
+          // A very hacky way to detect whether it should be multiline or not :D
+          multiline: !isImage && typeof property.default === 'string' && property.default.length > 30
+        } as TextParamConfig
+      },
+      components: [],
+      templates: []
     };
   }
 
   if (property.type === 'integer' || property.type === 'number') {
     return {
-      ...baseProps,
-      type: 'number',
-      typeConfig: {
-        required: parentSchema.required?.includes(propertyName),
-        decimal: property.type === 'number'
-      } as NumberParamConfig
+      field: {
+        ...baseProps,
+        type: 'number',
+        typeConfig: {
+          required: parentSchema.required?.includes(propertyName),
+          decimal: property.type === 'number'
+        } as NumberParamConfig
+      },
+      components: [],
+      templates: []
     };
   }
 
   if (property.type === 'boolean') {
     return {
-      ...baseProps,
-      type: 'checkbox'
+      field: {
+        ...baseProps,
+        type: 'checkbox'
+      },
+      components: [],
+      templates: []
     };
   }
 
   // If no matches, fall back to text input
   console.log('unsupported property in scalarMapping, falling back to string input', property);
   return {
-    ...baseProps,
-    type: 'text',
-    typeConfig: {
-      required: parentSchema.required?.includes(propertyName),
-      // A very hacky way to detect whether it should be multiline or not :D
-      multiline: typeof property.default === 'string' && property.default.length > 30
-    } as TextParamConfig
+    field: {
+      ...baseProps,
+      type: 'text',
+      typeConfig: {
+        required: parentSchema.required?.includes(propertyName),
+        // A very hacky way to detect whether it should be multiline or not :D
+        multiline: typeof property.default === 'string' && property.default.length > 30
+      } as TextParamConfig
+    },
+    components: [],
+    templates: []
   };
 }
 

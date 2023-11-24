@@ -3,7 +3,10 @@ import {
   toPascalCase,
   getSchemaReducer,
   IProcessInterface,
-  safeEnumKey
+  safeEnumKey,
+  IReducerResult,
+  IProcessFnMultipleResult,
+  IProcessFnResult
 } from '@kickstartds/jsonschema-utils';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 
@@ -24,14 +27,19 @@ export { INetlifyCmsConfig, createConfig };
  * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
  */
-export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): INetlifyCmsField[] {
+export function convert({
+  schemaIds,
+  ajv,
+  schemaPost
+}: IConvertParams): IReducerResult<INetlifyCmsField, INetlifyCmsField> {
   return getSchemasForIds(schemaIds, ajv).reduce(
-    getSchemaReducer<INetlifyCmsField>({
+    getSchemaReducer<INetlifyCmsField, INetlifyCmsField, INetlifyCmsField>({
       ajv,
       typeResolutionField,
       buildDescription,
       safeEnumKey,
       basicMapping,
+      processComponent,
       processObject,
       processRefArray,
       processObjectArray,
@@ -39,9 +47,12 @@ export function convert({ schemaIds, ajv, schemaPost }: IConvertParams): INetlif
       processEnum,
       processConst,
       processBasic,
-      schemaPost
+      schemaPost,
+      isField,
+      isComponent,
+      isTemplate
     }),
-    []
+    { components: [], templates: [] }
   );
 }
 
@@ -65,6 +76,19 @@ const mapping: ITypeMapping = {
   [TypeName.Number]: 'number'
 };
 
+// TODO this is incomplete
+function isField(object: INetlifyCmsField): object is INetlifyCmsField {
+  return (object as INetlifyCmsField).type !== undefined;
+}
+
+function isComponent(object: INetlifyCmsField): object is INetlifyCmsField {
+  return (object as INetlifyCmsField).type !== undefined;
+}
+
+function isTemplate(object: INetlifyCmsField): object is INetlifyCmsField {
+  return (object as INetlifyCmsField).type !== undefined;
+}
+
 function basicMapping(property: JSONSchema.Interface): string {
   if (property.type === 'string' && property.enum && property.enum.length) {
     return 'select';
@@ -85,12 +109,40 @@ function basicMapping(property: JSONSchema.Interface): string {
   return mapping[property.type as TypeName];
 }
 
+function processComponent({
+  name,
+  description,
+  subSchema,
+  fields
+}: IProcessInterface<INetlifyCmsField>): IReducerResult<INetlifyCmsField, INetlifyCmsField> {
+  if (!fields) throw new Error('Missing fields on component to process');
+
+  const objects: INetlifyCmsField[] = [];
+  objects.push({
+    label: toPascalCase(name),
+    name,
+    widget: basicMapping(subSchema),
+    fields: fields,
+    collapsed: true,
+    // TODO this is suspect, should expect an object here when in processObject
+    default: subSchema?.default as string,
+    hint: description,
+    required: subSchema.required?.includes(name) || false
+  });
+
+  return { components: objects, templates: [] };
+}
+
 function processObject({
   name,
   description,
   subSchema,
   fields
-}: IProcessInterface<INetlifyCmsField>): INetlifyCmsField {
+}: IProcessInterface<INetlifyCmsField>): IProcessFnMultipleResult<
+  INetlifyCmsField,
+  INetlifyCmsField,
+  INetlifyCmsField
+> {
   const field: INetlifyCmsField = {
     label: toPascalCase(name),
     name,
@@ -106,7 +158,7 @@ function processObject({
 
   field.required = subSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
 function processRefArray({
@@ -114,7 +166,11 @@ function processRefArray({
   description,
   rootSchema,
   fields
-}: IProcessInterface<INetlifyCmsField>): INetlifyCmsField {
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<
+  INetlifyCmsField,
+  INetlifyCmsField,
+  INetlifyCmsField
+> {
   const field: INetlifyCmsField = {
     name,
     widget: 'list',
@@ -125,7 +181,7 @@ function processRefArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
 function processObjectArray({
@@ -134,7 +190,11 @@ function processObjectArray({
   subSchema,
   rootSchema,
   fields
-}: IProcessInterface<INetlifyCmsField>): INetlifyCmsField {
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<
+  INetlifyCmsField,
+  INetlifyCmsField,
+  INetlifyCmsField
+> {
   const field: INetlifyCmsField = {
     name,
     widget: 'list',
@@ -148,7 +208,7 @@ function processObjectArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
 function processArray({
@@ -157,7 +217,11 @@ function processArray({
   subSchema,
   rootSchema,
   arrayField
-}: IProcessInterface<INetlifyCmsField>): INetlifyCmsField {
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<
+  INetlifyCmsField,
+  INetlifyCmsField,
+  INetlifyCmsField
+> {
   const field: INetlifyCmsField = {
     label: toPascalCase(name),
     name,
@@ -173,7 +237,7 @@ function processArray({
 
   if (arrayField && arrayField.fields) field.fields = arrayField.fields;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
 function processEnum({
@@ -181,7 +245,11 @@ function processEnum({
   description,
   subSchema,
   options
-}: IProcessInterface<INetlifyCmsField>): INetlifyCmsField {
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<
+  INetlifyCmsField,
+  INetlifyCmsField,
+  INetlifyCmsField
+> {
   const field: INetlifyCmsField = {
     label: toPascalCase(name),
     name,
@@ -195,10 +263,16 @@ function processEnum({
 
   field.required = subSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
-function processConst({ subSchema }: IProcessInterface<INetlifyCmsField>): INetlifyCmsField {
+function processConst({
+  subSchema
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<
+  INetlifyCmsField,
+  INetlifyCmsField,
+  INetlifyCmsField
+> {
   return getInternalTypeDefinition(subSchema.const as string);
 }
 
@@ -207,7 +281,11 @@ function processBasic({
   description,
   subSchema,
   rootSchema
-}: IProcessInterface<INetlifyCmsField>): INetlifyCmsField {
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<
+  INetlifyCmsField,
+  INetlifyCmsField,
+  INetlifyCmsField
+> {
   const widget = basicMapping(subSchema);
 
   const field: INetlifyCmsField = {
@@ -224,16 +302,22 @@ function processBasic({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return field;
+  return { field, components: [], templates: [] };
 }
 
-function getInternalTypeDefinition(type: string): INetlifyCmsField {
+function getInternalTypeDefinition(
+  type: string
+): IProcessFnResult<INetlifyCmsField, INetlifyCmsField, INetlifyCmsField> {
   return {
-    label: toPascalCase(typeResolutionField),
-    name: typeResolutionField,
-    widget: 'hidden',
-    description: 'Internal type for interface resolution',
-    default: type
+    field: {
+      label: toPascalCase(typeResolutionField),
+      name: typeResolutionField,
+      widget: 'hidden',
+      description: 'Internal type for interface resolution',
+      default: type
+    },
+    components: [],
+    templates: []
   };
 }
 

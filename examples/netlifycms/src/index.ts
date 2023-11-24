@@ -32,7 +32,13 @@ async function convertKds(): Promise<void> {
     ajv
   });
 
-  const netlifyConfig = createConfigNetlifyCMS(pageFields, settingsFields, undefined, 'pages', 'settings');
+  const netlifyConfig = createConfigNetlifyCMS(
+    pageFields.components,
+    settingsFields.components,
+    undefined,
+    'pages',
+    'settings'
+  );
 
   mkdirSync('dist/kds', { recursive: true });
 

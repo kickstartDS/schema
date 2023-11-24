@@ -27,60 +27,6 @@ export type GenericType =
   | 'style'
   | 'text';
 
-export type StoryblokElement = IStoryblokBlock | IStoryblokSchemaElement;
-
-export interface IStoryblokBlock {
-  name: string;
-  display_name: string;
-  created_at: string;
-  updated_at: string;
-  id: number;
-  schema: Record<string, IStoryblokSchemaElement>;
-  image?: unknown;
-  preview_field?: unknown;
-  is_root?: boolean;
-  preview_tmpl?: string;
-  is_nestable: boolean;
-  all_presets?: unknown[];
-  preset_id?: unknown;
-  real_name: string;
-  component_group_uuid?: unknown;
-  component_group_name?: string;
-  color?: string;
-  icon?: string;
-}
-
-export interface IStoryblokSchemaElement {
-  type: GenericType;
-  pos?: number;
-  key: string;
-  use_uuid?: boolean;
-  source?: 'internal' | 'external' | 'internal_stories' | 'internal_languages';
-  options?: IStoryblokSchemaElementOption[];
-  filter_content_type?: string[];
-  restrict_components?: boolean;
-  component_whitelist?: string[];
-  component_group_whitelist?: string[];
-  restrict_type?: 'groups' | '';
-  exclude_empty_option?: boolean;
-  max_length?: string;
-  required?: boolean;
-  display_name: string;
-  default_value?: string;
-  description?: string;
-  fields?: IStoryblokSchemaElement[];
-  objectFields?: IStoryblokSchemaElement[];
-  objectArrayFields?: IStoryblokSchemaElement[];
-  arrayFields?: IStoryblokSchemaElement[];
-  bloks?: StoryblokElement[];
-}
-
-export interface IStoryblokSchemaElementOption {
-  _uid?: string;
-  name: string;
-  value: string;
-}
-
 export interface ITypeMapping {
   boolean: GenericType;
   string: GenericType;

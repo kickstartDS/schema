@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2uniform",
+      "comment": "align convert to reworked reducer",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2uniform"
+}

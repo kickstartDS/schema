@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2netlifycms",
   "entries": [
     {
+      "version": "2.6.0",
+      "tag": "@kickstartds/jsonschema2netlifycms_v2.6.0",
+      "date": "Fri, 24 Nov 2023 14:26:22 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "align convert to reworked reducer"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.5.25",
       "tag": "@kickstartds/jsonschema2netlifycms_v2.5.25",
       "date": "Thu, 23 Nov 2023 21:05:30 GMT",

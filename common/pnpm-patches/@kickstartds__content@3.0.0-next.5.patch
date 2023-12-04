@@ -1,0 +1,34 @@
+diff --git a/lib/slider/slider.schema.dereffed.json b/lib/slider/slider.schema.dereffed.json
+index e403e847580fc25354bea4ff5de242ff20685768..baa6a593cc78473ed2d09b2975b8d3e7d905d05b 100644
+--- a/lib/slider/slider.schema.dereffed.json
++++ b/lib/slider/slider.schema.dereffed.json
+@@ -63,15 +63,7 @@
+     "focusAt": {
+       "title": "Focus at",
+       "description": "Focus currently active slide at a specified position",
+-      "anyOf": [
+-        {
+-          "type": "number"
+-        },
+-        {
+-          "type": "string",
+-          "const": "center"
+-        }
+-      ],
++      "type": "string",
+       "default": "center"
+     },
+     "gap": {
+diff --git a/lib/slider/slider.schema.json b/lib/slider/slider.schema.json
+index 911f5f0cd9aafb639ad3cdb43469c844bcfee8d8..5ce0023a6600bfee75772e2660b6c158006071f9 100644
+--- a/lib/slider/slider.schema.json
++++ b/lib/slider/slider.schema.json
+@@ -59,7 +59,7 @@
+     "focusAt": {
+       "title": "Focus at",
+       "description": "Focus currently active slide at a specified position",
+-      "anyOf": [{ "type": "number" }, { "type": "string", "const": "center" }],
++      "type": "string",
+       "default": "center"
+     },
+     "gap": {

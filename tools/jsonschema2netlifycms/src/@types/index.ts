@@ -1,13 +1,3 @@
-import { type JSONSchema } from 'json-schema-typed/draft-07';
-
-declare type MyAjv = import('ajv').default;
-
-export interface IConvertParams {
-  schemaIds: string[];
-  ajv: MyAjv;
-  schemaPost?: (schema: JSONSchema.Interface) => JSONSchema.Interface;
-}
-
 // See https://www.marcveens.nl/netlify-cms-generate-config-yml
 // https://www.netlifycms.org/docs/configuration-options/
 

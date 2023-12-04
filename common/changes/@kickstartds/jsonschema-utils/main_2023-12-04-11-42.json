@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "remove lodash and ramda",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

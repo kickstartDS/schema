@@ -10,8 +10,6 @@ import { resolve } from 'import-meta-resolve';
 import traverse from 'json-schema-traverse';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 import { get } from 'jsonpointer';
-import _ from 'lodash';
-import { compose } from 'ramda';
 import { DirectedAcyclicGraph } from 'typescript-graph';
 
 declare type MyAjv = import('ajv').default;
@@ -176,13 +174,36 @@ export function reduceSchemaAllOfs(schema: JSONSchema.Interface, ajv: MyAjv): vo
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T): T {
+  const keys = Array.from(new Set([...Object.keys(obj1), ...Object.keys(obj2)]));
+
+  return keys.reduce((acc, key) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const val1 = obj1[key] as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const val2 = obj2[key] as any;
+
+    if (typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 !== null) {
+      acc[key] = deepMerge(val1, val2);
+    } else if (key in obj2) {
+      acc[key] = structuredClone(val2);
+    } else {
+      acc[key] = structuredClone(val1);
+    }
+
+    return acc;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }, {} as any) as T;
+}
+
 export function reduceSchemaAllOf(schema: JSONSchema.Interface, ajv: MyAjv): JSONSchema.Interface {
   const allOfs = schema.allOf as JSONSchema.Interface[];
 
   const reducedSchema = allOfs.reduce((finalSchema: JSONSchema.Interface, allOf: JSONSchema.Interface) => {
     const mergeSchemaAllOf = (allOf: JSONSchema.Interface): JSONSchema.Interface => {
-      if (!_.isUndefined(allOf.$ref)) {
-        const reffedSchema = _.cloneDeep(
+      if (allOf.$ref !== undefined) {
+        const reffedSchema = structuredClone(
           ajv.getSchema(
             allOf.$ref.includes('#/definitions/') && !allOf.$ref.includes('http')
               ? `${schema.$id}${allOf.$ref}`
@@ -190,22 +211,23 @@ export function reduceSchemaAllOf(schema: JSONSchema.Interface, ajv: MyAjv): JSO
           )?.schema as JSONSchema.Interface
         );
 
-        return _.merge(
+        return deepMerge(
           reffedSchema && reffedSchema.allOf
             ? reduceSchemaAllOf(reffedSchema, ajv)
-            : _.merge(reffedSchema, finalSchema),
+            : deepMerge(reffedSchema, finalSchema),
           finalSchema
         );
       } else {
         reduceSchemaAllOfs(allOf, ajv);
-        return _.merge(allOf, finalSchema);
+        return deepMerge(allOf, finalSchema);
       }
     };
 
     return mergeSchemaAllOf(allOf);
   }, {} as JSONSchema.Interface);
 
-  if (schema.properties) reducedSchema.properties = _.merge(schema.properties, reducedSchema.properties);
+  if (schema.properties)
+    reducedSchema.properties = deepMerge(schema.properties, reducedSchema.properties || {});
 
   mergeAnyOfEnums(reducedSchema, ajv);
 
@@ -516,10 +538,10 @@ export async function processSchemas(
     layerRefs: shouldLayerRefs,
     inlineReferences: shouldInlineReferences,
     addExplicitAnyOfs: shouldAddExlicitAnyOfs
-  } = _.merge(defaultProcessingOptions, options);
+  } = deepMerge<Partial<IProcessingOptions>>(defaultProcessingOptions, options || {});
   // load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas =
-    modules.length > 0
+    modules && modules.length > 0
       ? await modules.reduce(async (schemaPromises, moduleName: string) => {
           const schemas = await schemaPromises;
           try {
@@ -553,7 +575,8 @@ export async function processSchemas(
   if (shouldLayerRefs) layerRefs(jsonSchemas, kdsSchemas);
   if (typeResolution) addTypeInterfaces(sortedSchemas);
   if (shouldInlineReferences) inlineReferences(sortedSchemas);
-  if (additionalProperties !== 'keep') processAdditionalProperties(sortedSchemas, additionalProperties);
+  if (additionalProperties && additionalProperties !== 'keep')
+    processAdditionalProperties(sortedSchemas, additionalProperties);
 
   // 2. add all schemas to ajv for the following processing steps
   sortedSchemas.forEach((schema) => {
@@ -636,15 +659,14 @@ export function hashFieldName(fieldName: string, optionalName?: string): string 
     ? `${fieldName.replace('___NODE', '')}__${createHash('md5')
         .update(fieldName.replace('___NODE', '') + (optionalName || ''))
         .digest('hex')
-        .substr(0, 4)}___NODE`
+        .slice(0, 4)}___NODE`
     : `${fieldName}__${createHash('md5')
         .update(fieldName + (optionalName || ''))
         .digest('hex')
-        .substr(0, 4)}`;
+        .slice(0, 4)}`;
 }
 
-// TODO pretty sure `fieldName === 'type'` shouldn't be hardcoded here
-export function dedupe(
+export function clearHashing(
   schema: JSONSchema.Interface,
   optionalName?: string
 ):
@@ -652,18 +674,24 @@ export function dedupe(
       [key: string]: JSONSchema.Interface;
     }
   | undefined {
-  return _.mapKeys<JSONSchema.Interface>(
-    schema.properties,
-    (__prop: JSONSchema.Interface, fieldName: string) =>
-      fieldName.includes('__') || fieldName === 'type' ? fieldName : hashFieldName(fieldName, optionalName)
-  );
+  return schema.properties
+    ? Object.entries(schema.properties).reduce((a, [fieldName, value]) => {
+        // TODO think again about `fieldName === 'type'`, maybe relation to typeResolutionField?
+        a[
+          fieldName.includes('__') || fieldName === 'type'
+            ? fieldName
+            : hashFieldName(fieldName, optionalName)
+        ] = value as JSONSchema.Interface;
+        return a;
+      }, {} as { [key: string]: JSONSchema.Interface })
+    : undefined;
 }
 
-export function dedupeDeep(schema: JSONSchema.Interface): JSONSchema.Interface {
+export function clearHashingDeep(schema: JSONSchema.Interface): JSONSchema.Interface {
   traverse(schema, {
     cb: (subSchema) => {
       if (subSchema.properties) {
-        subSchema.properties = dedupe(subSchema, getSchemaName(schema.$id));
+        subSchema.properties = clearHashing(subSchema, getSchemaName(schema.$id));
       }
     }
   });
@@ -681,6 +709,10 @@ export function clearAndUpper(text: string): string {
 
 export function err(msg: string, propName?: string): Error {
   return new Error(`jsonschema-utils: ${propName ? `Couldn't convert property ${propName}. ` : ''}${msg}`);
+}
+
+export function compose<T>(fn1: (a: T) => T, ...fns: Array<(a: T) => T>): (value: T) => T {
+  return fns.reduce((prevFn, nextFn) => (value) => prevFn(nextFn(value)), fn1);
 }
 
 export function safeEnumKey(value: string): string {
@@ -702,5 +734,5 @@ export function safeEnumKey(value: string): string {
     }
   };
   const sanitize = (s: string): string => s.replace(/[^_a-zA-Z0-9]/g, '_');
-  return compose(sanitize, convertComparators, safeNum, trim)(value);
+  return compose<string>(sanitize, convertComparators, safeNum, trim)(value);
 }

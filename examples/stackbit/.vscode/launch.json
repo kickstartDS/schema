@@ -4,9 +4,10 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Example Storyblok",
+      "name": "Debug Example Stackbit",
       "program": "${workspaceFolder}/src/index.ts",
       "runtimeArgs": ["--experimental-vm-modules"],
+      "runtimeExecutable": "/home/julrich/.nvm/versions/node/v18.16.0/bin/node",
       "skipFiles": ["<node_internals>/**"],
       "resolveSourceMapLocations": ["**", "!**/node_modules/**"]
     }

@@ -1,15 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { type JSONSchema } from 'json-schema-typed/draft-07';
-
 import { IComponents } from './uniform-components.js';
-
-declare type MyAjv = import('ajv').default;
-
-export interface IConvertParams {
-  schemaIds: string[];
-  ajv: MyAjv;
-  schemaPost?: (schema: JSONSchema.Interface) => JSONSchema.Interface;
-}
 
 export type UniformComponent = IComponents['schemas']['ComponentDefinition'];
 
@@ -19,7 +8,7 @@ export type UniformSlot = NonNullable<UniformComponent['slots']>[0];
 
 export type UniformElement = UniformComponent | UniformComponentParameter | UniformSlot;
 
-export interface TextParamConfig {
+export interface ITextParamConfig {
   required?: boolean;
   multiline?: boolean;
   linesCount?: number;
@@ -29,12 +18,12 @@ export interface TextParamConfig {
   caption?: string;
 }
 
-export interface SelectParamConfiguration {
+export interface ISelectParamConfiguration {
   options?: Array<{ value: string; text: string }>;
   required?: boolean;
 }
 
-export interface NumberParamConfig {
+export interface INumberParamConfig {
   required?: boolean;
   decimal?: boolean;
   decimalPlaces?: number;

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "switch to reworked utils and reducer",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

@@ -114,8 +114,8 @@
       "storybook-design-token",
       "react-dom",
       "@storybook/types"
-    ]
-    // "allowedVersions": { "react": "17" },
+    ],
+    "allowedVersions": { "@kickstartds/base": "3.0.0-next.11", "@kickstartds/core": "3.0.0-next.8" }
     // "allowAny": ["@babel/*"]
   },
 
@@ -186,7 +186,7 @@
    *
    * PNPM documentation: https://pnpm.io/package_json#pnpmpatcheddependencies
    */
-  "globalPatchedDependencies": {"to-json-schema@0.2.5":"patches/to-json-schema@0.2.5.patch","@bcherny/json-schema-ref-parser@10.0.5-fork":"patches/@bcherny__json-schema-ref-parser@10.0.5-fork.patch"},
+  "globalPatchedDependencies": {"to-json-schema@0.2.5":"patches/to-json-schema@0.2.5.patch","@bcherny/json-schema-ref-parser@10.0.5-fork":"patches/@bcherny__json-schema-ref-parser@10.0.5-fork.patch","@kickstartds/content@3.0.0-next.5":"patches/@kickstartds__content@3.0.0-next.5.patch"},
 
   /**
    * (USE AT YOUR OWN RISK)  This is a free-form property bag that will be copied into

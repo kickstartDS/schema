@@ -3,15 +3,6 @@
 // Related Storyblok docs:
 // - https://www.storyblok.com/docs/api/management#core-resources/components/components
 // - https://www.storyblok.com/docs/schema-configuration
-import { type JSONSchema } from 'json-schema-typed/draft-07';
-
-declare type MyAjv = import('ajv').default;
-
-export interface IConvertParams {
-  schemaIds: string[];
-  ajv: MyAjv;
-  schemaPost?: (schema: JSONSchema.Interface) => JSONSchema.Interface;
-}
 
 export type GenericType =
   | 'text'

@@ -7,9 +7,11 @@ import {
   safeEnumKey,
   IReducerResult,
   IProcessFnMultipleResult,
-  IProcessFnResult
+  IProcessFnResult,
+  IConvertParams
 } from '@kickstartds/jsonschema-utils';
 import {
+  DataModel,
   Field,
   FieldBasicProps,
   FieldEnum,
@@ -21,7 +23,7 @@ import {
 } from '@stackbit/types';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 
-import { GenericType, IConvertParams, ITypeMapping } from './@types/index.js';
+import { GenericType, ITypeMapping } from './@types/index.js';
 export * from './@types/index.js';
 
 const typeResolutionField: string = 'type';
@@ -33,15 +35,16 @@ const typeResolutionField: string = 'type';
 export function convert({
   schemaIds,
   ajv,
-  schemaPost
-}: IConvertParams): IReducerResult<ObjectModel, PageModel> {
+  schemaPost,
+  schemaClassifier
+}: IConvertParams): IReducerResult<ObjectModel, PageModel, DataModel> {
   const reduced = getSchemasForIds(schemaIds, ajv).reduce(
-    getSchemaReducer<Field, ObjectModel, PageModel>({
+    getSchemaReducer<Field, ObjectModel, PageModel, DataModel>({
       ajv,
       typeResolutionField,
       buildDescription,
       safeEnumKey,
-      basicMapping,
+      basicTypeMapping,
       processComponent,
       processObject,
       processRefArray,
@@ -51,11 +54,9 @@ export function convert({
       processConst,
       processBasic,
       schemaPost,
-      isField,
-      isComponent,
-      isTemplate
+      schemaClassifier
     }),
-    { components: [], templates: [] }
+    { components: [], templates: [], globals: [] }
   );
 
   return reduced;
@@ -71,20 +72,7 @@ const mapping: ITypeMapping = {
   [TypeName.Number]: 'number'
 };
 
-// TODO this is incomplete
-function isField(object: Field | ObjectModel | PageModel): object is Field {
-  return (object as Field).type !== undefined;
-}
-
-function isComponent(object: Field | ObjectModel | PageModel): object is ObjectModel {
-  return (object as ObjectModel).type === 'object';
-}
-
-function isTemplate(object: Field | ObjectModel | PageModel): object is PageModel {
-  return (object as PageModel).type === 'page';
-}
-
-function basicMapping(property: JSONSchema.Interface): GenericType {
+function basicTypeMapping(property: JSONSchema.Interface): GenericType {
   if (property.type === 'string' && property.enum && property.enum.length) {
     return 'enum';
   }
@@ -107,29 +95,62 @@ function basicMapping(property: JSONSchema.Interface): GenericType {
 function processComponent({
   name,
   description,
-  fields
-}: IProcessInterface<Field>): IReducerResult<ObjectModel, PageModel> {
+  fields,
+  classification
+}: IProcessInterface<Field>): IReducerResult<ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on component to process');
 
-  const objects: ObjectModel[] = [];
-  objects.push({
-    name: name.replace('-', '_'),
-    label: toPascalCase(name),
-    description,
-    type: 'object',
-    fields: fields.reduce<Field[]>((fields, field) => {
-      fields.push(field);
-      return fields;
-    }, [])
-  });
-  return { components: objects, templates: [] };
+  if (classification && classification === 'template') {
+    const objects: PageModel[] = [
+      {
+        name: name.replace('-', '_'),
+        label: toPascalCase(name),
+        description,
+        type: 'page',
+        fields: fields.reduce<Field[]>((fields, field) => {
+          fields.push(field);
+          return fields;
+        }, [])
+      }
+    ];
+    return { components: [], templates: objects, globals: [] };
+  } else if (classification && classification === 'global') {
+    const objects: DataModel[] = [
+      {
+        name: name.replace('-', '_'),
+        label: toPascalCase(name),
+        description,
+        type: 'data',
+        fields: fields.reduce<Field[]>((fields, field) => {
+          fields.push(field);
+          return fields;
+        }, [])
+      }
+    ];
+    return { components: [], templates: [], globals: objects };
+  }
+
+  const objects: ObjectModel[] = [
+    {
+      name: name.replace('-', '_'),
+      label: toPascalCase(name),
+      description,
+      type: 'object',
+      fields: fields.reduce<Field[]>((fields, field) => {
+        fields.push(field);
+        return fields;
+      }, [])
+    }
+  ];
+
+  return { components: objects, templates: [], globals: [] };
 }
 
 function processObject({
   name,
   description,
   fields
-}: IProcessInterface<Field>): IProcessFnMultipleResult<Field, ObjectModel, PageModel> {
+}: IProcessInterface<Field>): IProcessFnMultipleResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object to process');
 
   const field: FieldObject = {
@@ -143,7 +164,7 @@ function processObject({
     }, [])
   };
 
-  return { field, components: [], templates: [] };
+  return { field };
 }
 
 function processRefArray({
@@ -151,7 +172,7 @@ function processRefArray({
   description,
   rootSchema,
   fields
-}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel> {
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on ref array to process');
 
   const field: FieldList = {
@@ -160,7 +181,7 @@ function processRefArray({
     items: {
       type: 'model',
       models: fields?.reduce<string[]>((models, field) => {
-        models.push(field.name);
+        models.push(field.name.replace('-', '_'));
         return models;
       }, [])
     }
@@ -170,7 +191,7 @@ function processRefArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return { field, components: [], templates: [] };
+  return { field };
 }
 
 function processObjectArray({
@@ -179,7 +200,7 @@ function processObjectArray({
   subSchema,
   rootSchema,
   fields
-}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel> {
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object array to process');
 
   const objects: ObjectModel[] = [];
@@ -201,7 +222,7 @@ function processObjectArray({
     items: {
       type: 'model',
       models: fields?.reduce<string[]>((models, field) => {
-        models.push(field.name);
+        models.push(field.name.replace('-', '_'));
         return models;
       }, [])
     }
@@ -223,7 +244,7 @@ function processArray({
   // subSchema,
   // rootSchema,
   arrayField
-}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel> {
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!arrayField || !arrayField.type) throw new Error('Missing type in array field');
   if (arrayField.type === 'list') throw new Error('Error type list');
   if (arrayField.type === 'number') throw new Error('Error type number');
@@ -244,7 +265,7 @@ function processArray({
       items: listField
     };
 
-    return { field, components: [], templates: [] };
+    return { field };
   } else {
     const items: FieldBasicProps = {
       type: arrayField.type
@@ -256,7 +277,7 @@ function processArray({
       items
     };
 
-    return { field, components: [], templates: [] };
+    return { field };
   }
 }
 
@@ -265,7 +286,7 @@ function processEnum({
   description,
   subSchema,
   options
-}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel> {
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   const field: FieldEnum = {
     name,
     type: 'enum',
@@ -282,13 +303,13 @@ function processEnum({
 
   field.required = subSchema.required?.includes(name) || false;
 
-  return { field, components: [], templates: [] };
+  return { field };
 }
 
 function processConst({
   subSchema
-}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel> {
-  return { field: getInternalTypeDefinition(subSchema.const as string), components: [], templates: [] };
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
+  return { field: getInternalTypeDefinition(subSchema.const as string) };
 }
 
 function processBasic({
@@ -296,7 +317,7 @@ function processBasic({
   description,
   subSchema,
   rootSchema
-}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel> {
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   // const type = basicMapping(subSchema);
 
   const field: Field = {
@@ -310,7 +331,7 @@ function processBasic({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return { field, components: [], templates: [] };
+  return { field };
 }
 
 function getInternalTypeDefinition(type: string): FieldText {
@@ -318,7 +339,8 @@ function getInternalTypeDefinition(type: string): FieldText {
     name: toPascalCase(typeResolutionField),
     type: 'text',
     description: 'Internal type for interface resolution',
-    default: type
+    default: type,
+    hidden: true
   };
 }
 

@@ -7,19 +7,13 @@ import {
   safeEnumKey,
   IReducerResult,
   IProcessFnResult,
-  IProcessFnMultipleResult
+  IProcessFnMultipleResult,
+  IConvertParams
 } from '@kickstartds/jsonschema-utils';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
-// import { traverse } from 'object-traversal';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  GenericType,
-  IConvertParams,
-  ITypeMapping,
-  IStoryblokSchemaElement,
-  IStoryblokBlock
-} from './@types/index.js';
+import { GenericType, ITypeMapping, IStoryblokSchemaElement, IStoryblokBlock } from './@types/index.js';
 export * from './@types/index.js';
 
 const typeResolutionField: string = 'type';
@@ -74,15 +68,16 @@ const colors: Record<string, string> = {
 export function convert({
   schemaIds,
   ajv,
-  schemaPost
-}: IConvertParams): IReducerResult<IStoryblokBlock, IStoryblokBlock> {
+  schemaPost,
+  schemaClassifier
+}: IConvertParams): IReducerResult<IStoryblokBlock> {
   const reduced = getSchemasForIds(schemaIds, ajv).reduce(
-    getSchemaReducer<IStoryblokSchemaElement, IStoryblokBlock, IStoryblokBlock>({
+    getSchemaReducer<IStoryblokSchemaElement, IStoryblokBlock>({
       ajv,
       typeResolutionField,
       buildDescription,
       safeEnumKey,
-      basicMapping,
+      basicTypeMapping,
       processComponent,
       processObject,
       processRefArray,
@@ -92,13 +87,12 @@ export function convert({
       processConst,
       processBasic,
       schemaPost,
-      isField,
-      isComponent,
-      isTemplate
+      schemaClassifier
     }),
     {
       components: [],
-      templates: []
+      templates: [],
+      globals: []
     }
   );
 
@@ -142,10 +136,6 @@ const mapping: ITypeMapping = {
   [TypeName.Number]: 'number'
 };
 
-function isField(object: IStoryblokSchemaElement | IStoryblokBlock): object is IStoryblokSchemaElement {
-  return (object as IStoryblokSchemaElement).key !== undefined;
-}
-
 function isComponent(object: IStoryblokSchemaElement | IStoryblokBlock): object is IStoryblokBlock {
   return (
     ((object as IStoryblokBlock).is_root === undefined || (object as IStoryblokBlock).is_root === false) &&
@@ -153,11 +143,7 @@ function isComponent(object: IStoryblokSchemaElement | IStoryblokBlock): object 
   );
 }
 
-function isTemplate(object: IStoryblokSchemaElement | IStoryblokBlock): object is IStoryblokBlock {
-  return (object as IStoryblokBlock).is_root === true;
-}
-
-function basicMapping(property: JSONSchema.Interface): GenericType {
+function basicTypeMapping(property: JSONSchema.Interface): GenericType {
   if (property.type === 'string' && property.enum && property.enum.length) {
     return 'option';
   }
@@ -182,7 +168,7 @@ const componentGroups: Record<string, string> = {};
 function processComponent({
   name,
   fields
-}: IProcessInterface<IStoryblokSchemaElement>): IReducerResult<IStoryblokBlock, IStoryblokBlock> {
+}: IProcessInterface<IStoryblokSchemaElement>): IReducerResult<IStoryblokBlock> {
   if (!fields) throw new Error('Missing fields on component to process');
 
   const bloks: IStoryblokBlock[] = [];
@@ -200,7 +186,7 @@ function processComponent({
     real_name: toPascalCase(name)
   });
 
-  return { components: bloks, templates: [] };
+  return { components: bloks, templates: [], globals: [] };
 }
 
 function processObject({
@@ -211,7 +197,6 @@ function processObject({
   fields
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnMultipleResult<
   IStoryblokSchemaElement,
-  IStoryblokBlock,
   IStoryblokBlock
 > {
   if (parentSchema && parentSchema.type === 'array') {
@@ -251,7 +236,7 @@ function processObject({
 
     if (description) field.description = description;
 
-    return { field, components: [blok], templates: [] };
+    return { field, components: [blok] };
   } else {
     const tabId = `tab-${uuidv4()}`;
     const tab: IStoryblokSchemaElement = {
@@ -275,7 +260,7 @@ function processObject({
 
     tab.required = subSchema.required?.includes(name) || false;
 
-    return { field: tab, fields, components: [], templates: [] };
+    return { field: tab, fields };
   }
 }
 
@@ -284,11 +269,7 @@ function processRefArray({
   description,
   rootSchema,
   fields
-}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
-  IStoryblokSchemaElement,
-  IStoryblokBlock,
-  IStoryblokBlock
-> {
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   componentGroups[name] ||= uuidv4();
 
   const field: IStoryblokSchemaElement = {
@@ -321,7 +302,7 @@ function processRefArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return { field, components: bloks, templates: [] };
+  return { field, components: bloks };
 }
 
 function processObjectArray({
@@ -329,11 +310,7 @@ function processObjectArray({
   description,
   subSchema,
   rootSchema
-}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
-  IStoryblokSchemaElement,
-  IStoryblokBlock,
-  IStoryblokBlock
-> {
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   const field: IStoryblokSchemaElement = {
     id: 0,
     pos: 0,
@@ -351,16 +328,12 @@ function processObjectArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return { field, components: [], templates: [] };
+  return { field };
 }
 
 function processArray({
   arrayField
-}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
-  IStoryblokSchemaElement,
-  IStoryblokBlock,
-  IStoryblokBlock
-> {
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!arrayField) throw new Error('Missing array fields in conversion');
   // TODO this probably generates empty arrays somewhere
   // Can include stuff like :
@@ -375,10 +348,10 @@ function processArray({
       type: 'array',
       key: arrayField.key
     };
-    return { field: stringArrayField, components: [], templates: [] };
+    return { field: stringArrayField };
   }
 
-  return { field: arrayField, components: [], templates: [] };
+  return { field: arrayField };
 }
 
 function processEnum({
@@ -386,11 +359,7 @@ function processEnum({
   description,
   subSchema,
   options
-}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
-  IStoryblokSchemaElement,
-  IStoryblokBlock,
-  IStoryblokBlock
-> {
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   const field: IStoryblokSchemaElement = {
     id: 0,
     pos: 0,
@@ -411,17 +380,13 @@ function processEnum({
 
   field.required = subSchema.required?.includes(name) || false;
 
-  return { field, components: [], templates: [] };
+  return { field };
 }
 
 function processConst({
   subSchema
-}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
-  IStoryblokSchemaElement,
-  IStoryblokBlock,
-  IStoryblokBlock
-> {
-  return { field: getInternalTypeDefinition(subSchema.const), components: [], templates: [] };
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
+  return { field: getInternalTypeDefinition(subSchema.const) };
 }
 
 function processBasic({
@@ -429,12 +394,8 @@ function processBasic({
   description,
   subSchema,
   rootSchema
-}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<
-  IStoryblokSchemaElement,
-  IStoryblokBlock,
-  IStoryblokBlock
-> {
-  const type = basicMapping(subSchema);
+}: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
+  const type = basicTypeMapping(subSchema);
 
   const field: IStoryblokSchemaElement = {
     id: 0,
@@ -450,7 +411,7 @@ function processBasic({
 
   field.required = rootSchema.required?.includes(name) || false;
 
-  return { field, components: [], templates: [] };
+  return { field };
 }
 
 function getInternalTypeDefinition(type: string): IStoryblokSchemaElement {

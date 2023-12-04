@@ -167,24 +167,65 @@ const componentGroups: Record<string, string> = {};
 
 function processComponent({
   name,
-  fields
+  fields,
+  classification
 }: IProcessInterface<IStoryblokSchemaElement>): IReducerResult<IStoryblokBlock> {
   if (!fields) throw new Error('Missing fields on component to process');
 
-  const bloks: IStoryblokBlock[] = [];
-  bloks.push({
-    name,
-    display_name: toPascalCase(name),
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    id: 0,
-    schema: fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
-      schema[field.key] = field;
-      return schema;
-    }, {}),
-    is_nestable: false,
-    real_name: toPascalCase(name)
-  });
+  if (classification && classification === 'template') {
+    const bloks: IStoryblokBlock[] = [
+      {
+        name,
+        display_name: toPascalCase(name),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        is_root: true,
+        id: 0,
+        schema: fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+          schema[field.key] = field;
+          return schema;
+        }, {}),
+        is_nestable: false,
+        real_name: toPascalCase(name)
+      }
+    ];
+
+    return { components: [], templates: bloks, globals: [] };
+  } else if (classification && classification === 'global') {
+    const bloks: IStoryblokBlock[] = [
+      {
+        name,
+        display_name: toPascalCase(name),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        id: 0,
+        schema: fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+          schema[field.key] = field;
+          return schema;
+        }, {}),
+        is_nestable: false,
+        real_name: toPascalCase(name)
+      }
+    ];
+
+    return { components: [], templates: [], globals: bloks };
+  }
+
+  const bloks: IStoryblokBlock[] = [
+    {
+      name,
+      display_name: toPascalCase(name),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      id: 0,
+      schema: fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+        schema[field.key] = field;
+        return schema;
+      }, {}),
+      is_nestable: false,
+      real_name: toPascalCase(name)
+    }
+  ];
 
   return { components: bloks, templates: [], globals: [] };
 }

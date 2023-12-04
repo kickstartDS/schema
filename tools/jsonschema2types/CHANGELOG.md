@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/jsonschema2types
 
-This log was last generated on Thu, 23 Nov 2023 21:05:30 GMT and should not be manually modified.
+This log was last generated on Mon, 04 Dec 2023 11:43:19 GMT and should not be manually modified.
+
+## 1.1.21
+Mon, 04 Dec 2023 11:43:19 GMT
+
+_Version update only_
 
 ## 1.1.20
 Thu, 23 Nov 2023 21:05:30 GMT

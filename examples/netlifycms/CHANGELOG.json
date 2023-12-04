@@ -2,6 +2,26 @@
   "name": "@kickstartds/netlifycms-example",
   "entries": [
     {
+      "version": "1.2.0",
+      "tag": "@kickstartds/netlifycms-example_v1.2.0",
+      "date": "Mon, 04 Dec 2023 11:43:19 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "update to reworked converter, update ds-agency"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.10.0`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2netlifycms\" to `2.7.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.4",
       "tag": "@kickstartds/netlifycms-example_v1.1.4",
       "date": "Fri, 24 Nov 2023 14:26:22 GMT",

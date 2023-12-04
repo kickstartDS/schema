@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.10.0",
+      "tag": "@kickstartds/jsonschema-utils_v2.10.0",
+      "date": "Mon, 04 Dec 2023 11:43:19 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "remove lodash and ramda"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.9.0",
       "tag": "@kickstartds/jsonschema-utils_v2.9.0",
       "date": "Thu, 23 Nov 2023 21:05:30 GMT",

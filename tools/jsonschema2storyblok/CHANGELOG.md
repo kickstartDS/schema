@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Mon, 04 Dec 2023 11:43:19 GMT and should not be manually modified.
+This log was last generated on Mon, 04 Dec 2023 14:09:19 GMT and should not be manually modified.
+
+## 1.2.1
+Mon, 04 Dec 2023 14:09:19 GMT
+
+### Patches
+
+- segment component types
 
 ## 1.2.0
 Mon, 04 Dec 2023 11:43:19 GMT

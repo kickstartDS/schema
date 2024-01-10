@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@kickstartds/design-system": "^2.5.17",
-    "@kickstartds/ds-agency": "^2.1.35",
+    "@kickstartds/ds-agency": "2.2.0--canary.44.1288.0",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2netlifycms": "workspace:*",
     "ajv": "^8.12.0",

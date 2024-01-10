@@ -9,6 +9,7 @@
       "cwd": "${workspaceFolder}",
       "args": ["--debug", "test", "--clean"],
       "console": "integratedTerminal",
+      "runtimeExecutable": "/home/julrich/.nvm/versions/node/v18.16.0/bin/node",
       "sourceMaps": true,
       "runtimeArgs": ["--experimental-vm-modules"]
     }

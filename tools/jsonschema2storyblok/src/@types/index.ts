@@ -64,6 +64,8 @@ export interface IStoryblokSchemaElement {
   display_name: string;
   default_value?: string;
   description?: string;
+  minimum?: number;
+  maximum?: number;
 
   objectFields?: IStoryblokSchemaElement[];
 }

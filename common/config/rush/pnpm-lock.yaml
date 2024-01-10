@@ -56,7 +56,7 @@ importers:
       '@kickstartds/content': ^3.0.0-next.1
       '@kickstartds/core': ^3.0.0-next.1 || 3.0.0-next.8
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^2.1.35
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0
       '@kickstartds/form': ^3.0.0-next.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@rushstack/eslint-config': ^3.2.0
@@ -79,7 +79,7 @@ importers:
       '@kickstartds/content': 3.0.0-next.5_wvjxvq7acgevdznrnpz64rmeve_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/core': 3.0.0-next.8
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.9.0
-      '@kickstartds/ds-agency': 2.1.35_@bedrock-layout+css@2.3.1
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0_@bedrock-layout+css@2.3.1
       '@kickstartds/form': 3.0.0-next.10_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
     devDependencies:
@@ -105,7 +105,7 @@ importers:
       '@kickstartds/content': ^3.0.0-next.1
       '@kickstartds/core': ^3.0.0-next.1 || 3.0.0-next.8
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^2.1.35
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0
       '@kickstartds/form': ^3.0.0-next.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2netlifycms': workspace:*
@@ -132,7 +132,7 @@ importers:
       '@kickstartds/content': 3.0.0-next.5_wvjxvq7acgevdznrnpz64rmeve_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/core': 3.0.0-next.8
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.9.0
-      '@kickstartds/ds-agency': 2.1.35_@bedrock-layout+css@2.3.1
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0_@bedrock-layout+css@2.3.1
       '@kickstartds/form': 3.0.0-next.10_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2netlifycms': link:../../tools/jsonschema2netlifycms
@@ -162,7 +162,7 @@ importers:
       '@kickstartds/content': ^3.0.0-next.1
       '@kickstartds/core': ^3.0.0-next.1 || 3.0.0-next.8
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^2.1.35
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0
       '@kickstartds/form': ^3.0.0-next.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2stackbit': workspace:*
@@ -189,7 +189,7 @@ importers:
       '@kickstartds/content': 3.0.0-next.5_wvjxvq7acgevdznrnpz64rmeve_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/core': 3.0.0-next.8
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.9.0
-      '@kickstartds/ds-agency': 2.1.35_@bedrock-layout+css@2.3.1
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0_@bedrock-layout+css@2.3.1
       '@kickstartds/form': 3.0.0-next.10_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2stackbit': link:../../tools/jsonschema2stackbit
@@ -219,7 +219,7 @@ importers:
       '@kickstartds/content': ^3.0.0-next.1
       '@kickstartds/core': ^3.0.0-next.1 || 3.0.0-next.8
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^2.1.35
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0
       '@kickstartds/form': ^3.0.0-next.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2storyblok': workspace:*
@@ -246,7 +246,7 @@ importers:
       '@kickstartds/content': 3.0.0-next.5_wvjxvq7acgevdznrnpz64rmeve_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/core': 3.0.0-next.8
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.9.0
-      '@kickstartds/ds-agency': 2.1.35_@bedrock-layout+css@2.3.1
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0_@bedrock-layout+css@2.3.1
       '@kickstartds/form': 3.0.0-next.10_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2storyblok': link:../../tools/jsonschema2storyblok
@@ -276,7 +276,7 @@ importers:
       '@kickstartds/content': ^3.0.0-next.1
       '@kickstartds/core': ^3.0.0-next.1 || 3.0.0-next.8
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^2.1.35
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0
       '@kickstartds/form': ^3.0.0-next.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2types': workspace:*
@@ -301,7 +301,7 @@ importers:
       '@kickstartds/content': 3.0.0-next.5_wvjxvq7acgevdznrnpz64rmeve_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/core': 3.0.0-next.8
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.9.0
-      '@kickstartds/ds-agency': 2.1.35_@bedrock-layout+css@2.3.1
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0_@bedrock-layout+css@2.3.1
       '@kickstartds/form': 3.0.0-next.10_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2types': link:../../tools/jsonschema2types
@@ -329,7 +329,7 @@ importers:
       '@kickstartds/content': ^3.0.0-next.1
       '@kickstartds/core': ^3.0.0-next.1 || 3.0.0-next.8
       '@kickstartds/design-system': ^2.5.17
-      '@kickstartds/ds-agency': ^2.1.35
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0
       '@kickstartds/form': ^3.0.0-next.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2uniform': workspace:*
@@ -356,7 +356,7 @@ importers:
       '@kickstartds/content': 3.0.0-next.5_wvjxvq7acgevdznrnpz64rmeve_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/core': 3.0.0-next.8
       '@kickstartds/design-system': 2.5.20_style-dictionary@3.9.0
-      '@kickstartds/ds-agency': 2.1.35_@bedrock-layout+css@2.3.1
+      '@kickstartds/ds-agency': 2.2.0--canary.44.1288.0_@bedrock-layout+css@2.3.1
       '@kickstartds/form': 3.0.0-next.10_dk3kom4jfxbgsmrzxp4xnlnrqi
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2uniform': link:../../tools/jsonschema2uniform
@@ -2806,8 +2806,8 @@ packages:
       - supports-color
     dev: false
 
-  /@kickstartds/ds-agency/2.1.35_@bedrock-layout+css@2.3.1:
-    resolution: {integrity: sha512-b9aS67is1ZCIs8Llv3NDj0aSe29simojRJ6s70N9JdPWDiovGDiQ05+RP9NqSf4+yGnRTwi5JCgV95Tt2Xu4Mw==}
+  /@kickstartds/ds-agency/2.2.0--canary.44.1288.0_@bedrock-layout+css@2.3.1:
+    resolution: {integrity: sha512-U3DyFcI6JoA06hp2KnPibM1gUcvrQL0rGmJ4yOWoijx/Im++4z2vQln2yoIzhsFBuNbem7roy2BbGGgfOQaQuw==}
     dependencies:
       '@bedrock-layout/primitives': 3.0.28_hxosurnxs6iijzmx4hzhyhluva
       '@bedrock-layout/spacing-constants': 3.3.2_react@18.2.0

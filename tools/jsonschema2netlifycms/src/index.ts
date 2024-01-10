@@ -5,7 +5,6 @@ import {
   IProcessInterface,
   safeEnumKey,
   IReducerResult,
-  IProcessFnMultipleResult,
   IProcessFnResult,
   IConvertParams
 } from '@kickstartds/jsonschema-utils';
@@ -41,8 +40,9 @@ export function convert({
       buildDescription,
       safeEnumKey,
       basicTypeMapping,
-      processComponent,
+      componentsEqual,
       processObject,
+      processRef,
       processRefArray,
       processObjectArray,
       processArray,
@@ -96,28 +96,8 @@ function basicTypeMapping(property: JSONSchema.Interface): string {
   return mapping[property.type as TypeName];
 }
 
-function processComponent({
-  name,
-  description,
-  subSchema,
-  fields
-}: IProcessInterface<INetlifyCmsField>): IReducerResult<INetlifyCmsField> {
-  if (!fields) throw new Error('Missing fields on component to process');
-
-  const objects: INetlifyCmsField[] = [];
-  objects.push({
-    label: toPascalCase(name),
-    name,
-    widget: basicTypeMapping(subSchema),
-    fields: fields,
-    collapsed: true,
-    // TODO this is suspect, should expect an object here when in processObject
-    default: subSchema?.default as string,
-    hint: description,
-    required: subSchema.required?.includes(name) || false
-  });
-
-  return { components: objects, templates: [], globals: [] };
+function componentsEqual(componentOne: INetlifyCmsField, componentTwo: INetlifyCmsField): boolean {
+  return componentOne.name === componentTwo.name;
 }
 
 function processObject({
@@ -125,7 +105,31 @@ function processObject({
   description,
   subSchema,
   fields
-}: IProcessInterface<INetlifyCmsField>): IProcessFnMultipleResult<INetlifyCmsField> {
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
+  const field: INetlifyCmsField = {
+    label: toPascalCase(name),
+    name,
+    widget: basicTypeMapping(subSchema),
+    fields: fields,
+    collapsed: true
+  };
+
+  // TODO this is suspect, should expect an object here when in processObject
+  if (subSchema.default) field.default = subSchema.default as string;
+
+  if (description) field.hint = description;
+
+  field.required = subSchema.required?.includes(name) || false;
+
+  return { field };
+}
+
+function processRef({
+  name,
+  description,
+  subSchema,
+  fields
+}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
   const field: INetlifyCmsField = {
     label: toPascalCase(name),
     name,

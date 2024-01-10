@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "update to streamlined reducer",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

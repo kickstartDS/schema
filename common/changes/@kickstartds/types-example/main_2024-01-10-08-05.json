@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/types-example",
+      "comment": "use updated utils",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/types-example"
+}

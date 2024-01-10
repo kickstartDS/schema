@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "fix array check, further streamline reducer",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

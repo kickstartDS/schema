@@ -5,7 +5,6 @@ import {
   getSchemaReducer,
   IProcessInterface,
   IReducerResult,
-  IProcessFnMultipleResult,
   IProcessFnResult,
   IConvertParams
 } from '@kickstartds/jsonschema-utils';
@@ -130,8 +129,9 @@ export const convert = ({
       buildDescription,
       safeEnumKey: (key) => key,
       basicTypeMapping,
-      processComponent,
+      componentsEqual,
       processObject,
+      processRef,
       processRefArray,
       processObjectArray,
       processArray,
@@ -190,14 +190,17 @@ function basicTypeMapping(property: JSONSchema.Interface): string {
   return '';
 }
 
-function processComponent({
+function componentsEqual(componentOne: UniformElement, componentTwo: UniformElement): boolean {
+  return componentOne.name === componentTwo.name;
+}
+
+function processObject({
   name,
   fields
-}: IProcessInterface<UniformElement>): IReducerResult<UniformElement> {
+}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
   if (!fields) throw new Error('Missing fields on object to process');
 
-  const objects: UniformComponent[] = [];
-  objects.push({
+  const component: UniformComponent = {
     id: nameToId(name),
     name: capitalCase(name),
     // TODO Look into how we want to set the icon, or just default to some more
@@ -210,15 +213,12 @@ function processComponent({
     slots: fields.filter((field): field is UniformSlot => {
       return field.hasOwnProperty('allowedComponents');
     })
-  });
+  };
 
-  return { components: objects, templates: [], globals: [] };
+  return { field: component };
 }
 
-function processObject({
-  name,
-  fields
-}: IProcessInterface<UniformElement>): IProcessFnMultipleResult<UniformElement> {
+function processRef({ name, fields }: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
   if (!fields) throw new Error('Missing fields on object to process');
 
   const component: UniformComponent = {

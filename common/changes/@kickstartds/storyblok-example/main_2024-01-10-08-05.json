@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "use updated transformer",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

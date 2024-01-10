@@ -184,7 +184,11 @@ function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T): T {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const val2 = obj2[key] as any;
 
-    if (typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 !== null) {
+    if (Array.isArray(val1) && Array.isArray(val2)) {
+      acc[key] = [...val1, ...val2].filter((value, index, self) => {
+        return self.findIndex((v) => v === value) === index;
+      });
+    } else if (typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 !== null) {
       acc[key] = deepMerge(val1, val2);
     } else if (key in obj2) {
       acc[key] = structuredClone(val2);

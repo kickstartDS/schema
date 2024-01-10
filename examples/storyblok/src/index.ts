@@ -9,7 +9,7 @@ import {
   IClassifierResult,
   getSchemaName
 } from '@kickstartds/jsonschema-utils';
-import { convert as convertToStoryblok } from '@kickstartds/jsonschema2storyblok';
+import { convert, configuration } from '@kickstartds/jsonschema2storyblok';
 import { resolve } from 'import-meta-resolve';
 
 async function convertDsAgency(): Promise<void> {
@@ -19,18 +19,22 @@ async function convertDsAgency(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv);
-  const customSchemaIds = getCustomSchemaIds(schemaIds);
+  await processSchemaGlob(customGlob, ajv);
 
-  const { components, templates, globals } = convertToStoryblok({
-    schemaIds: customSchemaIds,
+  const convertedObjects = convert({
+    schemaIds: [
+      'http://schema.mydesignsystem.com/cms/page.schema.json',
+      'http://schema.mydesignsystem.com/cms/settings.schema.json'
+    ],
     ajv,
     schemaClassifier: (schemaId: string) => {
       switch (getSchemaName(schemaId)) {
         case 'header':
         case 'footer':
+        case 'seo':
           return IClassifierResult.Global;
         case 'page':
+        case 'settings':
           return IClassifierResult.Template;
         default:
           return IClassifierResult.Component;
@@ -40,12 +44,8 @@ async function convertDsAgency(): Promise<void> {
 
   mkdirSync('dist/agency', { recursive: true });
 
-  const configStringStoryblok = JSON.stringify(
-    { components: [...components, ...templates, ...globals] },
-    null,
-    2
-  );
-  writeFileSync(`dist/agency/components.123456.json`, configStringStoryblok);
+  const configString = configuration(convertedObjects);
+  writeFileSync(`dist/agency/components.123456.json`, configString);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,15 +59,15 @@ async function convertKds(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  const { components } = convertToStoryblok({
+  const convertedObjects = convert({
     schemaIds: customSchemaIds,
     ajv
   });
 
   mkdirSync('dist/kds', { recursive: true });
 
-  const configStringStoryblok = JSON.stringify({ components }, null, 2);
-  writeFileSync(`dist/kds/components.123456.json`, configStringStoryblok);
+  const configString = configuration(convertedObjects);
+  writeFileSync(`dist/kds/components.123456.json`, configString);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -84,21 +84,21 @@ async function convertCore(): Promise<void> {
       schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
     );
 
-    const { components } = convertToStoryblok({
+    const convertedObjects = convert({
       schemaIds: moduleSchemaIds.filter((schemaId) => !schemaId.includes('table.schema.json')),
       ajv
     });
 
     mkdirSync(`dist/${module}`, { recursive: true });
 
-    const configStringStoryblok = JSON.stringify({ components }, null, 2);
-    writeFileSync(`dist/${module}/components.123456.json`, configStringStoryblok);
+    const configString = configuration(convertedObjects);
+    writeFileSync(`dist/${module}/components.123456.json`, configString);
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   await convertDsAgency();
-  // await convertKds();
-  // await convertCore();
+  await convertKds();
+  await convertCore();
 })();

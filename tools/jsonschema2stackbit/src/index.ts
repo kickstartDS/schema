@@ -6,7 +6,6 @@ import {
   IProcessInterface,
   safeEnumKey,
   IReducerResult,
-  IProcessFnMultipleResult,
   IProcessFnResult,
   IConvertParams
 } from '@kickstartds/jsonschema-utils';
@@ -45,8 +44,9 @@ export function convert({
       buildDescription,
       safeEnumKey,
       basicTypeMapping,
-      processComponent,
+      componentsEqual,
       processObject,
+      processRef,
       processRefArray,
       processObjectArray,
       processArray,
@@ -92,65 +92,36 @@ function basicTypeMapping(property: JSONSchema.Interface): GenericType {
   return mapping[property.type as TypeName];
 }
 
-function processComponent({
-  name,
-  description,
-  fields,
-  classification
-}: IProcessInterface<Field>): IReducerResult<ObjectModel, PageModel, DataModel> {
-  if (!fields) throw new Error('Missing fields on component to process');
-
-  if (classification && classification === 'template') {
-    const objects: PageModel[] = [
-      {
-        name: name.replace('-', '_'),
-        label: toPascalCase(name),
-        description,
-        type: 'page',
-        fields: fields.reduce<Field[]>((fields, field) => {
-          fields.push(field);
-          return fields;
-        }, [])
-      }
-    ];
-    return { components: [], templates: objects, globals: [] };
-  } else if (classification && classification === 'global') {
-    const objects: DataModel[] = [
-      {
-        name: name.replace('-', '_'),
-        label: toPascalCase(name),
-        description,
-        type: 'data',
-        fields: fields.reduce<Field[]>((fields, field) => {
-          fields.push(field);
-          return fields;
-        }, [])
-      }
-    ];
-    return { components: [], templates: [], globals: objects };
-  }
-
-  const objects: ObjectModel[] = [
-    {
-      name: name.replace('-', '_'),
-      label: toPascalCase(name),
-      description,
-      type: 'object',
-      fields: fields.reduce<Field[]>((fields, field) => {
-        fields.push(field);
-        return fields;
-      }, [])
-    }
-  ];
-
-  return { components: objects, templates: [], globals: [] };
+function componentsEqual(componentOne: ObjectModel, componentTwo: ObjectModel): boolean {
+  return componentOne.name === componentTwo.name;
 }
 
 function processObject({
   name,
   description,
   fields
-}: IProcessInterface<Field>): IProcessFnMultipleResult<Field, ObjectModel, PageModel, DataModel> {
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
+  if (!fields) throw new Error('Missing fields on object to process');
+
+  const field: FieldObject = {
+    name,
+    label: toPascalCase(name),
+    description,
+    type: 'object',
+    fields: fields.reduce<Field[]>((fields, field) => {
+      fields.push(field);
+      return fields;
+    }, [])
+  };
+
+  return { field };
+}
+
+function processRef({
+  name,
+  description,
+  fields
+}: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object to process');
 
   const field: FieldObject = {

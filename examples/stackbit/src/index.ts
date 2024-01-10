@@ -19,11 +19,14 @@ async function convertDsAgency(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv);
-  const customSchemaIds = getCustomSchemaIds(schemaIds);
+  await processSchemaGlob(customGlob, ajv);
 
   const { components, templates, globals } = convertToStackbit({
-    schemaIds: customSchemaIds,
+    schemaIds: [
+      'http://schema.mydesignsystem.com/cms/page.schema.json',
+      'http://schema.mydesignsystem.com/header.schema.json',
+      'http://schema.mydesignsystem.com/footer.schema.json'
+    ],
     ajv,
     schemaClassifier: (schemaId: string) => {
       switch (getSchemaName(schemaId)) {

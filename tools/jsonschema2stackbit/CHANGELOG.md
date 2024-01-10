@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Mon, 04 Dec 2023 11:43:19 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jan 2024 08:06:43 GMT and should not be manually modified.
+
+## 1.2.0
+Wed, 10 Jan 2024 08:06:43 GMT
+
+### Minor changes
+
+- update to streamlined reducer
 
 ## 1.1.0
 Mon, 04 Dec 2023 11:43:19 GMT

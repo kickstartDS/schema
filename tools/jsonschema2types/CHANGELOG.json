@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2types",
   "entries": [
     {
+      "version": "1.1.22",
+      "tag": "@kickstartds/jsonschema2types_v1.1.22",
+      "date": "Wed, 10 Jan 2024 08:06:43 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.11.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.21",
       "tag": "@kickstartds/jsonschema2types_v1.1.21",
       "date": "Mon, 04 Dec 2023 11:43:19 GMT",

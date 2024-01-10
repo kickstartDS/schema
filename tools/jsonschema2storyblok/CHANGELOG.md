@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Mon, 04 Dec 2023 14:09:19 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jan 2024 08:06:43 GMT and should not be manually modified.
+
+## 1.3.0
+Wed, 10 Jan 2024 08:06:43 GMT
+
+### Minor changes
+
+- update to streamlined reducer
 
 ## 1.2.1
 Mon, 04 Dec 2023 14:09:19 GMT

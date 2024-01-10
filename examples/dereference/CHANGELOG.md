@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Mon, 04 Dec 2023 11:43:19 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jan 2024 08:06:43 GMT and should not be manually modified.
+
+## 1.2.7
+Wed, 10 Jan 2024 08:06:43 GMT
+
+### Patches
+
+- update to fixed jsonschema utils helpers
 
 ## 1.2.6
 Mon, 04 Dec 2023 11:43:19 GMT

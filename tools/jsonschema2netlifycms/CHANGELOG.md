@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2netlifycms
 
-This log was last generated on Mon, 04 Dec 2023 11:43:19 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jan 2024 08:06:43 GMT and should not be manually modified.
+
+## 2.8.0
+Wed, 10 Jan 2024 08:06:43 GMT
+
+### Minor changes
+
+- update to streamlined reducer
 
 ## 2.7.0
 Mon, 04 Dec 2023 11:43:19 GMT

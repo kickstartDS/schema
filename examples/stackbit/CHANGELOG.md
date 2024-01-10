@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/stackbit-example
 
-This log was last generated on Mon, 04 Dec 2023 11:43:19 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jan 2024 08:06:43 GMT and should not be manually modified.
+
+## 1.4.0
+Wed, 10 Jan 2024 08:06:43 GMT
+
+### Minor changes
+
+- use updated transformer
 
 ## 1.3.0
 Mon, 04 Dec 2023 11:43:19 GMT

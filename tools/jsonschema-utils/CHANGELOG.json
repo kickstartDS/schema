@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.11.0",
+      "tag": "@kickstartds/jsonschema-utils_v2.11.0",
+      "date": "Wed, 10 Jan 2024 08:06:43 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "fix array check, further streamline reducer"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.10.0",
       "tag": "@kickstartds/jsonschema-utils_v2.10.0",
       "date": "Mon, 04 Dec 2023 11:43:19 GMT",

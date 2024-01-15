@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/uniform-example",
+      "comment": "update schema utils",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/uniform-example"
+}

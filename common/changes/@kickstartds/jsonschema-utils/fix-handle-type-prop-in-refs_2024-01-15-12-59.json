@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "handle type properties in inline references correctly",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "update schema utils",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

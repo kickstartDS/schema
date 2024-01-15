@@ -313,7 +313,9 @@ export function inlineReferences(jsonSchemas: JSONSchema.Interface[]): void {
         if (!propertyName) throw new Error('Failed to split a propertyName from a pointer');
 
         if (subSchema.$ref) {
-          const schemaPointer = subSchema.$ref.split('#').pop();
+          const schemaPointer = subSchema.$ref.split('#').pop().endsWith('/type')
+            ? subSchema.$ref.split('#').pop().replace('/type', '/typeProp')
+            : subSchema.$ref.split('#').pop();
           const schemaId = subSchema.$ref.split('#').shift();
 
           if (schemaPointer.startsWith('/definitions/')) {

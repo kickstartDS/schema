@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Wed, 10 Jan 2024 08:06:43 GMT and should not be manually modified.
+This log was last generated on Mon, 15 Jan 2024 13:01:48 GMT and should not be manually modified.
+
+## 1.2.8
+Mon, 15 Jan 2024 13:01:48 GMT
+
+### Patches
+
+- update schema utils
 
 ## 1.2.7
 Wed, 10 Jan 2024 08:06:43 GMT

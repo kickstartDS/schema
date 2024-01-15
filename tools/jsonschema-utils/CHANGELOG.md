@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Wed, 10 Jan 2024 08:06:43 GMT and should not be manually modified.
+This log was last generated on Mon, 15 Jan 2024 13:01:48 GMT and should not be manually modified.
+
+## 2.11.1
+Mon, 15 Jan 2024 13:01:48 GMT
+
+### Patches
+
+- handle type properties in inline references correctly
 
 ## 2.11.0
 Wed, 10 Jan 2024 08:06:43 GMT

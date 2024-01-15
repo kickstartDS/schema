@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.11.1",
+      "tag": "@kickstartds/jsonschema-utils_v2.11.1",
+      "date": "Mon, 15 Jan 2024 13:01:48 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "handle type properties in inline references correctly"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.11.0",
       "tag": "@kickstartds/jsonschema-utils_v2.11.0",
       "date": "Wed, 10 Jan 2024 08:06:43 GMT",

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/netlifycms-example",
+      "comment": "update ksDS dependencies",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/netlifycms-example"
+}

@@ -713,8 +713,9 @@ export function clearAndUpper(text: string): string {
   return text.replace(/-/, ' ').toUpperCase();
 }
 
-export function err(msg: string, propName?: string): Error {
-  return new Error(`jsonschema-utils: ${propName ? `Couldn't convert property ${propName}. ` : ''}${msg}`);
+export function err(message: string, ...objects: unknown[]): Error {
+  if (objects && objects.length) console.error(`jsonschema-utils: debug context`, ...objects);
+  return new Error(`jsonschema-utils: ${message}`);
 }
 
 export function compose<T>(fn1: (a: T) => T, ...fns: Array<(a: T) => T>): (value: T) => T {

@@ -24,7 +24,9 @@ async function convertDsAgency(): Promise<void> {
   const convertedObjects = convert({
     schemaIds: [
       'http://schema.mydesignsystem.com/cms/page.schema.json',
-      'http://schema.mydesignsystem.com/cms/settings.schema.json'
+      'http://schema.mydesignsystem.com/cms/settings.schema.json',
+      'http://schema.mydesignsystem.com/cms/blog-overview.schema.json',
+      'http://schema.mydesignsystem.com/cms/blog-post.schema.json'
     ],
     ajv,
     schemaClassifier: (schemaId: string) => {
@@ -35,6 +37,8 @@ async function convertDsAgency(): Promise<void> {
           return IClassifierResult.Global;
         case 'page':
         case 'settings':
+        case 'blog-overview':
+        case 'blog-post':
           return IClassifierResult.Template;
         default:
           return IClassifierResult.Component;

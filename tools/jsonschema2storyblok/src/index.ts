@@ -7,7 +7,8 @@ import {
   safeEnumKey,
   IReducerResult,
   IProcessFnResult,
-  IConvertParams
+  IConvertParams,
+  getSchemaName
 } from '@kickstartds/jsonschema-utils';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 import { v4 as uuidv4 } from 'uuid';
@@ -65,6 +66,7 @@ const colors: Record<string, string> = {
  *  - [ ] handle `image` scenarios better, some not translated to image controls
  *  - [ ] use more up-to-date mapping for image controls overall, probably `asset`?
  *  - [ ] more generic solution to encode icon assigment?
+ *  - [ ] split off bloks fields should encode `maximum` and `minimum` where possible (eg.: `"prop": { "$ref": "..."}` will get split off, but should specify `maximum` as `1` and `minimum` as `1` if `required` and `0` when not)
  *
  *  # DS Agency
  *
@@ -205,7 +207,12 @@ function processObject({
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!fields || (fields && !(fields.length > 0))) throw new Error("Can't process object without fields");
   if (parentSchema && parentSchema.type === 'array') {
-    componentGroups[name] ||= uuidv4();
+    const blokName =
+      classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
+        ? getSchemaName(subSchema.$id)
+        : name;
+
+    componentGroups[blokName] ||= uuidv4();
 
     const field: IStoryblokSchemaElement = {
       id: 0,
@@ -215,12 +222,12 @@ function processObject({
       type: 'bloks',
       restrict_type: 'groups',
       restrict_components: true,
-      component_group_whitelist: [componentGroups[name]]
+      component_group_whitelist: [componentGroups[blokName]]
     };
 
     const blok: IStoryblokBlock = {
-      name,
-      display_name: toPascalCase(name),
+      name: blokName,
+      display_name: toPascalCase(blokName),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       id: 0,
@@ -236,11 +243,11 @@ function processObject({
           return schema;
         }, {}) || [],
       is_nestable: false,
-      real_name: toPascalCase(name),
-      color: colors[name] || '#05566a',
-      icon: icons[name] || 'block-wallet',
-      component_group_uuid: componentGroups[name],
-      component_group_name: toPascalCase(name)
+      real_name: toPascalCase(blokName),
+      color: colors[blokName] || '#05566a',
+      icon: icons[blokName] || 'block-wallet',
+      component_group_uuid: componentGroups[blokName],
+      component_group_name: toPascalCase(blokName)
     };
 
     if (description) field.description = description;
@@ -343,10 +350,12 @@ function processObject({
 function processRef({
   name,
   description,
+  subSchema,
   fields
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!fields || (fields && !(fields.length > 0))) throw new Error("Can't process object without fields");
-  componentGroups[name] ||= uuidv4();
+  const blokName = subSchema.$id ? getSchemaName(subSchema.$id) : name;
+  componentGroups[blokName] ||= uuidv4();
 
   const field: IStoryblokSchemaElement = {
     id: 0,
@@ -356,12 +365,12 @@ function processRef({
     type: 'bloks',
     restrict_type: 'groups',
     restrict_components: true,
-    component_group_whitelist: [componentGroups[name]]
+    component_group_whitelist: [componentGroups[blokName]]
   };
 
   const blok: IStoryblokBlock = {
-    name,
-    display_name: toPascalCase(name),
+    name: blokName,
+    display_name: toPascalCase(blokName),
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     id: 0,
@@ -377,11 +386,11 @@ function processRef({
         return schema;
       }, {}) || [],
     is_nestable: false,
-    real_name: toPascalCase(name),
-    color: colors[name] || '#05566a',
-    icon: icons[name] || 'block-wallet',
-    component_group_uuid: componentGroups[name],
-    component_group_name: toPascalCase(name)
+    real_name: toPascalCase(blokName),
+    color: colors[blokName] || '#05566a',
+    icon: icons[blokName] || 'block-wallet',
+    component_group_uuid: componentGroups[blokName],
+    component_group_name: toPascalCase(blokName)
   };
 
   if (description) field.description = description;

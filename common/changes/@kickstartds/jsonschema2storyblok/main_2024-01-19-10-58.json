@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "fix naming of reffed schemas (singular and in arrays)",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

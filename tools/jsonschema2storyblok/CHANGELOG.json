@@ -2,6 +2,23 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.4.0",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.4.0",
+      "date": "Fri, 19 Jan 2024 10:59:21 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "fix naming of reffed schemas (singular and in arrays)"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `2.12.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.3.1",
       "tag": "@kickstartds/jsonschema2storyblok_v1.3.1",
       "date": "Mon, 15 Jan 2024 13:01:48 GMT",

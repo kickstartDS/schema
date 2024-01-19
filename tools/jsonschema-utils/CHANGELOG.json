@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "2.12.0",
+      "tag": "@kickstartds/jsonschema-utils_v2.12.0",
+      "date": "Fri, 19 Jan 2024 10:59:21 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "streamline result processing in reducer, update error handling"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.11.1",
       "tag": "@kickstartds/jsonschema-utils_v2.11.1",
       "date": "Mon, 15 Jan 2024 13:01:48 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/stackbit-example
 
-This log was last generated on Mon, 15 Jan 2024 13:01:48 GMT and should not be manually modified.
+This log was last generated on Fri, 19 Jan 2024 10:59:21 GMT and should not be manually modified.
+
+## 1.4.2
+Fri, 19 Jan 2024 10:59:21 GMT
+
+### Patches
+
+- update ksDS dependencies
 
 ## 1.4.1
 Mon, 15 Jan 2024 13:01:48 GMT

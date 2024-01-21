@@ -354,7 +354,7 @@ function processRef({
   fields
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!fields || (fields && !(fields.length > 0))) throw new Error("Can't process object without fields");
-  const blokName = subSchema.$id ? `${getSchemaName(subSchema.$id)}-reference` : name;
+  const blokName = subSchema.$id ? `${getSchemaName(subSchema.$id)}-reference` : `${name}`;
   componentGroups[blokName] ||= uuidv4();
 
   const field: IStoryblokSchemaElement = {

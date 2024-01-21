@@ -210,7 +210,7 @@ function processObject({
     const blokName =
       classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
         ? getSchemaName(subSchema.$id)
-        : name;
+        : `${name}-entry`;
 
     componentGroups[blokName] ||= uuidv4();
 

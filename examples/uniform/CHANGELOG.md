@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/uniform-example
 
-This log was last generated on Fri, 19 Jan 2024 10:59:21 GMT and should not be manually modified.
+This log was last generated on Tue, 23 Jan 2024 10:56:23 GMT and should not be manually modified.
+
+## 1.3.3
+Tue, 23 Jan 2024 10:56:23 GMT
+
+### Patches
+
+- clean up ksDS dependencies
 
 ## 1.3.2
 Fri, 19 Jan 2024 10:59:21 GMT

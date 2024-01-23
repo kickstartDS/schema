@@ -220,7 +220,7 @@ function processObject({
       display_name: toPascalCase(name),
       key: name,
       type: 'bloks',
-      restrict_type: 'groups',
+      restrict_type: '',
       restrict_components: true,
       component_whitelist: [blokName]
     };
@@ -362,7 +362,7 @@ function processRef({
     display_name: toPascalCase(name),
     key: name,
     type: 'bloks',
-    restrict_type: 'groups',
+    restrict_type: '',
     restrict_components: true,
     component_whitelist: [blokName]
   };

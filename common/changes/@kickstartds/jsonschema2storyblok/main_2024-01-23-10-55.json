@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "improve handling of refs",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

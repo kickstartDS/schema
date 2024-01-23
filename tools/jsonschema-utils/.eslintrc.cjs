@@ -26,6 +26,7 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_'
       }
     ],
+    'import/namespace': 'off',
     'import/order': [
       'error',
       {

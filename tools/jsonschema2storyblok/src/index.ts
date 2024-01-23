@@ -210,7 +210,7 @@ function processObject({
     const blokName =
       classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
         ? getSchemaName(subSchema.$id)
-        : `${name}-entry`;
+        : name;
 
     componentGroups[blokName] ||= uuidv4();
 
@@ -222,7 +222,7 @@ function processObject({
       type: 'bloks',
       restrict_type: 'groups',
       restrict_components: true,
-      component_group_whitelist: [componentGroups[blokName]]
+      component_whitelist: [blokName]
     };
 
     const blok: IStoryblokBlock = {
@@ -245,9 +245,7 @@ function processObject({
       is_nestable: false,
       real_name: toPascalCase(blokName),
       color: colors[blokName] || '#05566a',
-      icon: icons[blokName] || 'block-wallet',
-      component_group_uuid: componentGroups[blokName],
-      component_group_name: toPascalCase(blokName)
+      icon: icons[blokName] || 'block-wallet'
     };
 
     if (description) field.description = description;
@@ -354,8 +352,9 @@ function processRef({
   fields
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!fields || (fields && !(fields.length > 0))) throw new Error("Can't process object without fields");
-  const blokName = subSchema.$id ? `${getSchemaName(subSchema.$id)}-reference` : `${name}`;
-  componentGroups[blokName] ||= uuidv4();
+  if (!subSchema.$id) throw new Error("Can't process a reference without an $id");
+
+  const blokName = getSchemaName(subSchema.$id);
 
   const field: IStoryblokSchemaElement = {
     id: 0,
@@ -365,7 +364,7 @@ function processRef({
     type: 'bloks',
     restrict_type: 'groups',
     restrict_components: true,
-    component_group_whitelist: [componentGroups[blokName]]
+    component_whitelist: [blokName]
   };
 
   const blok: IStoryblokBlock = {
@@ -388,9 +387,7 @@ function processRef({
     is_nestable: false,
     real_name: toPascalCase(blokName),
     color: colors[blokName] || '#05566a',
-    icon: icons[blokName] || 'block-wallet',
-    component_group_uuid: componentGroups[blokName],
-    component_group_name: toPascalCase(blokName)
+    icon: icons[blokName] || 'block-wallet'
   };
 
   if (description) field.description = description;

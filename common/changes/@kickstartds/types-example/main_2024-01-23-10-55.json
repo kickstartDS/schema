@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/types-example",
+      "comment": "clean up ksDS dependencies",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/types-example"
+}

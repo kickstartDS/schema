@@ -76,7 +76,7 @@ async function convertKds(): Promise<void> {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function convertCore(): Promise<void> {
-  for (const module of ['base', 'blog', 'content', 'form']) {
+  for (const module of ['base', 'blog', 'form']) {
     const packagePath = path.dirname(
       fileURLToPath(resolve(`@kickstartds/${module}/package.json`, import.meta.url))
     );
@@ -103,6 +103,6 @@ async function convertCore(): Promise<void> {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   await convertDsAgency();
-  await convertKds();
+  // await convertKds();
   await convertCore();
 })();

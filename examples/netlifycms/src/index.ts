@@ -10,6 +10,7 @@ import {
 import { resolve } from 'import-meta-resolve';
 import { dump as yamlDump } from 'js-yaml';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function convertKds(): Promise<void> {
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
@@ -50,5 +51,5 @@ async function convertKds(): Promise<void> {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  await convertKds();
+  // await convertKds();
 })();

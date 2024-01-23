@@ -44,11 +44,10 @@
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
-    "@kickstartds/base": "^3.0.0-beta.0",
-    "@kickstartds/blog": "^3.0.0-beta.0",
-    "@kickstartds/content": "^3.0.0-next.7",
-    "@kickstartds/core": "^3.0.0-beta.0",
-    "@kickstartds/form": "^3.0.0-beta.0"
+    "@kickstartds/base": "2.3.0-beta.1",
+    "@kickstartds/blog": "2.3.0-beta.1",
+    "@kickstartds/core": "3.0.0-beta.0",
+    "@kickstartds/form": "2.3.0-beta.1"
   },
   "engines": {
     "node": ">=18.16"

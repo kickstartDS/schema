@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.1",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.1",
+      "date": "Tue, 23 Jan 2024 11:35:50 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix restriction setting for component whitelists"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.0",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.0",
       "date": "Tue, 23 Jan 2024 10:56:23 GMT",

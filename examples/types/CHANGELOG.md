@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/types-example
 
-This log was last generated on Tue, 23 Jan 2024 10:56:23 GMT and should not be manually modified.
+This log was last generated on Mon, 29 Jan 2024 13:41:37 GMT and should not be manually modified.
+
+## 1.3.4
+Mon, 29 Jan 2024 13:41:37 GMT
+
+### Patches
+
+- update ksDS dependencies
 
 ## 1.3.3
 Tue, 23 Jan 2024 10:56:23 GMT

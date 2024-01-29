@@ -2,6 +2,21 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.2",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.2",
+      "date": "Mon, 29 Jan 2024 13:41:37 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "correctly add reffed storyblok components to group"
+          },
+          {
+            "comment": "fine-tune controls for basic types"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.1",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.1",
       "date": "Tue, 23 Jan 2024 11:35:50 GMT",

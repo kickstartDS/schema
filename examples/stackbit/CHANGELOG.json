@@ -2,6 +2,18 @@
   "name": "@kickstartds/stackbit-example",
   "entries": [
     {
+      "version": "1.4.4",
+      "tag": "@kickstartds/stackbit-example_v1.4.4",
+      "date": "Mon, 29 Jan 2024 13:41:37 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "update ksDS dependencies"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.4.3",
       "tag": "@kickstartds/stackbit-example_v1.4.3",
       "date": "Tue, 23 Jan 2024 10:56:23 GMT",

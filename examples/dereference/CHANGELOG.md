@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Tue, 23 Jan 2024 10:56:23 GMT and should not be manually modified.
+This log was last generated on Mon, 29 Jan 2024 13:41:37 GMT and should not be manually modified.
+
+## 1.2.11
+Mon, 29 Jan 2024 13:41:37 GMT
+
+### Patches
+
+- update ksDS dependencies
 
 ## 1.2.10
 Tue, 23 Jan 2024 10:56:23 GMT

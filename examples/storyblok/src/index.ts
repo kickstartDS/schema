@@ -40,8 +40,19 @@ async function convertDsAgency(): Promise<void> {
         case 'blog-overview':
         case 'blog-post':
           return IClassifierResult.Template;
-        default:
+        case 'cta':
+        case 'faq':
+        case 'features':
+        case 'gallery':
+        case 'image-text':
+        case 'logos':
+        case 'stats':
+        case 'teaser-card':
+        case 'testimonials':
+        case 'text':
           return IClassifierResult.Component;
+        default:
+          return IClassifierResult.Object;
       }
     }
   });

@@ -345,7 +345,8 @@ function processRef({
   name,
   description,
   subSchema,
-  fields
+  fields,
+  classification
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!fields || (fields && !(fields.length > 0))) throw new Error("Can't process object without fields");
   if (!subSchema.$id) throw new Error("Can't process a reference without an $id");
@@ -385,10 +386,13 @@ function processRef({
     is_nestable: false,
     real_name: toPascalCase(blokName),
     color: colors[blokName] || '#05566a',
-    icon: icons[blokName] || 'block-wallet',
-    component_group_uuid: componentGroups.components,
-    component_group_name: 'Components'
+    icon: icons[blokName] || 'block-wallet'
   };
+
+  if (classification === 'component') {
+    blok.component_group_uuid = componentGroups.components;
+    blok.component_group_name = 'Components';
+  }
 
   if (description) field.description = description;
 

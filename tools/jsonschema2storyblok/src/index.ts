@@ -181,10 +181,6 @@ function basicTypeMapping(property: JSONSchema.Interface): GenericType {
     return 'markdown';
   }
 
-  if (property.type === 'string' && property.format && property.format === 'image') {
-    return 'image';
-  }
-
   if (property.type === 'string' && property.format && property.format === 'id') {
     return 'number';
   }
@@ -523,6 +519,37 @@ function processBasic({
     key: name,
     type
   };
+
+  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'image') {
+    field.type = 'asset';
+    field.filetypes = ['images'];
+  }
+
+  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'video') {
+    field.type = 'asset';
+    field.filetypes = ['videos'];
+  }
+
+  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'uri') {
+    field.type = 'multilink';
+    field.allow_target_blank = true;
+    field.email_link_type = true;
+    field.asset_link_type = true;
+    field.show_anchor = true;
+  }
+
+  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'email') {
+    field.type = 'multilink';
+    field.allow_target_blank = false;
+    field.email_link_type = true;
+    field.asset_link_type = false;
+    field.show_anchor = false;
+  }
+
+  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'date') {
+    field.type = 'datetime';
+    field.disable_time = true;
+  }
 
   if (subSchema.default) field.default_value = subSchema.default;
 

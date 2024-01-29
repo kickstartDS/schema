@@ -23,6 +23,8 @@ export type GenericType =
   | 'table'
   | 'tab';
 
+export type AssetType = 'images' | 'videos';
+
 export interface IStoryblokBlock {
   name: string;
   display_name: string;
@@ -57,7 +59,7 @@ export interface IStoryblokSchemaElement {
   restrict_components?: boolean;
   component_whitelist?: string[];
   component_group_whitelist?: string[]; // undocumented
-  restrict_type?: 'groups' | ''; // sus
+  restrict_type?: 'groups' | ''; // undocumented
   exclude_empty_option?: boolean; // sus
   max_length?: string;
   required?: boolean;
@@ -66,6 +68,20 @@ export interface IStoryblokSchemaElement {
   description?: string;
   minimum?: number;
   maximum?: number;
+
+  // type: `asset` / `multiasset`
+  filetypes?: AssetType[];
+  asset_folder_id?: number;
+
+  // type: `multilink`
+  allow_target_blank?: boolean;
+  email_link_type?: boolean;
+  asset_link_type?: boolean;
+  show_anchor?: boolean;
+  restrict_content_types?: boolean;
+
+  // type: `date`
+  disable_time?: boolean;
 
   objectFields?: IStoryblokSchemaElement[];
 }

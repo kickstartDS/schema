@@ -1,6 +1,14 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Mon, 29 Jan 2024 13:41:37 GMT and should not be manually modified.
+This log was last generated on Mon, 29 Jan 2024 17:54:39 GMT and should not be manually modified.
+
+## 1.5.3
+Mon, 29 Jan 2024 17:54:39 GMT
+
+### Patches
+
+- clean up component grouping with classification
+- clean up component grouping with classification
 
 ## 1.5.2
 Mon, 29 Jan 2024 13:41:37 GMT

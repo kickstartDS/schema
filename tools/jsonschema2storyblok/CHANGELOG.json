@@ -2,6 +2,21 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.3",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.3",
+      "date": "Mon, 29 Jan 2024 17:54:39 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "clean up component grouping with classification"
+          },
+          {
+            "comment": "clean up component grouping with classification"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.2",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.2",
       "date": "Mon, 29 Jan 2024 13:41:37 GMT",

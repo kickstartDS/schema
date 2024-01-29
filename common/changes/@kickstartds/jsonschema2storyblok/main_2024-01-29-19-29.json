@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "trigger another release without log statement",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

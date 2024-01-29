@@ -318,7 +318,7 @@ function processObject({
     display_name: 'Dummy',
     key: 'dummy',
     type: 'text',
-    description: 'This is simply a Dummy field to satisfy the typings, it gets thrown out later'
+    description: 'This is simply a Dummy field to satisfy the typings, it should get thrown out later'
   };
   if (classification && classification === 'template') {
     return { field: dummy, templates: bloks };

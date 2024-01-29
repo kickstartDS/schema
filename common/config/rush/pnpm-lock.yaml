@@ -51,7 +51,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1
       '@kickstartds/blog': 2.3.0-beta.1
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': ^3.2.2
+      '@kickstartds/ds-agency': ^3.2.15
       '@kickstartds/form': 2.3.0-beta.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@rushstack/eslint-config': ^3.2.0
@@ -72,7 +72,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1_ggs4uwszbbwsnqb32pgojqqyba
       '@kickstartds/blog': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': 3.2.2_m2fp5pffwfnshsc5cjw4py3cwy
+      '@kickstartds/ds-agency': 3.2.15_m2fp5pffwfnshsc5cjw4py3cwy
       '@kickstartds/form': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
     devDependencies:
@@ -96,7 +96,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1
       '@kickstartds/blog': 2.3.0-beta.1
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': ^3.2.2
+      '@kickstartds/ds-agency': ^3.2.15
       '@kickstartds/form': 2.3.0-beta.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2netlifycms': workspace:*
@@ -121,7 +121,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1_ggs4uwszbbwsnqb32pgojqqyba
       '@kickstartds/blog': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': 3.2.2_m2fp5pffwfnshsc5cjw4py3cwy
+      '@kickstartds/ds-agency': 3.2.15_m2fp5pffwfnshsc5cjw4py3cwy
       '@kickstartds/form': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2netlifycms': link:../../tools/jsonschema2netlifycms
@@ -149,7 +149,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1
       '@kickstartds/blog': 2.3.0-beta.1
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': ^3.2.2
+      '@kickstartds/ds-agency': ^3.2.15
       '@kickstartds/form': 2.3.0-beta.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2stackbit': workspace:*
@@ -174,7 +174,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1_ggs4uwszbbwsnqb32pgojqqyba
       '@kickstartds/blog': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': 3.2.2_m2fp5pffwfnshsc5cjw4py3cwy
+      '@kickstartds/ds-agency': 3.2.15_m2fp5pffwfnshsc5cjw4py3cwy
       '@kickstartds/form': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2stackbit': link:../../tools/jsonschema2stackbit
@@ -202,7 +202,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1
       '@kickstartds/blog': 2.3.0-beta.1
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': ^3.2.2
+      '@kickstartds/ds-agency': ^3.2.15
       '@kickstartds/form': 2.3.0-beta.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2storyblok': workspace:*
@@ -227,7 +227,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1_ggs4uwszbbwsnqb32pgojqqyba
       '@kickstartds/blog': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': 3.2.2_m2fp5pffwfnshsc5cjw4py3cwy
+      '@kickstartds/ds-agency': 3.2.15_m2fp5pffwfnshsc5cjw4py3cwy
       '@kickstartds/form': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2storyblok': link:../../tools/jsonschema2storyblok
@@ -255,7 +255,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1
       '@kickstartds/blog': 2.3.0-beta.1
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': ^3.2.2
+      '@kickstartds/ds-agency': ^3.2.15
       '@kickstartds/form': 2.3.0-beta.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2types': workspace:*
@@ -278,7 +278,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1_ggs4uwszbbwsnqb32pgojqqyba
       '@kickstartds/blog': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': 3.2.2_m2fp5pffwfnshsc5cjw4py3cwy
+      '@kickstartds/ds-agency': 3.2.15_m2fp5pffwfnshsc5cjw4py3cwy
       '@kickstartds/form': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2types': link:../../tools/jsonschema2types
@@ -304,7 +304,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1
       '@kickstartds/blog': 2.3.0-beta.1
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': ^3.2.2
+      '@kickstartds/ds-agency': ^3.2.15
       '@kickstartds/form': 2.3.0-beta.1
       '@kickstartds/jsonschema-utils': workspace:*
       '@kickstartds/jsonschema2uniform': workspace:*
@@ -329,7 +329,7 @@ importers:
       '@kickstartds/base': 2.3.0-beta.1_ggs4uwszbbwsnqb32pgojqqyba
       '@kickstartds/blog': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/core': 3.0.0-beta.0
-      '@kickstartds/ds-agency': 3.2.2_m2fp5pffwfnshsc5cjw4py3cwy
+      '@kickstartds/ds-agency': 3.2.15_m2fp5pffwfnshsc5cjw4py3cwy
       '@kickstartds/form': 2.3.0-beta.1_soqponj7iwy5mchcjfjn47ft7e
       '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
       '@kickstartds/jsonschema2uniform': link:../../tools/jsonschema2uniform
@@ -2068,8 +2068,8 @@ packages:
       sass: 1.70.0
     dev: false
 
-  /@kickstartds/ds-agency/3.2.2_m2fp5pffwfnshsc5cjw4py3cwy:
-    resolution: {integrity: sha512-zScF/wiMENGyTX2g9kxga9G3e++OvTfASGyz6qqgd3nex4E9HehbfC6TvfS5+9PzHLuNTjwZvqzPfNoVwR3CpQ==}
+  /@kickstartds/ds-agency/3.2.15_m2fp5pffwfnshsc5cjw4py3cwy:
+    resolution: {integrity: sha512-038+eJjuLyuvtjXnbo6v2U+HaJp1vog/fY1bzklVE0Tks/u5IWe7sZKTv7hevWfGGC3LXoGbP+yG4LMOnGGxPQ==}
     peerDependencies:
       '@kickstartds/base': 2.3.0-beta.0
       '@kickstartds/blog': 2.3.0-beta.0

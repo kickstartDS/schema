@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@kickstartds/ds-agency": "^3.2.2",
+    "@kickstartds/ds-agency": "^3.2.15",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2netlifycms": "workspace:*",
     "ajv": "^8.12.0",

@@ -354,6 +354,8 @@ function processRef({
   if (!fields || (fields && !(fields.length > 0))) throw new Error("Can't process object without fields");
   if (!subSchema.$id) throw new Error("Can't process a reference without an $id");
 
+  componentGroups.components ||= uuidv4();
+
   const blokName = getSchemaName(subSchema.$id);
 
   const field: IStoryblokSchemaElement = {
@@ -387,7 +389,9 @@ function processRef({
     is_nestable: false,
     real_name: toPascalCase(blokName),
     color: colors[blokName] || '#05566a',
-    icon: icons[blokName] || 'block-wallet'
+    icon: icons[blokName] || 'block-wallet',
+    component_group_uuid: componentGroups.components,
+    component_group_name: 'Components'
   };
 
   if (description) field.description = description;

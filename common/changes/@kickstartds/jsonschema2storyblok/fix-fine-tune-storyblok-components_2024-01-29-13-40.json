@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "correctly add reffed storyblok components to group",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

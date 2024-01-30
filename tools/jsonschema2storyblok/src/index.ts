@@ -467,9 +467,42 @@ function processObjectArray(): IProcessFnResult<IStoryblokSchemaElement, IStoryb
 }
 
 function processArray({
+  name,
   arrayField
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!arrayField) throw new Error('Missing array fields in conversion');
+
+  if (!(arrayField.type === 'bloks')) {
+    const field: IStoryblokSchemaElement = {
+      id: 0,
+      pos: 0,
+      display_name: toPascalCase(name),
+      key: name,
+      type: 'bloks',
+      restrict_type: '',
+      restrict_components: true,
+      component_whitelist: [name]
+    };
+
+    const blok: IStoryblokBlock = {
+      name,
+      display_name: toPascalCase(name),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      id: 0,
+      schema: { entry: arrayField },
+      is_nestable: false,
+      real_name: toPascalCase(name),
+      color: colors[name] || '#05566a',
+      icon: icons[name] || 'block-wallet'
+    };
+
+    return {
+      field,
+      components: [blok]
+    };
+  }
+
   return { field: arrayField };
 }
 

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.5",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.5",
+      "date": "Tue, 30 Jan 2024 15:51:13 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix handling of string arrays"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.4",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.4",
       "date": "Mon, 29 Jan 2024 19:29:51 GMT",

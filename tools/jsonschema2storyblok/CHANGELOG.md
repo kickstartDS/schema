@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Mon, 29 Jan 2024 19:29:51 GMT and should not be manually modified.
+This log was last generated on Tue, 30 Jan 2024 15:51:13 GMT and should not be manually modified.
+
+## 1.5.5
+Tue, 30 Jan 2024 15:51:13 GMT
+
+### Patches
+
+- fix handling of string arrays
 
 ## 1.5.4
 Mon, 29 Jan 2024 19:29:51 GMT

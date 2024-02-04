@@ -80,6 +80,7 @@ const colors: Record<string, string> = {
  */
 
 const componentGroups: Record<string, string> = {};
+let blokId: number = 0;
 
 export function configuration(
   options: IReducerResult<IStoryblokBlock> = {
@@ -226,7 +227,7 @@ function processObject({
       display_name: toPascalCase(blokName),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      id: 0,
+      id: blokId++,
       schema:
         fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
           schema[field.key] = field;
@@ -296,7 +297,7 @@ function processObject({
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_root: (classification && classification === 'template') || false,
-      id: 0,
+      id: blokId++,
       schema: fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
         schema[field.key] = field;
         if (field.objectFields) {
@@ -371,7 +372,7 @@ function processRef({
     display_name: toPascalCase(blokName),
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    id: 0,
+    id: blokId++,
     schema:
       fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
         schema[field.key] = field;
@@ -430,7 +431,7 @@ function processRefArray({
           display_name: toPascalCase(field.key),
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          id: 0,
+          id: blokId++,
           schema:
             field.objectFields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
               schema[field.key] = field;
@@ -489,7 +490,7 @@ function processArray({
       display_name: toPascalCase(name),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      id: 0,
+      id: blokId++,
       schema: { entry: arrayField },
       is_nestable: false,
       real_name: toPascalCase(name),

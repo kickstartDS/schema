@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Tue, 30 Jan 2024 15:51:13 GMT and should not be manually modified.
+This log was last generated on Sun, 04 Feb 2024 16:52:43 GMT and should not be manually modified.
+
+## 1.5.6
+Sun, 04 Feb 2024 16:52:43 GMT
+
+### Patches
+
+- add incrementing ids to components
 
 ## 1.5.5
 Tue, 30 Jan 2024 15:51:13 GMT

@@ -7,7 +7,8 @@ import {
   safeEnumKey,
   IReducerResult,
   IProcessFnResult,
-  IConvertParams
+  IConvertParams,
+  getSchemaName
 } from '@kickstartds/jsonschema-utils';
 import {
   DataModel,
@@ -16,6 +17,7 @@ import {
   FieldEnum,
   FieldList,
   FieldObject,
+  FieldReference,
   FieldText,
   ObjectModel,
   PageModel
@@ -26,6 +28,20 @@ import { GenericType, ITypeMapping } from './@types/index.js';
 export * from './@types/index.js';
 
 const typeResolutionField: string = 'type';
+
+export function configuration(
+  options: IReducerResult<ObjectModel, PageModel, DataModel> = {
+    components: [],
+    templates: [],
+    globals: []
+  }
+): string {
+  return JSON.stringify(
+    { components: [...options.components, ...options.templates, ...options.globals] },
+    null,
+    2
+  );
+}
 
 /**
  * @param jsonSchemas - An individual schema or an array of schemas, provided
@@ -99,9 +115,99 @@ function componentsEqual(componentOne: ObjectModel, componentTwo: ObjectModel): 
 function processObject({
   name,
   description,
-  fields
+  fields,
+  classification,
+  parentSchema,
+  subSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object to process');
+
+  if (parentSchema && parentSchema.type === 'array') {
+    const modelName =
+      classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
+        ? getSchemaName(subSchema.$id)
+        : name;
+
+    const reference: FieldReference = {
+      name,
+      label: toPascalCase(name),
+      description,
+      type: 'reference',
+      models: [modelName]
+    };
+
+    const field: ObjectModel = {
+      name: modelName,
+      label: toPascalCase(modelName),
+      description,
+      type: 'object',
+      fields: fields.reduce<Field[]>((fields, field) => {
+        fields.push(field);
+        return fields;
+      }, [])
+    };
+
+    return { field: reference, components: [field] };
+  } else if ((parentSchema && parentSchema.type === 'object') || (parentSchema && parentSchema.$ref)) {
+    if (classification && ['component', 'template', 'global'].includes(classification)) {
+      // console.log('parentSchema object classified', name, parentSchema?.$id);
+    } else {
+      // console.log('parentSchema object raw', name, parentSchema?.$id);
+    }
+  }
+
+  if (classification) {
+    const field: FieldObject = {
+      name,
+      label: toPascalCase(name),
+      description,
+      type: 'object',
+      fields: []
+    };
+
+    if (classification === 'component') {
+      const object: ObjectModel = {
+        name,
+        label: toPascalCase(name),
+        description,
+        type: 'object',
+        fields: fields.reduce<Field[]>((fields, field) => {
+          fields.push(field);
+          return fields;
+        }, [])
+      };
+
+      return { field, components: [object] };
+    }
+    if (classification === 'template') {
+      const template: PageModel = {
+        name,
+        label: toPascalCase(name),
+        description,
+        type: 'page',
+        fields: fields.reduce<Field[]>((fields, field) => {
+          fields.push(field);
+          return fields;
+        }, [])
+      };
+
+      return { field, templates: [template] };
+    }
+    if (classification === 'global') {
+      const global: DataModel = {
+        name,
+        label: toPascalCase(name),
+        description,
+        type: 'data',
+        fields: fields.reduce<Field[]>((fields, field) => {
+          fields.push(field);
+          return fields;
+        }, [])
+      };
+
+      return { field, globals: [global] };
+    }
+  }
 
   const field: FieldObject = {
     name,
@@ -120,13 +226,23 @@ function processObject({
 function processRef({
   name,
   description,
-  fields
+  fields,
+  subSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object to process');
+  const modelName = getSchemaName(subSchema.$id);
 
-  const field: FieldObject = {
+  const reference: FieldReference = {
     name,
     label: toPascalCase(name),
+    description,
+    type: 'reference',
+    models: [modelName]
+  };
+
+  const field: ObjectModel = {
+    name: modelName,
+    label: toPascalCase(modelName),
     description,
     type: 'object',
     fields: fields.reduce<Field[]>((fields, field) => {
@@ -135,7 +251,7 @@ function processRef({
     }, [])
   };
 
-  return { field };
+  return { field: reference, components: [field] };
 }
 
 function processRefArray({
@@ -222,9 +338,21 @@ function processArray({
   if (arrayField.type === 'enum') throw new Error('Error type enum');
   if (arrayField.type === 'image') throw new Error('Error type image');
   if (arrayField.type === 'model') throw new Error('Error type model');
-  if (arrayField.type === 'reference') throw new Error('Error type reference');
   if (arrayField.type === 'style') throw new Error('Error type style');
   if (arrayField.type === 'cross-reference') throw new Error('Error type cross-reference');
+
+  if (arrayField.type === 'reference') {
+    const { name, label, description, ...listField } = arrayField;
+    const field: FieldList = {
+      name,
+      label,
+      description,
+      type: 'list',
+      items: listField
+    };
+
+    return { field };
+  }
 
   if (arrayField.type === 'object') {
     const { name, label, description, ...listField } = arrayField;

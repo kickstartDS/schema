@@ -9,7 +9,7 @@ import {
   IClassifierResult,
   getSchemaName
 } from '@kickstartds/jsonschema-utils';
-import { convert as convertToStackbit } from '@kickstartds/jsonschema2stackbit';
+import { configuration, convert } from '@kickstartds/jsonschema2stackbit';
 import { resolve } from 'import-meta-resolve';
 
 async function convertDsAgency(): Promise<void> {
@@ -21,34 +21,47 @@ async function convertDsAgency(): Promise<void> {
   const ajv = getSchemaRegistry();
   await processSchemaGlob(customGlob, ajv);
 
-  const { components, templates, globals } = convertToStackbit({
+  const convertedObjects = convert({
     schemaIds: [
       'http://schema.mydesignsystem.com/cms/page.schema.json',
-      'http://schema.mydesignsystem.com/header.schema.json',
-      'http://schema.mydesignsystem.com/footer.schema.json'
+      'http://schema.mydesignsystem.com/cms/settings.schema.json',
+      'http://schema.mydesignsystem.com/cms/blog-overview.schema.json',
+      'http://schema.mydesignsystem.com/cms/blog-post.schema.json'
     ],
     ajv,
     schemaClassifier: (schemaId: string) => {
       switch (getSchemaName(schemaId)) {
         case 'header':
         case 'footer':
+        case 'seo':
           return IClassifierResult.Global;
         case 'page':
+        case 'settings':
+        case 'blog-overview':
+        case 'blog-post':
           return IClassifierResult.Template;
-        default:
+        case 'cta':
+        case 'faq':
+        case 'features':
+        case 'gallery':
+        case 'image-text':
+        case 'logos':
+        case 'stats':
+        case 'teaser-card':
+        case 'testimonials':
+        case 'text':
+        case 'blog-teaser':
           return IClassifierResult.Component;
+        default:
+          return IClassifierResult.Object;
       }
     }
   });
 
   mkdirSync('dist/agency', { recursive: true });
 
-  const configStringStackbit = JSON.stringify(
-    { components: [...components, ...templates, ...globals] },
-    null,
-    2
-  );
-  writeFileSync(`dist/agency/models.json`, configStringStackbit);
+  const configString = configuration(convertedObjects);
+  writeFileSync(`dist/agency/models.json`, configString);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -62,15 +75,15 @@ async function convertKds(): Promise<void> {
   const schemaIds = await processSchemaGlob(customGlob, ajv);
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  const { components } = convertToStackbit({
+  const { components } = convert({
     schemaIds: customSchemaIds,
     ajv
   });
 
   mkdirSync('dist/kds', { recursive: true });
 
-  const configStringStackbit = JSON.stringify({ components }, null, 2);
-  writeFileSync(`dist/kds/models.json`, configStringStackbit);
+  const configString = JSON.stringify({ components }, null, 2);
+  writeFileSync(`dist/kds/models.json`, configString);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,15 +100,15 @@ async function convertCore(): Promise<void> {
       schemaId.startsWith(`http://schema.kickstartds.com/${module}/`)
     );
 
-    const { components } = convertToStackbit({
+    const { components } = convert({
       schemaIds: moduleSchemaIds.filter((schemaId) => !schemaId.includes('table.schema.json')),
       ajv
     });
 
     mkdirSync(`dist/${module}`, { recursive: true });
 
-    const configStringStackbit = JSON.stringify({ components }, null, 2);
-    writeFileSync(`dist/${module}/models.json`, configStringStackbit);
+    const configString = JSON.stringify({ components }, null, 2);
+    writeFileSync(`dist/${module}/models.json`, configString);
   }
 }
 

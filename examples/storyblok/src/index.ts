@@ -50,6 +50,7 @@ async function convertDsAgency(): Promise<void> {
         case 'teaser-card':
         case 'testimonials':
         case 'text':
+        case 'blog-teaser':
           return IClassifierResult.Component;
         default:
           return IClassifierResult.Object;

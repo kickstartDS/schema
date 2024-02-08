@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/storyblok-example
 
-This log was last generated on Sun, 04 Feb 2024 16:52:43 GMT and should not be manually modified.
+This log was last generated on Thu, 08 Feb 2024 17:23:24 GMT and should not be manually modified.
+
+## 1.6.7
+Thu, 08 Feb 2024 17:23:24 GMT
+
+### Patches
+
+- update ksDS dependencies
 
 ## 1.6.6
 Sun, 04 Feb 2024 16:52:43 GMT

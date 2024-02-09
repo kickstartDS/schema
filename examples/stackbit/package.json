@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/stackbit-example",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "Example use showing full conversion of JSON Schema files to importable Stackbit configuration",
   "license": "UNLICENSED",
   "author": {

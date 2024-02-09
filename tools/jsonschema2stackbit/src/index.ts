@@ -16,8 +16,8 @@ import {
   FieldBasicProps,
   FieldEnum,
   FieldList,
+  FieldModel,
   FieldObject,
-  FieldReference,
   FieldText,
   ObjectModel,
   PageModel
@@ -125,14 +125,14 @@ function processObject({
   if (parentSchema && parentSchema.type === 'array') {
     const modelName =
       classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
-        ? getSchemaName(subSchema.$id)
-        : name;
+        ? getSchemaName(subSchema.$id).replace('-', '_')
+        : name.replace('-', '_');
 
-    const reference: FieldReference = {
-      name,
+    const reference: FieldModel = {
+      name: name.replace('-', '_'),
       label: toPascalCase(name),
       description,
-      type: 'reference',
+      type: 'model',
       models: [modelName]
     };
 
@@ -158,7 +158,7 @@ function processObject({
 
   if (classification) {
     const field: FieldObject = {
-      name,
+      name: name.replace('-', '_'),
       label: toPascalCase(name),
       description,
       type: 'object',
@@ -167,7 +167,7 @@ function processObject({
 
     if (classification === 'component') {
       const object: ObjectModel = {
-        name,
+        name: name.replace('-', '_'),
         label: toPascalCase(name),
         description,
         type: 'object',
@@ -181,7 +181,7 @@ function processObject({
     }
     if (classification === 'template') {
       const template: PageModel = {
-        name,
+        name: name.replace('-', '_'),
         label: toPascalCase(name),
         description,
         type: 'page',
@@ -195,7 +195,7 @@ function processObject({
     }
     if (classification === 'global') {
       const global: DataModel = {
-        name,
+        name: name.replace('-', '_'),
         label: toPascalCase(name),
         description,
         type: 'data',
@@ -210,7 +210,7 @@ function processObject({
   }
 
   const field: FieldObject = {
-    name,
+    name: name.replace('-', '_'),
     label: toPascalCase(name),
     description,
     type: 'object',
@@ -230,13 +230,13 @@ function processRef({
   subSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object to process');
-  const modelName = getSchemaName(subSchema.$id);
+  const modelName = getSchemaName(subSchema.$id).replace('-', '_');
 
-  const reference: FieldReference = {
-    name,
+  const reference: FieldModel = {
+    name: name.replace('-', '_'),
     label: toPascalCase(name),
     description,
-    type: 'reference',
+    type: 'model',
     models: [modelName]
   };
 
@@ -263,7 +263,7 @@ function processRefArray({
   if (!fields) throw new Error('Missing fields on ref array to process');
 
   const field: FieldList = {
-    name,
+    name: name.replace('-', '_'),
     type: 'list',
     items: {
       type: 'model',
@@ -294,7 +294,7 @@ function processObjectArray({
   for (const field of fields) {
     if (field.type === 'object') {
       objects.push({
-        name: field.name,
+        name: field.name.replace('-', '_'),
         label: toPascalCase(field.name),
         description,
         type: 'object',
@@ -304,7 +304,7 @@ function processObjectArray({
   }
 
   const field: FieldList = {
-    name,
+    name: name.replace('-', '_'),
     type: 'list',
     items: {
       type: 'model',
@@ -316,7 +316,7 @@ function processObjectArray({
   };
 
   // TODO this is suspect, should expect an object here when in processObject
-  if (rootSchema.default) field.default = subSchema.default as string;
+  if (rootSchema.default) field.default = (subSchema.default as string).replace('-', '_');
 
   if (description) field.description = description;
 
@@ -333,18 +333,19 @@ function processArray({
   arrayField
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!arrayField || !arrayField.type) throw new Error('Missing type in array field');
-  if (arrayField.type === 'list') throw new Error('Error type list');
-  if (arrayField.type === 'number') throw new Error('Error type number');
-  if (arrayField.type === 'enum') throw new Error('Error type enum');
-  if (arrayField.type === 'image') throw new Error('Error type image');
-  if (arrayField.type === 'model') throw new Error('Error type model');
-  if (arrayField.type === 'style') throw new Error('Error type style');
-  if (arrayField.type === 'cross-reference') throw new Error('Error type cross-reference');
+  if (arrayField.type === 'list') throw new Error('Error type list encountered in processArray');
+  if (arrayField.type === 'number') throw new Error('Error type number encountered in processArray');
+  if (arrayField.type === 'enum') throw new Error('Error type enum encountered in processArray');
+  if (arrayField.type === 'image') throw new Error('Error type image encountered in processArray');
+  if (arrayField.type === 'style') throw new Error('Error type style encountered in processArray');
+  if (arrayField.type === 'reference') throw new Error('Error type reference encountered in processArray');
+  if (arrayField.type === 'cross-reference')
+    throw new Error('Error type cross-reference encountered in processArray');
 
-  if (arrayField.type === 'reference') {
+  if (arrayField.type === 'model') {
     const { name, label, description, ...listField } = arrayField;
     const field: FieldList = {
-      name,
+      name: name.replace('-', '_'),
       label,
       description,
       type: 'list',
@@ -357,7 +358,7 @@ function processArray({
   if (arrayField.type === 'object') {
     const { name, label, description, ...listField } = arrayField;
     const field: FieldList = {
-      name,
+      name: name.replace('-', '_'),
       label,
       description,
       type: 'list',
@@ -371,7 +372,7 @@ function processArray({
     };
 
     const field: FieldList = {
-      name,
+      name: name.replace('-', '_'),
       type: 'list',
       items
     };
@@ -387,7 +388,7 @@ function processEnum({
   options
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   const field: FieldEnum = {
-    name,
+    name: name.replace('-', '_'),
     type: 'enum',
     options: []
   };
@@ -420,7 +421,7 @@ function processBasic({
   // const type = basicMapping(subSchema);
 
   const field: Field = {
-    name,
+    name: name.replace('-', '_'),
     type: 'string'
   };
 
@@ -435,10 +436,10 @@ function processBasic({
 
 function getInternalTypeDefinition(type: string): FieldText {
   return {
-    name: toPascalCase(typeResolutionField),
+    name: typeResolutionField.replace('-', '_'),
     type: 'text',
     description: 'Internal type for interface resolution',
-    default: type,
+    default: type.replace('-', '_'),
     hidden: true
   };
 }

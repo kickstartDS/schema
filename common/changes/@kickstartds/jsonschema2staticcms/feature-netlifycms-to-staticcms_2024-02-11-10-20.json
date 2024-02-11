@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2staticcms",
+      "comment": "migrate netlify cms to static cms",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2staticcms"
+}

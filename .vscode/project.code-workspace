@@ -13,8 +13,8 @@
       "path": "../tools/jsonschema-utils"
     },
     {
-      "name": "tools/jsonschema2netlifycms",
-      "path": "../tools/jsonschema2netlifycms"
+      "name": "tools/jsonschema2staticcms",
+      "path": "../tools/jsonschema2staticcms"
     },
     {
       "name": "tools/jsonschema2stackbit",
@@ -41,8 +41,8 @@
       "path": "../examples/dereference"
     },
     {
-      "name": "examples/netlifycms",
-      "path": "../examples/netlifycms"
+      "name": "examples/staticcms",
+      "path": "../examples/staticcms"
     },
     {
       "name": "examples/stackbit",

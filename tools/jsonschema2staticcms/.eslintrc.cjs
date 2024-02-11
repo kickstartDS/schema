@@ -38,6 +38,7 @@ module.exports = {
         }
       }
     ],
+    'import/no-named-as-default-member': 'off',
     'json-files/sort-package-json': 'error'
   }
 };

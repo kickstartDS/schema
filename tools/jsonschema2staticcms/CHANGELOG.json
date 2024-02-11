@@ -1,9 +1,9 @@
 {
-  "name": "@kickstartds/jsonschema2netlifycms",
+  "name": "@kickstartds/jsonschema2staticcms",
   "entries": [
     {
       "version": "2.8.3",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.8.3",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.8.3",
       "date": "Tue, 23 Jan 2024 10:56:23 GMT",
       "comments": {
         "dependency": [
@@ -15,7 +15,7 @@
     },
     {
       "version": "2.8.2",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.8.2",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.8.2",
       "date": "Fri, 19 Jan 2024 10:59:21 GMT",
       "comments": {
         "dependency": [
@@ -27,7 +27,7 @@
     },
     {
       "version": "2.8.1",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.8.1",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.8.1",
       "date": "Mon, 15 Jan 2024 13:01:48 GMT",
       "comments": {
         "dependency": [
@@ -39,7 +39,7 @@
     },
     {
       "version": "2.8.0",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.8.0",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.8.0",
       "date": "Wed, 10 Jan 2024 08:06:43 GMT",
       "comments": {
         "minor": [
@@ -56,7 +56,7 @@
     },
     {
       "version": "2.7.0",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.7.0",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.7.0",
       "date": "Mon, 04 Dec 2023 11:43:19 GMT",
       "comments": {
         "minor": [
@@ -73,7 +73,7 @@
     },
     {
       "version": "2.6.0",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.6.0",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.6.0",
       "date": "Fri, 24 Nov 2023 14:26:22 GMT",
       "comments": {
         "minor": [
@@ -85,7 +85,7 @@
     },
     {
       "version": "2.5.25",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.25",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.25",
       "date": "Thu, 23 Nov 2023 21:05:30 GMT",
       "comments": {
         "dependency": [
@@ -97,7 +97,7 @@
     },
     {
       "version": "2.5.24",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.24",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.24",
       "date": "Sun, 29 Oct 2023 11:05:45 GMT",
       "comments": {
         "dependency": [
@@ -109,7 +109,7 @@
     },
     {
       "version": "2.5.23",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.23",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.23",
       "date": "Thu, 26 Oct 2023 21:26:21 GMT",
       "comments": {
         "dependency": [
@@ -121,7 +121,7 @@
     },
     {
       "version": "2.5.22",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.22",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.22",
       "date": "Tue, 17 Oct 2023 20:29:19 GMT",
       "comments": {
         "dependency": [
@@ -133,7 +133,7 @@
     },
     {
       "version": "2.5.21",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.21",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.21",
       "date": "Sun, 15 Oct 2023 10:08:47 GMT",
       "comments": {
         "dependency": [
@@ -145,7 +145,7 @@
     },
     {
       "version": "2.5.20",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.20",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.20",
       "date": "Thu, 12 Oct 2023 12:44:39 GMT",
       "comments": {
         "dependency": [
@@ -157,7 +157,7 @@
     },
     {
       "version": "2.5.19",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.19",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.19",
       "date": "Wed, 11 Oct 2023 11:51:20 GMT",
       "comments": {
         "dependency": [
@@ -169,7 +169,7 @@
     },
     {
       "version": "2.5.18",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.18",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.18",
       "date": "Sat, 07 Oct 2023 18:54:59 GMT",
       "comments": {
         "dependency": [
@@ -181,7 +181,7 @@
     },
     {
       "version": "2.5.17",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.17",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.17",
       "date": "Fri, 06 Oct 2023 13:43:55 GMT",
       "comments": {
         "patch": [
@@ -198,7 +198,7 @@
     },
     {
       "version": "2.5.16",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.16",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.16",
       "date": "Fri, 06 Oct 2023 13:08:52 GMT",
       "comments": {
         "dependency": [
@@ -210,7 +210,7 @@
     },
     {
       "version": "2.5.15",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.15",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.15",
       "date": "Thu, 05 Oct 2023 10:51:41 GMT",
       "comments": {
         "dependency": [
@@ -222,7 +222,7 @@
     },
     {
       "version": "2.5.14",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.14",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.14",
       "date": "Tue, 03 Oct 2023 13:03:14 GMT",
       "comments": {
         "dependency": [
@@ -234,7 +234,7 @@
     },
     {
       "version": "2.5.13",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.13",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.13",
       "date": "Tue, 03 Oct 2023 12:46:28 GMT",
       "comments": {
         "dependency": [
@@ -246,7 +246,7 @@
     },
     {
       "version": "2.5.12",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.12",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.12",
       "date": "Mon, 02 Oct 2023 09:50:58 GMT",
       "comments": {
         "dependency": [
@@ -258,7 +258,7 @@
     },
     {
       "version": "2.5.11",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.11",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.11",
       "date": "Mon, 25 Sep 2023 14:22:48 GMT",
       "comments": {
         "dependency": [
@@ -270,7 +270,7 @@
     },
     {
       "version": "2.5.10",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.10",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.10",
       "date": "Mon, 25 Sep 2023 13:21:10 GMT",
       "comments": {
         "dependency": [
@@ -282,7 +282,7 @@
     },
     {
       "version": "2.5.9",
-      "tag": "@kickstartds/jsonschema2netlifycms_v2.5.9",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.5.9",
       "date": "Sun, 24 Sep 2023 13:58:19 GMT",
       "comments": {
         "dependency": [

@@ -20,7 +20,6 @@
   "dependencies": {
     "@kickstartds/jsonschema-utils": "workspace:*",
     "ajv": "^8.12.0",
-    "lodash": "^4.17.21",
     "object-traversal": "^1.0.1",
     "uuid": "~9.0.0"
   },
@@ -30,7 +29,6 @@
     "@rushstack/heft-jest-plugin": "~0.5.10",
     "@rushstack/heft-node-rig": "^1.12.10",
     "@types/heft-jest": "1.0.3",
-    "@types/lodash": "~4.14.195",
     "@types/node": "^18.16.4",
     "@types/ramda": "^0.28.20",
     "@types/uuid": "~9.0.2",

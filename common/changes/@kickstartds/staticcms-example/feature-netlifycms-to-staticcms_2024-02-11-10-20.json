@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/staticcms-example",
+      "comment": "update converter used",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/staticcms-example"
+}

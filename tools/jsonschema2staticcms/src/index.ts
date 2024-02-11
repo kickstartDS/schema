@@ -6,18 +6,122 @@ import {
   safeEnumKey,
   IReducerResult,
   IProcessFnResult,
-  IConvertParams
+  IConvertParams,
+  capitalize
 } from '@kickstartds/jsonschema-utils';
+import { dump as yamlDump } from 'js-yaml';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
+import pkg from 'pluralize';
 
-import { INetlifyCmsField, INetlifyCmsConfig } from './@types/index.js';
-import { createConfig } from './createConfig.js';
+import { IStaticCmsCollection, IStaticCmsConfig, IStaticCmsField } from './@types/index.js';
+import { sortFieldsDeep } from './helpers.js';
+
+export * from './@types/index.js';
+
+const { plural, singular } = pkg;
 
 const typeResolutionField: string = 'type';
 
-export { INetlifyCmsConfig, createConfig };
+const defaultConfig: IStaticCmsConfig = {
+  backend: {
+    name: 'git-gateway',
+    branch: 'main'
+  },
+  local_backend: true,
+  locale: 'en',
+  media_folder: 'static/images',
+  public_folder: '/images',
+  publish_mode: 'editorial_workflow',
+  logo_url: 'https://example.com/logo.png',
+  collections: []
+};
 
-// TODO check the generated NetlifyCmsField properties for all elements:
+export function defaultTemplateConfig(
+  collectionName: string,
+  folder: string,
+  fields: IStaticCmsField[]
+): IStaticCmsCollection {
+  return {
+    name: plural(collectionName),
+    label: plural(capitalize(collectionName)),
+    label_singular: singular(capitalize(collectionName)),
+    description: `${singular(capitalize(collectionName))} documents consisting of default content elements`,
+    folder,
+    create: true,
+    delete: true,
+    identifier_field: 'title',
+    extension: 'md',
+    slug: '{{fields.slug}}',
+    fields
+  };
+}
+
+export function defaultSettingsConfig(
+  collectionName: string,
+  folder: string,
+  fields: IStaticCmsField[]
+): IStaticCmsCollection {
+  return {
+    name: collectionName,
+    label: capitalize(collectionName),
+    description: `${capitalize(collectionName)} consisting of general configuration options for the page`,
+    extension: 'md',
+    format: 'yaml-frontmatter',
+    files: fields.map((field) => {
+      return {
+        name: field.name,
+        file: `${folder}/${field.name}.md`,
+        label: capitalize(field.name),
+        fields: field.fields
+      };
+    })
+  };
+}
+
+export function configuration(
+  converted: IReducerResult<IStaticCmsField> = {
+    components: [],
+    templates: [],
+    globals: []
+  },
+  config: IStaticCmsConfig = defaultConfig,
+  templateConfig: (
+    collectionName: string,
+    folder: string,
+    fields: IStaticCmsField[]
+  ) => IStaticCmsCollection = defaultTemplateConfig,
+  settingsConfig: (
+    collectionName: string,
+    folder: string,
+    files: IStaticCmsField[]
+  ) => IStaticCmsCollection = defaultSettingsConfig
+): string {
+  for (const template of converted.templates) {
+    config.collections ||= [];
+
+    const sorted = sortFieldsDeep([template]).pop();
+    if (!sorted || !sorted.fields) throw new Error(`Error while sorting template ${template.name}`);
+    const collection = config.collections.find((collection) => collection.name === sorted.name);
+    if (collection) collection.fields = sorted.fields;
+    else
+      config.collections.push(templateConfig(sorted.name, `content/${plural(sorted.name)}`, sorted.fields));
+  }
+
+  for (const global of converted.globals) {
+    config.collections ||= [];
+
+    const sorted = sortFieldsDeep([global]).pop();
+    if (!sorted || !sorted.fields) throw new Error(`Error while sorting global ${global.name}`);
+    const collection = config.collections.find((collection) => collection.name === sorted.name);
+    const collectionConfig = settingsConfig(sorted.name, 'content/settings', sorted.fields);
+    if (collection) collection.files = collectionConfig.files;
+    else config.collections.push(collectionConfig);
+  }
+
+  return yamlDump(config);
+}
+
+// TODO check the generated StaticCmsField properties for all elements:
 // * required -> this is not functional yet... needs to be evaluated intelligently,
 //      because of schema nesting (schema > array > allOf > $ref > object, etc)
 // * hint -> may be affected by the same challenge as `required`
@@ -32,9 +136,9 @@ export function convert({
   ajv,
   schemaPost,
   schemaClassifier
-}: IConvertParams): IReducerResult<INetlifyCmsField> {
-  return getSchemasForIds(schemaIds, ajv).reduce(
-    getSchemaReducer<INetlifyCmsField>({
+}: IConvertParams): IReducerResult<IStaticCmsField> {
+  const reduced = getSchemasForIds(schemaIds, ajv).reduce(
+    getSchemaReducer<IStaticCmsField>({
       ajv,
       typeResolutionField,
       buildDescription,
@@ -54,6 +158,8 @@ export function convert({
     }),
     { components: [], templates: [], globals: [] }
   );
+
+  return reduced;
 }
 
 interface ITypeMapping {
@@ -96,7 +202,7 @@ function basicTypeMapping(property: JSONSchema.Interface): string {
   return mapping[property.type as TypeName];
 }
 
-function componentsEqual(componentOne: INetlifyCmsField, componentTwo: INetlifyCmsField): boolean {
+function componentsEqual(componentOne: IStaticCmsField, componentTwo: IStaticCmsField): boolean {
   return componentOne.name === componentTwo.name;
 }
 
@@ -104,9 +210,10 @@ function processObject({
   name,
   description,
   subSchema,
-  fields
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
-  const field: INetlifyCmsField = {
+  fields,
+  classification
+}: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
+  const field: IStaticCmsField = {
     label: toPascalCase(name),
     name,
     widget: basicTypeMapping(subSchema),
@@ -121,6 +228,11 @@ function processObject({
 
   field.required = subSchema.required?.includes(name) || false;
 
+  if (classification && classification === 'template') {
+    return { field, templates: [field] };
+  } else if (classification && classification === 'global') {
+    return { field, globals: [field] };
+  }
   return { field };
 }
 
@@ -129,8 +241,8 @@ function processRef({
   description,
   subSchema,
   fields
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
-  const field: INetlifyCmsField = {
+}: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
+  const field: IStaticCmsField = {
     label: toPascalCase(name),
     name,
     widget: basicTypeMapping(subSchema),
@@ -153,8 +265,8 @@ function processRefArray({
   description,
   rootSchema,
   fields
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
-  const field: INetlifyCmsField = {
+}: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
+  const field: IStaticCmsField = {
     name,
     widget: 'list',
     types: fields
@@ -173,8 +285,8 @@ function processObjectArray({
   subSchema,
   rootSchema,
   fields
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
-  const field: INetlifyCmsField = {
+}: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
+  const field: IStaticCmsField = {
     name,
     widget: 'list',
     types: fields
@@ -196,8 +308,8 @@ function processArray({
   subSchema,
   rootSchema,
   arrayField
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
-  const field: INetlifyCmsField = {
+}: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
+  const field: IStaticCmsField = {
     label: toPascalCase(name),
     name,
     widget: 'list'
@@ -220,8 +332,8 @@ function processEnum({
   description,
   subSchema,
   options
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
-  const field: INetlifyCmsField = {
+}: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
+  const field: IStaticCmsField = {
     label: toPascalCase(name),
     name,
     widget: 'select',
@@ -237,9 +349,7 @@ function processEnum({
   return { field };
 }
 
-function processConst({
-  subSchema
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
+function processConst({ subSchema }: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
   return getInternalTypeDefinition(subSchema.const as string);
 }
 
@@ -248,10 +358,10 @@ function processBasic({
   description,
   subSchema,
   rootSchema
-}: IProcessInterface<INetlifyCmsField>): IProcessFnResult<INetlifyCmsField> {
+}: IProcessInterface<IStaticCmsField>): IProcessFnResult<IStaticCmsField> {
   const widget = basicTypeMapping(subSchema);
 
-  const field: INetlifyCmsField = {
+  const field: IStaticCmsField = {
     label: toPascalCase(name),
     name,
     widget
@@ -270,7 +380,7 @@ function processBasic({
 
 function getInternalTypeDefinition(
   type: string
-): IProcessFnResult<INetlifyCmsField, INetlifyCmsField, INetlifyCmsField> {
+): IProcessFnResult<IStaticCmsField, IStaticCmsField, IStaticCmsField> {
   return {
     field: {
       label: toPascalCase(typeResolutionField),

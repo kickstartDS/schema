@@ -30,14 +30,14 @@ export * from './@types/index.js';
 const typeResolutionField: string = 'type';
 
 export function configuration(
-  options: IReducerResult<ObjectModel, PageModel, DataModel> = {
+  converted: IReducerResult<ObjectModel, PageModel, DataModel> = {
     components: [],
     templates: [],
     globals: []
   }
 ): string {
   return JSON.stringify(
-    { components: [...options.components, ...options.templates, ...options.globals] },
+    { components: [...converted.components, ...converted.templates, ...converted.globals] },
     null,
     2
   );
@@ -128,7 +128,7 @@ function processObject({
         ? getSchemaName(subSchema.$id).replace('-', '_')
         : name.replace('-', '_');
 
-    const reference: FieldModel = {
+    const model: FieldModel = {
       name: name.replace('-', '_'),
       label: toPascalCase(name),
       description,
@@ -147,7 +147,7 @@ function processObject({
       }, [])
     };
 
-    return { field: reference, components: [field] };
+    return { field: model, components: [field] };
   } else if ((parentSchema && parentSchema.type === 'object') || (parentSchema && parentSchema.$ref)) {
     if (classification && ['component', 'template', 'global'].includes(classification)) {
       // console.log('parentSchema object classified', name, parentSchema?.$id);
@@ -232,7 +232,7 @@ function processRef({
   if (!fields) throw new Error('Missing fields on object to process');
   const modelName = getSchemaName(subSchema.$id).replace('-', '_');
 
-  const reference: FieldModel = {
+  const model: FieldModel = {
     name: name.replace('-', '_'),
     label: toPascalCase(name),
     description,
@@ -251,7 +251,7 @@ function processRef({
     }, [])
   };
 
-  return { field: reference, components: [field] };
+  return { field: model, components: [field] };
 }
 
 function processRefArray({

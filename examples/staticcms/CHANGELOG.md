@@ -1,4 +1,4 @@
-# Change Log - @kickstartds/netlifycms-example
+# Change Log - @kickstartds/staticcms-example
 
 This log was last generated on Thu, 08 Feb 2024 17:23:24 GMT and should not be manually modified.
 

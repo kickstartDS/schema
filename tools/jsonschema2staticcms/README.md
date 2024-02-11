@@ -1,6 +1,6 @@
-# JSON Schema to Netlify CMS admin config(.yml) converter
+# JSON Schema to Static CMS admin config(.yml) converter
 
-This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Netlify CMS admin config.yml]().
+This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Static CMS admin config.yml]().
 
 
 ## Installation
@@ -8,16 +8,16 @@ This library exports a single function, `convert`, which converts one or more [J
 Install with yarn:
 
 ```
-yarn add jsonschema2netlifycms
+yarn add jsonschema2staticcms
 ```
 
-## Usage (TODO Fix, usage differs for Netlify CMS)
+## Usage (TODO Fix, usage differs for Static CMS)
 
 You can convert a schema expressed as an object literal:
 
 ```js
 import { printSchema } from 'graphql'
-import convert from 'jsonschema2netlifycms'
+import convert from 'jsonschema2staticcms'
 
 const jsonSchema = {
   $id: '#/person',

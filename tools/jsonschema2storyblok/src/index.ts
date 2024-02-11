@@ -83,14 +83,14 @@ const componentGroups: Record<string, string> = {};
 let blokId: number = 0;
 
 export function configuration(
-  options: IReducerResult<IStoryblokBlock> = {
+  converted: IReducerResult<IStoryblokBlock> = {
     components: [],
     templates: [],
     globals: []
   }
 ): string {
   return JSON.stringify(
-    { components: [...options.components, ...options.templates, ...options.globals] },
+    { components: [...converted.components, ...converted.templates, ...converted.globals] },
     null,
     2
   );

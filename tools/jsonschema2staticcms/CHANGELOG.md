@@ -1,4 +1,4 @@
-# Change Log - @kickstartds/jsonschema2netlifycms
+# Change Log - @kickstartds/jsonschema2staticcms
 
 This log was last generated on Tue, 23 Jan 2024 10:56:23 GMT and should not be manually modified.
 

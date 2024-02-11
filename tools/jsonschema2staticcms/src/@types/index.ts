@@ -1,5 +1,5 @@
 // See https://www.marcveens.nl/netlify-cms-generate-config-yml
-// https://www.netlifycms.org/docs/configuration-options/
+// https://www.staticcms.org/docs/configuration-options
 
 type PublishMode = 'simple' | 'editorial_workflow';
 type ExtensionType = 'yml' | 'yaml' | 'toml' | 'json' | 'md' | 'markdown' | 'html';
@@ -43,7 +43,7 @@ type MarkdownButtonType =
   | 'numbered-list';
 type ValueType = 'int' | 'float';
 
-export interface INetlifyCmsField {
+export interface IStaticCmsField {
   name: string;
   label?: string;
   description?: string;
@@ -68,9 +68,9 @@ export interface INetlifyCmsField {
 
   // list | object
   allow_add?: boolean;
-  field?: INetlifyCmsField;
-  fields?: INetlifyCmsField[]; // actually required in case of object
-  types?: INetlifyCmsField[];
+  field?: IStaticCmsField;
+  fields?: IStaticCmsField[]; // actually required in case of object
+  types?: IStaticCmsField[];
 
   // map
   type?: MapType;
@@ -95,20 +95,20 @@ export interface INetlifyCmsField {
   options?: string[] | { label: string; value: string }[];
 }
 
-export interface INetlifyCmsFileCollection {
+export interface IStaticCmsFileCollection {
   name: string;
   file: string;
   label?: string;
-  fields?: INetlifyCmsField[];
+  fields?: IStaticCmsField[];
 }
 
-export interface INetlifyCmsCollection {
+export interface IStaticCmsCollection {
   name: string;
   identifier_field?: string;
   label?: string;
   label_singular?: string;
   description?: string;
-  files?: INetlifyCmsFileCollection[];
+  files?: IStaticCmsFileCollection[];
   folder?: string;
   filter?: string;
   create?: boolean;
@@ -118,12 +118,12 @@ export interface INetlifyCmsCollection {
   frontmatter_delimiter?: string | string[];
   slug?: string;
   preview_path?: string;
-  fields?: INetlifyCmsField[];
+  fields?: IStaticCmsField[];
   editor?: boolean;
   summary?: string;
 }
 
-export interface INetlifyCmsConfig {
+export interface IStaticCmsConfig {
   backend: {
     name: string;
     repo?: string;
@@ -159,5 +159,5 @@ export interface INetlifyCmsConfig {
   };
   locale: string;
 
-  collections: INetlifyCmsCollection[];
+  collections: IStaticCmsCollection[];
 }

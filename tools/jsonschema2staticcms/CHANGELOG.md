@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2staticcms
 
-This log was last generated on Tue, 23 Jan 2024 10:56:23 GMT and should not be manually modified.
+This log was last generated on Sun, 11 Feb 2024 10:59:10 GMT and should not be manually modified.
+
+## 2.9.0
+Sun, 11 Feb 2024 10:59:10 GMT
+
+### Minor changes
+
+- migrate netlify cms to static cms
 
 ## 2.8.3
 Tue, 23 Jan 2024 10:56:23 GMT

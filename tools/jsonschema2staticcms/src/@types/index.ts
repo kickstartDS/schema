@@ -119,7 +119,9 @@ export interface IStaticCmsCollection {
   slug?: string;
   preview_path?: string;
   fields?: IStaticCmsField[];
-  editor?: boolean;
+  editor?: {
+    frame?: boolean;
+  };
   summary?: string;
 }
 

@@ -51,6 +51,9 @@ export function defaultTemplateConfig(
     delete: true,
     identifier_field: 'title',
     extension: 'md',
+    editor: {
+      frame: false
+    },
     slug: '{{fields.slug}}',
     fields
   };

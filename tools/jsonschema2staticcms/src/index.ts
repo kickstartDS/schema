@@ -70,16 +70,17 @@ export function defaultSettingsConfig(
     description: `${capitalize(collectionName)} consisting of general configuration options for the page`,
     extension: 'md',
     format: 'yaml-frontmatter',
-    files: fields
-      .filter((field) => field.fields && field.fields.length)
-      .map((field) => {
-        return {
-          name: field.name,
-          file: `${folder}/${field.name}.md`,
-          label: capitalize(field.name),
-          fields: [field]
-        };
-      })
+    editor: {
+      frame: false
+    },
+    files: [
+      {
+        name: collectionName,
+        file: `${folder}/${collectionName}.md`,
+        label: capitalize(collectionName),
+        fields
+      }
+    ]
   };
 }
 
@@ -118,7 +119,7 @@ export function configuration(
     const sorted = sortFieldsDeep([global]).pop();
     if (!sorted || !sorted.fields) throw new Error(`Error while sorting global ${global.name}`);
     const collection = config.collections.find((collection) => collection.name === sorted.name);
-    const collectionConfig = settingsConfig(sorted.name, `content/${sorted.name}`, sorted.fields);
+    const collectionConfig = settingsConfig(sorted.name, 'content', sorted.fields);
     if (collection) collection.files = collectionConfig.files;
     else config.collections.push(collectionConfig);
   }

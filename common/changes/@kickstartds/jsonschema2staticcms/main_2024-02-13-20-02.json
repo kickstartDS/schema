@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@kickstartds/jsonschema2staticcms",
-      "comment": "disable iframe in editor",
+      "comment": "inline settings into single file",
       "type": "patch"
     }
   ],

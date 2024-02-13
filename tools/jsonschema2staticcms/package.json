@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2staticcms",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "Converts JSON schema to Static CMS admin config",
   "license": "UNLICENSED",
   "author": {

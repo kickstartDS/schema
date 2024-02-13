@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2staticcms
 
-This log was last generated on Sun, 11 Feb 2024 10:59:10 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Feb 2024 11:21:08 GMT and should not be manually modified.
+
+## 2.9.1
+Tue, 13 Feb 2024 11:21:08 GMT
+
+### Patches
+
+- fix conversion around settings and globals
 
 ## 2.9.0
 Sun, 11 Feb 2024 10:59:10 GMT

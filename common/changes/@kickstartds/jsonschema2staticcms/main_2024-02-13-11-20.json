@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2staticcms",
+      "comment": "fix conversion around settings and globals",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2staticcms"
+}

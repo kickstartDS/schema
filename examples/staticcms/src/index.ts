@@ -31,9 +31,6 @@ async function convertDsAgency(): Promise<void> {
     ajv,
     schemaClassifier: (schemaId: string) => {
       switch (getSchemaName(schemaId)) {
-        case 'header':
-        case 'footer':
-        case 'seo':
         case 'settings':
         case 'blog-overview':
           return IClassifierResult.Global;
@@ -50,6 +47,9 @@ async function convertDsAgency(): Promise<void> {
         case 'teaser-card':
         case 'testimonials':
         case 'text':
+        case 'header':
+        case 'footer':
+        case 'seo':
         case 'blog-teaser':
           return IClassifierResult.Component;
         default:

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2staticcms",
   "entries": [
     {
+      "version": "2.9.2",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.9.2",
+      "date": "Tue, 13 Feb 2024 20:03:20 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "inline settings into single file"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.9.1",
       "tag": "@kickstartds/jsonschema2staticcms_v2.9.1",
       "date": "Tue, 13 Feb 2024 11:21:08 GMT",

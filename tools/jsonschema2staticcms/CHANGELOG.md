@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2staticcms
 
-This log was last generated on Tue, 13 Feb 2024 20:03:20 GMT and should not be manually modified.
+This log was last generated on Wed, 14 Feb 2024 12:45:43 GMT and should not be manually modified.
+
+## 2.9.3
+Wed, 14 Feb 2024 12:45:43 GMT
+
+### Patches
+
+- add slug and name to templates, fix identifier_field
 
 ## 2.9.2
 Tue, 13 Feb 2024 20:03:20 GMT

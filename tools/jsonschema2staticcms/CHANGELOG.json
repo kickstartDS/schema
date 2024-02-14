@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2staticcms",
   "entries": [
     {
+      "version": "2.9.3",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.9.3",
+      "date": "Wed, 14 Feb 2024 12:45:43 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add slug and name to templates, fix identifier_field"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.9.2",
       "tag": "@kickstartds/jsonschema2staticcms_v2.9.2",
       "date": "Tue, 13 Feb 2024 20:03:20 GMT",

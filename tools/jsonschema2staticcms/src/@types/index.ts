@@ -143,7 +143,10 @@ export interface IStaticCmsConfig {
   media_folder: string;
   public_folder?: string;
   media_library?: {
-    name: string;
+    name?: string;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    max_file_size?: number;
+    folder_support?: boolean;
     config?: {
       publicKey?: string;
     };

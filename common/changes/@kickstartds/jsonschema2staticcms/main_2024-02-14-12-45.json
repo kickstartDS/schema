@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2staticcms",
+      "comment": "add slug and name to templates, fix identifier_field",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2staticcms"
+}

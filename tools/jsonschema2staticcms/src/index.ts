@@ -27,12 +27,16 @@ const defaultConfig: IStaticCmsConfig = {
     name: 'git-gateway',
     branch: 'main'
   },
-  local_backend: true,
+  local_backend: false,
   locale: 'en',
-  media_folder: 'static/images',
+  media_folder: 'public/images',
   public_folder: '/images',
-  publish_mode: 'editorial_workflow',
-  logo_url: 'https://example.com/logo.png',
+  logo_url: '/logo.svg',
+  media_library: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    max_file_size: 2000000,
+    folder_support: true
+  },
   collections: []
 };
 
@@ -41,6 +45,20 @@ export function defaultTemplateConfig(
   folder: string,
   fields: IStaticCmsField[]
 ): IStaticCmsCollection {
+  const slugField: IStaticCmsField = {
+    label: 'Slug',
+    name: 'slug',
+    widget: 'string',
+    required: true
+  };
+
+  const nameField: IStaticCmsField = {
+    label: 'Name',
+    name: 'name',
+    widget: 'string',
+    required: true
+  };
+
   return {
     name: plural(collectionName),
     label: plural(capitalize(collectionName)),
@@ -49,13 +67,13 @@ export function defaultTemplateConfig(
     folder,
     create: true,
     delete: true,
-    identifier_field: 'title',
+    identifier_field: 'name',
     extension: 'md',
     editor: {
       frame: false
     },
     slug: '{{fields.slug}}',
-    fields
+    fields: [slugField, nameField].concat(fields)
   };
 }
 

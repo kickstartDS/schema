@@ -2,7 +2,7 @@
   "name": "@kickstartds/jsonschema2staticcms",
   "version": "2.9.3",
   "description": "Converts JSON schema to Static CMS admin config",
-  "license": "UNLICENSED",
+  "license": "(MIT OR Apache-2.0)",
   "author": {
     "name": "Jonas Ulrich",
     "email": "jonas.ulrich@kickstartds.com"

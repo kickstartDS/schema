@@ -2,7 +2,7 @@
   "name": "@kickstartds/cambria-example",
   "version": "1.0.3",
   "description": "Example use of the cambria tool package",
-  "license": "UNLICENSED",
+  "license": "(MIT OR Apache-2.0)",
   "author": {
     "name": "Jonas Ulrich",
     "email": "jonas.ulrich@kickstartds.com"

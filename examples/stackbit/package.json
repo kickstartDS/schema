@@ -2,7 +2,7 @@
   "name": "@kickstartds/stackbit-example",
   "version": "1.4.7",
   "description": "Example use showing full conversion of JSON Schema files to importable Stackbit configuration",
-  "license": "UNLICENSED",
+  "license": "(MIT OR Apache-2.0)",
   "author": {
     "name": "Jonas Ulrich",
     "email": "jonas.ulrich@kickstartds.com"

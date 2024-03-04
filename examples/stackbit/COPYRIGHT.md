@@ -1,6 +1,6 @@
 # Licensing Information
 
-Copyright 2022 Jonas Ulrich, kickstartDS by ruhmesmeile GmbH [jonas.ulrich@kickstartds.com].
+Copyright 2024 Jonas Ulrich, kickstartDS by ruhmesmeile GmbH [jonas.ulrich@kickstartds.com].
 
 Copyrights in this project are retained by contributors. No copyright assignment
 is required to contribute to this project.

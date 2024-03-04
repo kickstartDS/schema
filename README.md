@@ -40,3 +40,7 @@ The SPDX license identifier for this project is MIT OR Apache-2.0.
 
 ---
 For more information and updates, please visit the project's GitHub repository.
+
+## Support
+
+Join our [Discord community](https://discord.gg/mwKzD5gejY) for support, or leave an issue on this repository!

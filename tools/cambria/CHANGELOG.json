@@ -2,6 +2,18 @@
   "name": "@kickstartds/cambria",
   "entries": [
     {
+      "version": "1.0.3",
+      "tag": "@kickstartds/cambria_v1.0.3",
+      "date": "Tue, 12 Mar 2024 14:55:57 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "export raw loadLens for json lenses"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.2",
       "tag": "@kickstartds/cambria_v1.0.2",
       "date": "Sun, 24 Sep 2023 13:58:19 GMT",

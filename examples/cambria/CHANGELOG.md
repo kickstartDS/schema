@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/cambria-example
 
-This log was last generated on Tue, 17 Oct 2023 20:29:19 GMT and should not be manually modified.
+This log was last generated on Tue, 12 Mar 2024 14:55:57 GMT and should not be manually modified.
+
+## 1.0.4
+Tue, 12 Mar 2024 14:55:57 GMT
+
+_Version update only_
 
 ## 1.0.3
 Tue, 17 Oct 2023 20:29:19 GMT

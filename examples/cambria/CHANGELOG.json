@@ -2,6 +2,18 @@
   "name": "@kickstartds/cambria-example",
   "entries": [
     {
+      "version": "1.0.4",
+      "tag": "@kickstartds/cambria-example_v1.0.4",
+      "date": "Tue, 12 Mar 2024 14:55:57 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/cambria\" to `1.0.3`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.3",
       "tag": "@kickstartds/cambria-example_v1.0.3",
       "date": "Tue, 17 Oct 2023 20:29:19 GMT",

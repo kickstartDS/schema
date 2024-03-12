@@ -19,4 +19,4 @@ export {
   convertValue
 } from './helpers.js';
 
-export { loadYamlLens } from './lens-loader.js';
+export { loadYamlLens, loadLens } from './lens-loader.js';

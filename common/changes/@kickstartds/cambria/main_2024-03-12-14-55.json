@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "export raw loadLens for json lenses",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

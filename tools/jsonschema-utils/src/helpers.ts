@@ -491,8 +491,10 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
   );
 }
 
-export function getSortedSchemas(jsonSchemas: JSONSchema.Interface[]): JSONSchema.Interface[] {
-  const graph = getSchemaGraph(jsonSchemas);
+export function getSortedSchemas(
+  jsonSchemas: JSONSchema.Interface[],
+  graph: SchemaDirectedGraph = getSchemaGraph(jsonSchemas)
+): JSONSchema.Interface[] {
   const sortedVertices: SchemaVertex[] = graph.topologicalSort('vertex') as SchemaVertex[];
   if (!sortedVertices) throw new Error('Failed to get sorted vertices');
   return sortedVertices.map((vertex) => vertex.data || {}).reverse();

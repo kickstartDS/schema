@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "add option to pass graph to schema sort",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

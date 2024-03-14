@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/dereference-example",
+      "comment": "update to new kickstartDS releases",
+      "type": "major"
+    }
+  ],
+  "packageName": "@kickstartds/dereference-example"
+}

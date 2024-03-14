@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "update to new kickstartDS releases",
+      "type": "major"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

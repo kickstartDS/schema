@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "update to new kickstartDS releases",
+      "type": "major"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

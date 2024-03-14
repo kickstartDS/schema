@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/staticcms-example",
+      "comment": "update to new kickstartDS releases",
+      "type": "major"
+    }
+  ],
+  "packageName": "@kickstartds/staticcms-example"
+}

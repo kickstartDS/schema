@@ -469,7 +469,7 @@ export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.
 export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirectedGraph {
   return new SchemaDirectedGraph(
     jsonSchemas.map((schema) => {
-      if (!schema.$id) throw new Error('Schema without $id while getting schema graph');
+      if (!schema.$id) throw new Error('Schema without $id while getting schema graph!');
       return new SchemaVertex(schema.$id, schema);
     }),
     jsonSchemas.reduce((edges: SchemaEdge<unknown>[], schema) => {

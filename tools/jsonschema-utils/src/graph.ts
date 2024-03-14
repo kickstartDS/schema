@@ -47,4 +47,29 @@ export class SchemaDirectedGraph<V = JSONSchema.Interface, E = unknown> extends 
       this.addEdge(edge);
     }
   }
+
+  public getSubGraphStartingFrom(vertexKey: VertexKey): SchemaDirectedGraph<V, E> {
+    const connectedGraph = new SchemaDirectedGraph<V, E>();
+    const visited: Set<VertexKey> = new Set();
+    const queue: VertexKey[] = [vertexKey];
+
+    while (queue.length > 0) {
+      const currentKey = queue.shift();
+      if (currentKey && !visited.has(currentKey)) {
+        visited.add(currentKey);
+        const currentVertex = this.getVertex(currentKey);
+        if (currentVertex) {
+          connectedGraph.addVertex(currentVertex);
+          for (const edge of this.edgesOf(currentKey)) {
+            connectedGraph.addEdge(edge);
+            if (!visited.has(edge.dest)) {
+              queue.push(edge.dest);
+            }
+          }
+        }
+      }
+    }
+
+    return connectedGraph;
+  }
 }

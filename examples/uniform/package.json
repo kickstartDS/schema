@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/uniform-example",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Example use showing full conversion of JSON Schema files to importable Uniform configuration",
   "license": "(MIT OR Apache-2.0)",
   "author": {

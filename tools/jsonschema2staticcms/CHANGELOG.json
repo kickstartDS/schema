@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2staticcms",
   "entries": [
     {
+      "version": "2.9.6",
+      "tag": "@kickstartds/jsonschema2staticcms_v2.9.6",
+      "date": "Thu, 14 Mar 2024 13:15:38 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.0.2`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.9.5",
       "tag": "@kickstartds/jsonschema2staticcms_v2.9.5",
       "date": "Thu, 14 Mar 2024 12:45:31 GMT",

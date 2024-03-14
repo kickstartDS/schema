@@ -1,26 +1,40 @@
 import { promises } from 'fs';
 import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
 import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import Ajv from 'ajv';
+import Ajv2019 from 'ajv/dist/2019.js';
 import { kebabCase, pascalCase } from 'change-case';
 import { default as glob } from 'fast-glob';
 import { resolve } from 'import-meta-resolve';
 import traverse from 'json-schema-traverse';
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 import { get } from 'jsonpointer';
-import { DirectedAcyclicGraph } from 'typescript-graph';
+
+import { SchemaDirectedGraph, SchemaEdge, SchemaVertex } from './graph.js';
 
 declare type MyAjv = import('ajv').default;
+declare type MyAjv2019 = import('ajv/dist/2019.js').default;
 
-export function getSchemaRegistry(): MyAjv {
-  const ajv = new Ajv.default({
+const require: NodeRequire = createRequire(import.meta.url);
+const draft7MetaSchema: Ajv.AnySchemaObject = require('ajv/dist/refs/json-schema-draft-07.json');
+
+export function getSchemaRegistry({ support2019 = false }: { support2019?: boolean } = {}):
+  | MyAjv
+  | MyAjv2019 {
+  const ajvOptions: Ajv.Options = {
     removeAdditional: true,
     validateSchema: true,
     schemaId: '$id',
     allErrors: true
-  });
+  };
+  const ajv = support2019 ? new Ajv2019.default(ajvOptions) : new Ajv.default(ajvOptions);
+
+  if (support2019) {
+    ajv.addMetaSchema(draft7MetaSchema);
+  }
 
   // TODO update JSON Schema, clean up ignored formats
   const ignoredFormats = [
@@ -452,34 +466,36 @@ export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.
   );
 }
 
-export function getSchemaGraph(
-  jsonSchemas: JSONSchema.Interface[]
-): DirectedAcyclicGraph<JSONSchema.Interface> {
-  const graph = new DirectedAcyclicGraph<JSONSchema.Interface>((n: JSONSchema.Interface) => {
-    if (!n.$id) throw new Error('Schema without $id while getting schema graph');
-    return n.$id.replace(/#.*$/g, '');
-  });
-
-  jsonSchemas.forEach((jsonSchema) => {
-    if (!jsonSchema.$id) throw new Error('Schema without id in graph generation');
-    if (!graph.getNode(jsonSchema.$id)) graph.insert(jsonSchema);
-    traverse(jsonSchema, {
-      cb: (subSchema) => {
-        if (subSchema.$ref && subSchema.$ref.includes('http')) {
-          if (!jsonSchema.$id) throw new Error('Schema without id in graph generation');
-          const reffedSchema = jsonSchemas.find(
-            (schema) => schema.$id === subSchema.$ref.replace(/#.*$/g, '')
-          );
-          if (!reffedSchema || !reffedSchema.$id)
-            throw new Error("Couldn't find a reffed schema in schema graph generation");
-          if (!graph.getNode(reffedSchema.$id)) graph.insert(reffedSchema);
-          graph.addEdge(jsonSchema.$id, reffedSchema.$id);
+export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirectedGraph {
+  return new SchemaDirectedGraph(
+    jsonSchemas.map((schema) => {
+      if (!schema.$id) throw new Error('Schema without $id while getting schema graph');
+      return new SchemaVertex(schema.$id, schema);
+    }),
+    jsonSchemas.reduce((edges: SchemaEdge<unknown>[], schema) => {
+      traverse(schema, {
+        cb: (subSchema) => {
+          if (subSchema.$ref && subSchema.$ref.includes('http')) {
+            if (!schema.$id) throw new Error('Schema without id in graph generation');
+            const reffedSchema = jsonSchemas.find(
+              (schema) => schema.$id === subSchema.$ref.replace(/#.*$/g, '')
+            );
+            if (!reffedSchema || !reffedSchema.$id)
+              throw new Error("Couldn't find a reffed schema in schema graph generation");
+            edges.push(new SchemaEdge(schema.$id, reffedSchema.$id));
+          }
         }
-      }
-    });
-  });
+      });
+      return edges;
+    }, [] as SchemaEdge[])
+  );
+}
 
-  return graph;
+export function getSortedSchemas(jsonSchemas: JSONSchema.Interface[]): JSONSchema.Interface[] {
+  const graph = getSchemaGraph(jsonSchemas);
+  const sortedVertices: SchemaVertex[] = graph.topologicalSort('vertex') as SchemaVertex[];
+  if (!sortedVertices) throw new Error('Failed to get sorted vertices');
+  return sortedVertices.map((vertex) => vertex.data || {}).reverse();
 }
 
 export interface IProcessingOptions {
@@ -572,8 +588,7 @@ export async function processSchemas(
     (value: JSONSchema.Interface, index, self) => self.findIndex((v) => v.$id === value.$id) === index
   );
 
-  const schemaGraph = getSchemaGraph(allSchemas);
-  const sortedSchemas = schemaGraph.topologicallySortedNodes().reverse();
+  const sortedSchemas = getSortedSchemas(allSchemas);
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it

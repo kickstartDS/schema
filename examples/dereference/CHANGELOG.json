@@ -2,6 +2,23 @@
   "name": "@kickstartds/dereference-example",
   "entries": [
     {
+      "version": "2.0.0",
+      "tag": "@kickstartds/dereference-example_v2.0.0",
+      "date": "Thu, 14 Mar 2024 12:11:35 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "update to new kickstartDS releases"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.0.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.2.12",
       "tag": "@kickstartds/dereference-example_v1.2.12",
       "date": "Thu, 08 Feb 2024 17:23:24 GMT",

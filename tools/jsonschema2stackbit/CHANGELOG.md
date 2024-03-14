@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Sun, 11 Feb 2024 10:59:10 GMT and should not be manually modified.
+This log was last generated on Thu, 14 Mar 2024 12:11:35 GMT and should not be manually modified.
+
+## 1.3.3
+Thu, 14 Mar 2024 12:11:35 GMT
+
+_Version update only_
 
 ## 1.3.2
 Sun, 11 Feb 2024 10:59:10 GMT

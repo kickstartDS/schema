@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.0.3",
+      "tag": "@kickstartds/jsonschema-utils_v3.0.3",
+      "date": "Thu, 14 Mar 2024 13:50:59 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add option to create new subgraph vom vertex id"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.2",
       "tag": "@kickstartds/jsonschema-utils_v3.0.2",
       "date": "Thu, 14 Mar 2024 13:15:38 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Thu, 14 Mar 2024 13:15:38 GMT and should not be manually modified.
+This log was last generated on Thu, 14 Mar 2024 13:50:59 GMT and should not be manually modified.
+
+## 3.0.3
+Thu, 14 Mar 2024 13:50:59 GMT
+
+### Patches
+
+- add option to create new subgraph vom vertex id
 
 ## 3.0.2
 Thu, 14 Mar 2024 13:15:38 GMT

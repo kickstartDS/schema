@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/jsonschema2uniform
 
-This log was last generated on Thu, 14 Mar 2024 13:50:59 GMT and should not be manually modified.
+This log was last generated on Thu, 14 Mar 2024 14:00:48 GMT and should not be manually modified.
+
+## 1.3.9
+Thu, 14 Mar 2024 14:00:48 GMT
+
+_Version update only_
 
 ## 1.3.8
 Thu, 14 Mar 2024 13:50:59 GMT

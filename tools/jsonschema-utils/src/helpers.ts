@@ -472,9 +472,9 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
       if (!schema.$id) throw new Error('Schema without $id while getting schema graph!');
       return new SchemaVertex(schema.$id, schema);
     }),
-    jsonSchemas.reduce((edges: SchemaEdge<unknown>[], schema) => {
+    jsonSchemas.reduce((edges: SchemaEdge[], schema) => {
       traverse(schema, {
-        cb: (subSchema) => {
+        cb: (subSchema, jsonPtr) => {
           if (subSchema.$ref && subSchema.$ref.includes('http')) {
             if (!schema.$id) throw new Error('Schema without id in graph generation');
             const reffedSchema = jsonSchemas.find(
@@ -482,12 +482,17 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
             );
             if (!reffedSchema || !reffedSchema.$id)
               throw new Error("Couldn't find a reffed schema in schema graph generation");
-            edges.push(new SchemaEdge(schema.$id, reffedSchema.$id));
+            edges.push(
+              new SchemaEdge(schema.$id, reffedSchema.$id, {
+                refOrigin: jsonPtr,
+                refTarget: reffedSchema.$id
+              })
+            );
           }
         }
       });
       return edges;
-    }, [] as SchemaEdge[])
+    }, [])
   );
 }
 

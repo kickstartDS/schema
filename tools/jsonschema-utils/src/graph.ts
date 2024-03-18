@@ -2,6 +2,10 @@ import { DirectedEdge, DirectedGraph, DirectedVertex } from 'directed-graph-type
 import { JSONSchema } from 'json-schema-typed/draft-07';
 
 export type VertexKey = string | number;
+export interface IEdgeData {
+  refOrigin: string;
+  refTarget: string;
+}
 export class SchemaVertex<V = JSONSchema.Interface> extends DirectedVertex<V> {
   private _data: V | undefined;
 
@@ -19,10 +23,10 @@ export class SchemaVertex<V = JSONSchema.Interface> extends DirectedVertex<V> {
   }
 }
 
-export class SchemaEdge<E = unknown> extends DirectedEdge<E> {
+export class SchemaEdge<E = IEdgeData> extends DirectedEdge<E> {
   private _data: E | undefined;
 
-  public constructor(v1: VertexKey, v2: VertexKey, weight?: number, val?: E) {
+  public constructor(v1: VertexKey, v2: VertexKey, val?: E, weight?: number) {
     super(v1, v2, weight, val);
     this._data = val;
   }
@@ -36,7 +40,7 @@ export class SchemaEdge<E = unknown> extends DirectedEdge<E> {
   }
 }
 
-export class SchemaDirectedGraph<V = JSONSchema.Interface, E = unknown> extends DirectedGraph<V, E> {
+export class SchemaDirectedGraph<V = JSONSchema.Interface, E = IEdgeData> extends DirectedGraph<V, E> {
   public constructor(vertices?: SchemaVertex<V>[], edges?: SchemaEdge<E>[]) {
     super();
 

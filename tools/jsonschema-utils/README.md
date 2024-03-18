@@ -6,7 +6,7 @@ Contains utilities used and needed to process and handle **kickstartDS** compone
 
 ## kickstartDS
 
-kickstartDS is an Open Source Design System starter and UI toolkit for building up your very own Design System. This in turn enables you, and your team, to build brand-compliant websites and apps super efficiently. All while using core web technologies — HTML, CSS, and JavaScript — and best practices.
+kickstartDS is an Open Source Design System starter and UI toolkit for building up your very own Design System. This in turn enables you, and your team, to build brand-compliant websites and apps super efficiently. All while using core web technologies — HTML, CSS, and JavaScript — and best practices!
 
 Learn more at https://www.kickstartDS.com or in our docs at https://www.kickstartDS.com/docs.
 

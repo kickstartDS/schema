@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.13",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.13",
+      "date": "Mon, 18 Mar 2024 10:56:30 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.0.5`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.12",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.12",
       "date": "Thu, 14 Mar 2024 14:00:48 GMT",

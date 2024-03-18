@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.0.5",
+      "tag": "@kickstartds/jsonschema-utils_v3.0.5",
+      "date": "Mon, 18 Mar 2024 10:56:30 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add edge data to schema graph"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.4",
       "tag": "@kickstartds/jsonschema-utils_v3.0.4",
       "date": "Thu, 14 Mar 2024 14:00:48 GMT",

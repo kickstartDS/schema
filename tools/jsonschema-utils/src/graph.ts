@@ -2,10 +2,12 @@ import { DirectedEdge, DirectedGraph, DirectedVertex } from 'directed-graph-type
 import { JSONSchema } from 'json-schema-typed/draft-07';
 
 export type VertexKey = string | number;
-export interface IEdgeData {
-  refOrigin: string;
-  refTarget: string;
-}
+export type IEdgeData = [
+  {
+    refOrigin: string;
+    refTarget: string;
+  }
+];
 export class SchemaVertex<V = JSONSchema.Interface> extends DirectedVertex<V> {
   private _data: V | undefined;
 

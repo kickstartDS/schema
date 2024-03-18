@@ -467,33 +467,43 @@ export async function getSchemasForGlob(schemaGlob: string): Promise<JSONSchema.
 }
 
 export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirectedGraph {
-  return new SchemaDirectedGraph(
-    jsonSchemas.map((schema) => {
-      if (!schema.$id) throw new Error('Schema without $id while getting schema graph!');
-      return new SchemaVertex(schema.$id, schema);
-    }),
-    jsonSchemas.reduce((edges: SchemaEdge[], schema) => {
-      traverse(schema, {
-        cb: (subSchema, jsonPtr) => {
-          if (subSchema.$ref && subSchema.$ref.includes('http')) {
-            if (!schema.$id) throw new Error('Schema without id in graph generation');
-            const reffedSchema = jsonSchemas.find(
-              (schema) => schema.$id === subSchema.$ref.replace(/#.*$/g, '')
+  const graph = new SchemaDirectedGraph();
+
+  for (const jsonSchema of jsonSchemas) {
+    if (!jsonSchema.$id) throw new Error('Schema without $id while getting schema graph!');
+    graph.addVertex(new SchemaVertex(jsonSchema.$id, jsonSchema));
+
+    traverse(jsonSchema, {
+      cb: (subSchema, jsonPtr) => {
+        if (subSchema.$ref && subSchema.$ref.includes('http')) {
+          if (!jsonSchema.$id) throw new Error('Schema without id in graph generation');
+          const reffedSchema = jsonSchemas.find(
+            (jsonSchema) => jsonSchema.$id === subSchema.$ref.replace(/#.*$/g, '')
+          );
+          if (!reffedSchema || !reffedSchema.$id)
+            throw new Error("Couldn't find a reffed json in json graph generation");
+          if (!graph.hasEdge(jsonSchema.$id, reffedSchema.$id))
+            graph.addEdge(
+              new SchemaEdge(jsonSchema.$id, reffedSchema.$id, [
+                {
+                  refOrigin: jsonPtr,
+                  refTarget: reffedSchema.$id
+                }
+              ])
             );
-            if (!reffedSchema || !reffedSchema.$id)
-              throw new Error("Couldn't find a reffed schema in schema graph generation");
-            edges.push(
-              new SchemaEdge(schema.$id, reffedSchema.$id, {
-                refOrigin: jsonPtr,
-                refTarget: reffedSchema.$id
-              })
-            );
+          else {
+            const edge = graph.getEdge(jsonSchema.$id, reffedSchema.$id) as SchemaEdge;
+            edge.data!.push({
+              refOrigin: jsonPtr,
+              refTarget: reffedSchema.$id
+            });
           }
         }
-      });
-      return edges;
-    }, [])
-  );
+      }
+    });
+  }
+
+  return graph;
 }
 
 export function getSortedSchemas(graph: SchemaDirectedGraph): JSONSchema.Interface[] {

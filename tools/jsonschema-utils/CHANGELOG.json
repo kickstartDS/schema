@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.0.8",
+      "tag": "@kickstartds/jsonschema-utils_v3.0.8",
+      "date": "Mon, 18 Mar 2024 16:16:53 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add vertices before trying to add them to an edge"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.7",
       "tag": "@kickstartds/jsonschema-utils_v3.0.7",
       "date": "Mon, 18 Mar 2024 15:09:15 GMT",

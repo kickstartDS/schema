@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Mon, 18 Mar 2024 15:09:15 GMT and should not be manually modified.
+This log was last generated on Mon, 18 Mar 2024 16:16:53 GMT and should not be manually modified.
+
+## 3.0.8
+Mon, 18 Mar 2024 16:16:53 GMT
+
+### Patches
+
+- add vertices before trying to add them to an edge
 
 ## 3.0.7
 Mon, 18 Mar 2024 15:09:15 GMT

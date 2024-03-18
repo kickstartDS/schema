@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.0.9",
+      "tag": "@kickstartds/jsonschema-utils_v3.0.9",
+      "date": "Mon, 18 Mar 2024 16:21:34 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "trigger another fixed release"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.8",
       "tag": "@kickstartds/jsonschema-utils_v3.0.8",
       "date": "Mon, 18 Mar 2024 16:16:53 GMT",

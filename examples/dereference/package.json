@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/dereference-example",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Example use of the component schema dereferencing",
   "license": "(MIT OR Apache-2.0)",
   "author": {

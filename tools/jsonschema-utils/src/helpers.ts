@@ -487,7 +487,7 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
               new SchemaEdge(jsonSchema.$id, reffedSchema.$id, [
                 {
                   refOrigin: jsonPtr,
-                  refTarget: reffedSchema.$id
+                  refTarget: subSchema.$ref
                 }
               ])
             );
@@ -495,7 +495,7 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
             const edge = graph.getEdge(jsonSchema.$id, reffedSchema.$id) as SchemaEdge;
             edge.data!.push({
               refOrigin: jsonPtr,
-              refTarget: reffedSchema.$id
+              refTarget: subSchema.$ref
             });
           }
         }

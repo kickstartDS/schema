@@ -471,8 +471,9 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
 
   for (const jsonSchema of jsonSchemas) {
     if (!jsonSchema.$id) throw new Error('Schema without $id while getting schema graph!');
-    graph.addVertex(new SchemaVertex(jsonSchema.$id, jsonSchema));
-
+    if (!graph.hasVertex(jsonSchema.$id)) {
+      graph.addVertex(new SchemaVertex(jsonSchema.$id, jsonSchema));
+    }
     traverse(jsonSchema, {
       cb: (subSchema, jsonPtr) => {
         if (subSchema.$ref && subSchema.$ref.includes('http')) {
@@ -482,7 +483,11 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
           );
           if (!reffedSchema || !reffedSchema.$id)
             throw new Error("Couldn't find a reffed json in json graph generation");
-          if (!graph.hasEdge(jsonSchema.$id, reffedSchema.$id))
+          if (!graph.hasEdge(jsonSchema.$id, reffedSchema.$id)) {
+            if (!graph.hasVertex(reffedSchema.$id)) {
+              graph.addVertex(new SchemaVertex(reffedSchema.$id, reffedSchema));
+            }
+
             graph.addEdge(
               new SchemaEdge(jsonSchema.$id, reffedSchema.$id, [
                 {
@@ -491,7 +496,7 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
                 }
               ])
             );
-          else {
+          } else {
             const edge = graph.getEdge(jsonSchema.$id, reffedSchema.$id) as SchemaEdge;
             edge.data!.push({
               refOrigin: jsonPtr,

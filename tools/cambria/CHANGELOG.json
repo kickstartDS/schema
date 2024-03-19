@@ -2,6 +2,18 @@
   "name": "@kickstartds/cambria",
   "entries": [
     {
+      "version": "1.0.4",
+      "tag": "@kickstartds/cambria_v1.0.4",
+      "date": "Tue, 19 Mar 2024 22:12:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add option to start graph from existing schema"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.3",
       "tag": "@kickstartds/cambria_v1.0.3",
       "date": "Tue, 12 Mar 2024 14:55:57 GMT",

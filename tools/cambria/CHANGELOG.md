@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/cambria
 
-This log was last generated on Tue, 12 Mar 2024 14:55:57 GMT and should not be manually modified.
+This log was last generated on Tue, 19 Mar 2024 22:12:00 GMT and should not be manually modified.
+
+## 1.0.4
+Tue, 19 Mar 2024 22:12:00 GMT
+
+### Patches
+
+- add option to start graph from existing schema
 
 ## 1.0.3
 Tue, 12 Mar 2024 14:55:57 GMT

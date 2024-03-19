@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "add option to start graph from existing schema",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

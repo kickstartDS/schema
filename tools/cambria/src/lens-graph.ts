@@ -11,10 +11,10 @@ export interface ILensGraph {
   graph: Graph;
 }
 
-export function initLensGraph(): ILensGraph {
+export function initLensGraph(schema?: JSONSchema.Interface): ILensGraph {
   const lensGraph: ILensGraph = { graph: new Graph() };
 
-  lensGraph.graph.setNode('mu', emptySchema);
+  lensGraph.graph.setNode('mu', schema || emptySchema);
   return lensGraph;
 }
 

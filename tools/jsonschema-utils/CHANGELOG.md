@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Wed, 20 Mar 2024 14:13:07 GMT and should not be manually modified.
+This log was last generated on Wed, 20 Mar 2024 20:13:09 GMT and should not be manually modified.
+
+## 3.0.11
+Wed, 20 Mar 2024 20:13:09 GMT
+
+### Patches
+
+- add typed versions of getEdge, getVertex in graph
 
 ## 3.0.10
 Wed, 20 Mar 2024 14:13:07 GMT

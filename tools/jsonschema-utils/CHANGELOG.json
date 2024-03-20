@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.0.11",
+      "tag": "@kickstartds/jsonschema-utils_v3.0.11",
+      "date": "Wed, 20 Mar 2024 20:13:09 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add typed versions of getEdge, getVertex in graph"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.10",
       "tag": "@kickstartds/jsonschema-utils_v3.0.10",
       "date": "Wed, 20 Mar 2024 14:13:07 GMT",

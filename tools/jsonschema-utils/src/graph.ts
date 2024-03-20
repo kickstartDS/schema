@@ -42,7 +42,12 @@ export class SchemaEdge<E = IEdgeData> extends DirectedEdge<E> {
   }
 }
 
-export class SchemaDirectedGraph<V = JSONSchema.Interface, E = IEdgeData> extends DirectedGraph<V, E> {
+export class SchemaDirectedGraph<V = JSONSchema.Interface, E = IEdgeData> extends DirectedGraph<
+  V,
+  E,
+  SchemaVertex<V>,
+  SchemaEdge<E>
+> {
   public constructor(vertices?: SchemaVertex<V>[], edges?: SchemaEdge<E>[]) {
     super();
 
@@ -52,6 +57,17 @@ export class SchemaDirectedGraph<V = JSONSchema.Interface, E = IEdgeData> extend
     for (const edge of edges || []) {
       this.addEdge(edge);
     }
+  }
+
+  public getEdge(
+    srcOrKey: SchemaVertex<V> | VertexKey | undefined,
+    destOrKey: SchemaVertex<V> | VertexKey | undefined
+  ): SchemaEdge<E> | undefined {
+    return super.getEdge(srcOrKey, destOrKey);
+  }
+
+  public getVertex(vertexKey: VertexKey): SchemaVertex<V> | undefined {
+    return super.getVertex(vertexKey);
   }
 
   public getSubGraphStartingFrom(vertexKey: VertexKey): SchemaDirectedGraph<V, E> {

@@ -6,6 +6,8 @@ export type UniformComponentParameter = NonNullable<UniformComponent['parameters
 
 export type UniformSlot = NonNullable<UniformComponent['slots']>[0];
 
+export type UniformField = UniformComponentParameter | UniformSlot;
+
 export type UniformElement = UniformComponent | UniformComponentParameter | UniformSlot;
 
 export interface ITextParamConfig {

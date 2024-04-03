@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/uniform-example",
+      "comment": "use cleaned up converter",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/uniform-example"
+}

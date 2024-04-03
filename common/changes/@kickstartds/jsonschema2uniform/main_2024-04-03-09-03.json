@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2uniform",
+      "comment": "clean up converter",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2uniform"
+}

@@ -16,98 +16,29 @@ import {
   ISelectParamConfiguration,
   ITextParamConfig,
   UniformComponent,
-  UniformComponentParameter,
   UniformElement,
-  UniformSlot
+  UniformSlot,
+  UniformField,
+  UniformComponentParameter
 } from './@types/index.js';
 import { nameToId } from './utils.js';
 export * from './@types/index.js';
 
 const typeResolutionField: string = 'type';
 
-const fieldIsUniformComponent = (field: UniformElement): field is UniformComponent => {
-  return field.hasOwnProperty('icon') && field.hasOwnProperty('parameters');
-};
-
-// Un-mark fields as required
-const unrequireParameters = (component: UniformComponent): void => {
-  component.parameters?.forEach((parameter) => {
-    if (!parameter.typeConfig) {
-      return;
-    }
-
-    // TODO this forced type could possibly be replaced by another union type for all
-    // the current Param types (`ITextParamConfig`, `ISelectParamConfiguration`, etc)
-    (parameter.typeConfig as { required: boolean }).required = false;
-  });
-};
-
-// The way reducer works, it's possible for objects to be converted into
-// component shape but they don't get hoisted to top level because they don't
-// have an ID. Since Uniform doesn't yet support object options, our current
-// approach is to flatten those
-const flattenNestedComponentObjects = (components: UniformComponent[]): UniformComponent[] => {
-  const flattenComponentParameters = (
-    component: UniformComponent & {
-      parameters?: (UniformComponent | UniformComponentParameter)[];
-    },
-    // For nested parameters
-    prefix?: {
-      id: string;
-      name: string;
-    }
-  ): void => {
-    component.parameters = component.parameters?.reduce((parameters, parameterOrComponent) => {
-      if (!fieldIsUniformComponent(parameterOrComponent)) {
-        if (prefix) {
-          (parameterOrComponent as UniformComponentParameter).id = `${prefix.id}__${
-            (parameterOrComponent as UniformComponentParameter).id
-          }`;
-          (parameterOrComponent as UniformComponentParameter).name = `${prefix.name}: ${
-            (parameterOrComponent as UniformComponentParameter).name
-          }`;
-        }
-
-        return [...parameters, parameterOrComponent];
-      }
-
-      const actuallyComponent = parameterOrComponent as UniformComponent;
-
-      unrequireParameters(actuallyComponent);
-      flattenComponentParameters(
-        actuallyComponent,
-        prefix
-          ? {
-              id: `${prefix.id}__${actuallyComponent.id}`,
-              name: `${prefix.name}: ${actuallyComponent.name}`
-            }
-          : {
-              id: actuallyComponent.id,
-              name: actuallyComponent.name
-            }
-      );
-
-      if (actuallyComponent.parameters) {
-        return [...parameters, ...actuallyComponent.parameters];
-      } else {
-        return parameters;
-      }
-    }, [] as UniformComponentParameter[]);
-
-    if (prefix) {
-      component.id = `${prefix.id}__${component.id}`;
-      component.name = `${prefix.name}: ${component.name}`;
-    }
-  };
-
-  components.forEach((component) => {
-    flattenComponentParameters(component);
-  });
-
-  return components;
-};
-
-let extraComponents: Map<string, UniformComponent> = new Map();
+export function configuration(
+  converted: IReducerResult<UniformComponent> = {
+    components: [],
+    templates: [],
+    globals: []
+  }
+): string {
+  return JSON.stringify(
+    { components: [...converted.components, ...converted.templates, ...converted.globals] },
+    null,
+    2
+  );
+}
 
 // TODO correct parameter documentation
 /**
@@ -120,10 +51,8 @@ export const convert = ({
   schemaPost,
   schemaClassifier
 }: IConvertParams): IReducerResult<UniformComponent> => {
-  extraComponents = new Map();
-
   const reduced = getSchemasForIds(schemaIds, ajv).reduce(
-    getSchemaReducer<UniformComponent, UniformComponent, UniformElement>({
+    getSchemaReducer<UniformField, UniformComponent>({
       ajv,
       typeResolutionField,
       buildDescription,
@@ -144,14 +73,7 @@ export const convert = ({
     { components: [], templates: [], globals: [] }
   );
 
-  return {
-    components: [
-      ...flattenNestedComponentObjects(reduced.components),
-      ...Array.from(extraComponents.values())
-    ],
-    templates: [],
-    globals: []
-  };
+  return reduced;
 };
 
 function basicTypeMapping(property: JSONSchema.Interface): string {
@@ -196,9 +118,41 @@ function componentsEqual(componentOne: UniformElement, componentTwo: UniformElem
 
 function processObject({
   name,
-  fields
-}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
+  fields,
+  classification,
+  parentSchema,
+  subSchema,
+  rootSchema
+}: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
   if (!fields) throw new Error('Missing fields on object to process');
+  if (parentSchema && parentSchema.type === 'array') {
+    const componentName =
+      classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
+        ? getSchemaName(subSchema.$id)
+        : name;
+
+    const field: UniformSlot = {
+      id: nameToId(name),
+      name: sentenceCase(name),
+      allowedComponents: [componentName],
+      inheritAllowedComponents: false
+    };
+
+    const component: UniformComponent = {
+      id: componentName,
+      name: capitalCase(componentName),
+      icon: 'screen',
+      parameters: fields.filter((field): field is UniformComponentParameter => {
+        return !field.hasOwnProperty('allowedComponents');
+      }),
+      canBeComposition: false,
+      slots: fields.filter((field): field is UniformSlot => {
+        return field.hasOwnProperty('allowedComponents');
+      })
+    };
+
+    return { field, components: [component] };
+  }
 
   const component: UniformComponent = {
     id: nameToId(name),
@@ -215,11 +169,46 @@ function processObject({
     })
   };
 
-  return { field: component };
+  const slot: UniformSlot = {
+    id: nameToId(name),
+    name: sentenceCase(name),
+    allowedComponents: [component.id],
+    inheritAllowedComponents: false
+  };
+
+  if (classification) {
+    if (classification === 'component') {
+      return { field: slot, components: [component] };
+    }
+    if (classification === 'template') {
+      return { field: slot, templates: [component] };
+    }
+    if (classification === 'global') {
+      return { field: slot, globals: [component] };
+    }
+  }
+
+  const prefixedName = `${getSchemaName(parentSchema?.$id || rootSchema.$id)}-${nameToId(name)}`;
+  component.id = prefixedName;
+  component.name = capitalCase(prefixedName);
+
+  slot.allowedComponents = [component.id];
+
+  return { field: slot, components: [component] };
 }
 
-function processRef({ name, fields }: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
+function processRef({
+  name,
+  fields
+}: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
   if (!fields) throw new Error('Missing fields on object to process');
+
+  const slot: UniformSlot = {
+    id: nameToId(name),
+    name: sentenceCase(name),
+    allowedComponents: [name],
+    inheritAllowedComponents: false
+  };
 
   const component: UniformComponent = {
     id: nameToId(name),
@@ -236,13 +225,13 @@ function processRef({ name, fields }: IProcessInterface<UniformElement>): IProce
     })
   };
 
-  return { field: component };
+  return { field: slot, components: [component] };
 }
 
 function processRefArray({
   name,
   fields
-}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
+}: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
   if (!fields) throw new Error('Missing fields on array to process');
   // This will return a slot instead of a component parameter. Later on in
   // processObject function we extract those slots from fields into actual slots
@@ -254,71 +243,27 @@ function processRefArray({
     inheritAllowedComponents: false
   };
 
-  return { field: slot };
+  return { field: slot, components: fields };
 }
 
 function processObjectArray({
   name
-}: // description,
-// subSchema,
-// rootSchema,
-// fields
-IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
-  // TODO should try to get by without that forced type
-  // const field: ObjectType<false> = {
-  //   name: name.replace(/-/g, '_'),
-  //   list: true,
-  //   type: 'object',
-  //   label: subSchema.title || toPascalCase(cleanFieldName(name)),
-  //   templates: (fields as {
-  //     label: string;
-  //     name: string;
-  //     fields: UniformComponent[];
-  //   }[]).map(({label, ...rest}) => {
-  //     return {
-  //       ...rest,
-  //       label: toPascalCase(cleanFieldName(label)),
-  //     }
-  //   }),
-  // };
+}: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
+  const field: UniformComponentParameter = {
+    id: nameToId(name),
+    name: capitalCase(name),
+    type: 'string'
+  };
 
-  // if (description)
-  //   field.description = description;
-
-  return { field: { name } as UniformElement };
+  return { field };
 }
 
 function processArray({
   name,
   subSchema,
-  arrayField,
-  rootSchema
-}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
+  arrayField
+}: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
   if (!arrayField) throw new Error('Missing array field on process array');
-  // const field: ObjectType<false> = {
-  //   name: name.replace(/-/g, '_'),
-  //   list: true,
-  //   type: 'object',
-  //   label: subSchema.title || toPascalCase(cleanFieldName(name)),
-  //   templates: []
-  // };
-
-  // // TODO should try to get by without that forced type
-  // if (arrayField) {
-  //   const { label, ...rest } = arrayField;
-
-  //   field.templates.push({
-  //     label: toPascalCase(cleanFieldName(label)),
-  //     ...rest
-  //   } as {
-  //     label: string;
-  //     name: string;
-  //     fields: UniformComponent[];
-  //   });
-  // }
-
-  // if (description)
-  //   field.description = description;
 
   if (typeof subSchema.items !== 'object')
     throw new Error("Can't process array without single object definition");
@@ -328,9 +273,9 @@ function processArray({
   const test = subSchema.items as JSONSchema.Object;
   const isComponentWithId = Boolean(test.$ref);
 
-  const id = isComponentWithId
-    ? (arrayField as UniformComponent).id
-    : `${nameToId(getSchemaName(rootSchema.$id))}${capitalCase(arrayField.id)}`;
+  // TODO this seems not done, possibly... re-check
+  // console.log(isComponentWithId, test.$ref, arrayField.id);
+  const id = isComponentWithId ? (arrayField as UniformComponent).id : `${arrayField.id}`;
 
   const slot: UniformSlot = {
     id: nameToId(name),
@@ -339,17 +284,7 @@ function processArray({
     inheritAllowedComponents: false
   };
 
-  if (!test.$ref && !extraComponents.has(id)) {
-    // This array item doesn't have an ID, which means it won't get registered
-    // as a component, we will have to to it manually in a hacky way
-    extraComponents.set(id, {
-      ...arrayField,
-      id,
-      name: `${capitalCase(getSchemaName(rootSchema.$id))}: ${arrayField.name}`
-    } as UniformComponent);
-  }
-
-  return { field: slot };
+  return { field: slot, components: [arrayField] };
 }
 
 function processEnum({
@@ -358,7 +293,7 @@ function processEnum({
   subSchema,
   options,
   parentSchema
-}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
+}: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
   return {
     field: {
       id: subSchema.$id ?? name,
@@ -378,7 +313,9 @@ function processEnum({
   };
 }
 
-function processConst(props: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
+function processConst(
+  props: IProcessInterface<UniformField>
+): IProcessFnResult<UniformField, UniformElement> {
   return { field: processBasic(props).field };
 }
 
@@ -387,7 +324,7 @@ function processBasic({
   description,
   subSchema,
   parentSchema
-}: IProcessInterface<UniformElement>): IProcessFnResult<UniformElement> {
+}: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
   if (!parentSchema) throw new Error('Missing parent schema in basic processing');
   return {
     field: scalarMapping(subSchema, name, description, parentSchema).field
@@ -399,96 +336,12 @@ function scalarMapping(
   propertyName: string,
   description: string,
   parentSchema: JSONSchema.Interface
-): IProcessFnResult<UniformElement> {
+): IProcessFnResult<UniformField, UniformElement> {
   const baseProps: Pick<UniformComponentParameter, 'id' | 'name' | 'helpText'> = {
     id: property.$id ?? propertyName,
     name: sentenceCase(property.title || toPascalCase(propertyName)),
     helpText: description
   };
-
-  // if (
-  //   property.type === 'string' &&
-  //   property.format &&
-  //   property.format === 'markdown'
-  // ) {
-  //   return {
-  //     label: property.title || toPascalCase(cleanFieldName(propertyName)),
-  //     description,
-  //     name: propertyName.replace('-', '_'),
-  //     type: 'rich-text',
-  //     required: parentSchema.required?.includes(cleanFieldName(propertyName)),
-  //     ui: {
-  //     },
-  //   }
-  // }
-
-  // if (
-  //   property.type === 'string' &&
-  //   property.format &&
-  //   property.format === 'image'
-  // ) {
-  //   return {
-  //     label: property.title || toPascalCase(cleanFieldName(propertyName)),
-  //     description,
-  //     name: propertyName.replace('-', '_'),
-  //     type: 'image',
-  //     required: parentSchema.required?.includes(cleanFieldName(propertyName)),
-  //   };
-  // }
-
-  // if (
-  //   property.type === 'string' &&
-  //   property.format &&
-  //   property.format === 'date'
-  // ) {
-  //   return {
-  //     label: property.title || toPascalCase(cleanFieldName(propertyName)),
-  //     description,
-  //     name: propertyName.replace('-', '_'),
-  //     type: 'string',
-  //     required: parentSchema.required?.includes(cleanFieldName(propertyName)),
-  //     ui: {
-  //       dateFormat: 'YYYY MM DD',
-  //       defaultValue: property.default as string,
-  //     },
-  //   };
-  // }
-
-  // if (
-  //   property.type === 'string' &&
-  //   property.format &&
-  //   property.format === 'id'
-  // ) {
-  //   return {
-  //     label: property.title || toPascalCase(cleanFieldName(propertyName)),
-  //     description,
-  //     name: propertyName.replace('-', '_'),
-  //     type: 'string',
-  //     list: false,
-  //     required: parentSchema.required?.includes(cleanFieldName(propertyName)),
-  //     ui: {
-  //       defaultValue: property.default as string
-  //     },
-  //   };
-  // }
-
-  // if (
-  //   property.type === 'string' &&
-  //   property.format &&
-  //   property.format === 'color'
-  // ) {
-  //   return {
-  //     label: property.title || toPascalCase(cleanFieldName(propertyName)),
-  //     description,
-  //     name: propertyName.replace('-', '_'),
-  //     type: 'string',
-  //     list: false,
-  //     ui: {
-  //       component: 'color',
-  //       defaultValue: property.default as string
-  //     },
-  //   };
-  // }
 
   if (property.type === 'string') {
     const isImage = property.format && property.format === 'image';

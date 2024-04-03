@@ -1,7 +1,7 @@
 {
-  "name": "@kickstartds/jsonschema2uniform",
-  "version": "1.4.0",
-  "description": "Converts JSON schema to Uniform component json definition",
+  "name": "@kickstartds/cport-example",
+  "version": "1.0.0",
+  "description": "Example use showing full conversion of JSON Schema files to normalized cport format",
   "license": "(MIT OR Apache-2.0)",
   "author": {
     "name": "Jonas Ulrich",
@@ -10,41 +10,42 @@
   "type": "module",
   "exports": "./lib/index.js",
   "types": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
   "scripts": {
     "build": "heft build --clean",
-    "test": "NODE_OPTIONS=--experimental-vm-modules heft test --clean"
+    "start": "node lib/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@kickstartds/ds-agency": "^3.4.5",
     "@kickstartds/jsonschema-utils": "workspace:*",
+    "@kickstartds/jsonschema2cport": "workspace:*",
     "ajv": "^8.12.0",
-    "change-case": "^5.0.2"
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@rushstack/eslint-config": "^3.2.0",
     "@rushstack/heft": "^0.50.4",
-    "@rushstack/heft-jest-plugin": "~0.5.10",
     "@rushstack/heft-node-rig": "^1.12.10",
-    "@types/heft-jest": "1.0.3",
+    "@tsconfig/node16": "^1.0.3",
+    "@types/js-yaml": "^4.0.5",
     "@types/node": "^18.16.4",
-    "@types/ramda": "^0.28.20",
-    "@types/uuid": "~9.0.2",
     "@typescript-eslint/parser": "~5.59.2",
     "eslint": "^8.40.0",
     "eslint-import-resolver-typescript": "~3.5.5",
     "eslint-plugin-import": "~2.27.5",
     "eslint-plugin-json-files": "~2.2.0",
+    "import-meta-resolve": "~3.0.0",
     "json-schema-typed": "~8.0.1",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4"
   },
-  "engines": {
-    "node": ">=18.16"
+  "peerDependencies": {
+    "@kickstartds/base": "^4.0.2",
+    "@kickstartds/blog": "^4.0.2",
+    "@kickstartds/core": "^4.0.2",
+    "@kickstartds/form": "^4.0.2"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
+  "engines": {
+    "node": ">=14.16"
   }
 }

@@ -13,6 +13,10 @@
       "path": "../tools/jsonschema-utils"
     },
     {
+      "name": "tools/jsonschema2cport",
+      "path": "../tools/jsonschema2cport"
+    },
+    {
       "name": "tools/jsonschema2staticcms",
       "path": "../tools/jsonschema2staticcms"
     },
@@ -35,6 +39,10 @@
     {
       "name": "examples/cambria",
       "path": "../examples/cambria"
+    },
+    {
+      "name": "examples/cport",
+      "path": "../examples/cport"
     },
     {
       "name": "examples/dereference",

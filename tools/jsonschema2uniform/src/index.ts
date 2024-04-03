@@ -131,7 +131,7 @@ function processObject({
         ? getSchemaName(subSchema.$id)
         : name;
 
-    const field: UniformSlot = {
+    const slot: UniformSlot = {
       id: nameToId(name),
       name: sentenceCase(name),
       allowedComponents: [componentName],
@@ -151,7 +151,7 @@ function processObject({
       })
     };
 
-    return { field, components: [component] };
+    return { field: slot, components: [component] };
   }
 
   const component: UniformComponent = {
@@ -233,9 +233,7 @@ function processRefArray({
   fields
 }: IProcessInterface<UniformField>): IProcessFnResult<UniformField, UniformElement> {
   if (!fields) throw new Error('Missing fields on array to process');
-  // This will return a slot instead of a component parameter. Later on in
-  // processObject function we extract those slots from fields into actual slots
-  // array
+
   const slot: UniformSlot = {
     id: nameToId(name),
     name: sentenceCase(name),

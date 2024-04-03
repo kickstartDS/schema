@@ -1,7 +1,7 @@
 {
-  "name": "@kickstartds/jsonschema2uniform",
+  "name": "@kickstartds/jsonschema2cport",
   "version": "1.4.0",
-  "description": "Converts JSON schema to Uniform component json definition",
+  "description": "Converts JSON schema to normalized cport component definitions",
   "license": "(MIT OR Apache-2.0)",
   "author": {
     "name": "Jonas Ulrich",

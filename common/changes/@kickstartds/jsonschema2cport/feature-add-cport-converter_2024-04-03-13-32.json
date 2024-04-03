@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2cport",
+      "comment": "add initial version of cport converter",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2cport"
+}

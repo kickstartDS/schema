@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cport-example",
+      "comment": "add initial version of cport converter example",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cport-example"
+}

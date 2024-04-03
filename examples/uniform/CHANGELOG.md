@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/uniform-example
 
-This log was last generated on Wed, 20 Mar 2024 20:13:09 GMT and should not be manually modified.
+This log was last generated on Wed, 03 Apr 2024 09:03:35 GMT and should not be manually modified.
+
+## 2.1.0
+Wed, 03 Apr 2024 09:03:35 GMT
+
+### Minor changes
+
+- use cleaned up converter
 
 ## 2.0.11
 Wed, 20 Mar 2024 20:13:09 GMT

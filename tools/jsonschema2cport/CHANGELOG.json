@@ -1,0 +1,20 @@
+{
+  "name": "@kickstartds/jsonschema2cport",
+  "entries": [
+    {
+      "version": "1.4.1",
+      "tag": "@kickstartds/jsonschema2cport_v1.4.1",
+      "date": "Thu, 04 Apr 2024 10:06:47 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add initial version of cport converter"
+          },
+          {
+            "comment": "handle templates and globals"
+          }
+        ]
+      }
+    }
+  ]
+}

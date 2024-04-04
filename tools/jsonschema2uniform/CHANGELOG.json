@@ -2,6 +2,21 @@
   "name": "@kickstartds/jsonschema2uniform",
   "entries": [
     {
+      "version": "1.4.1",
+      "tag": "@kickstartds/jsonschema2uniform_v1.4.1",
+      "date": "Thu, 04 Apr 2024 10:06:47 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "clean up code"
+          },
+          {
+            "comment": "clean up code"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.4.0",
       "tag": "@kickstartds/jsonschema2uniform_v1.4.0",
       "date": "Wed, 03 Apr 2024 09:03:35 GMT",

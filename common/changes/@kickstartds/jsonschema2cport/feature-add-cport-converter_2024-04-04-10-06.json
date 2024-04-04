@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2cport",
+      "comment": "handle templates and globals",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2cport"
+}

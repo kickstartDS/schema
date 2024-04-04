@@ -192,9 +192,11 @@ function processObject({
       return { field, components: [component] };
     }
     if (classification === 'template') {
+      component.single = true;
       return { field, templates: [component] };
     }
     if (classification === 'global') {
+      component.single = true;
       return { field, globals: [component] };
     }
   }

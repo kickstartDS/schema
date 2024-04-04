@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cport-example",
+      "comment": "handle template and globals",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cport-example"
+}

@@ -49,6 +49,13 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@kickstartds/jsonschema2hygraph",
+      "projectFolder": "tools/jsonschema2hygraph",
+      "reviewCategory": "tools",
+      "tags": ["tools"],
+      "shouldPublish": true
+    },
+    {
       "packageName": "@kickstartds/jsonschema2staticcms",
       "projectFolder": "tools/jsonschema2staticcms",
       "reviewCategory": "tools",
@@ -100,6 +107,13 @@
     {
       "packageName": "@kickstartds/dereference-example",
       "projectFolder": "examples/dereference",
+      "reviewCategory": "examples",
+      "tags": ["examples"],
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@kickstartds/hygraph-example",
+      "projectFolder": "examples/hygraph",
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true

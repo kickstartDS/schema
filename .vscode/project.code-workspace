@@ -17,6 +17,10 @@
       "path": "../tools/jsonschema2cport"
     },
     {
+      "name": "tools/jsonschema2hygraph",
+      "path": "../tools/jsonschema2hygraph"
+    },
+    {
       "name": "tools/jsonschema2staticcms",
       "path": "../tools/jsonschema2staticcms"
     },
@@ -47,6 +51,10 @@
     {
       "name": "examples/dereference",
       "path": "../examples/dereference"
+    },
+    {
+      "name": "examples/hygraph",
+      "path": "../examples/hygraph"
     },
     {
       "name": "examples/staticcms",

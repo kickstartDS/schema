@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2cport",
+      "comment": "code styling",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2cport"
+}

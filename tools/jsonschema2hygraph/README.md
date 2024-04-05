@@ -1,6 +1,6 @@
-# JSON Schema to Uniform configuration
+# JSON Schema to Hygraph converter
 
-This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to [Uniform](#) configuration.
+This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Hygraph](https://hygraph.com/docs/api-reference/management-sdk/management-sdk-field-examples) configuration.
 
 ## Contributing
 

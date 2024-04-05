@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2hygraph",
+      "comment": "initial hygraph converter",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2hygraph"
+}

@@ -1,6 +1,6 @@
-# JSON Schema to Storyblok admin config(.yml) converter
+# JSON Schema to cport  converter
 
-This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [Storyblok admin config.yml]().
+This library exports a single function, `convert`, which converts one or more [JSON schemas](https://json-schema.org/) to a [cport](https://github.com/caisy-io/cport/) configuration.
 
 ## Contributing
 

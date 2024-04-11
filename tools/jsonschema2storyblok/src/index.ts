@@ -239,7 +239,7 @@ function processObject({
           }
           return schema;
         }, {}) || [],
-      is_nestable: false,
+      is_nestable: true,
       real_name: toPascalCase(blokName),
       color: colors[blokName] || '#05566a',
       icon: icons[blokName] || 'block-wallet'
@@ -308,7 +308,7 @@ function processObject({
         }
         return schema;
       }, {}),
-      is_nestable: false,
+      is_nestable: true,
       real_name: toPascalCase(name)
     }
   ];
@@ -322,6 +322,7 @@ function processObject({
     description: 'This is simply a Dummy field to satisfy the typings, it should get thrown out later'
   };
   if (classification && classification === 'template') {
+    bloks[0].is_nestable = false;
     return { field: dummy, templates: bloks };
   } else if (classification && classification === 'global') {
     componentGroups.global ||= uuidv4();
@@ -384,7 +385,7 @@ function processRef({
         }
         return schema;
       }, {}) || [],
-    is_nestable: false,
+    is_nestable: true,
     real_name: toPascalCase(blokName),
     color: colors[blokName] || '#05566a',
     icon: icons[blokName] || 'block-wallet'
@@ -443,7 +444,7 @@ function processRefArray({
               }
               return schema;
             }, {}) || [],
-          is_nestable: false,
+          is_nestable: true,
           real_name: toPascalCase(name),
           color: colors[field.key] || '#05566a',
           icon: icons[field.key] || 'block-wallet',
@@ -492,7 +493,7 @@ function processArray({
       updated_at: new Date().toISOString(),
       id: blokId++,
       schema: { entry: arrayField },
-      is_nestable: false,
+      is_nestable: true,
       real_name: toPascalCase(name),
       color: colors[name] || '#05566a',
       icon: icons[name] || 'block-wallet'

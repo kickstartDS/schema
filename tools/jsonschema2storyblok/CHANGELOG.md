@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Wed, 20 Mar 2024 20:13:09 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Apr 2024 08:42:25 GMT and should not be manually modified.
+
+## 1.5.20
+Thu, 11 Apr 2024 08:42:25 GMT
+
+### Patches
+
+- fix nestable attribute for components
 
 ## 1.5.19
 Wed, 20 Mar 2024 20:13:09 GMT

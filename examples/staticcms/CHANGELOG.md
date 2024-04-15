@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/staticcms-example
 
-This log was last generated on Mon, 15 Apr 2024 13:21:12 GMT and should not be manually modified.
+This log was last generated on Mon, 15 Apr 2024 13:24:51 GMT and should not be manually modified.
+
+## 2.0.13
+Mon, 15 Apr 2024 13:24:51 GMT
+
+_Version update only_
 
 ## 2.0.12
 Mon, 15 Apr 2024 13:21:12 GMT

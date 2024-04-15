@@ -317,19 +317,21 @@ export function addTypeInterfaces(jsonSchemas: JSONSchema.Interface[]): void {
   });
 }
 
-export function inlineReferences(jsonSchemas: JSONSchema.Interface[]): void {
+export function inlineReferences(jsonSchemas: JSONSchema.Interface[], typeResolution: boolean = false): void {
   jsonSchemas.forEach((jsonSchema) => {
     traverse(jsonSchema, {
       cb: (subSchema, pointer, rootSchema, __parentPointer, parentKeyword, parentSchema) => {
         if (!parentSchema || !parentKeyword) return;
 
-        const propertyName = pointer.split('/').pop();
+        const propertyName =
+          pointer.split('/').pop() === 'type' && typeResolution ? 'typeProp' : pointer.split('/').pop();
         if (!propertyName) throw new Error('Failed to split a propertyName from a pointer');
 
         if (subSchema.$ref) {
-          const schemaPointer = subSchema.$ref.split('#').pop().endsWith('/type')
-            ? subSchema.$ref.split('#').pop().replace('/type', '/typeProp')
-            : subSchema.$ref.split('#').pop();
+          const schemaPointer =
+            subSchema.$ref.split('#').pop().endsWith('/type') && typeResolution
+              ? subSchema.$ref.split('#').pop().replace('/type', '/typeProp')
+              : subSchema.$ref.split('#').pop();
           const schemaId = subSchema.$ref.split('#').shift();
 
           if (schemaPointer.startsWith('/definitions/')) {
@@ -614,7 +616,7 @@ export async function processSchemas(
   // 1. pre-process, before schemas enter `ajv`
   if (shouldLayerRefs) layerRefs(jsonSchemas, kdsSchemas);
   if (typeResolution) addTypeInterfaces(sortedSchemas);
-  if (shouldInlineReferences) inlineReferences(sortedSchemas);
+  if (shouldInlineReferences) inlineReferences(sortedSchemas, typeResolution);
   if (additionalProperties && additionalProperties !== 'keep')
     processAdditionalProperties(sortedSchemas, additionalProperties);
 

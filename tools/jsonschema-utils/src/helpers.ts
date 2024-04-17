@@ -596,7 +596,7 @@ export async function processSchemas(
     inlineReferences: shouldInlineReferences,
     addExplicitAnyOfs: shouldAddExlicitAnyOfs,
     replaceExamples: shouldReplaceExamples
-  } = deepMerge<Partial<IProcessingOptions>>(defaultProcessingOptions, options || {});
+  } = { ...defaultProcessingOptions, ...options };
   // load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas =
     modules && modules.length > 0

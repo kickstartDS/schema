@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Wed, 17 Apr 2024 13:59:54 GMT and should not be manually modified.
+This log was last generated on Wed, 17 Apr 2024 18:29:14 GMT and should not be manually modified.
+
+## 3.0.15
+Wed, 17 Apr 2024 18:29:14 GMT
+
+### Patches
+
+- don't deep merge processing configuration
 
 ## 3.0.14
 Wed, 17 Apr 2024 13:59:54 GMT

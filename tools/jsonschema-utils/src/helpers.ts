@@ -165,7 +165,11 @@ export function mergeAnyOfEnums(schema: JSONSchema.Interface, ajv: MyAjv): void 
   });
 }
 
-export function reduceSchemaAllOfs(schema: JSONSchema.Interface, ajv: MyAjv): void {
+export function reduceSchemaAllOfs(
+  schema: JSONSchema.Interface,
+  ajv: MyAjv,
+  replaceExamples: boolean = false
+): void {
   traverse(schema, {
     cb: (subSchema, pointer, __rootSchema, __parentPointer, parentKeyword, parentSchema) => {
       if (subSchema.allOf) {
@@ -175,12 +179,12 @@ export function reduceSchemaAllOfs(schema: JSONSchema.Interface, ajv: MyAjv): vo
           if (!propertyName) throw new Error('Failed to split a propertyName from a pointer');
 
           if (propertyName === parentKeyword) {
-            parentSchema[parentKeyword] = reduceSchemaAllOf(subSchema, ajv);
+            parentSchema[parentKeyword] = reduceSchemaAllOf(subSchema, ajv, replaceExamples);
           } else {
-            parentSchema[parentKeyword][propertyName] = reduceSchemaAllOf(subSchema, ajv);
+            parentSchema[parentKeyword][propertyName] = reduceSchemaAllOf(subSchema, ajv, replaceExamples);
           }
         } else {
-          schema.properties = reduceSchemaAllOf(subSchema, ajv).properties;
+          schema.properties = reduceSchemaAllOf(subSchema, ajv, replaceExamples).properties;
           delete schema.allOf;
         }
       }
@@ -189,7 +193,7 @@ export function reduceSchemaAllOfs(schema: JSONSchema.Interface, ajv: MyAjv): vo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T): T {
+function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T, replaceExamples: boolean = false): T {
   const keys = Array.from(new Set([...Object.keys(obj1), ...Object.keys(obj2)]));
 
   return keys.reduce((acc, key) => {
@@ -199,11 +203,14 @@ function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T): T {
     const val2 = obj2[key] as any;
 
     if (Array.isArray(val1) && Array.isArray(val2)) {
-      acc[key] = [...val1, ...val2].filter((value, index, self) => {
-        return self.findIndex((v) => v === value) === index;
-      });
+      acc[key] =
+        key === 'examples' && replaceExamples
+          ? val2
+          : (acc[key] = [...val1, ...val2].filter((value, index, self) => {
+              return self.findIndex((v) => v === value) === index;
+            }));
     } else if (typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 !== null) {
-      acc[key] = deepMerge(val1, val2);
+      acc[key] = deepMerge(val1, val2, replaceExamples);
     } else if (key in obj2) {
       acc[key] = structuredClone(val2);
     } else {
@@ -215,7 +222,11 @@ function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T): T {
   }, {} as any) as T;
 }
 
-export function reduceSchemaAllOf(schema: JSONSchema.Interface, ajv: MyAjv): JSONSchema.Interface {
+export function reduceSchemaAllOf(
+  schema: JSONSchema.Interface,
+  ajv: MyAjv,
+  replaceExamples: boolean = false
+): JSONSchema.Interface {
   const allOfs = schema.allOf as JSONSchema.Interface[];
 
   const reducedSchema = allOfs.reduce((finalSchema: JSONSchema.Interface, allOf: JSONSchema.Interface) => {
@@ -231,13 +242,14 @@ export function reduceSchemaAllOf(schema: JSONSchema.Interface, ajv: MyAjv): JSO
 
         return deepMerge(
           reffedSchema && reffedSchema.allOf
-            ? reduceSchemaAllOf(reffedSchema, ajv)
-            : deepMerge(reffedSchema, finalSchema),
-          finalSchema
+            ? reduceSchemaAllOf(reffedSchema, ajv, replaceExamples)
+            : deepMerge(reffedSchema, finalSchema, replaceExamples),
+          finalSchema,
+          replaceExamples
         );
       } else {
-        reduceSchemaAllOfs(allOf, ajv);
-        return deepMerge(allOf, finalSchema);
+        reduceSchemaAllOfs(allOf, ajv, replaceExamples);
+        return deepMerge(allOf, finalSchema, replaceExamples);
       }
     };
 
@@ -529,6 +541,7 @@ export interface IProcessingOptions {
   layerRefs: boolean;
   inlineReferences: boolean;
   addExplicitAnyOfs: boolean;
+  replaceExamples: boolean;
 }
 
 export const defaultProcessingOptions: IProcessingOptions = {
@@ -540,7 +553,8 @@ export const defaultProcessingOptions: IProcessingOptions = {
   mergeAnyOf: true,
   layerRefs: true,
   inlineReferences: true,
-  addExplicitAnyOfs: true
+  addExplicitAnyOfs: true,
+  replaceExamples: true
 };
 
 export async function processSchemaGlob(
@@ -580,7 +594,8 @@ export async function processSchemas(
     mergeAnyOf: shouldMergeAnyOf,
     layerRefs: shouldLayerRefs,
     inlineReferences: shouldInlineReferences,
-    addExplicitAnyOfs: shouldAddExlicitAnyOfs
+    addExplicitAnyOfs: shouldAddExlicitAnyOfs,
+    replaceExamples: shouldReplaceExamples
   } = deepMerge<Partial<IProcessingOptions>>(defaultProcessingOptions, options || {});
   // load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas =
@@ -628,7 +643,7 @@ export async function processSchemas(
   // 3. "compile" JSON Schema composition keywords (`anyOf`, `allOf`)
   const schemaAnyOfs: JSONSchema.Interface[] = [];
   sortedSchemas.forEach((schema) => {
-    if (shouldMergeAllOf) reduceSchemaAllOfs(schema, ajv);
+    if (shouldMergeAllOf) reduceSchemaAllOfs(schema, ajv, shouldReplaceExamples);
     if (shouldMergeAnyOf) mergeAnyOfEnums(schema, ajv);
 
     // 3. schema-local `anyOf` parts get split into distinct
@@ -642,7 +657,7 @@ export async function processSchemas(
   if (typeResolution) addTypeInterfaces(schemaAnyOfs);
   if (shouldAddExlicitAnyOfs && shouldMergeAllOf)
     schemaAnyOfs.forEach((schemaAnyOf) => {
-      reduceSchemaAllOfs(schemaAnyOf, ajv);
+      reduceSchemaAllOfs(schemaAnyOf, ajv, shouldReplaceExamples);
     });
 
   // 5. return list of processed schema `$id`s.

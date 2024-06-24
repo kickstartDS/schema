@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Wed, 17 Apr 2024 18:29:14 GMT and should not be manually modified.
+This log was last generated on Mon, 24 Jun 2024 10:40:19 GMT and should not be manually modified.
+
+## 3.0.16
+Mon, 24 Jun 2024 10:40:19 GMT
+
+### Patches
+
+- dont reference content module
 
 ## 3.0.15
 Wed, 17 Apr 2024 18:29:14 GMT

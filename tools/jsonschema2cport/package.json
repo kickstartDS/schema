@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2cport",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Converts JSON schema to normalized cport component definitions",
   "license": "(MIT OR Apache-2.0)",
   "author": {

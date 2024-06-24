@@ -546,7 +546,7 @@ export interface IProcessingOptions {
 
 export const defaultProcessingOptions: IProcessingOptions = {
   typeResolution: true,
-  modules: ['base', 'blog', 'form', 'content'],
+  modules: ['base', 'blog', 'form'],
   additionalProperties: 'forceFalse',
   loadPageSchema: true,
   mergeAllOf: true,

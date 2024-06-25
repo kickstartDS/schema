@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.4.1",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.4.1",
+      "date": "Tue, 25 Jun 2024 10:22:42 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "further fix basic type handling"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.4.0",
       "tag": "@kickstartds/jsonschema2stackbit_v1.4.0",
       "date": "Tue, 25 Jun 2024 09:46:26 GMT",

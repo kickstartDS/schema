@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/jsonschema2hygraph
 
-This log was last generated on Tue, 25 Jun 2024 10:33:43 GMT and should not be manually modified.
+This log was last generated on Tue, 25 Jun 2024 10:40:59 GMT and should not be manually modified.
+
+## 1.0.9
+Tue, 25 Jun 2024 10:40:59 GMT
+
+_Version update only_
 
 ## 1.0.8
 Tue, 25 Jun 2024 10:33:43 GMT

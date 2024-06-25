@@ -598,7 +598,7 @@ export async function processSchemas(
     addExplicitAnyOfs: shouldAddExlicitAnyOfs,
     replaceExamples: shouldReplaceExamples
   } = { ...defaultProcessingOptions, ...options };
-  // load all the schema files provided by `@kickstartDS` itself...
+  // Load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas =
     modules && modules.length > 0
       ? await modules.reduce(async (schemaPromises, moduleName: string) => {

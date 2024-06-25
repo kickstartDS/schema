@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "add icon format handling",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

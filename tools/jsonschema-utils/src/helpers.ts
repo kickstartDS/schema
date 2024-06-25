@@ -48,7 +48,8 @@ export function getSchemaRegistry({ support2019 = false }: { support2019?: boole
     'email',
     'html',
     'uuid',
-    'date-time'
+    'date-time',
+    'icon'
   ];
   ignoredFormats.forEach((ignoredFormat) => ajv.addFormat(ignoredFormat, { validate: () => true }));
 

@@ -105,6 +105,10 @@ function basicTypeMapping(property: JSONSchema.Interface): GenericType {
     return 'number';
   }
 
+  if (property.type === 'string' && property.format && property.format === 'icon') {
+    return 'icon';
+  }
+
   return mapping[property.type as TypeName];
 }
 
@@ -418,12 +422,15 @@ function processBasic({
   subSchema,
   rootSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
-  // const type = basicMapping(subSchema);
-
   const field: Field = {
     name: name.replace('-', '_'),
     type: 'string'
   };
+
+  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'icon') {
+    field.controlType = 'custom-modal-html';
+    field.controlFilePath = '.stackbit/fields/icon/index.html';
+  }
 
   if (subSchema.default) field.default = subSchema.default as string;
 

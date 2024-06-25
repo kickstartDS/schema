@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.1.1",
+      "tag": "@kickstartds/jsonschema-utils_v3.1.1",
+      "date": "Tue, 25 Jun 2024 10:33:43 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "revert not respecting content module by default"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.1.0",
       "tag": "@kickstartds/jsonschema-utils_v3.1.0",
       "date": "Tue, 25 Jun 2024 09:46:26 GMT",

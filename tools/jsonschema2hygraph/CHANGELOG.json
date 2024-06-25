@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2hygraph",
   "entries": [
     {
+      "version": "1.0.7",
+      "tag": "@kickstartds/jsonschema2hygraph_v1.0.7",
+      "date": "Tue, 25 Jun 2024 09:46:26 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.1.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.6",
       "tag": "@kickstartds/jsonschema2hygraph_v1.0.6",
       "date": "Mon, 24 Jun 2024 10:40:19 GMT",

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.1.0",
+      "tag": "@kickstartds/jsonschema-utils_v3.1.0",
+      "date": "Tue, 25 Jun 2024 09:46:26 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "add icon format handling"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.16",
       "tag": "@kickstartds/jsonschema-utils_v3.0.16",
       "date": "Mon, 24 Jun 2024 10:40:19 GMT",

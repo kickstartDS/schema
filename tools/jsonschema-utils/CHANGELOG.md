@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Mon, 24 Jun 2024 10:40:19 GMT and should not be manually modified.
+This log was last generated on Tue, 25 Jun 2024 09:46:26 GMT and should not be manually modified.
+
+## 3.1.0
+Tue, 25 Jun 2024 09:46:26 GMT
+
+### Minor changes
+
+- add icon format handling
 
 ## 3.0.16
 Mon, 24 Jun 2024 10:40:19 GMT

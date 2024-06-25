@@ -14,8 +14,7 @@ export type GenericType =
   | 'slug'
   | 'string'
   | 'style'
-  | 'text'
-  | 'icon';
+  | 'text';
 
 export interface ITypeMapping {
   boolean: GenericType;

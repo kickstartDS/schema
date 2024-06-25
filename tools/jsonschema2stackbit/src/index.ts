@@ -79,7 +79,7 @@ export function convert({
 }
 
 const mapping: ITypeMapping = {
-  [TypeName.String]: 'text',
+  [TypeName.String]: 'string',
   [TypeName.Integer]: 'number',
   [TypeName.Boolean]: 'boolean',
   [TypeName.Array]: 'list',
@@ -89,10 +89,6 @@ const mapping: ITypeMapping = {
 };
 
 function basicTypeMapping(property: JSONSchema.Interface): GenericType {
-  if (property.type === 'string' && property.enum && property.enum.length) {
-    return 'enum';
-  }
-
   if (property.type === 'string' && property.format && property.format === 'markdown') {
     return 'markdown';
   }
@@ -103,10 +99,6 @@ function basicTypeMapping(property: JSONSchema.Interface): GenericType {
 
   if (property.type === 'string' && property.format && property.format === 'id') {
     return 'number';
-  }
-
-  if (property.type === 'string' && property.format && property.format === 'icon') {
-    return 'icon';
   }
 
   return mapping[property.type as TypeName];
@@ -422,17 +414,38 @@ function processBasic({
   subSchema,
   rootSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
-  const field: Field = {
+  const type = basicTypeMapping(subSchema);
+
+  let field: Field = {
     name: name.replace('-', '_'),
     type: 'string'
   };
 
-  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'icon') {
-    field.controlType = 'custom-modal-html';
-    field.controlFilePath = '.stackbit/fields/icon/index.html';
+  if (type === 'string' && subSchema.format && subSchema.format === 'icon') {
+    field = {
+      name: name.replace('-', '_'),
+      type: 'string',
+      controlType: 'custom-modal-html',
+      controlFilePath: '.stackbit/fields/icon/index.html'
+    };
+  } else if (
+    type === 'markdown' ||
+    type === 'image' ||
+    type === 'number' ||
+    type === 'boolean' ||
+    type === 'color' ||
+    type === 'date' ||
+    type === 'datetime' ||
+    type === 'slug' ||
+    type === 'text'
+  ) {
+    field = {
+      name: name.replace('-', '_'),
+      type
+    };
   }
 
-  if (subSchema.default) field.default = subSchema.default as string;
+  if (subSchema.default !== null) field.default = subSchema.default as string;
 
   if (description) field.description = description;
 

@@ -2,6 +2,23 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.5.0",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.5.0",
+      "date": "Fri, 28 Jun 2024 15:41:21 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "adopt new title handling in schema reducer"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.2.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.4.3",
       "tag": "@kickstartds/jsonschema2stackbit_v1.4.3",
       "date": "Tue, 25 Jun 2024 10:40:59 GMT",

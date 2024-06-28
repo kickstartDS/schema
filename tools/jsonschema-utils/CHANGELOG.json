@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.2.0",
+      "tag": "@kickstartds/jsonschema-utils_v3.2.0",
+      "date": "Fri, 28 Jun 2024 15:41:21 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "handle title fields in JSON Schemas"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.1.2",
       "tag": "@kickstartds/jsonschema-utils_v3.1.2",
       "date": "Tue, 25 Jun 2024 10:40:59 GMT",

@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2stackbit",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "description": "Converts JSON schema to Stackbit component json definition",
   "license": "(MIT OR Apache-2.0)",
   "author": {

@@ -110,6 +110,7 @@ function componentsEqual(componentOne: ObjectModel, componentTwo: ObjectModel): 
 
 function processObject({
   name,
+  title,
   description,
   fields,
   classification,
@@ -123,10 +124,13 @@ function processObject({
       classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
         ? getSchemaName(subSchema.$id).replace('-', '_')
         : name.replace('-', '_');
+    const modelLabel =
+      (classification && ['component', 'template', 'global'].includes(classification) && subSchema.title) ||
+      toPascalCase(modelName);
 
     const model: FieldModel = {
       name: name.replace('-', '_'),
-      label: toPascalCase(name),
+      label: title || toPascalCase(name),
       description,
       type: 'model',
       models: [modelName]
@@ -134,7 +138,7 @@ function processObject({
 
     const field: ObjectModel = {
       name: modelName,
-      label: toPascalCase(modelName),
+      label: modelLabel,
       description,
       type: 'object',
       fields: fields.reduce<Field[]>((fields, field) => {
@@ -155,7 +159,7 @@ function processObject({
   if (classification) {
     const field: FieldObject = {
       name: name.replace('-', '_'),
-      label: toPascalCase(name),
+      label: title || toPascalCase(name),
       description,
       type: 'object',
       fields: []
@@ -164,7 +168,7 @@ function processObject({
     if (classification === 'component') {
       const object: ObjectModel = {
         name: name.replace('-', '_'),
-        label: toPascalCase(name),
+        label: title || toPascalCase(name),
         description,
         type: 'object',
         fields: fields.reduce<Field[]>((fields, field) => {
@@ -178,7 +182,7 @@ function processObject({
     if (classification === 'template') {
       const template: PageModel = {
         name: name.replace('-', '_'),
-        label: toPascalCase(name),
+        label: title || toPascalCase(name),
         description,
         type: 'page',
         fields: fields.reduce<Field[]>((fields, field) => {
@@ -192,7 +196,7 @@ function processObject({
     if (classification === 'global') {
       const global: DataModel = {
         name: name.replace('-', '_'),
-        label: toPascalCase(name),
+        label: title || toPascalCase(name),
         description,
         type: 'data',
         fields: fields.reduce<Field[]>((fields, field) => {
@@ -207,7 +211,7 @@ function processObject({
 
   const field: FieldObject = {
     name: name.replace('-', '_'),
-    label: toPascalCase(name),
+    label: title || toPascalCase(name),
     description,
     type: 'object',
     fields: fields.reduce<Field[]>((fields, field) => {
@@ -221,16 +225,18 @@ function processObject({
 
 function processRef({
   name,
+  title,
   description,
   fields,
   subSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object to process');
   const modelName = getSchemaName(subSchema.$id).replace('-', '_');
+  const modelLabel = subSchema.title || toPascalCase(modelName);
 
   const model: FieldModel = {
     name: name.replace('-', '_'),
-    label: toPascalCase(name),
+    label: title || toPascalCase(name),
     description,
     type: 'model',
     models: [modelName]
@@ -238,7 +244,7 @@ function processRef({
 
   const field: ObjectModel = {
     name: modelName,
-    label: toPascalCase(modelName),
+    label: modelLabel,
     description,
     type: 'object',
     fields: fields.reduce<Field[]>((fields, field) => {
@@ -252,6 +258,7 @@ function processRef({
 
 function processRefArray({
   name,
+  title,
   description,
   rootSchema,
   fields
@@ -260,6 +267,7 @@ function processRefArray({
 
   const field: FieldList = {
     name: name.replace('-', '_'),
+    label: title || toPascalCase(name),
     type: 'list',
     items: {
       type: 'model',
@@ -279,6 +287,7 @@ function processRefArray({
 
 function processObjectArray({
   name,
+  title,
   description,
   subSchema,
   rootSchema,
@@ -291,7 +300,7 @@ function processObjectArray({
     if (field.type === 'object') {
       objects.push({
         name: field.name.replace('-', '_'),
-        label: toPascalCase(field.name),
+        label: field.label || toPascalCase(field.name),
         description,
         type: 'object',
         fields: field.fields
@@ -301,6 +310,7 @@ function processObjectArray({
 
   const field: FieldList = {
     name: name.replace('-', '_'),
+    label: title || toPascalCase(name),
     type: 'list',
     items: {
       type: 'model',
@@ -323,9 +333,7 @@ function processObjectArray({
 
 function processArray({
   name,
-  // description,
-  // subSchema,
-  // rootSchema,
+  title,
   arrayField
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!arrayField || !arrayField.type) throw new Error('Missing type in array field');
@@ -369,6 +377,7 @@ function processArray({
 
     const field: FieldList = {
       name: name.replace('-', '_'),
+      label: title || toPascalCase(name),
       type: 'list',
       items
     };
@@ -379,12 +388,14 @@ function processArray({
 
 function processEnum({
   name,
+  title,
   description,
   subSchema,
   options
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   const field: FieldEnum = {
     name: name.replace('-', '_'),
+    label: title || toPascalCase(name),
     type: 'enum',
     options: []
   };
@@ -410,6 +421,7 @@ function processConst({
 
 function processBasic({
   name,
+  title,
   description,
   subSchema,
   rootSchema
@@ -418,6 +430,7 @@ function processBasic({
 
   let field: Field = {
     name: name.replace('-', '_'),
+    label: title || toPascalCase(name),
     type: 'string'
   };
 
@@ -457,6 +470,7 @@ function processBasic({
 function getInternalTypeDefinition(type: string): FieldText {
   return {
     name: typeResolutionField.replace('-', '_'),
+    label: toPascalCase(typeResolutionField),
     type: 'text',
     description: 'Internal type for interface resolution',
     default: type.replace('-', '_'),

@@ -19,6 +19,7 @@ export interface IConvertParams {
 
 export interface IProcessInterface<Field> {
   name: string;
+  title: string;
   description: string;
   subSchema: JSONSchema.Interface;
   rootSchema: JSONSchema.Interface;
@@ -123,13 +124,15 @@ export function getSchemaReducer<
     if (schema.$id === undefined) throw err(`Schema does not have an $id property.`, schema);
 
     const componentName = getSchemaName(schema.$id);
+    const componentTitle = schema.title || componentName;
     const clonedSchema = schemaPost ? schemaPost(structuredClone(schema)) : structuredClone(schema);
 
-    return buildComponent(componentName, clonedSchema, knownObjects);
+    return buildComponent(componentName, componentTitle, clonedSchema, knownObjects);
   }
 
   function buildComponent(
     name: string,
+    title: string,
     schema: JSONSchema.Interface,
     knownObjects: IReducerResult<ComponentType, TemplateType, GlobalType> = {
       components: [],
@@ -143,6 +146,7 @@ export function getSchemaReducer<
 
     const result = processObject({
       name,
+      title,
       description,
       subSchema: schema,
       rootSchema: schema,
@@ -151,7 +155,9 @@ export function getSchemaReducer<
           ? Object.keys(schema.properties).reduce<FieldType[]>((acc, name) => {
               if (!schema.properties) throw err(`Can't process a component without properties.`, schema);
               const objectSchema = structuredClone(schema.properties[name] as JSONSchema.Interface);
-              return acc.concat(buildType(name, objectSchema, schema, schema, knownObjects));
+              return acc.concat(
+                buildType(name, objectSchema.title || name, objectSchema, schema, schema, knownObjects)
+              );
             }, [])
           : [],
       classification:
@@ -181,6 +187,7 @@ export function getSchemaReducer<
    */
   function buildType(
     name: string,
+    title: string,
     schema: JSONSchema.Interface,
     parentSchema: JSONSchema.Interface,
     rootSchema: JSONSchema.Interface,
@@ -224,6 +231,7 @@ export function getSchemaReducer<
       return processResult(
         processRef({
           name,
+          title,
           description,
           subSchema: reffedSchema,
           rootSchema,
@@ -238,7 +246,16 @@ export function getSchemaReducer<
                       rootSchema.$id
                     );
                   const objectSchema = structuredClone(reffedSchema.properties[name] as JSONSchema.Interface);
-                  return acc.concat(buildType(name, objectSchema, schema, rootSchema, knownObjects));
+                  return acc.concat(
+                    buildType(
+                      name,
+                      objectSchema.title || name,
+                      objectSchema,
+                      schema,
+                      rootSchema,
+                      knownObjects
+                    )
+                  );
                 }, [])
               : [],
           classification:
@@ -266,6 +283,7 @@ export function getSchemaReducer<
       return processResult(
         processEnum({
           name,
+          title,
           description,
           subSchema: schema,
           rootSchema,
@@ -290,6 +308,7 @@ export function getSchemaReducer<
       return processResult(
         processConst({
           name,
+          title,
           description,
           subSchema: schema,
           rootSchema,
@@ -313,6 +332,7 @@ export function getSchemaReducer<
       return processResult(
         processObject({
           name,
+          title,
           description,
           subSchema: schema,
           rootSchema,
@@ -327,7 +347,16 @@ export function getSchemaReducer<
                       rootSchema.$id
                     );
                   const objectSchema = structuredClone(schema.properties[name] as JSONSchema.Interface);
-                  return acc.concat(buildType(name, objectSchema, schema, rootSchema, knownObjects));
+                  return acc.concat(
+                    buildType(
+                      name,
+                      objectSchema.title || name,
+                      objectSchema,
+                      schema,
+                      rootSchema,
+                      knownObjects
+                    )
+                  );
                 }, [])
               : [],
           classification:
@@ -358,6 +387,7 @@ export function getSchemaReducer<
             return prev.concat(
               buildType(
                 getSchemaName(resolvedSchema.$id),
+                resolvedSchema.title || getSchemaName(resolvedSchema.$id),
                 resolvedSchema,
                 parentSchema,
                 rootSchema,
@@ -369,6 +399,7 @@ export function getSchemaReducer<
           return processResult(
             processRefArray({
               name,
+              title,
               description,
               subSchema: schema,
               rootSchema,
@@ -383,6 +414,7 @@ export function getSchemaReducer<
               prev.concat(
                 buildType(
                   arraySchema.title?.toLowerCase() || '',
+                  arraySchema.title || '',
                   arraySchema,
                   parentSchema,
                   rootSchema,
@@ -395,6 +427,7 @@ export function getSchemaReducer<
           return processResult(
             processObjectArray({
               name,
+              title,
               description,
               subSchema: schema,
               rootSchema,
@@ -421,9 +454,23 @@ export function getSchemaReducer<
         let fieldConfig;
         if (arraySchema.$ref) {
           const resolvedSchema = getSchemaFn ? getSchemaFn(arraySchema.$ref) : getSchema(arraySchema.$ref);
-          fieldConfig = buildType(name, resolvedSchema, schema, rootSchema, knownObjects);
+          fieldConfig = buildType(
+            name,
+            resolvedSchema.title || name,
+            resolvedSchema,
+            schema,
+            rootSchema,
+            knownObjects
+          );
         } else {
-          fieldConfig = buildType(name, arraySchema, schema, rootSchema, knownObjects);
+          fieldConfig = buildType(
+            name,
+            arraySchema.title || name,
+            arraySchema,
+            schema,
+            rootSchema,
+            knownObjects
+          );
         }
 
         if (Array.isArray(fieldConfig) && fieldConfig.length !== 1)
@@ -436,6 +483,7 @@ export function getSchemaReducer<
         return processResult(
           processArray({
             name,
+            title,
             description,
             subSchema: schema,
             rootSchema,
@@ -453,6 +501,7 @@ export function getSchemaReducer<
       return processResult(
         processBasic({
           name,
+          title,
           description,
           subSchema: schema,
           rootSchema,

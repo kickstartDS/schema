@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "allow additional cms related keywords",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

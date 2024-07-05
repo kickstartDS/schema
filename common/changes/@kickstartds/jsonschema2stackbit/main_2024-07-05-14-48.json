@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "add processing for cms grouping of fields",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

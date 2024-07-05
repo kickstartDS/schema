@@ -15,6 +15,7 @@ import {
   Field,
   FieldBasicProps,
   FieldEnum,
+  FieldGroupItem,
   FieldList,
   FieldModel,
   FieldObject,
@@ -108,6 +109,19 @@ function componentsEqual(componentOne: ObjectModel, componentTwo: ObjectModel): 
   return componentOne.name === componentTwo.name;
 }
 
+function isCmsAnnotatedSchema(schema: unknown): schema is JSONSchema.Interface & {
+  'x-cms-group-name': string;
+  'x-cms-group-title'?: string;
+  'x-cms-group-icon'?: string;
+} {
+  return (
+    typeof schema === 'object' &&
+    schema !== null &&
+    'x-cms-group-name' in schema &&
+    schema['x-cms-group-name'] !== undefined
+  );
+}
+
 function processObject({
   name,
   title,
@@ -117,6 +131,25 @@ function processObject({
   parentSchema,
   subSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
+  function reduceFields(fields: Field[]): [Field[], FieldGroupItem[]] {
+    const fieldGroups: Record<string, FieldGroupItem> = {};
+    const reducedFields = fields.reduce<Field[]>((fields, field) => {
+      if (field.group && subSchema.properties) {
+        const schemaField = subSchema.properties[field.name];
+        if (isCmsAnnotatedSchema(schemaField)) {
+          fieldGroups[field.group] ||= {
+            name: field.group,
+            label: schemaField['x-cms-group-title'] || toPascalCase(field.group),
+            icon: schemaField['x-cms-group-icon'] || 'circle-question'
+          };
+        }
+      }
+      fields.push(field);
+      return fields;
+    }, []);
+
+    return [reducedFields, Object.values(fieldGroups)];
+  }
   if (!fields) throw new Error('Missing fields on object to process');
 
   if (parentSchema && parentSchema.type === 'array') {
@@ -136,23 +169,22 @@ function processObject({
       models: [modelName]
     };
 
+    const [reducedFields, fieldGroups] = reduceFields(fields);
     const field: ObjectModel = {
       name: modelName,
       label: modelLabel,
       description,
       type: 'object',
-      fields: fields.reduce<Field[]>((fields, field) => {
-        fields.push(field);
-        return fields;
-      }, [])
+      fields: reducedFields,
+      fieldGroups
     };
 
     return { field: model, components: [field] };
   } else if ((parentSchema && parentSchema.type === 'object') || (parentSchema && parentSchema.$ref)) {
     if (classification && ['component', 'template', 'global'].includes(classification)) {
-      // console.log('parentSchema object classified', name, parentSchema?.$id);
+      // This case is currently not hit for the Stackbit converter, keep it if the need arises
     } else {
-      // console.log('parentSchema object raw', name, parentSchema?.$id);
+      // This case is currently not hit for the Stackbit converter, keep it if the need arises
     }
   }
 
@@ -166,58 +198,54 @@ function processObject({
     };
 
     if (classification === 'component') {
+      const [reducedFields, fieldGroups] = reduceFields(fields);
       const object: ObjectModel = {
         name: name.replace('-', '_'),
         label: title || toPascalCase(name),
         description,
         type: 'object',
-        fields: fields.reduce<Field[]>((fields, field) => {
-          fields.push(field);
-          return fields;
-        }, [])
+        fields: reducedFields,
+        fieldGroups
       };
 
       return { field, components: [object] };
     }
     if (classification === 'template') {
+      const [reducedFields, fieldGroups] = reduceFields(fields);
       const template: PageModel = {
         name: name.replace('-', '_'),
         label: title || toPascalCase(name),
         description,
         type: 'page',
-        fields: fields.reduce<Field[]>((fields, field) => {
-          fields.push(field);
-          return fields;
-        }, [])
+        fields: reducedFields,
+        fieldGroups
       };
 
       return { field, templates: [template] };
     }
     if (classification === 'global') {
+      const [reducedFields, fieldGroups] = reduceFields(fields);
       const global: DataModel = {
         name: name.replace('-', '_'),
         label: title || toPascalCase(name),
         description,
         type: 'data',
-        fields: fields.reduce<Field[]>((fields, field) => {
-          fields.push(field);
-          return fields;
-        }, [])
+        fields: reducedFields,
+        fieldGroups
       };
 
       return { field, globals: [global] };
     }
   }
 
+  const [reducedFields, fieldGroups] = reduceFields(fields);
   const field: FieldObject = {
     name: name.replace('-', '_'),
     label: title || toPascalCase(name),
     description,
     type: 'object',
-    fields: fields.reduce<Field[]>((fields, field) => {
-      fields.push(field);
-      return fields;
-    }, [])
+    fields: reducedFields,
+    fieldGroups
   };
 
   return { field };
@@ -461,6 +489,8 @@ function processBasic({
   }
 
   if (subSchema.default !== null) field.default = subSchema.default as string;
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+    field.group = subSchema['x-cms-group-name'];
 
   if (description) field.description = description;
 

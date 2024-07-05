@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2uniform",
   "entries": [
     {
+      "version": "1.4.12",
+      "tag": "@kickstartds/jsonschema2uniform_v1.4.12",
+      "date": "Fri, 05 Jul 2024 14:49:28 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.3.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.4.11",
       "tag": "@kickstartds/jsonschema2uniform_v1.4.11",
       "date": "Fri, 28 Jun 2024 15:41:22 GMT",

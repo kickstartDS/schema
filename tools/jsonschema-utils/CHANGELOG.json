@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.3.0",
+      "tag": "@kickstartds/jsonschema-utils_v3.3.0",
+      "date": "Fri, 05 Jul 2024 14:49:28 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "allow additional cms related keywords"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.2.0",
       "tag": "@kickstartds/jsonschema-utils_v3.2.0",
       "date": "Fri, 28 Jun 2024 15:41:21 GMT",

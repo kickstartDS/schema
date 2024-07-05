@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Fri, 05 Jul 2024 11:46:07 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Jul 2024 14:49:28 GMT and should not be manually modified.
+
+## 1.6.0
+Fri, 05 Jul 2024 14:49:28 GMT
+
+### Minor changes
+
+- add processing for cms grouping of fields
 
 ## 1.5.1
 Fri, 05 Jul 2024 11:46:07 GMT

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.5.1",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.5.1",
+      "date": "Fri, 05 Jul 2024 11:46:07 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add missing titles to some basic field types"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.0",
       "tag": "@kickstartds/jsonschema2stackbit_v1.5.0",
       "date": "Fri, 28 Jun 2024 15:41:21 GMT",

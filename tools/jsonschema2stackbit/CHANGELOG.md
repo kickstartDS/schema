@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Fri, 28 Jun 2024 15:41:21 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Jul 2024 11:46:07 GMT and should not be manually modified.
+
+## 1.5.1
+Fri, 05 Jul 2024 11:46:07 GMT
+
+### Patches
+
+- add missing titles to some basic field types
 
 ## 1.5.0
 Fri, 28 Jun 2024 15:41:21 GMT

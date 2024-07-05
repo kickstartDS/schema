@@ -437,6 +437,7 @@ function processBasic({
   if (type === 'string' && subSchema.format && subSchema.format === 'icon') {
     field = {
       name: name.replace('-', '_'),
+      label: title || toPascalCase(name),
       type: 'string',
       controlType: 'custom-modal-html',
       controlFilePath: '.stackbit/fields/icon/index.html'
@@ -454,6 +455,7 @@ function processBasic({
   ) {
     field = {
       name: name.replace('-', '_'),
+      label: title || toPascalCase(name),
       type
     };
   }

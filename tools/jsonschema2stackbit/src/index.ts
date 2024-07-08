@@ -122,6 +122,26 @@ function isCmsAnnotatedSchema(schema: unknown): schema is JSONSchema.Interface &
   );
 }
 
+function reduceFields(fields: Field[], subSchema: JSONSchema.Interface): [Field[], FieldGroupItem[]] {
+  const fieldGroups: Record<string, FieldGroupItem> = {};
+  const reducedFields = fields.reduce<Field[]>((fields, field) => {
+    if (field.group && subSchema.properties) {
+      const schemaField = subSchema.properties[field.name];
+      if (isCmsAnnotatedSchema(schemaField)) {
+        fieldGroups[field.group] ||= {
+          name: field.group,
+          label: schemaField['x-cms-group-title'] || toPascalCase(field.group),
+          icon: schemaField['x-cms-group-icon'] || 'circle-question'
+        };
+      }
+    }
+    fields.push(field);
+    return fields;
+  }, []);
+
+  return [reducedFields, Object.values(fieldGroups)];
+}
+
 function processObject({
   name,
   title,
@@ -131,25 +151,6 @@ function processObject({
   parentSchema,
   subSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
-  function reduceFields(fields: Field[]): [Field[], FieldGroupItem[]] {
-    const fieldGroups: Record<string, FieldGroupItem> = {};
-    const reducedFields = fields.reduce<Field[]>((fields, field) => {
-      if (field.group && subSchema.properties) {
-        const schemaField = subSchema.properties[field.name];
-        if (isCmsAnnotatedSchema(schemaField)) {
-          fieldGroups[field.group] ||= {
-            name: field.group,
-            label: schemaField['x-cms-group-title'] || toPascalCase(field.group),
-            icon: schemaField['x-cms-group-icon'] || 'circle-question'
-          };
-        }
-      }
-      fields.push(field);
-      return fields;
-    }, []);
-
-    return [reducedFields, Object.values(fieldGroups)];
-  }
   if (!fields) throw new Error('Missing fields on object to process');
 
   if (parentSchema && parentSchema.type === 'array') {
@@ -168,8 +169,10 @@ function processObject({
       type: 'model',
       models: [modelName]
     };
+    if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+      model.group = subSchema['x-cms-group-name'];
 
-    const [reducedFields, fieldGroups] = reduceFields(fields);
+    const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
     const field: ObjectModel = {
       name: modelName,
       label: modelLabel,
@@ -198,7 +201,7 @@ function processObject({
     };
 
     if (classification === 'component') {
-      const [reducedFields, fieldGroups] = reduceFields(fields);
+      const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
       const object: ObjectModel = {
         name: name.replace('-', '_'),
         label: title || toPascalCase(name),
@@ -211,7 +214,7 @@ function processObject({
       return { field, components: [object] };
     }
     if (classification === 'template') {
-      const [reducedFields, fieldGroups] = reduceFields(fields);
+      const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
       const template: PageModel = {
         name: name.replace('-', '_'),
         label: title || toPascalCase(name),
@@ -224,7 +227,7 @@ function processObject({
       return { field, templates: [template] };
     }
     if (classification === 'global') {
-      const [reducedFields, fieldGroups] = reduceFields(fields);
+      const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
       const global: DataModel = {
         name: name.replace('-', '_'),
         label: title || toPascalCase(name),
@@ -238,7 +241,7 @@ function processObject({
     }
   }
 
-  const [reducedFields, fieldGroups] = reduceFields(fields);
+  const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
   const field: FieldObject = {
     name: name.replace('-', '_'),
     label: title || toPascalCase(name),
@@ -247,6 +250,8 @@ function processObject({
     fields: reducedFields,
     fieldGroups
   };
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+    field.group = subSchema['x-cms-group-name'];
 
   return { field };
 }
@@ -269,16 +274,17 @@ function processRef({
     type: 'model',
     models: [modelName]
   };
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+    model.group = subSchema['x-cms-group-name'];
 
+  const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
   const field: ObjectModel = {
     name: modelName,
     label: modelLabel,
     description,
     type: 'object',
-    fields: fields.reduce<Field[]>((fields, field) => {
-      fields.push(field);
-      return fields;
-    }, [])
+    fields: reducedFields,
+    fieldGroups
   };
 
   return { field: model, components: [field] };
@@ -289,6 +295,7 @@ function processRefArray({
   title,
   description,
   rootSchema,
+  subSchema,
   fields
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on ref array to process');
@@ -307,6 +314,9 @@ function processRefArray({
   };
 
   if (description) field.description = description;
+
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+    field.group = subSchema['x-cms-group-name'];
 
   field.required = rootSchema.required?.includes(name) || false;
 
@@ -352,6 +362,9 @@ function processObjectArray({
   // TODO this is suspect, should expect an object here when in processObject
   if (rootSchema.default) field.default = (subSchema.default as string).replace('-', '_');
 
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+    field.group = subSchema['x-cms-group-name'];
+
   if (description) field.description = description;
 
   field.required = rootSchema.required?.includes(name) || false;
@@ -362,6 +375,7 @@ function processObjectArray({
 function processArray({
   name,
   title,
+  subSchema,
   arrayField
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!arrayField || !arrayField.type) throw new Error('Missing type in array field');
@@ -383,6 +397,8 @@ function processArray({
       type: 'list',
       items: listField
     };
+    if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+      field.group = subSchema['x-cms-group-name'];
 
     return { field };
   }
@@ -396,19 +412,22 @@ function processArray({
       type: 'list',
       items: listField
     };
+    if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+      field.group = subSchema['x-cms-group-name'];
 
     return { field };
   } else {
     const items: FieldBasicProps = {
       type: arrayField.type
     };
-
     const field: FieldList = {
       name: name.replace('-', '_'),
       label: title || toPascalCase(name),
       type: 'list',
       items
     };
+    if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+      field.group = subSchema['x-cms-group-name'];
 
     return { field };
   }
@@ -429,6 +448,9 @@ function processEnum({
   };
 
   if (subSchema.default) field.default = safeEnumKey(subSchema.default as string);
+
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
+    field.group = subSchema['x-cms-group-name'];
 
   if (description) field.description = description;
 
@@ -489,6 +511,7 @@ function processBasic({
   }
 
   if (subSchema.default !== null) field.default = subSchema.default as string;
+
   if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
     field.group = subSchema['x-cms-group-name'];
 

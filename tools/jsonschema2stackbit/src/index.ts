@@ -45,6 +45,10 @@ export function configuration(
   );
 }
 
+function isObjectModel(field: unknown): field is ObjectModel {
+  return typeof field === 'object' && field !== null && 'type' in field && field.type === 'object';
+}
+
 /**
  * @param jsonSchemas - An individual schema or an array of schemas, provided
  * either as Javascript objects or as JSON text.
@@ -79,9 +83,24 @@ export function convert({
 
   traverse(
     reduced,
-    ({ key, value, parent }) => {
+    ({ value, parent }) => {
       if (value && value.group && value.group === 'INLINE') {
-        console.log(key, value, parent);
+        const schema = parent?.find((field: Field) => isObjectModel(field) && field.name === value.name);
+        if (
+          schema &&
+          isObjectModel(schema) &&
+          schema.fields &&
+          schema.fields.length > 0 &&
+          Array.isArray(parent)
+        ) {
+          for (const field of schema.fields) {
+            parent.unshift({
+              ...field,
+              name: `${value.name}_${field.name}`,
+              group: value.group
+            });
+          }
+        }
       }
     },
     {

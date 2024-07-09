@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.6.4",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.6.4",
+      "date": "Tue, 09 Jul 2024 09:43:24 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "further improve inlining capabilities"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.3",
       "tag": "@kickstartds/jsonschema2stackbit_v1.6.3",
       "date": "Tue, 09 Jul 2024 09:23:01 GMT",

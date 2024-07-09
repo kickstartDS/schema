@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Tue, 09 Jul 2024 09:23:01 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Jul 2024 09:43:24 GMT and should not be manually modified.
+
+## 1.6.4
+Tue, 09 Jul 2024 09:43:24 GMT
+
+### Patches
+
+- further improve inlining capabilities
 
 ## 1.6.3
 Tue, 09 Jul 2024 09:23:01 GMT

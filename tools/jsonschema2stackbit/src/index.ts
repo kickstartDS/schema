@@ -100,6 +100,7 @@ export function convert({
               group: value.name
             });
           }
+          parent.splice(parent.indexOf(schema));
         }
       }
     },

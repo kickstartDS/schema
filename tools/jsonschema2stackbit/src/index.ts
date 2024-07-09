@@ -84,7 +84,7 @@ export function convert({
   traverse(
     reduced,
     ({ value, parent }) => {
-      if (value && value.group && value.group === 'INLINE') {
+      if (value && value.group && value.group.startsWith('INLINE__')) {
         const schema = parent?.find((field: Field) => isObjectModel(field) && field.name === value.name);
         if (
           schema &&
@@ -96,8 +96,8 @@ export function convert({
           for (const field of schema.fields) {
             parent.unshift({
               ...field,
-              name: `${value.name}_${field.name}`,
-              group: value.group
+              name: `${value.name}__${field.name}`,
+              group: value.name
             });
           }
         }
@@ -162,9 +162,12 @@ function reduceFields(fields: Field[], subSchema: JSONSchema.Interface): [Field[
     if (field.group && subSchema.properties) {
       const schemaField = subSchema.properties[field.name];
       if (isCmsAnnotatedSchema(schemaField)) {
+        const groupName = field.group.startsWith('INLINE__')
+          ? field.group.replace('INLINE__', '')
+          : field.group;
         fieldGroups[field.group] ||= {
-          name: field.group,
-          label: schemaField['x-cms-group-title'] || toPascalCase(field.group),
+          name: groupName,
+          label: schemaField['x-cms-group-title'] || toPascalCase(groupName),
           icon: schemaField['x-cms-group-icon'] || 'circle-question'
         };
       }
@@ -287,7 +290,8 @@ function processObject({
   };
   if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
     field.group = subSchema['x-cms-group-name'];
-  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-inline']) field.group = 'INLINE';
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-inline'])
+    field.group = `INLINE__${name.replace('-', '_')}`;
 
   return { field };
 }

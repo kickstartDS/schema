@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Tue, 09 Jul 2024 11:13:35 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Jul 2024 11:52:39 GMT and should not be manually modified.
+
+## 1.6.8
+Tue, 09 Jul 2024 11:52:39 GMT
+
+### Patches
+
+- fix order of inlined fields
 
 ## 1.6.7
 Tue, 09 Jul 2024 11:13:35 GMT

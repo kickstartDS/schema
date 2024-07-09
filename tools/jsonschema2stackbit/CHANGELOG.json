@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.6.8",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.6.8",
+      "date": "Tue, 09 Jul 2024 11:52:39 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix order of inlined fields"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.7",
       "tag": "@kickstartds/jsonschema2stackbit_v1.6.7",
       "date": "Tue, 09 Jul 2024 11:13:35 GMT",

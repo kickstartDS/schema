@@ -2,6 +2,18 @@
   "name": "@kickstartds/stackbit-example",
   "entries": [
     {
+      "version": "2.0.25",
+      "tag": "@kickstartds/stackbit-example_v2.0.25",
+      "date": "Tue, 09 Jul 2024 09:11:08 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2stackbit\" to `1.6.2`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.24",
       "tag": "@kickstartds/stackbit-example_v2.0.24",
       "date": "Mon, 08 Jul 2024 11:58:48 GMT",

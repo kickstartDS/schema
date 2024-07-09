@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/stackbit-example
 
-This log was last generated on Mon, 08 Jul 2024 11:58:48 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Jul 2024 09:11:08 GMT and should not be manually modified.
+
+## 2.0.25
+Tue, 09 Jul 2024 09:11:08 GMT
+
+_Version update only_
 
 ## 2.0.24
 Mon, 08 Jul 2024 11:58:48 GMT

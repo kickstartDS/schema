@@ -24,6 +24,7 @@ import {
   PageModel
 } from '@stackbit/types';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
+import { traverse } from 'object-traversal';
 
 import { GenericType, ITypeMapping } from './@types/index.js';
 export * from './@types/index.js';
@@ -76,6 +77,19 @@ export function convert({
     { components: [], templates: [], globals: [] }
   );
 
+  traverse(
+    reduced,
+    ({ key, value, parent }) => {
+      if (value && value.group && value.group === 'INLINE') {
+        console.log(key, value, parent);
+      }
+    },
+    {
+      cycleHandling: false,
+      traversalType: 'breadth-first'
+    }
+  );
+
   return reduced;
 }
 
@@ -113,12 +127,13 @@ function isCmsAnnotatedSchema(schema: unknown): schema is JSONSchema.Interface &
   'x-cms-group-name': string;
   'x-cms-group-title'?: string;
   'x-cms-group-icon'?: string;
+  'x-cms-group-inline'?: boolean;
 } {
   return (
     typeof schema === 'object' &&
     schema !== null &&
-    'x-cms-group-name' in schema &&
-    schema['x-cms-group-name'] !== undefined
+    (('x-cms-group-name' in schema && schema['x-cms-group-name'] !== undefined) ||
+      ('x-cms-group-inline' in schema && schema['x-cms-group-inline'] === true))
   );
 }
 
@@ -220,6 +235,7 @@ function processObject({
         label: title || toPascalCase(name),
         description,
         type: 'page',
+        hideContent: true,
         fields: reducedFields,
         fieldGroups
       };
@@ -252,6 +268,7 @@ function processObject({
   };
   if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
     field.group = subSchema['x-cms-group-name'];
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-inline']) field.group = 'INLINE';
 
   return { field };
 }

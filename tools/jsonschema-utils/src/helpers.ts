@@ -73,6 +73,11 @@ export function getSchemaRegistry({ support2019 = false }: { support2019?: boole
     schemaType: 'string',
     validate: () => true
   });
+  ajv.addKeyword({
+    keyword: 'x-cms-group-inline',
+    schemaType: 'boolean',
+    validate: () => true
+  });
 
   return ajv;
 }

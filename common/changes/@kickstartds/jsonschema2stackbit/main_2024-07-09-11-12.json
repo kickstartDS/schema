@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "make inlined fields movable",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

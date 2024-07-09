@@ -97,7 +97,7 @@ export function convert({
             parent.unshift({
               ...field,
               name: `${value.name}__${field.name}`,
-              group: value.name
+              group: field.group && field.group === 'content' ? undefined : field.group || value.name
             });
           }
           parent.splice(parent.indexOf(schema), 1);

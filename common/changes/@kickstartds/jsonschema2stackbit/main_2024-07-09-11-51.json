@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "fix order of inlined fields",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

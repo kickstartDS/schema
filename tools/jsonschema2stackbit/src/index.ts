@@ -93,7 +93,7 @@ export function convert({
           schema.fields.length > 0 &&
           Array.isArray(parent)
         ) {
-          for (const field of schema.fields) {
+          for (const field of schema.fields.reverse()) {
             parent.unshift({
               ...field,
               name: `${value.name}__${field.name}`,

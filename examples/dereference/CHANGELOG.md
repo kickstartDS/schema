@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/dereference-example
 
-This log was last generated on Fri, 05 Jul 2024 14:49:28 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Jul 2024 10:38:59 GMT and should not be manually modified.
+
+## 2.0.22
+Tue, 09 Jul 2024 10:38:59 GMT
+
+_Version update only_
 
 ## 2.0.21
 Fri, 05 Jul 2024 14:49:28 GMT

@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Fri, 05 Jul 2024 14:49:28 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Jul 2024 10:38:59 GMT and should not be manually modified.
+
+## 3.3.1
+Tue, 09 Jul 2024 10:38:59 GMT
+
+### Patches
+
+- add inlining cms flag to allowed keywords
 
 ## 3.3.0
 Fri, 05 Jul 2024 14:49:28 GMT

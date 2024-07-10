@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "extract more tab groups",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

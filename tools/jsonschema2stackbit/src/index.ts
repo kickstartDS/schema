@@ -93,8 +93,8 @@ export function convert({
           schema.fields.length > 0 &&
           Array.isArray(parent)
         ) {
-          for (const field of schema.fields.reverse()) {
-            parent.unshift({
+          for (const field of schema.fields) {
+            parent.splice(parent.indexOf(schema), 0, {
               ...field,
               name: `${value.name}__${field.name}`,
               group: field.group && field.group === 'content' ? undefined : field.group || value.name
@@ -171,6 +171,38 @@ function reduceFields(fields: Field[], subSchema: JSONSchema.Interface): [Field[
           label: schemaField['x-cms-group-title'] || toPascalCase(groupName),
           icon: schemaField['x-cms-group-icon'] || 'circle-question'
         };
+
+        if (
+          field.group.startsWith('INLINE__') &&
+          field.type === 'object' &&
+          field.fields &&
+          field.fields.length > 0
+        ) {
+          for (const subField of field.fields) {
+            if (!subField.group) continue;
+            const groupName = subField.group.startsWith('INLINE__')
+              ? subField.group.replace('INLINE__', '')
+              : subField.group;
+
+            if (subField.group !== 'content') {
+              const schemaSubField = schemaField.properties && schemaField.properties[subField.name];
+
+              fieldGroups[subField.group] ||= {
+                name: groupName,
+                label:
+                  (schemaSubField &&
+                    isCmsAnnotatedSchema(schemaSubField) &&
+                    schemaSubField['x-cms-group-title']) ||
+                  toPascalCase(groupName),
+                icon:
+                  (schemaSubField &&
+                    isCmsAnnotatedSchema(schemaSubField) &&
+                    schemaSubField['x-cms-group-icon']) ||
+                  'circle-question'
+              };
+            }
+          }
+        }
       }
     }
     fields.push(field);

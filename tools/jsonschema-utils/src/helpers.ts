@@ -252,7 +252,9 @@ export function reduceSchemaAllOf(
 
   const reducedSchema = allOfs.reduce((finalSchema: JSONSchema.Interface, allOf: JSONSchema.Interface) => {
     const mergeSchemaAllOf = (allOf: JSONSchema.Interface): JSONSchema.Interface => {
-      if (allOf.$ref !== undefined) {
+      if (allOf.allOf) {
+        return deepMerge(reduceSchemaAllOf(allOf, ajv, replaceExamples), finalSchema, replaceExamples);
+      } else if (allOf.$ref !== undefined) {
         const reffedSchema = structuredClone(
           ajv.getSchema(
             allOf.$ref.includes('#/definitions/') && !allOf.$ref.includes('http')

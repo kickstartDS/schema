@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.3.3",
+      "tag": "@kickstartds/jsonschema-utils_v3.3.3",
+      "date": "Wed, 10 Jul 2024 12:46:32 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "handle nested allOfs"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.3.2",
       "tag": "@kickstartds/jsonschema-utils_v3.3.2",
       "date": "Tue, 09 Jul 2024 11:13:35 GMT",

@@ -2,6 +2,23 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.6.9",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.6.9",
+      "date": "Wed, 10 Jul 2024 12:46:32 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "extract more tab groups"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.3.3`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.8",
       "tag": "@kickstartds/jsonschema2stackbit_v1.6.8",
       "date": "Tue, 09 Jul 2024 11:52:39 GMT",

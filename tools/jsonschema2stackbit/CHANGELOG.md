@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Tue, 09 Jul 2024 11:52:39 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jul 2024 12:46:32 GMT and should not be manually modified.
+
+## 1.6.9
+Wed, 10 Jul 2024 12:46:32 GMT
+
+### Patches
+
+- extract more tab groups
 
 ## 1.6.8
 Tue, 09 Jul 2024 11:52:39 GMT

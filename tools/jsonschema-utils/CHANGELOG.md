@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Tue, 09 Jul 2024 11:13:35 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jul 2024 12:46:32 GMT and should not be manually modified.
+
+## 3.3.3
+Wed, 10 Jul 2024 12:46:32 GMT
+
+### Patches
+
+- handle nested allOfs
 
 ## 3.3.2
 Tue, 09 Jul 2024 11:13:35 GMT

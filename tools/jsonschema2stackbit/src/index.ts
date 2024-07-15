@@ -209,7 +209,7 @@ function reduceFields(fields: Field[], subSchema: JSONSchema.Interface): [Field[
     return fields;
   }, []);
 
-  return [reducedFields, Object.values(fieldGroups)];
+  return [reducedFields, Object.values(fieldGroups).reverse()];
 }
 
 function processObject({
@@ -226,14 +226,14 @@ function processObject({
   if (parentSchema && parentSchema.type === 'array') {
     const modelName =
       classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
-        ? getSchemaName(subSchema.$id).replace('-', '_')
-        : name.replace('-', '_');
+        ? getSchemaName(subSchema.$id).replaceAll('-', '_')
+        : name.replaceAll('-', '_');
     const modelLabel =
       (classification && ['component', 'template', 'global'].includes(classification) && subSchema.title) ||
       toPascalCase(modelName);
 
     const model: FieldModel = {
-      name: name.replace('-', '_'),
+      name: name.replaceAll('-', '_'),
       label: title || toPascalCase(name),
       description,
       type: 'model',
@@ -263,7 +263,7 @@ function processObject({
 
   if (classification) {
     const field: FieldObject = {
-      name: name.replace('-', '_'),
+      name: name.replaceAll('-', '_'),
       label: title || toPascalCase(name),
       description,
       type: 'object',
@@ -273,7 +273,7 @@ function processObject({
     if (classification === 'component') {
       const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
       const object: ObjectModel = {
-        name: name.replace('-', '_'),
+        name: name.replaceAll('-', '_'),
         label: title || toPascalCase(name),
         description,
         type: 'object',
@@ -286,7 +286,7 @@ function processObject({
     if (classification === 'template') {
       const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
       const template: PageModel = {
-        name: name.replace('-', '_'),
+        name: name.replaceAll('-', '_'),
         label: title || toPascalCase(name),
         description,
         type: 'page',
@@ -300,7 +300,7 @@ function processObject({
     if (classification === 'global') {
       const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
       const global: DataModel = {
-        name: name.replace('-', '_'),
+        name: name.replaceAll('-', '_'),
         label: title || toPascalCase(name),
         description,
         type: 'data',
@@ -314,7 +314,7 @@ function processObject({
 
   const [reducedFields, fieldGroups] = reduceFields(fields, subSchema);
   const field: FieldObject = {
-    name: name.replace('-', '_'),
+    name: name.replaceAll('-', '_'),
     label: title || toPascalCase(name),
     description,
     type: 'object',
@@ -324,7 +324,7 @@ function processObject({
   if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
     field.group = subSchema['x-cms-group-name'];
   if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-inline'])
-    field.group = `INLINE__${name.replace('-', '_')}`;
+    field.group = `INLINE__${name.replaceAll('-', '_')}`;
 
   return { field };
 }
@@ -337,11 +337,11 @@ function processRef({
   subSchema
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   if (!fields) throw new Error('Missing fields on object to process');
-  const modelName = getSchemaName(subSchema.$id).replace('-', '_');
+  const modelName = getSchemaName(subSchema.$id).replaceAll('-', '_');
   const modelLabel = subSchema.title || toPascalCase(modelName);
 
   const model: FieldModel = {
-    name: name.replace('-', '_'),
+    name: name.replaceAll('-', '_'),
     label: title || toPascalCase(name),
     description,
     type: 'model',
@@ -374,13 +374,13 @@ function processRefArray({
   if (!fields) throw new Error('Missing fields on ref array to process');
 
   const field: FieldList = {
-    name: name.replace('-', '_'),
+    name: name.replaceAll('-', '_'),
     label: title || toPascalCase(name),
     type: 'list',
     items: {
       type: 'model',
       models: fields?.reduce<string[]>((models, field) => {
-        models.push(field.name.replace('-', '_'));
+        models.push(field.name.replaceAll('-', '_'));
         return models;
       }, [])
     }
@@ -410,7 +410,7 @@ function processObjectArray({
   for (const field of fields) {
     if (field.type === 'object') {
       objects.push({
-        name: field.name.replace('-', '_'),
+        name: field.name.replaceAll('-', '_'),
         label: field.label || toPascalCase(field.name),
         description,
         type: 'object',
@@ -420,20 +420,20 @@ function processObjectArray({
   }
 
   const field: FieldList = {
-    name: name.replace('-', '_'),
+    name: name.replaceAll('-', '_'),
     label: title || toPascalCase(name),
     type: 'list',
     items: {
       type: 'model',
       models: fields?.reduce<string[]>((models, field) => {
-        models.push(field.name.replace('-', '_'));
+        models.push(field.name.replaceAll('-', '_'));
         return models;
       }, [])
     }
   };
 
   // TODO this is suspect, should expect an object here when in processObject
-  if (rootSchema.default) field.default = (subSchema.default as string).replace('-', '_');
+  if (rootSchema.default) field.default = (subSchema.default as string).replaceAll('-', '_');
 
   if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
     field.group = subSchema['x-cms-group-name'];
@@ -464,7 +464,7 @@ function processArray({
   if (arrayField.type === 'model') {
     const { name, label, description, ...listField } = arrayField;
     const field: FieldList = {
-      name: name.replace('-', '_'),
+      name: name.replaceAll('-', '_'),
       label,
       description,
       type: 'list',
@@ -479,7 +479,7 @@ function processArray({
   if (arrayField.type === 'object') {
     const { name, label, description, ...listField } = arrayField;
     const field: FieldList = {
-      name: name.replace('-', '_'),
+      name: name.replaceAll('-', '_'),
       label,
       description,
       type: 'list',
@@ -494,7 +494,7 @@ function processArray({
       type: arrayField.type
     };
     const field: FieldList = {
-      name: name.replace('-', '_'),
+      name: name.replaceAll('-', '_'),
       label: title || toPascalCase(name),
       type: 'list',
       items
@@ -514,7 +514,7 @@ function processEnum({
   options
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   const field: FieldEnum = {
-    name: name.replace('-', '_'),
+    name: name.replaceAll('-', '_'),
     label: title || toPascalCase(name),
     type: 'enum',
     options: []
@@ -552,14 +552,14 @@ function processBasic({
   const type = basicTypeMapping(subSchema);
 
   let field: Field = {
-    name: name.replace('-', '_'),
+    name: name.replaceAll('-', '_'),
     label: title || toPascalCase(name),
     type: 'string'
   };
 
   if (type === 'string' && subSchema.format && subSchema.format === 'icon') {
     field = {
-      name: name.replace('-', '_'),
+      name: name.replaceAll('-', '_'),
       label: title || toPascalCase(name),
       type: 'string',
       controlType: 'custom-modal-html',
@@ -577,7 +577,7 @@ function processBasic({
     type === 'text'
   ) {
     field = {
-      name: name.replace('-', '_'),
+      name: name.replaceAll('-', '_'),
       label: title || toPascalCase(name),
       type
     };
@@ -597,11 +597,11 @@ function processBasic({
 
 function getInternalTypeDefinition(type: string): FieldText {
   return {
-    name: typeResolutionField.replace('-', '_'),
+    name: typeResolutionField.replaceAll('-', '_'),
     label: toPascalCase(typeResolutionField),
     type: 'text',
     description: 'Internal type for interface resolution',
-    default: type.replace('-', '_'),
+    default: type.replaceAll('-', '_'),
     hidden: true
   };
 }

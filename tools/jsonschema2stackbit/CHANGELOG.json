@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.6.10",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.6.10",
+      "date": "Mon, 15 Jul 2024 09:24:39 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix multiple dashes conversion"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.9",
       "tag": "@kickstartds/jsonschema2stackbit_v1.6.9",
       "date": "Wed, 10 Jul 2024 12:46:32 GMT",

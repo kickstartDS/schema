@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Wed, 10 Jul 2024 12:46:32 GMT and should not be manually modified.
+This log was last generated on Mon, 15 Jul 2024 09:24:39 GMT and should not be manually modified.
+
+## 1.6.10
+Mon, 15 Jul 2024 09:24:39 GMT
+
+### Patches
+
+- fix multiple dashes conversion
 
 ## 1.6.9
 Wed, 10 Jul 2024 12:46:32 GMT

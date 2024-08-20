@@ -57,6 +57,10 @@
       "path": "../examples/hygraph"
     },
     {
+      "name": "examples/layering",
+      "path": "../examples/layering"
+    },
+    {
       "name": "examples/staticcms",
       "path": "../examples/staticcms"
     },

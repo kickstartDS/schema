@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/layering-example",
+      "comment": "first commit",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/layering-example"
+}

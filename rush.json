@@ -112,6 +112,13 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@kickstartds/layering-example",
+      "projectFolder": "examples/layering",
+      "reviewCategory": "examples",
+      "tags": ["examples"],
+      "shouldPublish": true
+    },
+    {
       "packageName": "@kickstartds/hygraph-example",
       "projectFolder": "examples/hygraph",
       "reviewCategory": "examples",

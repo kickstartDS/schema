@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://cms.schema.mydesignsystem.com/cta.schema.json",
+  "title": "Cta",
+  "description": "Cta layered on top by the CMS",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "layered": {
+          "type": "boolean",
+          "title": "Layered",
+          "description": "Indicates that this Cta is layered on top by the CMS",
+          "default": true
+        }
+      }
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/cta.schema.json"
+    }
+  ]
+}

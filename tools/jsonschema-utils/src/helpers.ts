@@ -320,10 +320,10 @@ export function layeredSchemaId(schemaId: string, targetSchemaIds: string[]): st
   return layeredId;
 }
 
-export function layerRefs(jsonSchemas: JSONSchema.Interface[], kdsSchemas: JSONSchema.Interface[]): void {
+export function layerRefs(jsonSchemas: JSONSchema.Interface[], schemasToLayer: JSONSchema.Interface[]): void {
   jsonSchemas.forEach((jsonSchema) => {
-    kdsSchemas.forEach((kdsSchema) => {
-      traverse(kdsSchema, {
+    schemasToLayer.forEach((schemaToLayer) => {
+      traverse(schemaToLayer, {
         cb: (subSchema) => {
           if (!subSchema.$ref || !subSchema.$ref.includes('http')) return;
           if (!jsonSchema.$id) throw new Error('Found a schema without $id, which is unsupported');
@@ -646,13 +646,21 @@ export async function processSchemas(
   const allSchemas = [...jsonSchemas, ...kdsSchemas].filter(
     (value: JSONSchema.Interface, index, self) => self.findIndex((v) => v.$id === value.$id) === index
   );
-
   const sortedSchemas = getSortedSchemas(getSchemaGraph(allSchemas));
+  const cmsSchemas = sortedSchemas.filter((sortedSchema) => sortedSchema.$id?.startsWith('http://cms.'));
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it
   // 1. pre-process, before schemas enter `ajv`
-  if (shouldLayerRefs) layerRefs(jsonSchemas, kdsSchemas);
+  if (shouldLayerRefs) {
+    layerRefs(cmsSchemas, kdsSchemas);
+    layerRefs(
+      cmsSchemas,
+      jsonSchemas.filter((schema) => !cmsSchemas.some((cmsSchema) => cmsSchema.$id === schema.$id))
+    );
+    layerRefs(jsonSchemas, kdsSchemas);
+  }
+
   if (typeResolution) addTypeInterfaces(sortedSchemas);
   if (shouldInlineReferences) inlineReferences(sortedSchemas, typeResolution);
   if (additionalProperties && additionalProperties !== 'keep')

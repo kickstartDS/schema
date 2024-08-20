@@ -197,6 +197,51 @@ importers:
       prettier: 2.8.8
       typescript: 5.3.3
 
+  ../../examples/layering:
+    specifiers:
+      '@kickstartds/base': ^4.0.2
+      '@kickstartds/blog': ^4.0.2
+      '@kickstartds/core': ^4.0.2
+      '@kickstartds/ds-agency': ^3.4.5
+      '@kickstartds/form': ^4.0.2
+      '@kickstartds/jsonschema-utils': workspace:*
+      '@rushstack/eslint-config': ^3.2.0
+      '@rushstack/heft': ^0.50.4
+      '@rushstack/heft-node-rig': ^1.12.10
+      '@tsconfig/node16': ^1.0.3
+      '@types/node': ^18.16.4
+      '@typescript-eslint/parser': ~5.59.2
+      eslint: ^8.40.0
+      eslint-import-resolver-typescript: ~3.5.5
+      eslint-plugin-import: ~2.27.5
+      eslint-plugin-json-files: ~2.2.0
+      import-meta-resolve: ~3.0.0
+      pascal-case: ^3.1.2
+      prettier: ^2.8.8
+      typescript: ^5.0.4
+    dependencies:
+      '@kickstartds/base': 4.0.2_@kickstartds+core@4.0.2
+      '@kickstartds/blog': 4.0.2_xqgpntmk27sq5ytaqq33tcp32m
+      '@kickstartds/core': 4.0.2
+      '@kickstartds/ds-agency': 3.4.5_pta2gn7gijqfqw6cqhqcosm7pu
+      '@kickstartds/form': 4.0.2_xqgpntmk27sq5ytaqq33tcp32m
+      '@kickstartds/jsonschema-utils': link:../../tools/jsonschema-utils
+    devDependencies:
+      '@rushstack/eslint-config': 3.6.0_xdgzedli73k7lw4xlyzszm74om
+      '@rushstack/heft': 0.50.7_@types+node@18.19.8
+      '@rushstack/heft-node-rig': 1.13.1_o3q7pzqtd7e6qcybsmmdodmsyu
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 18.19.8
+      '@typescript-eslint/parser': 5.59.11_xdgzedli73k7lw4xlyzszm74om
+      eslint: 8.56.0
+      eslint-import-resolver-typescript: 3.5.5_at3wd5jbbzx4vjqhzktn6nb57q
+      eslint-plugin-import: 2.27.5_eslint@8.56.0
+      eslint-plugin-json-files: 2.2.0_eslint@8.56.0
+      import-meta-resolve: 3.0.0
+      pascal-case: 3.1.2
+      prettier: 2.8.8
+      typescript: 5.3.3
+
   ../../examples/stackbit:
     specifiers:
       '@kickstartds/base': ^4.0.2
@@ -1854,6 +1899,7 @@ packages:
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
     dependencies:
       '@humanwhocodes/object-schema': 1.2.1
       debug: 4.3.4
@@ -1874,10 +1920,12 @@ packages:
 
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    deprecated: Use @eslint/object-schema instead
     dev: true
 
   /@humanwhocodes/object-schema/2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+    deprecated: Use @eslint/object-schema instead
     dev: true
 
   /@hygraph/management-sdk/1.2.4:
@@ -5380,6 +5428,7 @@ packages:
 
   /glob/7.0.6:
     resolution: {integrity: sha512-f8c0rE8JiCxpa52kWPAOa3ZaYEnzofDzCQLCn3Vdk0Z5OVLq3BsRFJI4S4ykpeVW6QMGBUkMeUpoEgWnMTnw5Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -5696,6 +5745,7 @@ packages:
 
   /inflight/1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -8086,6 +8136,7 @@ packages:
 
   /rimraf/2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3
@@ -8093,6 +8144,7 @@ packages:
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3

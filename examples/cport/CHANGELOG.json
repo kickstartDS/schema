@@ -2,6 +2,21 @@
   "name": "@kickstartds/cport-example",
   "entries": [
     {
+      "version": "1.0.16",
+      "tag": "@kickstartds/cport-example_v1.0.16",
+      "date": "Tue, 20 Aug 2024 13:12:42 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.4.0`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2cport\" to `1.4.16`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.15",
       "tag": "@kickstartds/cport-example_v1.0.15",
       "date": "Wed, 10 Jul 2024 12:46:32 GMT",

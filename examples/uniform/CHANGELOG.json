@@ -2,6 +2,21 @@
   "name": "@kickstartds/uniform-example",
   "entries": [
     {
+      "version": "2.1.16",
+      "tag": "@kickstartds/uniform-example_v2.1.16",
+      "date": "Tue, 20 Aug 2024 13:12:42 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.4.0`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2uniform\" to `1.4.16`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.1.15",
       "tag": "@kickstartds/uniform-example_v2.1.15",
       "date": "Wed, 10 Jul 2024 12:46:32 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Wed, 10 Jul 2024 12:46:32 GMT and should not be manually modified.
+This log was last generated on Tue, 20 Aug 2024 13:12:42 GMT and should not be manually modified.
+
+## 3.4.0
+Tue, 20 Aug 2024 13:12:42 GMT
+
+### Minor changes
+
+- add cms layering
 
 ## 3.3.3
 Wed, 10 Jul 2024 12:46:32 GMT

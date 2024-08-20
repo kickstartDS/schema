@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/jsonschema2cport
 
-This log was last generated on Wed, 10 Jul 2024 12:46:32 GMT and should not be manually modified.
+This log was last generated on Tue, 20 Aug 2024 13:12:42 GMT and should not be manually modified.
+
+## 1.4.16
+Tue, 20 Aug 2024 13:12:42 GMT
+
+_Version update only_
 
 ## 1.4.15
 Wed, 10 Jul 2024 12:46:32 GMT

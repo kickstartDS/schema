@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/staticcms-example",
-  "version": "2.0.25",
+  "version": "2.0.26",
   "description": "Example use showing full conversion of JSON Schema files to importable Static CMS configuration",
   "license": "(MIT OR Apache-2.0)",
   "author": {

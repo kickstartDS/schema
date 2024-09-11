@@ -214,7 +214,11 @@ export function reduceSchemaAllOfs(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T, replaceExamples: boolean = false): T {
+export function deepMerge<T extends Record<string, any>>(
+  obj1: T,
+  obj2: T,
+  replaceExamples: boolean = false
+): T {
   const keys = Array.from(new Set([...Object.keys(obj1), ...Object.keys(obj2)]));
 
   return keys.reduce((acc, key) => {

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "remove dependency to node utils",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

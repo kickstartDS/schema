@@ -1,5 +1,3 @@
-import { inspect } from 'node:util';
-
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 
 import { defaultValuesByType } from './defaults.js';
@@ -20,7 +18,7 @@ export const emptySchema: JSONSchema = {
 };
 
 function deepInspect(object: JSONSchema): string {
-  return inspect(object, false, null, true);
+  return JSON.stringify(object);
 }
 
 // add a property to a schema

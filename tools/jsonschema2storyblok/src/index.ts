@@ -186,11 +186,29 @@ function basicTypeMapping(property: JSONSchema.Interface): GenericType {
     return 'number';
   }
 
+  if (property.type === 'string' && property.format && property.format === 'table') {
+    return 'table';
+  }
+
   return mapping[property.type as TypeName];
 }
 
 function componentsEqual(componentOne: IStoryblokBlock, componentTwo: IStoryblokBlock): boolean {
   return componentOne.name === componentTwo.name;
+}
+
+function createBlokSchema(fields: IStoryblokSchemaElement[]): Record<string, IStoryblokSchemaElement> {
+  return fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+    schema[field.key] = field;
+    console.log('field', field.key);
+    if (field.objectFields) {
+      for (const objectField of field.objectFields) {
+        schema[objectField.key] = objectField;
+      }
+      delete field.objectFields;
+    }
+    return schema;
+  }, {});
 }
 
 function processObject({
@@ -228,17 +246,7 @@ function processObject({
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       id: blokId++,
-      schema:
-        fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
-          schema[field.key] = field;
-          if (field.objectFields) {
-            for (const objectField of field.objectFields) {
-              schema[objectField.key] = objectField;
-            }
-            delete field.objectFields;
-          }
-          return schema;
-        }, {}) || [],
+      schema: createBlokSchema(fields),
       is_nestable: true,
       real_name: toPascalCase(blokName),
       color: colors[blokName] || '#05566a',
@@ -298,16 +306,7 @@ function processObject({
       updated_at: new Date().toISOString(),
       is_root: (classification && classification === 'template') || false,
       id: blokId++,
-      schema: fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
-        schema[field.key] = field;
-        if (field.objectFields) {
-          for (const objectField of field.objectFields) {
-            schema[objectField.key] = objectField;
-          }
-          delete field.objectFields;
-        }
-        return schema;
-      }, {}),
+      schema: createBlokSchema(fields),
       is_nestable: true,
       real_name: toPascalCase(name)
     }
@@ -374,17 +373,7 @@ function processRef({
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     id: blokId++,
-    schema:
-      fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
-        schema[field.key] = field;
-        if (field.objectFields) {
-          for (const objectField of field.objectFields) {
-            schema[objectField.key] = objectField;
-          }
-          delete field.objectFields;
-        }
-        return schema;
-      }, {}) || [],
+    schema: createBlokSchema(fields),
     is_nestable: true,
     real_name: toPascalCase(blokName),
     color: colors[blokName] || '#05566a',
@@ -433,17 +422,7 @@ function processRefArray({
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           id: blokId++,
-          schema:
-            field.objectFields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
-              schema[field.key] = field;
-              if (field.objectFields) {
-                for (const objectField of field.objectFields) {
-                  schema[objectField.key] = objectField;
-                }
-                delete field.objectFields;
-              }
-              return schema;
-            }, {}) || [],
+          schema: createBlokSchema(field.objectFields),
           is_nestable: true,
           real_name: toPascalCase(name),
           color: colors[field.key] || '#05566a',

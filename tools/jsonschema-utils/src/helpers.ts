@@ -49,7 +49,8 @@ export function getSchemaRegistry({ support2019 = false }: { support2019?: boole
     'html',
     'uuid',
     'date-time',
-    'icon'
+    'icon',
+    'table'
   ];
   ignoredFormats.forEach((ignoredFormat) => ajv.addFormat(ignoredFormat, { validate: () => true }));
 
@@ -75,6 +76,11 @@ export function getSchemaRegistry({ support2019 = false }: { support2019?: boole
   });
   ajv.addKeyword({
     keyword: 'x-cms-group-inline',
+    schemaType: 'boolean',
+    validate: () => true
+  });
+  ajv.addKeyword({
+    keyword: 'x-cms-hidden',
     schemaType: 'boolean',
     validate: () => true
   });

@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/jsonschema2staticcms
 
-This log was last generated on Wed, 11 Sep 2024 12:34:08 GMT and should not be manually modified.
+This log was last generated on Mon, 30 Sep 2024 11:39:44 GMT and should not be manually modified.
+
+## 2.9.31
+Mon, 30 Sep 2024 11:39:44 GMT
+
+_Version update only_
 
 ## 2.9.30
 Wed, 11 Sep 2024 12:34:08 GMT

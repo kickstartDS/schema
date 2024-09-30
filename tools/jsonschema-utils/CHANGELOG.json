@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.4.2",
+      "tag": "@kickstartds/jsonschema-utils_v3.4.2",
+      "date": "Mon, 30 Sep 2024 11:39:44 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add additional cms format, add table format"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.4.1",
       "tag": "@kickstartds/jsonschema-utils_v3.4.1",
       "date": "Wed, 11 Sep 2024 12:34:08 GMT",

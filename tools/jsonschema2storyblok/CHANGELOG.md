@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Wed, 11 Sep 2024 12:34:08 GMT and should not be manually modified.
+This log was last generated on Mon, 30 Sep 2024 11:39:44 GMT and should not be manually modified.
+
+## 1.5.36
+Mon, 30 Sep 2024 11:39:44 GMT
+
+### Patches
+
+- add additional cms format, add table format
 
 ## 1.5.35
 Wed, 11 Sep 2024 12:34:08 GMT

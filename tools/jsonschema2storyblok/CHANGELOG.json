@@ -2,6 +2,23 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.36",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.36",
+      "date": "Mon, 30 Sep 2024 11:39:44 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add additional cms format, add table format"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.4.2`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.35",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.35",
       "date": "Wed, 11 Sep 2024 12:34:08 GMT",

@@ -200,7 +200,6 @@ function componentsEqual(componentOne: IStoryblokBlock, componentTwo: IStoryblok
 function createBlokSchema(fields: IStoryblokSchemaElement[]): Record<string, IStoryblokSchemaElement> {
   return fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
     schema[field.key] = field;
-    console.log('field', field.key);
     if (field.objectFields) {
       for (const objectField of field.objectFields) {
         schema[objectField.key] = objectField;

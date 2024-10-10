@@ -4,7 +4,6 @@ import {
   toPascalCase,
   getSchemaReducer,
   IProcessInterface,
-  safeEnumKey,
   IReducerResult,
   IProcessFnResult,
   IConvertParams,
@@ -47,6 +46,10 @@ export function configuration(
 
 function isObjectModel(field: unknown): field is ObjectModel {
   return typeof field === 'object' && field !== null && 'type' in field && field.type === 'object';
+}
+
+function safeEnumKey(string: string): string {
+  return string;
 }
 
 /**
@@ -511,6 +514,7 @@ function processEnum({
   title,
   description,
   subSchema,
+  parentSchema,
   options
 }: IProcessInterface<Field>): IProcessFnResult<Field, ObjectModel, PageModel, DataModel> {
   const field: FieldEnum = {
@@ -531,7 +535,7 @@ function processEnum({
     field.options = options;
   }
 
-  field.required = subSchema.required?.includes(name) || false;
+  field.required = parentSchema?.required?.includes(name) || false;
 
   return { field };
 }

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.37",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.37",
+      "date": "Thu, 10 Oct 2024 15:00:47 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "remove console log"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.36",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.36",
       "date": "Mon, 30 Sep 2024 11:39:44 GMT",

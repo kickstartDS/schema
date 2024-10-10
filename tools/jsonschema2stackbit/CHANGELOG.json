@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.6.14",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.6.14",
+      "date": "Thu, 10 Oct 2024 15:00:47 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "resolve wrong enums"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.13",
       "tag": "@kickstartds/jsonschema2stackbit_v1.6.13",
       "date": "Mon, 30 Sep 2024 11:39:44 GMT",

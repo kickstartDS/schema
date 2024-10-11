@@ -244,6 +244,7 @@ function processObject({
       type: 'model',
       models: [modelName]
     };
+
     if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-name'])
       model.group = subSchema['x-cms-group-name'];
 

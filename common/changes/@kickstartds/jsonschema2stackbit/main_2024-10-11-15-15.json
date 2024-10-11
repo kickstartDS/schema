@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "trigger another release",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

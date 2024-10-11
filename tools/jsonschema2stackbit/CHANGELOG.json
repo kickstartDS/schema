@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.6.15",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.6.15",
+      "date": "Fri, 11 Oct 2024 15:13:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "use correct labels in arrays of objects"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.14",
       "tag": "@kickstartds/jsonschema2stackbit_v1.6.14",
       "date": "Thu, 10 Oct 2024 15:00:47 GMT",

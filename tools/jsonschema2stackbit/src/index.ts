@@ -24,6 +24,7 @@ import {
 } from '@stackbit/types';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 import { traverse } from 'object-traversal';
+import { singular } from 'pluralize';
 
 import { GenericType, ITypeMapping } from './@types/index.js';
 export * from './@types/index.js';
@@ -230,15 +231,16 @@ function processObject({
     const modelName =
       classification && ['component', 'template', 'global'].includes(classification) && subSchema.$id
         ? getSchemaName(subSchema.$id).replaceAll('-', '_')
-        : name.replaceAll('-', '_');
+        : singular(name.replaceAll('-', '_'));
     const modelLabel =
       (classification && ['component', 'template', 'global'].includes(classification) && subSchema.title) ||
+      title ||
       toPascalCase(modelName);
 
     const model: FieldModel = {
       name: name.replaceAll('-', '_'),
-      label: title || toPascalCase(name),
-      description,
+      label: parentSchema.title || toPascalCase(name),
+      description: parentSchema.description || description,
       type: 'model',
       models: [modelName]
     };

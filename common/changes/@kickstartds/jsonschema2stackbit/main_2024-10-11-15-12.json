@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2stackbit",
+      "comment": "use correct labels in arrays of objects",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2stackbit"
+}

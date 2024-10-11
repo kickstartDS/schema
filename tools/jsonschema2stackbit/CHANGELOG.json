@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.6.17",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.6.17",
+      "date": "Fri, 11 Oct 2024 15:40:46 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix pluralize function"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.16",
       "tag": "@kickstartds/jsonschema2stackbit_v1.6.16",
       "date": "Fri, 11 Oct 2024 15:15:57 GMT",

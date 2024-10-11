@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Fri, 11 Oct 2024 15:15:57 GMT and should not be manually modified.
+This log was last generated on Fri, 11 Oct 2024 15:40:46 GMT and should not be manually modified.
+
+## 1.6.17
+Fri, 11 Oct 2024 15:40:46 GMT
+
+### Patches
+
+- fix pluralize function
 
 ## 1.6.16
 Fri, 11 Oct 2024 15:15:57 GMT

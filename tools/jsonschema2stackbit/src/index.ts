@@ -24,10 +24,12 @@ import {
 } from '@stackbit/types';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
 import { traverse } from 'object-traversal';
-import { singular } from 'pluralize';
+import pluralize from 'pluralize-esm';
 
 import { GenericType, ITypeMapping } from './@types/index.js';
 export * from './@types/index.js';
+
+const { singular } = pluralize;
 
 const typeResolutionField: string = 'type';
 

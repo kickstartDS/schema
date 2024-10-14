@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.38",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.38",
+      "date": "Mon, 14 Oct 2024 17:11:43 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add icon capabilities to Storyblok"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.37",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.37",
       "date": "Thu, 10 Oct 2024 15:00:47 GMT",

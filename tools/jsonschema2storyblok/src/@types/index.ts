@@ -21,7 +21,8 @@ export type GenericType =
   | 'multiasset'
   | 'multilink'
   | 'table'
-  | 'tab';
+  | 'tab'
+  | 'custom';
 
 export type AssetType = 'images' | 'videos';
 
@@ -82,6 +83,9 @@ export interface IStoryblokSchemaElement {
 
   // type: `date`
   disable_time?: boolean;
+
+  // type: `custom`
+  field_type?: string;
 
   objectFields?: IStoryblokSchemaElement[];
 }

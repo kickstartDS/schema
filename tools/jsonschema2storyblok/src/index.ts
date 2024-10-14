@@ -537,6 +537,12 @@ function processBasic({
     type
   };
 
+  if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'icon') {
+    field.type = 'custom';
+    field.field_type = 'storyblok-icon-sprite-picker-field-plugin';
+    field.options = [];
+  }
+
   if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'image') {
     field.type = 'asset';
     field.filetypes = ['images'];

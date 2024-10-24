@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Thu, 24 Oct 2024 14:45:17 GMT and should not be manually modified.
+This log was last generated on Thu, 24 Oct 2024 15:56:08 GMT and should not be manually modified.
+
+## 1.5.40
+Thu, 24 Oct 2024 15:56:08 GMT
+
+### Patches
+
+- use correct real_name in refArrays
 
 ## 1.5.39
 Thu, 24 Oct 2024 14:45:17 GMT

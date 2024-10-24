@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.40",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.40",
+      "date": "Thu, 24 Oct 2024 15:56:08 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "use correct real_name in refArrays"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.39",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.39",
       "date": "Thu, 24 Oct 2024 14:45:17 GMT",

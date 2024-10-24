@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.5.39",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.5.39",
+      "date": "Thu, 24 Oct 2024 14:45:17 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add maximum to reffed bloks entries"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.5.38",
       "tag": "@kickstartds/jsonschema2storyblok_v1.5.38",
       "date": "Mon, 14 Oct 2024 17:11:43 GMT",

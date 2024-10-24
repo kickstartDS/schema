@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Mon, 14 Oct 2024 17:11:43 GMT and should not be manually modified.
+This log was last generated on Thu, 24 Oct 2024 14:45:17 GMT and should not be manually modified.
+
+## 1.5.39
+Thu, 24 Oct 2024 14:45:17 GMT
+
+### Patches
+
+- add maximum to reffed bloks entries
 
 ## 1.5.38
 Mon, 14 Oct 2024 17:11:43 GMT

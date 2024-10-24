@@ -363,7 +363,9 @@ function processRef({
     type: 'bloks',
     restrict_type: '',
     restrict_components: true,
-    component_whitelist: [blokName]
+    component_whitelist: [blokName],
+    maximum: 1,
+    minimum: 0
   };
 
   const blok: IStoryblokBlock = {

@@ -425,7 +425,7 @@ function processRefArray({
           id: blokId++,
           schema: createBlokSchema(field.objectFields),
           is_nestable: true,
-          real_name: toPascalCase(name),
+          real_name: toPascalCase(field.key),
           color: colors[field.key] || '#05566a',
           icon: icons[field.key] || 'block-wallet',
           component_group_uuid: componentGroups[name],

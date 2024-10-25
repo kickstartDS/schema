@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Fri, 25 Oct 2024 07:12:38 GMT and should not be manually modified.
+This log was last generated on Fri, 25 Oct 2024 09:36:32 GMT and should not be manually modified.
+
+## 1.6.1
+Fri, 25 Oct 2024 09:36:32 GMT
+
+### Patches
+
+- add preview template to ref arrays
 
 ## 1.6.0
 Fri, 25 Oct 2024 07:12:38 GMT

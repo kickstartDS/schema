@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.6.1",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.6.1",
+      "date": "Fri, 25 Oct 2024 09:36:32 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add preview template to ref arrays"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.0",
       "tag": "@kickstartds/jsonschema2storyblok_v1.6.0",
       "date": "Fri, 25 Oct 2024 07:12:38 GMT",

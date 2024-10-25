@@ -84,6 +84,11 @@ export function getSchemaRegistry({ support2019 = false }: { support2019?: boole
     schemaType: 'boolean',
     validate: () => true
   });
+  ajv.addKeyword({
+    keyword: 'x-cms-preview',
+    schemaType: 'string',
+    validate: () => true
+  });
 
   return ajv;
 }

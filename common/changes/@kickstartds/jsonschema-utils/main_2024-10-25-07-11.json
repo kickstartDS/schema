@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "add preview cms annotation",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

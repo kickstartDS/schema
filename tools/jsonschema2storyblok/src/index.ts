@@ -197,6 +197,18 @@ function componentsEqual(componentOne: IStoryblokBlock, componentTwo: IStoryblok
   return componentOne.name === componentTwo.name;
 }
 
+function isCmsAnnotatedSchema(schema: unknown): schema is JSONSchema.Interface & {
+  'x-cms-hidden'?: boolean;
+  'x-cms-preview'?: string;
+} {
+  return (
+    typeof schema === 'object' &&
+    schema !== null &&
+    (('x-cms-hidden' in schema && schema['x-cms-hidden'] === true) ||
+      ('x-cms-preview' in schema && schema['x-cms-preview'] !== undefined))
+  );
+}
+
 function createBlokSchema(fields: IStoryblokSchemaElement[]): Record<string, IStoryblokSchemaElement> {
   return fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
     schema[field.key] = field;
@@ -252,6 +264,13 @@ function processObject({
       icon: icons[blokName] || 'block-wallet'
     };
 
+    if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-preview']) {
+      if (subSchema['x-cms-preview'].startsWith('field:')) {
+        blok.preview_field = subSchema['x-cms-preview'].split(':')[1];
+      } else if (subSchema['x-cms-preview'].startsWith('template:')) {
+        blok.preview_tmpl = subSchema['x-cms-preview'].split(':')[1];
+      }
+    }
     if (description) field.description = description;
 
     return { field, components: [blok] };
@@ -334,6 +353,13 @@ function processObject({
       })
     };
   } else if (classification && classification === 'component') {
+    if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-preview']) {
+      if (subSchema['x-cms-preview'].startsWith('field:')) {
+        bloks[0].preview_field = subSchema['x-cms-preview'].split(':')[1];
+      } else if (subSchema['x-cms-preview'].startsWith('template:')) {
+        bloks[0].preview_tmpl = subSchema['x-cms-preview'].split(':')[1];
+      }
+    }
     return { field: dummy, components: bloks };
   }
   throw new Error(
@@ -384,6 +410,14 @@ function processRef({
   if (classification === 'component') {
     blok.component_group_uuid = componentGroups.components;
     blok.component_group_name = 'Components';
+  }
+
+  if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-preview']) {
+    if (subSchema['x-cms-preview'].startsWith('field:')) {
+      blok.preview_field = subSchema['x-cms-preview'].split(':')[1];
+    } else if (subSchema['x-cms-preview'].startsWith('template:')) {
+      blok.preview_tmpl = subSchema['x-cms-preview'].split(':')[1];
+    }
   }
 
   if (description) field.description = description;

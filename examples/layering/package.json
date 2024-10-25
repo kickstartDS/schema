@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/layering-example",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Example use of the layering capabilities in kickstartDS",
   "license": "(MIT OR Apache-2.0)",
   "author": {

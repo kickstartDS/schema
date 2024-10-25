@@ -2,6 +2,21 @@
   "name": "@kickstartds/types-example",
   "entries": [
     {
+      "version": "2.0.28",
+      "tag": "@kickstartds/types-example_v2.0.28",
+      "date": "Fri, 25 Oct 2024 07:12:38 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.4.3`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2types\" to `1.1.54`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.27",
       "tag": "@kickstartds/types-example_v2.0.27",
       "date": "Mon, 30 Sep 2024 11:39:44 GMT",

@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/cport-example",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Example use showing full conversion of JSON Schema files to normalized cport format",
   "license": "(MIT OR Apache-2.0)",
   "author": {

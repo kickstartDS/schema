@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/types-example",
-  "version": "2.0.27",
+  "version": "2.0.28",
   "description": "Example use of the component type generation",
   "license": "(MIT OR Apache-2.0)",
   "author": {

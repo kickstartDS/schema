@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Mon, 30 Sep 2024 11:39:44 GMT and should not be manually modified.
+This log was last generated on Fri, 25 Oct 2024 07:12:38 GMT and should not be manually modified.
+
+## 3.4.3
+Fri, 25 Oct 2024 07:12:38 GMT
+
+### Patches
+
+- add preview cms annotation
 
 ## 3.4.2
 Mon, 30 Sep 2024 11:39:44 GMT

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.4.3",
+      "tag": "@kickstartds/jsonschema-utils_v3.4.3",
+      "date": "Fri, 25 Oct 2024 07:12:38 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add preview cms annotation"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.4.2",
       "tag": "@kickstartds/jsonschema-utils_v3.4.2",
       "date": "Mon, 30 Sep 2024 11:39:44 GMT",

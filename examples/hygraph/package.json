@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/hygraph-example",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Example use showing full conversion of JSON Schema files to Hygraph component configuration",
   "license": "(MIT OR Apache-2.0)",
   "author": {

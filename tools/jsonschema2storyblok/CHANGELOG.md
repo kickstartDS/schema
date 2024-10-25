@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Thu, 24 Oct 2024 15:56:08 GMT and should not be manually modified.
+This log was last generated on Fri, 25 Oct 2024 07:12:38 GMT and should not be manually modified.
+
+## 1.6.0
+Fri, 25 Oct 2024 07:12:38 GMT
+
+### Minor changes
+
+- add poc for preview annotation support
 
 ## 1.5.40
 Thu, 24 Oct 2024 15:56:08 GMT

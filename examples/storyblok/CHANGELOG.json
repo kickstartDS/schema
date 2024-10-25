@@ -2,6 +2,21 @@
   "name": "@kickstartds/storyblok-example",
   "entries": [
     {
+      "version": "2.0.33",
+      "tag": "@kickstartds/storyblok-example_v2.0.33",
+      "date": "Fri, 25 Oct 2024 07:12:38 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.4.3`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2storyblok\" to `1.6.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.32",
       "tag": "@kickstartds/storyblok-example_v2.0.32",
       "date": "Thu, 24 Oct 2024 15:56:08 GMT",

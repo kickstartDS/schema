@@ -87,7 +87,10 @@ export interface IStoryblokSchemaElement {
   // type: `custom`
   field_type?: string;
 
+  // our own processing helpers
   objectFields?: IStoryblokSchemaElement[];
+  preview_tmpl?: string;
+  preview_field?: string;
 }
 
 export interface IStoryblokSchemaElementOption {

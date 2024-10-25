@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "add preview template to ref arrays",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

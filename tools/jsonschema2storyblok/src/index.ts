@@ -266,9 +266,9 @@ function processObject({
 
     if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-preview']) {
       if (subSchema['x-cms-preview'].startsWith('field:')) {
-        blok.preview_field = subSchema['x-cms-preview'].split(':')[1];
+        blok.preview_field = subSchema['x-cms-preview'].replace('field:', '');
       } else if (subSchema['x-cms-preview'].startsWith('template:')) {
-        blok.preview_tmpl = subSchema['x-cms-preview'].split(':')[1];
+        blok.preview_tmpl = subSchema['x-cms-preview'].replace('template:', '');
       }
     }
     if (description) field.description = description;
@@ -286,6 +286,14 @@ function processObject({
         display_name: toPascalCase(name),
         objectFields: fields
       };
+
+      if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-preview']) {
+        if (subSchema['x-cms-preview'].startsWith('field:')) {
+          field.preview_field = subSchema['x-cms-preview'].replace('field:', '');
+        } else if (subSchema['x-cms-preview'].startsWith('template:')) {
+          field.preview_tmpl = subSchema['x-cms-preview'].replace('template:', '');
+        }
+      }
 
       return { field };
     } else {
@@ -414,9 +422,9 @@ function processRef({
 
   if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-preview']) {
     if (subSchema['x-cms-preview'].startsWith('field:')) {
-      blok.preview_field = subSchema['x-cms-preview'].split(':')[1];
+      blok.preview_field = subSchema['x-cms-preview'].replace('field:', '');
     } else if (subSchema['x-cms-preview'].startsWith('template:')) {
-      blok.preview_tmpl = subSchema['x-cms-preview'].split(':')[1];
+      blok.preview_tmpl = subSchema['x-cms-preview'].replace('template:', '');
     }
   }
 
@@ -463,7 +471,9 @@ function processRefArray({
           color: colors[field.key] || '#05566a',
           icon: icons[field.key] || 'block-wallet',
           component_group_uuid: componentGroups[name],
-          component_group_name: toPascalCase(name)
+          component_group_name: toPascalCase(name),
+          preview_field: field.preview_field,
+          preview_tmpl: field.preview_tmpl
         };
       })
     );

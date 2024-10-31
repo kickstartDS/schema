@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "add options to icon custom field plugin",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

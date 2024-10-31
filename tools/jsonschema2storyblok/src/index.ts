@@ -586,7 +586,7 @@ function processBasic({
   if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'icon') {
     field.type = 'custom';
     field.field_type = 'storyblok-icon-sprite-picker-field-plugin';
-    field.options = [];
+    field.options = [{ name: 'allowedIcons', value: JSON.stringify(subSchema.enum), _uid: uuidv4() }];
   }
 
   if (subSchema.type === 'string' && subSchema.format && subSchema.format === 'image') {

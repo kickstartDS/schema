@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Fri, 25 Oct 2024 09:36:32 GMT and should not be manually modified.
+This log was last generated on Thu, 31 Oct 2024 14:24:58 GMT and should not be manually modified.
+
+## 1.6.2
+Thu, 31 Oct 2024 14:24:58 GMT
+
+### Patches
+
+- add options to icon custom field plugin
 
 ## 1.6.1
 Fri, 25 Oct 2024 09:36:32 GMT

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.6.2",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.6.2",
+      "date": "Thu, 31 Oct 2024 14:24:58 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add options to icon custom field plugin"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.1",
       "tag": "@kickstartds/jsonschema2storyblok_v1.6.1",
       "date": "Fri, 25 Oct 2024 09:36:32 GMT",

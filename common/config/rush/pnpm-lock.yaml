@@ -814,6 +814,7 @@ importers:
       '@types/uuid': ~9.0.2
       '@typescript-eslint/parser': ~5.59.2
       ajv: ^8.12.0
+      es-toolkit: ^1.26.1
       eslint: ^8.40.0
       eslint-import-resolver-typescript: ~3.5.5
       eslint-plugin-import: ~2.27.5
@@ -827,6 +828,7 @@ importers:
     dependencies:
       '@kickstartds/jsonschema-utils': link:../jsonschema-utils
       ajv: 8.12.0
+      es-toolkit: 1.26.1
       object-traversal: 1.0.1
       uuid: 9.0.1
     devDependencies:
@@ -4592,6 +4594,10 @@ packages:
       is-date-object: 1.0.5
       is-symbol: 1.0.4
     dev: true
+
+  /es-toolkit/1.26.1:
+    resolution: {integrity: sha512-E3H14lHWk8JpupVpIRA1gfNF4r953abHTFW+X1Rp7zl7eG37ksuthfEA4FinyVF/Y807vzzfQS1nubeZk2LTVA==}
+    dev: false
 
   /es5-ext/0.10.62:
     resolution: {integrity: sha512-BHLqn0klhEpnOKSrzn/Xsz2UIW8j+cGmo9JLzr8BiUapV8hPL9+FliFqjwr9ngW7jWdnxv6eO+/LqyhJVqgrjA==}

@@ -1,3 +1,12 @@
+declare module '@stackbit/types' {
+  interface FieldCustomControlTypeProps<ControlType = never> {
+    /**
+     * TODO document
+     */
+    controlOptions?: [{ label: string; value: string }];
+  }
+}
+
 export type GenericType =
   | 'boolean'
   | 'color'

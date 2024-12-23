@@ -572,7 +572,8 @@ function processBasic({
       label: title || toPascalCase(name),
       type: 'string',
       controlType: 'custom-modal-html',
-      controlFilePath: '.stackbit/fields/icon/index.html'
+      controlFilePath: '.stackbit/fields/icon/index.html',
+      controlOptions: [{ label: 'allowedIcons', value: JSON.stringify(subSchema.enum) }]
     };
   } else if (
     type === 'markdown' ||

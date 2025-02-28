@@ -56,6 +56,13 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@kickstartds/jsonschema2payloadcms",
+      "projectFolder": "tools/jsonschema2payloadcms",
+      "reviewCategory": "tools",
+      "tags": ["tools"],
+      "shouldPublish": true
+    },
+    {
       "packageName": "@kickstartds/jsonschema2staticcms",
       "projectFolder": "tools/jsonschema2staticcms",
       "reviewCategory": "tools",
@@ -121,6 +128,13 @@
     {
       "packageName": "@kickstartds/hygraph-example",
       "projectFolder": "examples/hygraph",
+      "reviewCategory": "examples",
+      "tags": ["examples"],
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@kickstartds/payloadcms-example",
+      "projectFolder": "examples/payloadcms",
       "reviewCategory": "examples",
       "tags": ["examples"],
       "shouldPublish": true

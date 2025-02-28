@@ -21,6 +21,10 @@
       "path": "../tools/jsonschema2hygraph"
     },
     {
+      "name": "tools/jsonschema2payloadcms",
+      "path": "../tools/jsonschema2payloadcms"
+    },
+    {
       "name": "tools/jsonschema2staticcms",
       "path": "../tools/jsonschema2staticcms"
     },
@@ -55,6 +59,10 @@
     {
       "name": "examples/hygraph",
       "path": "../examples/hygraph"
+    },
+    {
+      "name": "examples/payloadcms",
+      "path": "../examples/payloadcms"
     },
     {
       "name": "examples/layering",

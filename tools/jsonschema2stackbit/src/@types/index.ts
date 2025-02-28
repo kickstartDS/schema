@@ -1,4 +1,5 @@
 declare module '@stackbit/types' {
+  // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
   interface FieldCustomControlTypeProps<ControlType = never> {
     /**
      * TODO document

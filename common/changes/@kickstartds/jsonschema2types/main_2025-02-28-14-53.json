@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2types",
+      "comment": "Add configurable naming for schemas",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2types"
+}

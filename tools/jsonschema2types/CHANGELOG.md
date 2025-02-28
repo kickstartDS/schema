@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema2types
 
-This log was last generated on Fri, 25 Oct 2024 07:12:38 GMT and should not be manually modified.
+This log was last generated on Fri, 28 Feb 2025 14:54:13 GMT and should not be manually modified.
+
+## 1.2.0
+Fri, 28 Feb 2025 14:54:13 GMT
+
+### Minor changes
+
+- Add configurable naming for schemas
 
 ## 1.1.54
 Fri, 25 Oct 2024 07:12:38 GMT

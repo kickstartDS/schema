@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2types",
   "entries": [
     {
+      "version": "1.2.0",
+      "tag": "@kickstartds/jsonschema2types_v1.2.0",
+      "date": "Fri, 28 Feb 2025 14:54:13 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add configurable naming for schemas"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.54",
       "tag": "@kickstartds/jsonschema2types_v1.1.54",
       "date": "Fri, 25 Oct 2024 07:12:38 GMT",

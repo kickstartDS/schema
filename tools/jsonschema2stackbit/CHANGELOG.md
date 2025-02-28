@@ -1,6 +1,17 @@
 # Change Log - @kickstartds/jsonschema2stackbit
 
-This log was last generated on Fri, 25 Oct 2024 07:12:38 GMT and should not be manually modified.
+This log was last generated on Fri, 28 Feb 2025 14:54:13 GMT and should not be manually modified.
+
+## 1.7.0
+Fri, 28 Feb 2025 14:54:13 GMT
+
+### Minor changes
+
+- add icon picker capabilities
+
+### Patches
+
+- Fix TypeScript warnings
 
 ## 1.6.18
 Fri, 25 Oct 2024 07:12:38 GMT

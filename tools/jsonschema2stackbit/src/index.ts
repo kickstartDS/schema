@@ -172,7 +172,7 @@ function reduceFields(fields: Field[], subSchema: JSONSchema.Interface): [Field[
         const groupName = field.group.startsWith('INLINE__')
           ? field.group.replace('INLINE__', '')
           : field.group;
-        fieldGroups[field.group] ||= {
+        fieldGroups[groupName] ||= {
           name: groupName,
           label: schemaField['x-cms-group-title'] || toPascalCase(groupName),
           icon: schemaField['x-cms-group-icon'] || 'circle-question'
@@ -193,7 +193,7 @@ function reduceFields(fields: Field[], subSchema: JSONSchema.Interface): [Field[
             if (subField.group !== 'content') {
               const schemaSubField = schemaField.properties && schemaField.properties[subField.name];
 
-              fieldGroups[subField.group] ||= {
+              fieldGroups[groupName] ||= {
                 name: groupName,
                 label:
                   (schemaSubField &&

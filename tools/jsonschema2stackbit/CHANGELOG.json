@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.7.1",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.7.1",
+      "date": "Fri, 11 Apr 2025 12:32:36 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "avoid duplicated field groups"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.7.0",
       "tag": "@kickstartds/jsonschema2stackbit_v1.7.0",
       "date": "Fri, 28 Feb 2025 14:54:13 GMT",

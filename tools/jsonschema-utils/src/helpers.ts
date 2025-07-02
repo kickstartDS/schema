@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { defaultObjectForSchema } from '@kickstartds/cambria';
 import Ajv from 'ajv';
 import Ajv2019 from 'ajv/dist/2019.js';
 import { kebabCase, pascalCase } from 'change-case';
@@ -751,6 +752,13 @@ export function getUniqueSchemaIds(schemaIds: string[]): string[] {
   );
 
   return [...customSchemaIds, ...unlayeredSchemaIds];
+}
+
+export function getSchemaDefaults(schemaId: string, ajv: MyAjv): Record<string, unknown> {
+  const schema = ajv.getSchema<JSONSchema.Object>(schemaId)?.schema as JSONSchema.Object;
+  if (!schema) throw new Error(`Couldn't find schema for id ${schemaId}`);
+
+  return defaultObjectForSchema(schema);
 }
 
 export function capitalize(s: string): string {

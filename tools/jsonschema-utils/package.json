@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@bcherny/json-schema-ref-parser": "10.0.5-fork",
+    "@kickstartds/cambria": "workspace:*",
     "ajv": "^8.12.0",
     "change-case": "^5.0.2",
     "directed-graph-typed": "~1.52.0",

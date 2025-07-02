@@ -2,6 +2,21 @@
   "name": "@kickstartds/staticcms-example",
   "entries": [
     {
+      "version": "2.0.29",
+      "tag": "@kickstartds/staticcms-example_v2.0.29",
+      "date": "Wed, 02 Jul 2025 09:04:33 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.5.0`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2staticcms\" to `2.9.33`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.28",
       "tag": "@kickstartds/staticcms-example_v2.0.28",
       "date": "Fri, 25 Oct 2024 07:12:38 GMT",

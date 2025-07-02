@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/layering-example
 
-This log was last generated on Fri, 25 Oct 2024 07:12:38 GMT and should not be manually modified.
+This log was last generated on Wed, 02 Jul 2025 09:04:33 GMT and should not be manually modified.
+
+## 1.0.5
+Wed, 02 Jul 2025 09:04:33 GMT
+
+_Version update only_
 
 ## 1.0.4
 Fri, 25 Oct 2024 07:12:38 GMT

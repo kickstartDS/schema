@@ -444,6 +444,24 @@ export function processAdditionalProperties(
   });
 }
 
+export function hideCmsFields(jsonSchemas: JSONSchema.Interface[]): void {
+  jsonSchemas.forEach((jsonSchema) => {
+    traverse(jsonSchema, {
+      cb: (subSchema, pointer, __rootSchema, __parentPointer, parentKeyword, parentSchema) => {
+        const propName = pointer.split('/').pop();
+        if (
+          propName &&
+          parentSchema &&
+          parentKeyword &&
+          parentSchema[parentKeyword][propName] &&
+          subSchema['x-cms-hidden'] === true
+        )
+          delete parentSchema[parentKeyword][propName];
+      }
+    });
+  });
+}
+
 export function collectComponentInterfaces(jsonSchemas: JSONSchema.Interface[]): Record<string, string[]> {
   const interfaceMap: Record<string, string[]> = {};
 
@@ -581,6 +599,7 @@ export interface IProcessingOptions {
   inlineReferences: boolean;
   addExplicitAnyOfs: boolean;
   replaceExamples: boolean;
+  hideCmsFields: boolean;
 }
 
 export const defaultProcessingOptions: IProcessingOptions = {
@@ -593,7 +612,8 @@ export const defaultProcessingOptions: IProcessingOptions = {
   layerRefs: true,
   inlineReferences: true,
   addExplicitAnyOfs: true,
-  replaceExamples: true
+  replaceExamples: true,
+  hideCmsFields: true
 };
 
 export async function processSchemaGlob(
@@ -634,7 +654,8 @@ export async function processSchemas(
     layerRefs: shouldLayerRefs,
     inlineReferences: shouldInlineReferences,
     addExplicitAnyOfs: shouldAddExlicitAnyOfs,
-    replaceExamples: shouldReplaceExamples
+    replaceExamples: shouldReplaceExamples,
+    hideCmsFields: shouldHideCmsFields
   } = { ...defaultProcessingOptions, ...options };
   // Load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas =
@@ -681,6 +702,7 @@ export async function processSchemas(
   if (shouldInlineReferences) inlineReferences(sortedSchemas, typeResolution);
   if (additionalProperties && additionalProperties !== 'keep')
     processAdditionalProperties(sortedSchemas, additionalProperties);
+  if (shouldHideCmsFields) hideCmsFields(sortedSchemas);
 
   // 2. add all schemas to ajv for the following processing steps
   sortedSchemas.forEach((schema) => {

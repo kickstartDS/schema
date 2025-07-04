@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Fri, 04 Jul 2025 15:47:19 GMT and should not be manually modified.
+This log was last generated on Fri, 04 Jul 2025 20:35:48 GMT and should not be manually modified.
+
+## 3.6.1
+Fri, 04 Jul 2025 20:35:48 GMT
+
+### Patches
+
+- dont hide fields by default
 
 ## 3.6.0
 Fri, 04 Jul 2025 15:47:19 GMT

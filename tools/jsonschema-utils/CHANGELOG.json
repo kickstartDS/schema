@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.6.1",
+      "tag": "@kickstartds/jsonschema-utils_v3.6.1",
+      "date": "Fri, 04 Jul 2025 20:35:48 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "dont hide fields by default"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.6.0",
       "tag": "@kickstartds/jsonschema-utils_v3.6.0",
       "date": "Fri, 04 Jul 2025 15:47:19 GMT",

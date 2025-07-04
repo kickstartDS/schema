@@ -72,7 +72,7 @@ async function convertKds(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv);
+  const schemaIds = await processSchemaGlob(customGlob, ajv, { hideCmsFields: true });
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
   const convertedObjects = convert({

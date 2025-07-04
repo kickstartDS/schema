@@ -613,7 +613,7 @@ export const defaultProcessingOptions: IProcessingOptions = {
   inlineReferences: true,
   addExplicitAnyOfs: true,
   replaceExamples: true,
-  hideCmsFields: true
+  hideCmsFields: false
 };
 
 export async function processSchemaGlob(

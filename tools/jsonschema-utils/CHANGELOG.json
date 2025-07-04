@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.6.0",
+      "tag": "@kickstartds/jsonschema-utils_v3.6.0",
+      "date": "Fri, 04 Jul 2025 15:47:19 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "implement feature to hide hidden fields in generated config"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.5.0",
       "tag": "@kickstartds/jsonschema-utils_v3.5.0",
       "date": "Wed, 02 Jul 2025 09:04:33 GMT",

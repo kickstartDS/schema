@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/uniform-example
 
-This log was last generated on Wed, 02 Jul 2025 09:04:33 GMT and should not be manually modified.
+This log was last generated on Fri, 04 Jul 2025 15:47:19 GMT and should not be manually modified.
+
+## 2.1.21
+Fri, 04 Jul 2025 15:47:19 GMT
+
+_Version update only_
 
 ## 2.1.20
 Wed, 02 Jul 2025 09:04:33 GMT

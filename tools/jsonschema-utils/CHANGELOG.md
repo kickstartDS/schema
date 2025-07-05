@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Fri, 04 Jul 2025 20:35:48 GMT and should not be manually modified.
+This log was last generated on Sat, 05 Jul 2025 15:22:42 GMT and should not be manually modified.
+
+## 3.6.2
+Sat, 05 Jul 2025 15:22:42 GMT
+
+### Patches
+
+- move hiding of cms fields in processing
 
 ## 3.6.1
 Fri, 04 Jul 2025 20:35:48 GMT

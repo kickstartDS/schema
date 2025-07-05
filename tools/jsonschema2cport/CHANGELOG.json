@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2cport",
   "entries": [
     {
+      "version": "1.4.23",
+      "tag": "@kickstartds/jsonschema2cport_v1.4.23",
+      "date": "Sat, 05 Jul 2025 15:22:43 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.6.2`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.4.22",
       "tag": "@kickstartds/jsonschema2cport_v1.4.22",
       "date": "Fri, 04 Jul 2025 20:35:48 GMT",

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.6.2",
+      "tag": "@kickstartds/jsonschema-utils_v3.6.2",
+      "date": "Sat, 05 Jul 2025 15:22:42 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "move hiding of cms fields in processing"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.6.1",
       "tag": "@kickstartds/jsonschema-utils_v3.6.1",
       "date": "Fri, 04 Jul 2025 20:35:48 GMT",

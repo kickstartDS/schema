@@ -2,6 +2,18 @@
   "name": "@kickstartds/layering-example",
   "entries": [
     {
+      "version": "1.0.8",
+      "tag": "@kickstartds/layering-example_v1.0.8",
+      "date": "Sat, 05 Jul 2025 15:22:43 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.6.2`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.7",
       "tag": "@kickstartds/layering-example_v1.0.7",
       "date": "Fri, 04 Jul 2025 20:35:48 GMT",

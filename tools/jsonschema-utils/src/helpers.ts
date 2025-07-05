@@ -702,7 +702,6 @@ export async function processSchemas(
   if (shouldInlineReferences) inlineReferences(sortedSchemas, typeResolution);
   if (additionalProperties && additionalProperties !== 'keep')
     processAdditionalProperties(sortedSchemas, additionalProperties);
-  if (shouldHideCmsFields) hideCmsFields(sortedSchemas);
 
   // 2. add all schemas to ajv for the following processing steps
   sortedSchemas.forEach((schema) => {
@@ -722,12 +721,13 @@ export async function processSchemas(
   });
 
   // 4. process new schemas, resulting from adding the distinct
-  // `anyOf`s in the step before
+  // `anyOf`s in the step before, hide CMS fields marked as hidden
   if (typeResolution) addTypeInterfaces(schemaAnyOfs);
   if (shouldAddExlicitAnyOfs && shouldMergeAllOf)
     schemaAnyOfs.forEach((schemaAnyOf) => {
       reduceSchemaAllOfs(schemaAnyOf, ajv, shouldReplaceExamples);
     });
+  if (shouldHideCmsFields) hideCmsFields(sortedSchemas);
 
   // 5. return list of processed schema `$id`s.
   // Accessing the full schemas works through `ajv`

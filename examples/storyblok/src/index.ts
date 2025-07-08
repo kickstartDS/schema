@@ -19,7 +19,10 @@ async function convertDsAgency(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  await processSchemaGlob(customGlob, ajv);
+  await processSchemaGlob(customGlob, ajv, {
+    hideCmsFields: true,
+    layerOrder: ['cms', 'schema', 'kickstartds']
+  });
 
   const convertedObjects = convert({
     schemaIds: [
@@ -72,7 +75,9 @@ async function convertKds(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, { hideCmsFields: true });
+  const schemaIds = await processSchemaGlob(customGlob, ajv, {
+    hideCmsFields: true
+  });
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
   const convertedObjects = convert({

@@ -588,6 +588,37 @@ export function getSortedSchemas(graph: SchemaDirectedGraph): JSONSchema.Interfa
   return sortedVertices.map((vertex) => vertex.data || {}).reverse();
 }
 
+export function layerSchemas(sortedSchemas: JSONSchema.Interface[], layerOrder: string[]): void {
+  const schemasByLayer = sortedSchemas.reduce<Record<string, JSONSchema.Interface[]>>((acc, jsonSchema) => {
+    const layerName = jsonSchema.$id?.includes('schema.kickstartds.com')
+      ? 'kickstartds'
+      : jsonSchema.$id?.split('//')[1].split('.')[0];
+    if (!layerName)
+      throw new Error(`Failed to get layer name from schema $id ${jsonSchema.$id} for layering`);
+    if (!layerOrder.includes(layerName))
+      throw new Error(`Layer name ${layerName} not included in layer order: ${layerOrder}`);
+
+    if (!acc[layerName]) acc[layerName] = [];
+    acc[layerName].push(jsonSchema);
+
+    return acc;
+  }, {});
+
+  for (const layer of layerOrder) {
+    if (layerOrder.indexOf(layer) === layerOrder.length - 1) continue;
+    if (!schemasByLayer[layer] || schemasByLayer[layer].length < 1) continue;
+
+    for (const deeperLayer of layerOrder.slice(layerOrder.indexOf(layer) + 1).reverse()) {
+      layerRefs(
+        schemasByLayer[layer],
+        schemasByLayer[deeperLayer].filter(
+          (schema) => !schemasByLayer[layer].some((s) => s.$id === schema.$id)
+        )
+      );
+    }
+  }
+}
+
 export interface IProcessingOptions {
   typeResolution: boolean;
   modules: string[];
@@ -600,6 +631,7 @@ export interface IProcessingOptions {
   addExplicitAnyOfs: boolean;
   replaceExamples: boolean;
   hideCmsFields: boolean;
+  layerOrder: string[];
 }
 
 export const defaultProcessingOptions: IProcessingOptions = {
@@ -613,7 +645,8 @@ export const defaultProcessingOptions: IProcessingOptions = {
   inlineReferences: true,
   addExplicitAnyOfs: true,
   replaceExamples: true,
-  hideCmsFields: false
+  hideCmsFields: false,
+  layerOrder: ['cms', 'schema', 'kickstartds']
 };
 
 export async function processSchemaGlob(
@@ -655,7 +688,8 @@ export async function processSchemas(
     inlineReferences: shouldInlineReferences,
     addExplicitAnyOfs: shouldAddExlicitAnyOfs,
     replaceExamples: shouldReplaceExamples,
-    hideCmsFields: shouldHideCmsFields
+    hideCmsFields: shouldHideCmsFields,
+    layerOrder
   } = { ...defaultProcessingOptions, ...options };
   // Load all the schema files provided by `@kickstartDS` itself...
   const kdsSchemas =
@@ -684,20 +718,11 @@ export async function processSchemas(
     (value: JSONSchema.Interface, index, self) => self.findIndex((v) => v.$id === value.$id) === index
   );
   const sortedSchemas = getSortedSchemas(getSchemaGraph(allSchemas));
-  const cmsSchemas = sortedSchemas.filter((sortedSchema) => sortedSchema.$id?.startsWith('http://cms.'));
 
   // Processing consists of 5 steps currently, that need to be run in this
   // exact order, because every step builds on the one before it
   // 1. pre-process, before schemas enter `ajv`
-  if (shouldLayerRefs) {
-    layerRefs(cmsSchemas, kdsSchemas);
-    layerRefs(
-      cmsSchemas,
-      jsonSchemas.filter((schema) => !cmsSchemas.some((cmsSchema) => cmsSchema.$id === schema.$id))
-    );
-    layerRefs(jsonSchemas, kdsSchemas);
-  }
-
+  if (shouldLayerRefs) layerSchemas(sortedSchemas, layerOrder);
   if (typeResolution) addTypeInterfaces(sortedSchemas);
   if (shouldInlineReferences) inlineReferences(sortedSchemas, typeResolution);
   if (additionalProperties && additionalProperties !== 'keep')
@@ -728,6 +753,7 @@ export async function processSchemas(
       reduceSchemaAllOfs(schemaAnyOf, ajv, shouldReplaceExamples);
     });
   if (shouldHideCmsFields) hideCmsFields(sortedSchemas);
+  if (shouldHideCmsFields) hideCmsFields(schemaAnyOfs);
 
   // 5. return list of processed schema `$id`s.
   // Accessing the full schemas works through `ajv`

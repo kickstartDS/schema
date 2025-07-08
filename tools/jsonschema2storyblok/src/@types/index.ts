@@ -52,7 +52,6 @@ export interface IStoryblokSchemaElement {
   type: GenericType;
   pos: number;
   key: string; // undocumented
-  keys?: string[];
   use_uuid?: boolean;
   source?: 'internal' | 'external' | 'internal_stories' | 'internal_languages';
   options?: IStoryblokSchemaElementOption[];
@@ -69,6 +68,9 @@ export interface IStoryblokSchemaElement {
   description?: string;
   minimum?: number;
   maximum?: number;
+
+  // type: `tab` / `section`
+  keys?: string[];
 
   // type: `asset` / `multiasset`
   filetypes?: AssetType[];
@@ -89,6 +91,7 @@ export interface IStoryblokSchemaElement {
 
   // our own processing helpers
   objectFields?: IStoryblokSchemaElement[];
+  section?: string;
   preview_tmpl?: string;
   preview_field?: string;
 }

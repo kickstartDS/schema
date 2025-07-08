@@ -1,6 +1,14 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Sat, 05 Jul 2025 15:22:43 GMT and should not be manually modified.
+This log was last generated on Tue, 08 Jul 2025 10:57:31 GMT and should not be manually modified.
+
+## 1.6.7
+Tue, 08 Jul 2025 10:57:31 GMT
+
+### Patches
+
+- update type annotations
+- update layering in utils
 
 ## 1.6.6
 Sat, 05 Jul 2025 15:22:43 GMT

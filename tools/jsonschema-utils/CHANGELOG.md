@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Sat, 05 Jul 2025 15:22:42 GMT and should not be manually modified.
+This log was last generated on Tue, 08 Jul 2025 10:57:31 GMT and should not be manually modified.
+
+## 3.7.0
+Tue, 08 Jul 2025 10:57:31 GMT
+
+### Minor changes
+
+- update layering of schemas to be more generic
 
 ## 3.6.2
 Sat, 05 Jul 2025 15:22:42 GMT

@@ -34,6 +34,8 @@ async function convertDsAgency(): Promise<void> {
   mkdirSync('dist/agency', { recursive: true });
 
   for (const schemaId of Object.keys(dereferencedSchemas)) {
+    // console.log('schemaId', schemaId, getSchemaName(schemaId));
+    // console.log(dereferencedSchemas[schemaId]);
     writeFileSync(
       `dist/agency/${getSchemaName(schemaId)}.schema.json`,
       JSON.stringify(dereferencedSchemas[schemaId], null, 2)
@@ -64,6 +66,7 @@ async function convertKds(): Promise<void> {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function convertCore(): Promise<void> {
   for (const module of ['base', 'blog', 'form']) {
     const packagePath = path.dirname(
@@ -94,5 +97,5 @@ async function convertCore(): Promise<void> {
 (async () => {
   await convertDsAgency();
   // await convertKds();
-  await convertCore();
+  // await convertCore();
 })();

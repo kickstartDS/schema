@@ -245,6 +245,7 @@ export function getSchemaReducer<
                       schema,
                       rootSchema.$id
                     );
+                  // console.log('maximum call stack?', reffedSchema.properties[name]);
                   const objectSchema = structuredClone(reffedSchema.properties[name] as JSONSchema.Interface);
                   return acc.concat(
                     buildType(

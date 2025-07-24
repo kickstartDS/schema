@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/blog-head.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "date": {
+          "title": "Datum",
+          "description": "Datum der Veröffentlichung des Blogbeitrags"
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "Tags des Blogbeitrags"
+        },
+        "headline": {
+          "title": "Headline",
+          "description": "Headline des Blogbeitrags"
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Hauptbild des Blogbeitrags"
+        },
+        "alt": {
+          "title": "Alternativtext",
+          "description": "Alternativtext für das Bild des Blogbeitrags"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/blog-head.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

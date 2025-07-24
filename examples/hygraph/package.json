@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@kickstartds/ds-agency": "^3.4.5",
+    "@kickstartds/ds-agency-premium": "1.7.0--canary.46.1837.0",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2hygraph": "workspace:*",
     "ajv": "^8.12.0",
@@ -40,10 +40,11 @@
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
-    "@kickstartds/base": "^4.0.2",
-    "@kickstartds/blog": "^4.0.2",
-    "@kickstartds/core": "^4.0.2",
-    "@kickstartds/form": "^4.0.2"
+    "@kickstartds/base": "^4.1.0",
+    "@kickstartds/blog": "^4.1.0",
+    "@kickstartds/content": "^4.1.1",
+    "@kickstartds/core": "^4.1.0",
+    "@kickstartds/form": "^4.1.0"
   },
   "engines": {
     "node": ">=14.16"

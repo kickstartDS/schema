@@ -35,8 +35,9 @@ const processingConfiguration: Partial<IProcessingOptions> = {
 };
 
 async function convertDsAgency(): Promise<void> {
+  const layerOrder = ['cms', 'schema', 'kickstartds'];
   const packagePath = path.dirname(
-    fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
+    fileURLToPath(resolve(`@kickstartds/ds-agency-premium/package.json`, import.meta.url))
   );
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
@@ -49,7 +50,7 @@ async function convertDsAgency(): Promise<void> {
     (schemaId) => !customSchemaIds.includes(schemaId)
   );
   const layeredSchemaIds = customSchemaIds.filter((schemaId) =>
-    kdsSchemaIds.some((kdsSchemaId) => shouldLayer(schemaId, kdsSchemaId))
+    kdsSchemaIds.some((kdsSchemaId) => shouldLayer(schemaId, kdsSchemaId, layerOrder))
   );
 
   const layeredTypes = await createTypes(
@@ -72,8 +73,8 @@ async function convertDsAgency(): Promise<void> {
     if (!schema) throw new Error("Can't find schema for layered type");
     if (!schema.$id) throw new Error('Found schema without $id property');
 
-    const layeredId = isLayering(schema.$id, kdsSchemaIds)
-      ? layeredSchemaId(schema.$id, kdsSchemaIds)
+    const layeredId = isLayering(schema.$id, kdsSchemaIds, layerOrder)
+      ? layeredSchemaId(schema.$id, kdsSchemaIds, layerOrder)
       : schema.$id;
 
     writeFileSync(
@@ -88,6 +89,8 @@ ${layeredTypes[schemaId]}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function convertKds(): Promise<void> {
+  // the following layering order will nocht work for Kds, because we use `http://kickstartds.com/button.schema.json` as the id format, needs fixing when reactivated
+  const layerOrder = ['schema', 'kickstartds'];
   const packagePath = path.dirname(
     fileURLToPath(resolve(`@kickstartds/design-system/package.json`, import.meta.url))
   );
@@ -102,7 +105,7 @@ async function convertKds(): Promise<void> {
     (schemaId) => !customSchemaIds.includes(schemaId)
   );
   const layeredSchemaIds = customSchemaIds.filter((schemaId) =>
-    kdsSchemaIds.some((kdsSchemaId) => shouldLayer(schemaId, kdsSchemaId))
+    kdsSchemaIds.some((kdsSchemaId) => shouldLayer(schemaId, kdsSchemaId, layerOrder))
   );
 
   const layeredTypes = await createTypes(
@@ -125,8 +128,8 @@ async function convertKds(): Promise<void> {
     if (!schema) throw new Error("Can't find schema for layered type");
     if (!schema.$id) throw new Error('Found schema without $id property');
 
-    const layeredId = isLayering(schema.$id, kdsSchemaIds)
-      ? layeredSchemaId(schema.$id, kdsSchemaIds)
+    const layeredId = isLayering(schema.$id, kdsSchemaIds, layerOrder)
+      ? layeredSchemaId(schema.$id, kdsSchemaIds, layerOrder)
       : schema.$id;
 
     writeFileSync(
@@ -140,9 +143,10 @@ ${layeredTypes[schemaId]}
 }
 
 async function convertCore(): Promise<void> {
+  const layerOrder = ['cms', 'schema', 'kickstartds'];
   for (const module of ['base', 'blog', 'form']) {
     const packagePath = path.dirname(
-      fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
+      fileURLToPath(resolve(`@kickstartds/ds-agency-premium/package.json`, import.meta.url))
     );
     const customGlob = `${packagePath}/lib/**/*.(schema|definitions|interface).json`;
 
@@ -155,7 +159,7 @@ async function convertCore(): Promise<void> {
       (schemaId) => !customSchemaIds.includes(schemaId)
     );
     const layeredSchemaIds = customSchemaIds.filter((schemaId) =>
-      kdsSchemaIds.some((kdsSchemaId) => shouldLayer(schemaId, kdsSchemaId))
+      kdsSchemaIds.some((kdsSchemaId) => shouldLayer(schemaId, kdsSchemaId, layerOrder))
     );
 
     const layeredTypes = await createTypes(
@@ -180,8 +184,8 @@ async function convertCore(): Promise<void> {
       if (!schema) throw new Error("Can't find schema for layered type");
       if (!schema.$id) throw new Error('Found schema without $id property');
 
-      const layeredId = isLayering(schema.$id, kdsSchemaIds)
-        ? layeredSchemaId(schema.$id, kdsSchemaIds)
+      const layeredId = isLayering(schema.$id, kdsSchemaIds, layerOrder)
+        ? layeredSchemaId(schema.$id, kdsSchemaIds, layerOrder)
         : schema.$id;
 
       writeFileSync(

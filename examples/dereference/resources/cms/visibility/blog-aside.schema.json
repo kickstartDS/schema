@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/blog-aside.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "author": {
+          "x-cms-hidden": false
+        },
+        "socialSharing": {
+          "x-cms-hidden": false
+        },
+        "readingTime": {
+          "x-cms-hidden": false
+        },
+        "date": {
+          "x-cms-hidden": false
+        },
+        "className": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/blog-aside.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

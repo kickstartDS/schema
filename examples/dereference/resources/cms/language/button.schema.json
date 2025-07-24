@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/button.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "label": {
+          "title": "Text",
+          "description": "Text des Buttons"
+        },
+        "target": {
+          "title": "Ziel",
+          "description": "Ziel des Buttons, z.B. eine URL oder eine Aktion"
+        },
+        "variant": {
+          "title": "Variante",
+          "description": "Variante des Buttons, z.B. primär, sekundär oder tertiär"
+        },
+        "icon": {
+          "title": "Icon",
+          "description": "Icon für den Button, z.B. ein Symbol oder eine Grafik"
+        },
+        "size": {
+          "title": "Größe",
+          "description": "Größe des Buttons, z.B. klein, mittel oder groß"
+        },
+        "disabled": {
+          "title": "Deaktiviert",
+          "description": "Gibt an, ob der Button deaktiviert ist und nicht angeklickt werden kann"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/button.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

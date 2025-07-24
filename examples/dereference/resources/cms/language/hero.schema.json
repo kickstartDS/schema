@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/hero.schema.json",
+  "title": "Hero",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "title": "Headline",
+          "description": "Headline für das Visual"
+        },
+        "sub": {
+          "title": "Subheadline",
+          "description": "Subheadline unterhalb der Headline"
+        },
+        "text": {
+          "title": "Text",
+          "description": "Textinhalt des Hero Elements"
+        },
+        "highlightText": {
+          "title": "Highlight Text?",
+          "description": "Textinhalt visuell hervorheben"
+        },
+        "colorNeutral": {
+          "title": "Neutrale Farben?",
+          "description": "Textinhalt and buttons in neutraler Farbe darstellen"
+        },
+        "height": {
+          "title": "Höhe",
+          "description": "Anzeigehöhe des Hero Elements"
+        },
+        "textbox": {
+          "title": "Text in Box?",
+          "description": "Auswählen ob der Textinhalt innerhalb einer eigenen Box angezeigt werden soll"
+        },
+        "buttons": {
+          "title": "Buttons",
+          "description": "Buttons für das Hero Element",
+          "items": {
+            "title": "Button",
+            "description": "Button für das Hero Element"
+          }
+        },
+        "overlay": {
+          "title": "Overlay",
+          "description": "Overlay über das Bild legen um Lesbarkeit zu verbessern"
+        },
+        "image": {
+          "title": "Hintergrund",
+          "description": "Hintergrundbild für das Hero Element"
+        },
+        "textPosition": {
+          "title": "Textausrichtung",
+          "description": "Ausrichtung des Hero Inhaltes auswählen"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://visibility.mydesignsystem.com/hero.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

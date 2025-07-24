@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "update jsonschema-utils, add layering to example",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

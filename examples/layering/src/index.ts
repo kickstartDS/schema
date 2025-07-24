@@ -18,7 +18,7 @@ const processingConfiguration: Partial<IProcessingOptions> = {
 
 async function convertDsAgency(): Promise<void> {
   const packagePath = path.dirname(
-    fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
+    fileURLToPath(resolve(`@kickstartds/ds-agency-premium/package.json`, import.meta.url))
   );
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
   const additionalGlob = `resources/cms/*.(schema|definitions|interface).json`;

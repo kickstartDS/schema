@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   processSchemaGlob,
+  processSchemaGlobs,
   getSchemaRegistry,
   getCustomSchemaIds,
   IClassifierResult,
@@ -14,14 +15,14 @@ import { resolve } from 'import-meta-resolve';
 
 async function convertDsAgency(): Promise<void> {
   const packagePath = path.dirname(
-    fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
+    fileURLToPath(resolve(`@kickstartds/ds-agency-premium/package.json`, import.meta.url))
   );
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  await processSchemaGlob(customGlob, ajv, {
+  await processSchemaGlobs(['resources/cms/**/*.(schema|definitions|interface).json', customGlob], ajv, {
     hideCmsFields: true,
-    layerOrder: ['cms', 'schema', 'kickstartds']
+    layerOrder: ['language', 'visibility', 'cms', 'schema', 'kickstartds']
   });
 
   const convertedObjects = convert({
@@ -43,17 +44,26 @@ async function convertDsAgency(): Promise<void> {
         case 'blog-overview':
         case 'blog-post':
           return IClassifierResult.Template;
+        case 'blog-teaser':
+        case 'contact':
         case 'cta':
+        case 'divider':
         case 'faq':
         case 'features':
         case 'gallery':
+        case 'hero':
+        case 'html':
+        case 'image-story':
         case 'image-text':
+        case 'info-table':
         case 'logos':
+        case 'mosaic':
+        case 'slider':
         case 'stats':
         case 'teaser-card':
         case 'testimonials':
         case 'text':
-        case 'blog-teaser':
+        case 'video-curtain':
           return IClassifierResult.Component;
         default:
           return IClassifierResult.Object;

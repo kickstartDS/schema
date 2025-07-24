@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/stackbit-example",
+      "comment": "update jsonschema-utils",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/stackbit-example"
+}

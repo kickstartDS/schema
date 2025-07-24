@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/staticcms-example",
+      "comment": "update jsonschema-utils",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/staticcms-example"
+}

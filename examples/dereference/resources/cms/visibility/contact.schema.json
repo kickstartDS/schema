@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/contact.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "image": {
+          "x-cms-hidden": false
+        },
+        "title": {
+          "x-cms-hidden": false
+        },
+        "subtitle": {
+          "x-cms-hidden": false
+        },
+        "links": {
+          "x-cms-hidden": false
+        },
+        "copy": {
+          "x-cms-hidden": false
+        },
+        "className": {
+          "x-cms-hidden": true
+        },
+        "component": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/contact.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

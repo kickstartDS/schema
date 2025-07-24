@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/blog-teaser.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "date": {
+          "title": "Datum",
+          "description": "Datum der Veröffentlichung des Blogbeitrags"
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "Tags des Blogbeitrags"
+        },
+        "headline": {
+          "title": "Headline",
+          "description": "Headline des Blogbeitrags"
+        },
+        "teaserText": {
+          "title": "Teasertext",
+          "description": "Teasertext des Blogbeitrags"
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Hauptbild des Blogbeitrags"
+        },
+        "alt": {
+          "title": "Alternativtext",
+          "description": "Alternativtext für das Bild des Blogbeitrags"
+        },
+        "link": {
+          "title": "Link",
+          "description": "Link zum Blogbeitrag"
+        },
+        "readingTime": {
+          "title": "Lesezeit",
+          "description": "Lesezeit des Blogbeitrags"
+        },
+        "author": {
+          "title": "Autor",
+          "description": "Autor des Blogbeitrags"
+        },
+        "className": {
+          "title": "Klasse",
+          "description": "Zusätzliche CSS-Klasse(n) für den Blog Teaser"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/blog-teaser.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

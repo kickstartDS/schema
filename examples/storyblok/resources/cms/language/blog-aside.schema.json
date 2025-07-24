@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/blog-aside.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "author": {
+          "title": "Autor",
+          "description": "Autor des Blogbeitrags"
+        },
+        "socialSharing": {
+          "title": "Social Sharing",
+          "description": "Social Sharing Links für den Blogbeitrag",
+          "items": {
+            "title": "Social Sharing Link",
+            "description": "Link zum Teilen des Blogbeitrags"
+          }
+        },
+        "readingTime": {
+          "title": "Lesezeit",
+          "description": "Lesezeit des Blogbeitrags"
+        },
+        "date": {
+          "title": "Datum",
+          "description": "Datum der Veröffentlichung des Blogbeitrags"
+        },
+        "className": {
+          "title": "Klasse",
+          "description": "Zusätzliche CSS-Klasse(n) für das Blog Aside Element"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/blog-aside.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

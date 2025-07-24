@@ -8,34 +8,35 @@ import {
   getSchemaRegistry,
   processSchemaGlob,
   dereference,
-  IProcessingOptions
+  IProcessingOptions,
+  processSchemaGlobs
 } from '@kickstartds/jsonschema-utils';
 import { resolve } from 'import-meta-resolve';
 
 const processingConfiguration: Partial<IProcessingOptions> = {
-  typeResolution: false
+  typeResolution: false,
+  layerOrder: ['language', 'visibility', 'cms', 'schema', 'kickstartds']
 };
 
 async function convertDsAgency(): Promise<void> {
   const packagePath = path.dirname(
-    fileURLToPath(resolve(`@kickstartds/ds-agency/package.json`, import.meta.url))
+    fileURLToPath(resolve(`@kickstartds/ds-agency-premium/package.json`, import.meta.url))
   );
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  const schemaIds = await processSchemaGlob(customGlob, ajv, processingConfiguration);
+  const schemaIds = await processSchemaGlobs(
+    ['resources/cms/**/*.(schema|definitions|interface).json', customGlob],
+    ajv,
+    processingConfiguration
+  );
   const customSchemaIds = getCustomSchemaIds(schemaIds);
 
-  const dereferencedSchemas = await dereference(
-    customSchemaIds.filter((schemaId) => !schemaId.includes('nav-main.schema.json')),
-    ajv
-  );
+  const dereferencedSchemas = await dereference(customSchemaIds, ajv);
 
   mkdirSync('dist/agency', { recursive: true });
 
   for (const schemaId of Object.keys(dereferencedSchemas)) {
-    // console.log('schemaId', schemaId, getSchemaName(schemaId));
-    // console.log(dereferencedSchemas[schemaId]);
     writeFileSync(
       `dist/agency/${getSchemaName(schemaId)}.schema.json`,
       JSON.stringify(dereferencedSchemas[schemaId], null, 2)

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/button-group.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "buttons": {
+          "x-cms-hidden": false
+        },
+        "colorNeutral": {
+          "x-cms-hidden": true
+        },
+        "size": {
+          "x-cms-hidden": false
+        },
+        "arrangement": {
+          "x-cms-hidden": false
+        },
+        "className": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/button-group.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

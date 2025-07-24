@@ -312,8 +312,15 @@ export function getSchemaFileName(schemaId: string): string {
   return schemaFileName;
 }
 
-export function shouldLayer(schemaId: string, targetSchemaId: string, inSchemaId?: string): boolean {
-  // TODO inSchemaId needed? dont replace refpointers? add layerOrder
+export function shouldLayer(
+  schemaId: string,
+  targetSchemaId: string,
+  layerOrder: string[],
+  inSchemaId?: string
+): boolean {
+  const targetSchemaLayer = getLayerName(targetSchemaId);
+  const layeringSchemaLayer = getLayerName(schemaId);
+
   const targetSchemaURL = new URL(targetSchemaId);
   const layeringSchemaURL = new URL(schemaId);
 
@@ -324,37 +331,31 @@ export function shouldLayer(schemaId: string, targetSchemaId: string, inSchemaId
   const shouldLayer =
     targetSchemaURL.host !== layeringSchemaURL.host &&
     targetSchemaFileName === layeringSchemaFileName &&
-    inSchemaFileName !== targetSchemaFileName;
-
-  // console.log(
-  //   'inSchemaFileName path',
-  //   inSchemaFileName !== targetSchemaFileName,
-  //   inSchemaFileName,
-  //   targetSchemaFileName
-  // );
+    inSchemaFileName !== targetSchemaFileName &&
+    layerOrder.indexOf(targetSchemaLayer) > layerOrder.indexOf(layeringSchemaLayer);
 
   return shouldLayer;
 }
 
-export function isLayering(schemaId: string, targetSchemaIds: string[]): boolean {
-  return targetSchemaIds.some((targetSchemaId) => shouldLayer(schemaId, targetSchemaId));
+export function isLayering(schemaId: string, targetSchemaIds: string[], layerOrder: string[]): boolean {
+  return targetSchemaIds.some((targetSchemaId) => shouldLayer(schemaId, targetSchemaId, layerOrder));
 }
 
-export function layeredSchemaId(schemaId: string, targetSchemaIds: string[]): string {
-  const layeredId = targetSchemaIds.find((targetSchemaId) => shouldLayer(schemaId, targetSchemaId));
+export function layeredSchemaId(schemaId: string, targetSchemaIds: string[], layerOrder: string[]): string {
+  const layeredId = targetSchemaIds.find((targetSchemaId) =>
+    shouldLayer(schemaId, targetSchemaId, layerOrder)
+  );
 
   if (!layeredId) throw new Error('Tried getting a layered id, for a schema that is not layering');
 
   return layeredId;
 }
 
-export function layerRefs(jsonSchemas: JSONSchema.Interface[], schemasToLayer: JSONSchema.Interface[]): void {
-  console.log(
-    'layering refs',
-    jsonSchemas.length,
-    schemasToLayer.length,
-    jsonSchemas.map((schema) => schema.$id)
-  );
+export function layerRefs(
+  jsonSchemas: JSONSchema.Interface[],
+  schemasToLayer: JSONSchema.Interface[],
+  layerOrder: string[]
+): void {
   jsonSchemas.forEach((jsonSchema) => {
     schemasToLayer.forEach((schemaToLayer) => {
       traverse(schemaToLayer, {
@@ -362,22 +363,18 @@ export function layerRefs(jsonSchemas: JSONSchema.Interface[], schemasToLayer: J
           if (!subSchema.$ref || !subSchema.$ref.includes('http')) return;
           if (!jsonSchema.$id) throw new Error('Found a schema without $id, which is unsupported');
 
-          if (shouldLayer(jsonSchema.$id, subSchema.$ref, schemaToLayer.$id)) {
-            const hash = new URL(subSchema.$ref).hash;
+          if (shouldLayer(jsonSchema.$id, subSchema.$ref, layerOrder, schemaToLayer.$id)) {
+            const hash = new URL(subSchema.$ref).hash.replace('#', '');
 
-            console.log(
-              '-------------------\n',
-              'layering in',
-              schemaToLayer.$id,
-              '\nlayering:',
-              jsonSchema.$id,
-              'to previous:',
-              subSchema.$ref,
-              '\nsetting to',
-              `${jsonSchema.$id}${hash}`
-            );
-
-            subSchema.$ref = `${jsonSchema.$id}${hash}`;
+            // TODO I guess this misses cases where the relevant part *is* inside the layering schema, just in one of the overriding allOf parts
+            // allOf, etc are not resolved here yet when processing schemas... so the pointer can't work for those cases currently
+            if (hash) {
+              if (get(jsonSchema, hash)) {
+                subSchema.$ref = `${jsonSchema.$id}#${hash}`;
+              }
+            } else {
+              subSchema.$ref = jsonSchema.$id;
+            }
           }
         }
       });
@@ -424,21 +421,15 @@ export function inlineReferences(jsonSchemas: JSONSchema.Interface[], typeResolu
                 if (!originalSchema || !originalSchema.definitions)
                   throw new Error("Couldn't find original schema to pull definitions from");
 
-                const test = get(originalSchema, schemaPointer);
-                if (!test) console.log('empty pointer', schemaPointer);
-                parentSchema.properties[propertyName] = test;
+                parentSchema.properties[propertyName] = get(originalSchema, schemaPointer);
               } else if (parentKeyword === 'allOf') {
                 const originalSchema = jsonSchemas.find((jsonSchema) => jsonSchema.$id === schemaId);
                 if (!originalSchema || !originalSchema.definitions)
                   throw new Error("Couldn't find original schema to pull definitions from");
 
-                const test = get(originalSchema, schemaPointer);
-                if (!test) console.log('empty pointer', schemaPointer);
-                parentSchema.allOf[propertyName] = test;
+                parentSchema.allOf[propertyName] = get(originalSchema, schemaPointer);
               }
             } else {
-              const test = get(rootSchema, schemaPointer);
-              if (!test) console.log('empty pointer', schemaPointer);
               parentSchema[parentKeyword][propertyName] = get(rootSchema, schemaPointer);
             }
           } else if (schemaPointer.startsWith('/properties/')) {
@@ -447,18 +438,14 @@ export function inlineReferences(jsonSchemas: JSONSchema.Interface[], typeResolu
               if (!originalSchema || !originalSchema.properties)
                 throw new Error("Couldn't find original schema to pull properties from");
 
-              const test = get(originalSchema, schemaPointer);
-              if (!test) console.log('empty pointer', schemaPointer);
-              parentSchema.properties[propertyName] = test;
+              parentSchema.properties[propertyName] = get(originalSchema, schemaPointer);
             } else if (parentKeyword === 'allOf') {
               const originalSchema = jsonSchemas.find((jsonSchema) => jsonSchema.$id === schemaId);
               if (!originalSchema || !originalSchema.properties)
                 throw new Error("Couldn't find original schema to pull properties from");
 
               const index = Number(pointer.split('/').pop());
-              const test = get(originalSchema, schemaPointer);
-              if (!test) console.log('empty pointer', schemaPointer);
-              parentSchema.allOf[index] = test;
+              parentSchema.allOf[index] = get(originalSchema, schemaPointer);
             }
           }
         }
@@ -595,7 +582,7 @@ export function getSchemaGraph(jsonSchemas: JSONSchema.Interface[]): SchemaDirec
             (jsonSchema) => jsonSchema.$id === subSchema.$ref.replace(/#.*$/g, '')
           );
           if (!reffedSchema || !reffedSchema.$id)
-            throw new Error("Couldn't find a reffed json in json graph generation");
+            throw new Error(`Couldn't find a reffed json in json graph generation for ${jsonSchema.$id}`);
           if (!graph.hasEdge(jsonSchema.$id, reffedSchema.$id)) {
             if (!graph.hasVertex(reffedSchema.$id)) {
               graph.addVertex(new SchemaVertex(reffedSchema.$id, reffedSchema));
@@ -634,22 +621,43 @@ export function getLayerName(schemaId: string): string {
   return schemaId.includes('schema.kickstartds.com') ? 'kickstartds' : schemaId.split('//')[1].split('.')[0];
 }
 
+export interface ISchemaEntry {
+  topLayerSchema: JSONSchema.Interface;
+  schemas: JSONSchema.Interface[];
+  schemaReferences: Map<string, string>;
+}
+
 export function layerSchemas(sortedSchemas: JSONSchema.Interface[], layerOrder: string[]): void {
-  const graph = new SchemaDirectedGraph();
+  const map = new Map<string, ISchemaEntry>();
+
   for (const jsonSchema of sortedSchemas) {
     if (!jsonSchema.$id) throw new Error('Schema without $id while layering schemas');
+
+    const schemaName = getSchemaName(jsonSchema.$id);
+    if (!map.has(schemaName)) {
+      map.set(schemaName, { topLayerSchema: jsonSchema, schemas: [], schemaReferences: new Map() });
+    }
+
     const layerName = getLayerName(jsonSchema.$id);
     if (!layerName)
       throw new Error(`Failed to get layer name from schema $id ${jsonSchema.$id} for layering`);
     if (!layerOrder.includes(layerName))
       throw new Error(`Layer name ${layerName} not included in layer order: ${layerOrder}`);
 
-    if (!graph.hasVertex(jsonSchema.$id)) graph.addVertex(new SchemaVertex(jsonSchema.$id, jsonSchema));
+    const schemaEntry = map.get(schemaName);
+    if (!schemaEntry) throw new Error(`Failed to get schema entry for ${schemaName} while layering schemas`);
+
+    if (
+      schemaEntry.topLayerSchema.$id &&
+      shouldLayer(jsonSchema.$id, schemaEntry.topLayerSchema.$id, layerOrder)
+    ) {
+      schemaEntry.topLayerSchema = jsonSchema;
+    }
 
     if (jsonSchema.allOf && jsonSchema.allOf.length > 1) {
       const ref = jsonSchema.allOf.filter((entry) => {
         if (entry === true || entry === false) return false;
-        if (entry.$ref && entry.$ref.includes('http')) return true;
+        if (entry.$ref && entry.$ref.startsWith('http')) return true;
         return false;
       });
       if (ref.length !== 1) {
@@ -657,115 +665,87 @@ export function layerSchemas(sortedSchemas: JSONSchema.Interface[], layerOrder: 
           `Found a schema with multiple $refs in root allOf, which is not supported: ${jsonSchema.$id}`
         );
       }
+
       const reffedSchema = sortedSchemas.find(
         (schema) => ref[0] !== true && ref[0] !== false && schema.$id === ref[0].$ref
       );
       if (!reffedSchema || !reffedSchema.$id)
         throw new Error("Couldn't find a reffed json in json allOf graph generation");
-      if (!graph.hasEdge(jsonSchema.$id, reffedSchema.$id)) {
-        if (getSchemaName(jsonSchema.$id) !== getSchemaName(reffedSchema.$id)) continue;
-        if (!graph.hasVertex(reffedSchema.$id)) {
-          graph.addVertex(new SchemaVertex(reffedSchema.$id, reffedSchema));
-        }
-        graph.addEdge(
-          new SchemaEdge(jsonSchema.$id, reffedSchema.$id, [
-            {
-              refOrigin: jsonSchema.$id,
-              refTarget: reffedSchema.$id
+      const reffedLayerName = getLayerName(reffedSchema.$id);
+      if (!reffedLayerName)
+        throw new Error(`Failed to get layer name from schema $id ${reffedSchema.$id} for layering`);
+      if (!layerOrder.includes(reffedLayerName))
+        throw new Error(`Layer name ${reffedLayerName} not included in layer order: ${layerOrder}`);
+
+      if (schemaEntry.schemaReferences.has(reffedSchema.$id)) {
+        const currentReference = schemaEntry.schemaReferences.get(reffedSchema.$id);
+        if (!currentReference)
+          throw new Error(`Failed to get current reference for ${reffedSchema.$id} in schema references`);
+        const currentReferenceSchema = sortedSchemas.find((schema) => schema.$id === currentReference);
+        if (!currentReferenceSchema || !currentReferenceSchema.$id)
+          throw new Error(
+            `Failed to get current reference schema for ${reffedSchema.$id} in schema references`
+          );
+        const currentReferenceLayerName = getLayerName(currentReferenceSchema.$id);
+        if (!currentReferenceLayerName)
+          throw new Error(
+            `Failed to get layer name from schema $id ${currentReferenceSchema.$id} for layering`
+          );
+        if (!layerOrder.includes(currentReferenceLayerName))
+          throw new Error(
+            `Layer name ${currentReferenceLayerName} not included in layer order: ${layerOrder}`
+          );
+        if (layerName === currentReferenceLayerName)
+          throw new Error(
+            `Layer name ${layerName} is the same as reffed layer name ${currentReferenceLayerName} for ${jsonSchema.$id}`
+          );
+
+        if (layerOrder.indexOf(layerName) > layerOrder.indexOf(currentReferenceLayerName)) {
+          if (currentReferenceSchema.allOf && currentReferenceSchema.allOf.length > 1) {
+            const reffedRef = currentReferenceSchema.allOf.filter((entry) => {
+              if (entry === true || entry === false) return false;
+              if (entry.$ref && entry.$ref.startsWith('http')) return true;
+              return false;
+            });
+
+            if (reffedRef[0] === true || reffedRef[0] === false) {
+              throw new Error(
+                `Found a schema with true/false in allOf, which is not supported: ${jsonSchema.$id}`
+              );
             }
-          ])
-        );
+
+            reffedRef[0].$ref = jsonSchema.$id;
+          }
+
+          schemaEntry.schemaReferences.set(jsonSchema.$id, currentReferenceSchema.$id);
+          schemaEntry.schemaReferences.set(reffedSchema.$id, jsonSchema.$id);
+        } else {
+          if (ref[0] === true || ref[0] === false) {
+            throw new Error(
+              `Found a schema with true/false in allOf, which is not supported: ${jsonSchema.$id}`
+            );
+          }
+          const currentReference = schemaEntry.schemaReferences.get(reffedSchema.$id);
+          if (!currentReference)
+            throw new Error(`Failed to get current reference for ${reffedSchema.$id} in schema references`);
+          ref[0].$ref = currentReference;
+          schemaEntry.schemaReferences.set(currentReference, jsonSchema.$id);
+        }
+      } else {
+        schemaEntry.schemaReferences.set(reffedSchema.$id, jsonSchema.$id);
       }
     }
-  }
-  const topLayerBySchemaIds: Record<string, JSONSchema.Interface> = {};
 
-  function findMostDistantParent(schemaId: string): JSONSchema.Interface | undefined {
-    if (graph.inDegreeOf(schemaId) === 0) return undefined;
-
-    const incomingEdges = graph.incomingEdgesOf(schemaId);
-    const parentSchema = graph.getEdgeSrc(incomingEdges[0]);
-
-    if (parentSchema && parentSchema.value && parentSchema.value.$id) {
-      const distantParent = findMostDistantParent(parentSchema.value.$id);
-      return distantParent || parentSchema.value;
-    }
-    return undefined;
-  }
-
-  for (const jsonSchema of sortedSchemas) {
-    if (!jsonSchema.$id) throw new Error('Schema without $id while layering schemas');
-
-    const mostDistantParent = findMostDistantParent(jsonSchema.$id);
-    if (mostDistantParent) {
-      topLayerBySchemaIds[jsonSchema.$id] = mostDistantParent;
-    }
+    map.get(schemaName)?.schemas.push(jsonSchema);
   }
 
   const topLayerSchemas: JSONSchema.Interface[] = [];
-  const checkedSchemas: Set<string> = new Set();
-
-  for (const jsonSchema of sortedSchemas) {
-    if (!jsonSchema.$id) throw new Error('Schema without $id while layering schemas');
-
-    const layerName = getLayerName(jsonSchema.$id);
-    if (!layerName)
-      throw new Error(`Failed to get layer name from schema $id ${jsonSchema.$id} for layering`);
-    if (!layerOrder.includes(layerName))
-      throw new Error(`Layer name ${layerName} not included in layer order: ${layerOrder}`);
-
-    const schemaFileName = getSchemaFileName(jsonSchema.$id);
-    if (checkedSchemas.has(schemaFileName)) continue;
-
-    const topLayerSchema = sortedSchemas.reduce<JSONSchema.Interface>((acc, schema) => {
-      if (!acc.$id) throw new Error('Schema without $id while layering schemas');
-      if (!schema.$id) throw new Error('Schema without $id while layering schemas');
-      if (!schema.$id.includes(schemaFileName)) return acc;
-
-      const currentTopLayer = getLayerName(acc.$id);
-      const schemaLayer = getLayerName(schema.$id);
-      if (!layerOrder.includes(schemaLayer))
-        throw new Error(`Layer name ${schemaLayer} not included in layer order: ${layerOrder}`);
-      if (layerOrder.indexOf(schemaLayer) >= layerOrder.indexOf(currentTopLayer)) return acc;
-
-      return schema;
-    }, jsonSchema);
-
-    if (topLayerSchema) topLayerSchemas.push(topLayerSchema);
-
-    checkedSchemas.add(schemaFileName);
+  const schemaIterator = map.values();
+  for (const schema of schemaIterator) {
+    topLayerSchemas.push(schema.topLayerSchema);
   }
 
-  layerRefs(topLayerSchemas, sortedSchemas);
-
-  // const schemasByLayer = sortedSchemas.reduce<Record<string, JSONSchema.Interface[]>>((acc, jsonSchema) => {
-  //   const layerName = jsonSchema.$id?.includes('schema.kickstartds.com')
-  //     ? 'kickstartds'
-  //     : jsonSchema.$id?.split('//')[1].split('.')[0];
-  //   if (!layerName)
-  //     throw new Error(`Failed to get layer name from schema $id ${jsonSchema.$id} for layering`);
-  //   if (!layerOrder.includes(layerName))
-  //     throw new Error(`Layer name ${layerName} not included in layer order: ${layerOrder}`);
-
-  //   if (!acc[layerName]) acc[layerName] = [];
-  //   acc[layerName].push(jsonSchema);
-
-  //   return acc;
-  // }, {});
-
-  // for (const layer of layerOrder) {
-  //   if (layerOrder.indexOf(layer) === layerOrder.length - 1) continue;
-  //   if (!schemasByLayer[layer] || schemasByLayer[layer].length < 1) continue;
-
-  //   for (const deeperLayer of layerOrder.slice(layerOrder.indexOf(layer) + 1).reverse()) {
-  //     layerRefs(
-  //       schemasByLayer[layer],
-  //       schemasByLayer[deeperLayer].filter(
-  //         (schema) => !schemasByLayer[layer].some((s) => s.$id === schema.$id)
-  //       )
-  //     );
-  //   }
-  // }
+  layerRefs(topLayerSchemas, sortedSchemas, layerOrder);
 }
 
 export interface IProcessingOptions {

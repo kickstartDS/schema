@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/contact.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "image": {
+          "title": "Bild",
+          "description": "Bild für das Kontakt Element"
+        },
+        "title": {
+          "title": "Titel",
+          "description": "Titel für das Kontakt Element"
+        },
+        "subtitle": {
+          "title": "Untertitel",
+          "description": "Untertitel für das Kontakt Element"
+        },
+        "links": {
+          "title": "Links",
+          "description": "Links zu sozialen Medien oder Kontaktmöglichkeiten"
+        },
+        "copy": {
+          "title": "Text",
+          "description": "Text für das Kontakt Element"
+        },
+        "className": {
+          "title": "Klasse",
+          "description": "Zusätzliche CSS-Klasse(n) für das Kontakt Element"
+        },
+        "component": {
+          "title": "Komponente",
+          "description": "Die Komponente, die für das Kontakt Element verwendet wird"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/contact.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

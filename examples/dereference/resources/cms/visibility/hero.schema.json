@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/hero.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "x-cms-hidden": false
+        },
+        "sub": {
+          "x-cms-hidden": false
+        },
+        "text": {
+          "x-cms-hidden": false
+        },
+        "highlightText": {
+          "x-cms-hidden": true
+        },
+        "colorNeutral": {
+          "x-cms-hidden": true
+        },
+        "height": {
+          "x-cms-hidden": true
+        },
+        "textbox": {
+          "x-cms-hidden": true
+        },
+        "buttons": {
+          "x-cms-hidden": false
+        },
+        "overlay": {
+          "x-cms-hidden": true
+        },
+        "image": {
+          "x-cms-hidden": false
+        },
+        "textPosition": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/hero.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

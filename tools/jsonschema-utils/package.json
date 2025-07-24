@@ -45,10 +45,11 @@
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
-    "@kickstartds/base": "^4.0.2",
-    "@kickstartds/blog": "^4.0.2",
-    "@kickstartds/core": "^4.0.2",
-    "@kickstartds/form": "^4.0.2"
+    "@kickstartds/base": "^4.1.0",
+    "@kickstartds/blog": "^4.1.0",
+    "@kickstartds/content": "^4.1.1",
+    "@kickstartds/core": "^4.1.0",
+    "@kickstartds/form": "^4.1.0"
   },
   "engines": {
     "node": ">=18.16"

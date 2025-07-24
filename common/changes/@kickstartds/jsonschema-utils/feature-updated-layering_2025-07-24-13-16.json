@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "update and improve layering capabilities",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

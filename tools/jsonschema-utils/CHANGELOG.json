@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.8.0",
+      "tag": "@kickstartds/jsonschema-utils_v3.8.0",
+      "date": "Thu, 24 Jul 2025 13:17:05 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "update and improve layering capabilities"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.7.0",
       "tag": "@kickstartds/jsonschema-utils_v3.7.0",
       "date": "Tue, 08 Jul 2025 10:57:31 GMT",

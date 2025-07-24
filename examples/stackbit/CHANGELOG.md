@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/stackbit-example
 
-This log was last generated on Tue, 08 Jul 2025 10:57:31 GMT and should not be manually modified.
+This log was last generated on Thu, 24 Jul 2025 13:17:05 GMT and should not be manually modified.
+
+## 2.0.49
+Thu, 24 Jul 2025 13:17:05 GMT
+
+### Patches
+
+- update jsonschema-utils
 
 ## 2.0.48
 Tue, 08 Jul 2025 10:57:31 GMT

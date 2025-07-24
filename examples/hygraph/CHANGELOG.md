@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/hygraph-example
 
-This log was last generated on Tue, 08 Jul 2025 10:57:31 GMT and should not be manually modified.
+This log was last generated on Thu, 24 Jul 2025 13:17:05 GMT and should not be manually modified.
+
+## 1.0.24
+Thu, 24 Jul 2025 13:17:05 GMT
+
+### Patches
+
+- update jsonschema-utils
 
 ## 1.0.23
 Tue, 08 Jul 2025 10:57:31 GMT

@@ -627,7 +627,10 @@ export interface ISchemaEntry {
   schemaReferences: Map<string, string>;
 }
 
-export function layerSchemas(sortedSchemas: JSONSchema.Interface[], layerOrder: string[]): void {
+export function getTopLayerSchemas(
+  sortedSchemas: JSONSchema.Interface[],
+  layerOrder: string[]
+): JSONSchema.Interface[] {
   const map = new Map<string, ISchemaEntry>();
 
   for (const jsonSchema of sortedSchemas) {
@@ -745,6 +748,11 @@ export function layerSchemas(sortedSchemas: JSONSchema.Interface[], layerOrder: 
     topLayerSchemas.push(schema.topLayerSchema);
   }
 
+  return topLayerSchemas;
+}
+
+export function layerSchemas(sortedSchemas: JSONSchema.Interface[], layerOrder: string[]): void {
+  const topLayerSchemas = getTopLayerSchemas(sortedSchemas, layerOrder);
   layerRefs(topLayerSchemas, sortedSchemas, layerOrder);
 }
 

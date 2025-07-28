@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/cport-example
 
-This log was last generated on Thu, 24 Jul 2025 13:17:05 GMT and should not be manually modified.
+This log was last generated on Mon, 28 Jul 2025 13:22:55 GMT and should not be manually modified.
+
+## 1.0.26
+Mon, 28 Jul 2025 13:22:55 GMT
+
+_Version update only_
 
 ## 1.0.25
 Thu, 24 Jul 2025 13:17:05 GMT

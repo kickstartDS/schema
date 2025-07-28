@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2types",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Converts JSON schema to TypeScript types to use as component props",
   "license": "(MIT OR Apache-2.0)",
   "author": {

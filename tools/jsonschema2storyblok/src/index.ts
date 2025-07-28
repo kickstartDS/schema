@@ -67,6 +67,10 @@ const colors: Record<string, string> = {
  *  - [ ] use more up-to-date mapping for image controls overall, probably `asset`?
  *  - [ ] more generic solution to encode icon assigment?
  *  - [ ] split off bloks fields should encode `maximum` and `minimum` where possible (eg.: `"prop": { "$ref": "..."}` will get split off, but should specify `maximum` as `1` and `minimum` as `1` if `required` and `0` when not)
+ *  - [ ] check for component descriptions, those are empty currently... even when there are descriptions in component schemas (like `cta.schema.json`)
+ *  - [ ] add preview templates everywhere applicable (a task for the JSON Schema of e.g. DSA)
+ *  - [ ] implement moving hidden fields to their own section at the end of each component tab as "expert settings"
+ *  - [ ] improve enum translations through schema layering
  *
  *  # DS Agency
  *

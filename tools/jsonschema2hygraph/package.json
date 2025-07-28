@@ -1,6 +1,6 @@
 {
   "name": "@kickstartds/jsonschema2hygraph",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Converts JSON schema to Hygraph component configuration",
   "license": "(MIT OR Apache-2.0)",
   "author": {

@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.8.1",
+      "tag": "@kickstartds/jsonschema-utils_v3.8.1",
+      "date": "Mon, 28 Jul 2025 13:22:55 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "export function to get top layer schemas"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.8.0",
       "tag": "@kickstartds/jsonschema-utils_v3.8.0",
       "date": "Thu, 24 Jul 2025 13:17:05 GMT",

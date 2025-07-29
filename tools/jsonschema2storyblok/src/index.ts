@@ -10,7 +10,9 @@ import {
   IConvertParams,
   getSchemaName
 } from '@kickstartds/jsonschema-utils';
+import { mergeWith } from 'es-toolkit';
 import { type JSONSchema, TypeName } from 'json-schema-typed/draft-07';
+import { traverse } from 'object-traversal';
 import { v4 as uuidv4 } from 'uuid';
 
 import { GenericType, ITypeMapping, IStoryblokSchemaElement, IStoryblokBlock } from './@types/index.js';
@@ -91,13 +93,44 @@ export function configuration(
     components: [],
     templates: [],
     globals: []
-  }
+  },
+  existingConfig?: { components: IStoryblokBlock[] }
 ): string {
-  return JSON.stringify(
-    { components: [...converted.components, ...converted.templates, ...converted.globals] },
-    null,
-    2
-  );
+  const config = { components: [...converted.components, ...converted.templates, ...converted.globals] };
+
+  if (existingConfig) {
+    traverse(existingConfig, ({ key, parent }) => {
+      if (key?.startsWith('tab-') && parent) {
+        delete parent[key];
+      }
+    });
+
+    for (const component of config.components) {
+      const existingComponent = existingConfig.components.find((c) => c.name === component.name);
+      if (existingComponent) {
+        mergeWith(existingComponent, component, (targetValue, sourceValue, key) => {
+          if (['id', '_uid', 'pos', 'component_group_uuid', 'image', 'created_at'].includes(key))
+            return targetValue ?? sourceValue;
+
+          if (key === 'options' && Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+            return sourceValue.map((option) => {
+              const existingOption = targetValue.find((o) => o.name === option.name);
+              if (existingOption) {
+                return { ...option, _uid: existingOption._uid };
+              }
+              return option;
+            });
+          }
+        });
+      } else {
+        existingConfig.components.push(component);
+      }
+    }
+
+    return JSON.stringify(existingConfig, null, 2);
+  }
+
+  return JSON.stringify(config, null, 2);
 }
 
 /**

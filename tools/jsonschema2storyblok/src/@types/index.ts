@@ -2,6 +2,7 @@
 // Storyblok types stem from here: https://github.com/dohomi/storyblok-generate-ts/blob/master/src/typings.ts
 // Related Storyblok docs:
 // - https://www.storyblok.com/docs/api/management#core-resources/components/components
+// - https://www.storyblok.com/docs/api/management/core-resources/components/the-component-schema-field-object
 // - https://www.storyblok.com/docs/schema-configuration
 
 export type GenericType =

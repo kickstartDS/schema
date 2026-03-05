@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -71,9 +71,11 @@ async function convertDsAgency(): Promise<void> {
     }
   });
 
+  const existingConfig = JSON.parse(readFileSync(`resources/config.json`, 'utf-8'));
+
   mkdirSync('dist/agency', { recursive: true });
 
-  const configString = configuration(convertedObjects);
+  const configString = configuration(convertedObjects, existingConfig);
   writeFileSync(`dist/agency/components.123456.json`, configString);
 }
 

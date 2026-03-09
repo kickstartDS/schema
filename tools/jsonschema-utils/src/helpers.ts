@@ -397,6 +397,8 @@ export function addTypeInterfaces(jsonSchemas: JSONSchema.Interface[]): void {
   });
 }
 
+// TODO this should also respect `x-cms-hidden`, if reffed field is in object, and hidden in it's own object
+// per the reffed schema... it should be removed here, too
 export function inlineReferences(jsonSchemas: JSONSchema.Interface[], typeResolution: boolean = false): void {
   jsonSchemas.forEach((jsonSchema) => {
     traverse(jsonSchema, {

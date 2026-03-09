@@ -443,7 +443,7 @@ function processRefArray({
   rootSchema,
   fields
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
-  componentGroups[name] ||= uuidv4();
+  componentGroups.components ||= uuidv4();
 
   const field: IStoryblokSchemaElement = {
     id: 0,
@@ -451,9 +451,9 @@ function processRefArray({
     display_name: toPascalCase(name),
     key: name,
     type: 'bloks',
-    restrict_type: 'groups',
+    restrict_type: '',
     restrict_components: true,
-    component_group_whitelist: [componentGroups[name]]
+    component_whitelist: fields ? fields.map((f) => f.key) : []
   };
 
   const bloks: IStoryblokBlock[] = [];
@@ -474,8 +474,8 @@ function processRefArray({
           real_name: toPascalCase(field.key),
           color: colors[field.key] || '#05566a',
           icon: icons[field.key] || 'block-wallet',
-          component_group_uuid: componentGroups[name],
-          component_group_name: toPascalCase(name),
+          component_group_uuid: componentGroups.components,
+          component_group_name: 'Components',
           preview_field: field.preview_field,
           preview_tmpl: field.preview_tmpl
         };

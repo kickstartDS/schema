@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.6.10",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.6.10",
+      "date": "Mon, 09 Mar 2026 14:41:34 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "rework group handling"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.9",
       "tag": "@kickstartds/jsonschema2storyblok_v1.6.9",
       "date": "Mon, 28 Jul 2025 13:22:55 GMT",

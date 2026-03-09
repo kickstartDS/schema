@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/section.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "width": {
+          "x-cms-hidden": false
+        },
+        "style": {
+          "x-cms-hidden": false
+        },
+        "backgroundColor": {
+          "x-cms-hidden": false
+        },
+        "backgroundImage": {
+          "x-cms-hidden": true
+        },
+        "spotlight": {
+          "x-cms-hidden": true
+        },
+        "spaceBefore": {
+          "x-cms-hidden": true
+        },
+        "spaceAfter": {
+          "x-cms-hidden": true
+        },
+        "inverted": {
+          "x-cms-hidden": false
+        },
+        "headerSpacing": {
+          "x-cms-hidden": true
+        },
+        "headline": {
+          "x-cms-hidden": false
+        },
+        "content": {
+          "x-cms-hidden": false
+        },
+        "components": {
+          "x-cms-hidden": false
+        },
+        "buttons": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/section.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

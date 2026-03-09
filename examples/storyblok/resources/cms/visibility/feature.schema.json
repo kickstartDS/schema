@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/feature.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "x-cms-hidden": false
+        },
+        "title": {
+          "x-cms-hidden": false
+        },
+        "text": {
+          "x-cms-hidden": false
+        },
+        "style": {
+          "x-cms-hidden": true
+        },
+        "cta": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/feature.schema.json"
+    }
+  ]
+}

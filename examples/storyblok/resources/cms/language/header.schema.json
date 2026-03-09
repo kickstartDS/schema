@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/header.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Header",
+      "description": "Header Element das als Start der Seite und für die Navigation eingesetzt wird.",
+      "type": "object",
+      "properties": {
+        "logo": {
+          "title": "Logo",
+          "description": "Das Logo im Header, das in der Regel die Marke repräsentiert."
+        },
+        "flyoutInverted": {
+          "title": "Flyout Invertiert?",
+          "description": "Ob das in mobilen Darstellungen verwendete Flyout-Menü invertiert dargestellt werden soll."
+        },
+        "dropdownInverted": {
+          "title": "Untermenüs Invertiert?",
+          "description": "Ob die Untermenüs auf Desktop invertiert dargestellt werden sollen."
+        },
+        "floating": {
+          "title": "Schwebend?",
+          "description": "Ob der Header in einer schwebenden Position dargestellt werden soll, die beim Scrollen sichtbar bleibt."
+        },
+        "inverted": {
+          "title": "Invertiert?",
+          "description": "Ob der Header invertiert dargestellt werden soll."
+        },
+        "navItems": {
+          "title": "Navigationselemente",
+          "description": "Eine Liste von Navigationselementen, die im Header angezeigt werden."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/header.schema.json"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/image-story.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Image Story",
+      "description": "Eine Image Story ist eine Kombination aus Bild und Text, die eine Geschichte erzählt.",
+      "type": "object",
+      "properties": {
+        "headline": {
+          "title": "Überschrift",
+          "description": "Die Hauptüberschrift der Image Story"
+        },
+        "largeHeadline": {
+          "title": "Große Überschrift?",
+          "description": "Die Überschrift in großer Schrift darstellen"
+        },
+        "sub": {
+          "title": "Unterüberschrift",
+          "description": "Eine optionale Unterüberschrift, die zusätzliche Informationen zur Image Story liefert"
+        },
+        "text": {
+          "title": "Text",
+          "description": "Der Haupttext der Image Story, der die Geschichte erzählt"
+        },
+        "layout": {
+          "title": "Layout",
+          "description": "Das Layout der Image Story, das die Anordnung von Bild und Text bestimmt"
+        },
+        "padding": {
+          "title": "Innenabstand?",
+          "description": "Zusätzlichen Innenabstand um die Image Story hinzufügen"
+        },
+        "buttons": {
+          "title": "Buttons",
+          "description": "Eine Gruppe von Buttons, die Aktionen oder Links zur Image Story hinzufügen"
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Das Hauptbild der Image Story, das die visuelle Komponente darstellt"
+        },
+        "textAlign": {
+          "title": "Textausrichtung",
+          "description": "Die Ausrichtung des Textes innerhalb der Image Story, z.B. links oder zentriert"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/image-story.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

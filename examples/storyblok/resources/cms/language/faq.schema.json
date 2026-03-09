@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/faq.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "FAQ",
+      "description": "Das FAQ Element repräsentiert eine Sammlung von häufig gestellten Fragen und deren Antworten.",
+      "type": "object",
+      "properties": {
+        "questions": {
+          "title": "Fragen",
+          "description": "Eine Liste von Fragen mit Antworten, die in der FAQ enthalten sind."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/faq.schema.json"
+    }
+  ]
+}

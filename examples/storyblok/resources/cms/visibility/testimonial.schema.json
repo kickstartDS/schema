@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/testimonial.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "quote": {
+          "x-cms-hidden": false
+        },
+        "quoteSigns": {
+          "x-cms-hidden": false
+        },
+        "name": {
+          "x-cms-hidden": false
+        },
+        "title": {
+          "x-cms-hidden": false
+        },
+        "image": {
+          "x-cms-hidden": false
+        },
+        "rating": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/testimonial.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

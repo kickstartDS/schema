@@ -4,6 +4,8 @@
   "type": "object",
   "allOf": [
     {
+      "title": "Blog Aside",
+      "description": "Das Blog Aside Element zeigt zusätzliche Informationen zu einem Blogbeitrag an, wie Autor, Lesezeit und Veröffentlichungsdatum.",
       "type": "object",
       "properties": {
         "author": {
@@ -14,8 +16,23 @@
           "title": "Social Sharing",
           "description": "Social Sharing Links für den Blogbeitrag",
           "items": {
+            "type": "object",
             "title": "Social Sharing Link",
-            "description": "Link zum Teilen des Blogbeitrags"
+            "description": "Link zum Teilen des Blogbeitrags",
+            "properties": {
+              "icon": {
+                "title": "Icon",
+                "description": "Das Icon für den Social Link"
+              },
+              "url": {
+                "title": "URL",
+                "description": "Die URL zum Teilen des Blogbeitrags"
+              },
+              "title": {
+                "title": "Title",
+                "description": "Dem Benutzer angezeigter Name des Links"
+              }
+            }
           }
         },
         "readingTime": {

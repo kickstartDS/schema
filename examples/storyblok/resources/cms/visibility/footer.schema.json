@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/footer.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "logo": {
+          "x-cms-hidden": false
+        },
+        "byline": {
+          "x-cms-hidden": false
+        },
+        "inverted": {
+          "x-cms-hidden": true
+        },
+        "navItems": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/footer.schema.json"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/testimonials.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Testimonials",
+      "description": "Das Testimonials Element repräsentiert eine Sammlung von Kundenmeinungen oder Bewertungen.",
+      "type": "object",
+      "properties": {
+        "layout": {
+          "title": "Layout",
+          "description": "Das Layout des Testimonials, z.B. ob es in einem Raster, Slider oder einer Liste angezeigt wird."
+        },
+        "quoteSigns": {
+          "title": "Anführungszeichen",
+          "description": "Die Darstellung der Anführungszeichen um das Zitat, z.B. ob sie angezeigt werden oder nicht."
+        },
+        "testimonial": {
+          "title": "Testimonials",
+          "description": "Eine Liste von Testimonials, die jeweils ein Zitat, den Namen des Kunden oder Nutzers, dessen Position und optional ein Bild enthalten."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/testimonials.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

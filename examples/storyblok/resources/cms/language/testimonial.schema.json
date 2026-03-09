@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/testimonial.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Testimonial",
+      "description": "Ein Testimonial ist eine Aussage oder Empfehlung von Kunden oder Nutzern, die ihre positiven Erfahrungen mit einem Produkt oder einer Dienstleistung teilen.",
+      "type": "object",
+      "properties": {
+        "quote": {
+          "title": "Zitat",
+          "description": "Das Zitat ist die zentrale Aussage des Testimonials, die die positiven Erfahrungen des Kunden oder Nutzers wiedergibt."
+        },
+        "quoteSigns": {
+          "title": "Anführungszeichen",
+          "description": "Wahl aus Anführungszeichen um das Zitat herum, die den Beginn und das Ende des Zitats markieren."
+        },
+        "name": {
+          "title": "Name",
+          "description": "Der Name des Kunden oder Nutzers, der das Testimonial gibt. Dies kann helfen, die Authentizität des Testimonials zu erhöhen."
+        },
+        "title": {
+          "title": "Position oder Titel",
+          "description": "Die Position oder der Titel des Kunden oder Nutzers, der das Testimonial gibt. Dies kann zusätzliche Glaubwürdigkeit verleihen."
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Ein Bild des Kunden oder Nutzers, das zusammen mit dem Testimonial angezeigt wird. Dies kann helfen, eine persönliche Verbindung herzustellen."
+        },
+        "rating": {
+          "title": "Bewertung",
+          "description": "Eine Bewertung von 1-5, die der Kunde oder Nutzer dem Produkt oder der Dienstleistung gibt. Dies kann in Form von Sternen, Punkten oder anderen Skalen erfolgen."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/testimonial.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

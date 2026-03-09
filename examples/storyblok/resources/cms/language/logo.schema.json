@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/logo.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Logo",
+      "description": "Logo für die Verwendung in Header, Footer oder anderen Bereichen der Website.",
+      "type": "object",
+      "properties": {
+        "src": {
+          "title": "URL",
+          "description": "URL des Logos, das auf der Website angezeigt wird."
+        },
+        "srcInverted": {
+          "title": "URL Invertiert",
+          "description": "URL des invertierten Logos, das auf der Website angezeigt wird wenn notwendig."
+        },
+        "alt": {
+          "title": "Alternativtext",
+          "description": "Alternativtext für das Logo, der angezeigt wird, wenn das Bild nicht geladen werden kann oder für Screenreader."
+        },
+        "homepageHref": {
+          "title": "Homepage Link",
+          "description": "Link zur Homepage, auf die das Logo verweist, wenn darauf geklickt wird."
+        },
+        "inverted": {
+          "title": "Invertiert?",
+          "description": "Soll das Logo invertiert dargestellt werden?"
+        },
+        "width": {
+          "title": "Breite",
+          "description": "Breite des Logos in Pixeln."
+        },
+        "height": {
+          "title": "Höhe",
+          "description": "Höhe des Logos in Pixeln."
+        },
+        "className": {
+          "title": "CSS-Klasse",
+          "description": "Zusätzliche CSS-Klasse(n) für das Logo, um das Styling anzupassen."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/logo.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/video-curtain.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "x-cms-hidden": false
+        },
+        "sub": {
+          "x-cms-hidden": false
+        },
+        "text": {
+          "x-cms-hidden": false
+        },
+        "highlightText": {
+          "x-cms-hidden": false
+        },
+        "colorNeutral": {
+          "x-cms-hidden": false
+        },
+        "buttons": {
+          "x-cms-hidden": false
+        },
+        "overlay": {
+          "x-cms-hidden": false
+        },
+        "video": {
+          "x-cms-hidden": false
+        },
+        "textPosition": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/video-curtain.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

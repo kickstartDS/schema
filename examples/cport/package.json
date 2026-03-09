@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@kickstartds/ds-agency-premium": "1.7.0--canary.46.1837.0",
+    "@kickstartds/ds-agency-premium": "^2.2.1",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2cport": "workspace:*",
     "ajv": "^8.12.0",

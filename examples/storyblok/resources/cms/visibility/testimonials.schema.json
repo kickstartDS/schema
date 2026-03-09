@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/testimonials.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "layout": {
+          "x-cms-hidden": false
+        },
+        "quoteSigns": {
+          "x-cms-hidden": false
+        },
+        "testimonial": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/testimonials.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

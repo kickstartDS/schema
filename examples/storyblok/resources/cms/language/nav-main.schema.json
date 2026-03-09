@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/nav-main.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Hauptnavigation",
+      "description": "Die Hauptnavigation ist die primäre Navigationsleiste der Website, die den Benutzern hilft, durch die wichtigsten Bereiche der Seite zu navigieren.",
+      "type": "object",
+      "properties": {
+        "logo": {
+          "title": "Logo",
+          "description": "Das Logo der Website, das in der Hauptnavigation angezeigt wird."
+        },
+        "flyoutInverted": {
+          "title": "Flyout Invertiert?",
+          "description": "Bestimmt, ob das Flyout-Menü der mobilen Navigation invertiert dargestellt wird."
+        },
+        "dropdownInverted": {
+          "title": "Dropdown Invertiert?",
+          "description": "Bestimmt, ob die Dropdown-Menüs der Desktop-Navigation invertiert dargestellt werden."
+        },
+        "items": {
+          "title": "Navigationselemente",
+          "description": "Liste der Navigationselemente, die in der Hauptnavigation angezeigt werden."
+        },
+        "cta": {
+          "title": "Call-to-Action",
+          "description": "Ein optionaler Call-to-Action-Bereich, der in der Hauptnavigation angezeigt wird, um Benutzer zu bestimmten Aktionen zu ermutigen."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/nav-main.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

@@ -4,6 +4,8 @@
   "type": "object",
   "allOf": [
     {
+      "title": "Blog Author",
+      "description": "Das Blog Author Element zeigt Informationen über den Autor oder die Autorin eines Blogbeitrags an.",
       "type": "object",
       "properties": {
         "name": {

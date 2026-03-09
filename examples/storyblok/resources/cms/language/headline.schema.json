@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/headline.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Überschrift",
+      "description": "Eine Überschrift, die in verschiedenen Stilen und Größen dargestellt werden kann.",
+      "type": "object",
+      "properties": {
+        "text": {
+          "title": "Text",
+          "description": "Der Haupttext der Überschrift"
+        },
+        "sub": {
+          "title": "Untertitel",
+          "description": "Ein optionaler Untertitel, der unter dem Haupttext angezeigt wird"
+        },
+        "switchOrder": {
+          "title": "Reihenfolge wechseln?",
+          "description": "Ob der Untertitel vor dem Haupttext angezeigt werden soll"
+        },
+        "align": {
+          "title": "Textausrichtung",
+          "description": "Die Ausrichtung des Textes, z.B. links, zentriert oder rechts"
+        },
+        "level": {
+          "title": "Überschriftenlevel",
+          "description": "Das Level der Überschrift, z.B. H1, H2, H3 usw."
+        },
+        "style": {
+          "title": "Stil",
+          "description": "Anzeige der Überschrift wie z.B. eine H1, H2, H3 usw"
+        },
+        "spaceAfter": {
+          "title": "Abstand nach der Überschrift?",
+          "description": "Ob nach der Überschrift ein zusätzlicher Abstand eingefügt werden soll"
+        },
+        "className": {
+          "title": "CSS-Klasse",
+          "description": "Zusätzliche CSS-Klasse(n) für die Überschrift, um das Styling anzupassen"
+        },
+        "id": {
+          "title": "ID",
+          "description": "Eine eindeutige ID für die Überschrift, die für Ankerlinks oder CSS verwendet werden kann"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/headline.schema.json"
+    }
+  ]
+}

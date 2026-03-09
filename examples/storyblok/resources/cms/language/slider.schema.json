@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/slider.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Slider",
+      "description": "Eine Layout-Komponente, die eine Reihe von Elementen in einem Slider anzeigt. Sie ermöglicht es, Inhalte wie Bilder, Texte oder andere Komponenten in einem durchlaufenden Format darzustellen.",
+      "type": "object",
+      "properties": {
+        "autoplay": {
+          "title": "Autoplay?",
+          "description": "Bestimmt, ob der Slider automatisch durch die Elemente wechselt."
+        },
+        "nav": {
+          "title": "Navigation?",
+          "description": "Eine Reihe von Kreisen zur expliziten Navigation durch die Slider-Elemente anzeigen?"
+        },
+        "teaseNeighbours": {
+          "title": "Nachbarn andeuten?",
+          "description": "Zeigt die Nachbarelemente des aktuellen Sliders an, um eine Vorschau auf die nächsten und vorherigen Elemente zu geben."
+        },
+        "equalHeight": {
+          "title": "Gleiche Höhe?",
+          "description": "Stellt sicher, dass alle Slider-Elemente die gleiche Höhe haben, um ein einheitliches Layout zu gewährleisten."
+        },
+        "gap": {
+          "title": "Abstand",
+          "description": "Der Abstand zwischen den einzelnen Slider-Elementen in Pixeln, um visuelle Trennung zu schaffen."
+        },
+        "arrows": {
+          "title": "Pfeile?",
+          "description": "Zeigt Pfeile an, um durch die Slider-Elemente zu navigieren. Diese können links und rechts des Sliders platziert werden."
+        },
+        "variant": {
+          "title": "Variante",
+          "description": "Die visuelle Variante des Sliders, die das Design und die Darstellung beeinflusst."
+        },
+        "className": {
+          "title": "CSS-Klasse",
+          "description": "Zusätzliche CSS-Klasse(n) für den Slider, um benutzerdefinierte Stile anzuwenden."
+        },
+        "components": {
+          "title": "Komponenten",
+          "description": "Die Komponenten, die im Slider angezeigt werden sollen."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/slider.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

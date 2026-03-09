@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/gallery.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "images": {
+          "x-cms-hidden": false
+        },
+        "layout": {
+          "x-cms-hidden": false
+        },
+        "aspectRatio": {
+          "x-cms-hidden": false
+        },
+        "lightbox": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/gallery.schema.json"
+    }
+  ]
+}

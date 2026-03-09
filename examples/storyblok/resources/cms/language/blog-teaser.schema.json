@@ -4,6 +4,8 @@
   "type": "object",
   "allOf": [
     {
+      "title": "Blog Teaser",
+      "description": "Das Blog Teaser Element zeigt eine Vorschau eines Blogbeitrags an, einschließlich Datum, Tags, Headline, Teasertext und Bild.",
       "type": "object",
       "properties": {
         "date": {

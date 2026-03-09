@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/stat.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Fakt",
+      "description": "Das Fakt Element repräsentiert eine einzelne Statistik oder einen Fakt, der im Fakten Layout angezeigt wird.",
+      "type": "object",
+      "properties": {
+        "number": {
+          "title": "Zahl",
+          "description": "Die Zahl, die den Fakt repräsentiert. Dies kann eine absolute Zahl oder eine Prozentangabe sein. Darf maximal eine numerische Zahl enthalten"
+        },
+        "description": {
+          "title": "Beschreibung",
+          "description": "Eine kurze Beschreibung oder Erklärung des Fakts. Dies kann zusätzliche Informationen oder Kontext zur Zahl bieten."
+        },
+        "title": {
+          "title": "Titel",
+          "description": "Ein optionaler Titel für den Fakt, der hervorgehoben wird. Dies kann verwendet werden, um den Fakt zu kategorisieren oder hervorzuheben."
+        },
+        "icon": {
+          "title": "Icon",
+          "description": "Ein optionales Icon, das den Fakt visuell unterstützt. Dies kann ein Symbol oder eine Grafik sein, die den Fakt repräsentiert."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/stat.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

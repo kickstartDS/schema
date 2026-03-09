@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/seo.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "SEO Einstellungen",
+      "description": "Konfiguration der SEO-Einstellungen für die Seite.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Meta Titel",
+          "description": "Der Titel der Seite, der in den Suchergebnissen angezeigt wird."
+        },
+        "description": {
+          "title": "Meta Beschreibung",
+          "description": "Eine kurze Beschreibung der Seite, die in den Suchergebnissen angezeigt wird."
+        },
+        "keywords": {
+          "title": "Keywords",
+          "description": "Eine Liste von Schlüsselwörtern, die die Seite beschreiben und in den Suchergebnissen verwendet werden können."
+        },
+        "image": {
+          "title": "Vorschaubild",
+          "description": "Ein Bild, das in den Suchergebnissen oder sozialen Medien als Vorschaubild verwendet wird."
+        },
+        "cardImage": {
+          "title": "Card-Bild",
+          "description": "Ein Bild, das speziell für die Darstellung in sozialen Medien verwendet wird, wenn die Seite geteilt wird."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://cms.mydesignsystem.com/seo.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

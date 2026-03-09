@@ -9,7 +9,7 @@
         "label": {
           "x-cms-hidden": false
         },
-        "target": {
+        "url": {
           "x-cms-hidden": false
         },
         "variant": {

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/logos.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Logos",
+      "description": "Element zur Anzeige von Logos mit optionalem Tagline und Call-to-Action.",
+      "type": "object",
+      "properties": {
+        "tagline": {
+          "title": "Tagline",
+          "description": "Optionaler Text, der über den Logos angezeigt wird."
+        },
+        "logo": {
+          "title": "Logos",
+          "description": "Liste von Logos, die angezeigt werden sollen."
+        },
+        "align": {
+          "title": "Ausrichtung",
+          "description": "Die Ausrichtung der Logos, z.B. links oder zentriert."
+        },
+        "logosPerRow": {
+          "title": "Logos pro Zeile",
+          "description": "Anzahl der Logos, die in einer Zeile angezeigt werden sollen."
+        },
+        "cta": {
+          "title": "Call-to-Action",
+          "description": "Optionaler Call-to-Action, der unter den Logos angezeigt wird."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/logos.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

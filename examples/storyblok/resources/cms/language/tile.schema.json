@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/tile.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Kachel",
+      "description": "Das Kachel-Element repräsentiert eine visuelle Kachel, die verschiedene Inhalte wie Text, Bilder und Buttons enthalten kann.",
+      "type": "object",
+      "properties": {
+        "headline": {
+          "title": "Überschrift",
+          "description": "Die Überschrift der Kachel, die den Inhalt zusammenfasst."
+        },
+        "sub": {
+          "title": "Unterüberschrift",
+          "description": "Eine optionale Unterüberschrift, die zusätzliche Informationen zur Kachel bietet."
+        },
+        "text": {
+          "title": "Text",
+          "description": "Der Haupttext der Kachel, der den Inhalt detailliert beschreibt."
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Ein Bild, das in der Kachel angezeigt wird, um den Inhalt visuell zu unterstützen."
+        },
+        "button": {
+          "title": "Button",
+          "description": "Ein Button, der eine Aktion auslöst, wie z.B. das Öffnen einer Seite."
+        },
+        "backgroundColor": {
+          "title": "Hintergrundfarbe",
+          "description": "Die Hintergrundfarbe der Kachel, die das visuelle Design unterstützt."
+        },
+        "backgroundImage": {
+          "title": "Hintergrundbild",
+          "description": "Ein optionales Hintergrundbild, das hinter dem Inhalt der Kachel angezeigt wird."
+        },
+        "textColor": {
+          "title": "Textfarbe",
+          "description": "Die Farbe des Textes in der Kachel, die die Lesbarkeit unterstützt."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/tile.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

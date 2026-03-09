@@ -27,10 +27,10 @@ async function convertDsAgency(): Promise<void> {
 
   const convertedObjects = convert({
     schemaIds: [
-      'http://schema.mydesignsystem.com/cms/page.schema.json',
-      'http://schema.mydesignsystem.com/cms/settings.schema.json',
-      'http://schema.mydesignsystem.com/cms/blog-overview.schema.json',
-      'http://schema.mydesignsystem.com/cms/blog-post.schema.json'
+      'http://cms.mydesignsystem.com/page.schema.json',
+      'http://cms.mydesignsystem.com/settings.schema.json',
+      'http://cms.mydesignsystem.com/blog-overview.schema.json',
+      'http://cms.mydesignsystem.com/blog-post.schema.json'
     ],
     ajv,
     schemaClassifier: (schemaId: string) => {
@@ -59,6 +59,8 @@ async function convertDsAgency(): Promise<void> {
         case 'logos':
         case 'mosaic':
         case 'slider':
+        case 'split-even':
+        case 'split-weighted':
         case 'stats':
         case 'teaser-card':
         case 'testimonials':

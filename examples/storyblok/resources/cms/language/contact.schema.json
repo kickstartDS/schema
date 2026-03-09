@@ -4,6 +4,8 @@
   "type": "object",
   "allOf": [
     {
+      "title": "Kontakt",
+      "description": "Das Kontakt Element zeigt Kontaktinformationen, Links zu sozialen Medien und andere relevante Informationen an.",
       "type": "object",
       "properties": {
         "image": {

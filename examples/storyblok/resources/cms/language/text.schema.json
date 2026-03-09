@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/text.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Text",
+      "description": "Element für die Darstellung von Textinhalten.",
+      "type": "object",
+      "properties": {
+        "text": {
+          "title": "Textinhalt",
+          "description": "Der darzustellende Textinhalt."
+        },
+        "layout": {
+          "title": "Layout",
+          "description": "Das Layout des Textes, z.B. ob er einspaltig oder mehrspaltig dargestellt wird."
+        },
+        "align": {
+          "title": "Ausrichtung",
+          "description": "Die Ausrichtung des Textes, z.B. links oder zentriert."
+        },
+        "highlightText": {
+          "title": "Hightlight?",
+          "description": "Ob der Text hervorgehoben werden soll, z.B. durch eine andere Farbe, Schriftart oder Größe."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/text.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

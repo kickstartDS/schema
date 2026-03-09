@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/features.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Features",
+      "description": "Das Features Element repräsentiert eine Sammlung von Merkmalen oder Funktionen, die hervorgehoben werden sollen.",
+      "type": "object",
+      "properties": {
+        "layout": {
+          "title": "Layout",
+          "description": "Das Layout der Features-Sektion, das die Anordnung und Struktur der enthaltenen Merkmale definiert."
+        },
+        "style": {
+          "title": "Stil",
+          "description": "Der Stil der Features-Sektion, der das visuelle Erscheinungsbild beeinflusst."
+        },
+        "ctas": {
+          "title": "Call to Actions",
+          "description": "Übergreifende Einstellungen für Handlungsaufrufen, die den Benutzer zu Aktionen auffordern, wie z.B. 'Mehr erfahren' oder 'Jetzt kaufen'."
+        },
+        "feature": {
+          "title": "Feature",
+          "description": "Ein einzelnes Merkmal oder eine Funktion, die hervorgehoben wird."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/features.schema.json"
+    }
+  ]
+}

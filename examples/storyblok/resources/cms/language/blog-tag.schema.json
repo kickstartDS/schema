@@ -4,6 +4,8 @@
   "type": "object",
   "allOf": [
     {
+      "title": "Blog Tag",
+      "description": "Das Blog Tag Element repräsentiert ein einzelnes Tag, das einem Blogbeitrag zugeordnet ist.",
       "type": "object",
       "properties": {
         "entry": {

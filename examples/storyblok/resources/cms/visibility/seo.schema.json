@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/seo.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "title": {
+          "x-cms-hidden": false
+        },
+        "description": {
+          "x-cms-hidden": false
+        },
+        "keywords": {
+          "x-cms-hidden": false
+        },
+        "image": {
+          "x-cms-hidden": false
+        },
+        "cardImage": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://cms.mydesignsystem.com/seo.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

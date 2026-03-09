@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/mosaic.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "layout": {
+          "x-cms-hidden": false
+        },
+        "largeHeadlines": {
+          "x-cms-hidden": false
+        },
+        "tile": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/mosaic.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

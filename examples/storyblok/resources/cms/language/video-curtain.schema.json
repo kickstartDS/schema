@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/video-curtain.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Video-Vorhang",
+      "description": "Das Video-Vorhang-Element zeigt ein Video mit einem Textüberlagerungseffekt an. Es eignet sich hervorragend für die Präsentation von Videoinhalten mit begleitendem Text.",
+      "type": "object",
+      "properties": {
+        "headline": {
+          "title": "Überschrift",
+          "description": "Die Hauptüberschrift des Video-Vorhangs, die den Inhalt zusammenfasst."
+        },
+        "sub": {
+          "title": "Unterüberschrift",
+          "description": "Eine optionale Unterüberschrift, die zusätzliche Informationen oder Kontext zum Video bietet."
+        },
+        "text": {
+          "title": "Text",
+          "description": "Der Haupttext des Video-Vorhangs, der den Inhalt detailliert beschreibt."
+        },
+        "highlightText": {
+          "title": "Highlight?",
+          "description": "Ob der Text visuell hervorgehoben werden soll, um besondere Aufmerksamkeit zu erregen."
+        },
+        "colorNeutral": {
+          "title": "Farbneutral?",
+          "description": "Ob der Text und die Buttons in neutralen Farben dargestellt werden sollen, um eine klare Lesbarkeit zu gewährleisten."
+        },
+        "buttons": {
+          "title": "Buttons",
+          "description": "Buttons, die im Video-Vorhang angezeigt werden, um Interaktionen zu ermöglichen."
+        },
+        "overlay": {
+          "title": "Overlay?",
+          "description": "Ob ein Overlay über dem Video angezeigt werden soll, um die Lesbarkeit des Textes zu verbessern."
+        },
+        "video": {
+          "title": "Video",
+          "description": "Das Video, das im Vorhang angezeigt wird. Es kann von einer URL oder einer eingebetteten Quelle stammen."
+        },
+        "textPosition": {
+          "title": "Textausrichtung",
+          "description": "Ausrichtung des Textes im Video-Vorhang. Dies kann die Positionierung des Textes relativ zum Video beeinflussen."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/video-curtain.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

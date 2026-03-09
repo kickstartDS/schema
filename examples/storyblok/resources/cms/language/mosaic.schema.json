@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/mosaic.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Mosaik",
+      "description": "Ein Mosaik-Element repräsentiert eine Sammlung von Kacheln, die in einem flexiblen Layout angeordnet sind.",
+      "type": "object",
+      "properties": {
+        "layout": {
+          "title": "Layout",
+          "description": "Das Layout des Mosaik-Elements, das die Anordnung der Kacheln bestimmt."
+        },
+        "largeHeadlines": {
+          "title": "Große Überschriften?",
+          "description": "Bestimmt, ob die Kacheln große Überschriften verwenden sollen."
+        },
+        "tile": {
+          "title": "Kachel",
+          "description": "Die Kachel, die im Mosaik-Element verwendet wird. Dies kann ein Bild, Text oder eine Kombination aus beidem sein."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/mosaic.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

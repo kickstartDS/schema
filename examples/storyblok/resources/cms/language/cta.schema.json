@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/cta.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Call-to-Action",
+      "description": "Das Call-to-Action Element ermöglicht es, Nutzer zu einer bestimmten Aktion aufzufordern, wie z.B. zum Kauf eines Produkts oder zur Anmeldung für einen Newsletter.",
+      "type": "object",
+      "properties": {
+        "headline": {
+          "title": "Headline",
+          "description": "Headline für den Call-to-Action"
+        },
+        "sub": {
+          "title": "Subheadline",
+          "description": "Subheadline unterhalb der Headline"
+        },
+        "text": {
+          "title": "Text",
+          "description": "Infotext für den Call-to-Action"
+        },
+        "highlightText": {
+          "title": "Text hervorheben?",
+          "description": "Soll der Infotext hervorgehoben werden?"
+        },
+        "colorNeutral": {
+          "title": "Farbneutral?",
+          "description": "Sollen Infotext und Buttons in neutralen Farben dargestellt werden?"
+        },
+        "buttons": {
+          "title": "Buttons",
+          "description": "Buttons für den Call-to-Action"
+        },
+        "backgroundColor": {
+          "title": "Hintergrundfarbe",
+          "description": "Hintergrundfarbe für den Call-to-Action"
+        },
+        "backgroundImage": {
+          "title": "Hintergrundbild",
+          "description": "Hintergrundbild für den Call-to-Action"
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Bild welches nebem dem Infotext angezeigt wird"
+        },
+        "order": {
+          "title": "Reihenfolge",
+          "description": "Reihenfolge von Bild und Infotext"
+        },
+        "textAlign": {
+          "title": "Textausrichtung",
+          "description": "Ausrichtung des Textes im Call-to-Action"
+        },
+        "align": {
+          "title": "Vertikale Ausrichtung",
+          "description": "Vertikale Ausrichtung des Inhalts im Call-to-Action"
+        },
+        "padding": {
+          "title": "Innenabstand?",
+          "description": "Innenabstand des Call-to-Action Elements"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/cta.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/feature.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Feature",
+      "description": "Das Feature Element repräsentiert eine einzelne Funktion oder Eigenschaft eines Produkts oder einer Dienstleistung.",
+      "type": "object",
+      "properties": {
+        "icon": {
+          "title": "Icon",
+          "description": "Ein Symbol, das die Funktion oder Eigenschaft visuell darstellt."
+        },
+        "title": {
+          "title": "Überschrift",
+          "description": "Eine kurze, prägnante Überschrift, die die Funktion oder Eigenschaft beschreibt."
+        },
+        "text": {
+          "title": "Text",
+          "description": "Ein erläuternder Text, der die Funktion oder Eigenschaft detaillierter beschreibt."
+        },
+        "style": {
+          "title": "Stil",
+          "description": "Der Stil des Features, der das visuelle Erscheinungsbild beeinflusst."
+        },
+        "cta": {
+          "title": "Call to Action",
+          "description": "Ein Handlungsaufruf, der den Benutzer zu einer Aktion auffordert, wie z.B. 'Mehr erfahren' oder 'Jetzt kaufen'."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/feature.schema.json"
+    }
+  ]
+}

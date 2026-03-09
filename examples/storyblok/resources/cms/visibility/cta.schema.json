@@ -21,9 +21,6 @@
         "colorNeutral": {
           "x-cms-hidden": true
         },
-        "fullWidth": {
-          "x-cms-hidden": true
-        },
         "buttons": {
           "x-cms-hidden": false
         },
@@ -42,7 +39,10 @@
         "textAlign": {
           "x-cms-hidden": true
         },
-        "contentAlign": {
+        "align": {
+          "x-cms-hidden": true
+        },
+        "padding": {
           "x-cms-hidden": true
         }
       },

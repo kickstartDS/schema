@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/image-story.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "x-cms-hidden": false
+        },
+        "largeHeadline": {
+          "x-cms-hidden": true
+        },
+        "sub": {
+          "x-cms-hidden": false
+        },
+        "text": {
+          "x-cms-hidden": false
+        },
+        "layout": {
+          "x-cms-hidden": false
+        },
+        "padding": {
+          "x-cms-hidden": true
+        },
+        "buttons": {
+          "x-cms-hidden": false
+        },
+        "image": {
+          "x-cms-hidden": false
+        },
+        "textAlign": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/image-story.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

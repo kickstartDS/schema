@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/nav-main.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "logo": {
+          "x-cms-hidden": false
+        },
+        "flyoutInverted": {
+          "x-cms-hidden": true
+        },
+        "dropdownInverted": {
+          "x-cms-hidden": true
+        },
+        "items": {
+          "x-cms-hidden": false
+        },
+        "cta": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/nav-main.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

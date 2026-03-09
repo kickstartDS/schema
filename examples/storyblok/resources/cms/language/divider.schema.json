@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/divider.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Trenner",
+      "description": "Ein horizontaler Trenner der dazu dient, Inhalte visuell voneinander zu trennen.",
+      "type": "object",
+      "properties": {
+        "variant": {
+          "title": "Variante",
+          "description": "Gewählte Variante des Trenners."
+        },
+        "className": {
+          "title": "CSS-Klasse",
+          "description": "Zusätzliche CSS-Klasse für benutzerdefinierte Stile."
+        },
+        "component": {
+          "title": "Komponente",
+          "description": "Die Komponente, die für den Trenner verwendet wird."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/divider.schema.json"
+    }
+  ]
+}

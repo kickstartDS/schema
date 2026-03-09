@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/teaser-card.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Teaser-Karte",
+      "description": "Das Teaser-Karten-Element repräsentiert eine Karte, die einen kurzen Überblick über Inhalte bietet und zu weiterführenden Informationen führt.",
+      "type": "object",
+      "properties": {
+        "headline": {
+          "title": "Überschrift",
+          "description": "Die Überschrift der Teaser-Karte, die den Inhalt zusammenfasst."
+        },
+        "text": {
+          "title": "Text",
+          "description": "Ein kurzer Text, der den Inhalt der Teaser-Karte beschreibt."
+        },
+        "label": {
+          "title": "Label",
+          "description": "Ein optionales Label, das zusätzliche Informationen oder Kategorien für die Teaser-Karte bereitstellt."
+        },
+        "layout": {
+          "title": "Layout",
+          "description": "Das Layout der Teaser-Karte, das die Anordnung von Text, Bild und anderen Elementen bestimmt."
+        },
+        "url": {
+          "title": "Ziel",
+          "description": "Das Ziel, auf das die Teaser-Karte verweist, z.B. eine URL oder eine interne Seite."
+        },
+        "button": {
+          "title": "Button",
+          "description": "Ein optionaler Button, als explizites Element zum das Öffnen der hinterlegten Seite."
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Ein Bild, das die Teaser-Karte visuell unterstützt. Dies kann ein Hauptbild oder ein Hintergrundbild sein."
+        },
+        "imageRatio": {
+          "title": "Bildverhältnis",
+          "description": "Das Verhältnis des Bildes, das in der Teaser-Karte verwendet wird, z.B. quadratisch oder weit."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/teaser-card.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

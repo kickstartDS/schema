@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/html.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "HTML Einbettung",
+      "description": "Einbettung von HTML-Inhalten, einschließlich Einwilligungsmanagement.",
+      "type": "object",
+      "properties": {
+        "html": {
+          "title": "HTML",
+          "description": "HTML-Inhalt, der eingebettet werden soll."
+        },
+        "consent": {
+          "title": "Einwilligung?",
+          "description": "Einwilligungsmanagement für eingebettete Inhalte. Aktivieren, um Einwilligung zu verlangen."
+        },
+        "consentText": {
+          "title": "Einwilligungstext",
+          "description": "Text, der für die Einwilligung angezeigt wird. Wird nur angezeigt, wenn 'Einwilligung' aktiviert ist."
+        },
+        "consentButtonLabel": {
+          "title": "Einwilligungsbutton-Beschriftung",
+          "description": "Beschriftung des Buttons für die Einwilligung. Wird nur angezeigt, wenn 'Einwilligung' aktiviert ist."
+        },
+        "consentBackgroundImage": {
+          "title": "Einwilligungs-Hintergrundbild",
+          "description": "Bild, das im Hintergrund des Einwilligungsdialogs angezeigt wird. Wird nur angezeigt, wenn 'Einwilligung' aktiviert ist."
+        },
+        "consentAspectRatio": {
+          "title": "Einwilligungs-Seitenverhältnis",
+          "description": "Seitenverhältnis des Einwilligungsdialogs. Wird nur verwendet, wenn 'Einwilligung' aktiviert ist."
+        },
+        "inverted": {
+          "title": "Invertiert?",
+          "description": "Ob die eingebetteten Inhalte invertiert dargestellt werden sollen."
+        },
+        "className": {
+          "title": "CSS-Klasse",
+          "description": "Zusätzliche CSS-Klasse(n) für die Überschrift, um das Styling anzupassen"
+        },
+        "component": {
+          "title": "Komponente",
+          "description": "Die Komponente, die für die HTML-Einbettung verwendet wird."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/html.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/logos.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "tagline": {
+          "x-cms-hidden": false
+        },
+        "logo": {
+          "x-cms-hidden": false
+        },
+        "align": {
+          "x-cms-hidden": true
+        },
+        "logosPerRow": {
+          "x-cms-hidden": false
+        },
+        "cta": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/logos.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

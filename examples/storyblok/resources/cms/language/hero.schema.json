@@ -1,10 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://language.mydesignsystem.com/hero.schema.json",
-  "title": "Hero",
   "type": "object",
   "allOf": [
     {
+      "title": "Hero",
+      "description": "Das Hero Element ist ein großes, visuell ansprechendes Element, das oft am Anfang einer Seite verwendet wird, um wichtige Informationen hervorzuheben.",
       "type": "object",
       "properties": {
         "headline": {
@@ -59,7 +60,7 @@
       "additionalProperties": false
     },
     {
-      "$ref": "http://visibility.mydesignsystem.com/hero.schema.json"
+      "$ref": "http://schema.mydesignsystem.com/hero.schema.json"
     }
   ],
   "additionalProperties": false

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/section.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Sektion",
+      "description": "Eine Sektion ist ein Bereich auf der Seite, der verschiedene Inhalte gruppiert. Sie kann in verschiedenen Stilen und Layouts gestaltet werden.",
+      "type": "object",
+      "properties": {
+        "width": {
+          "title": "Breite",
+          "description": "Die Breite der Sektion."
+        },
+        "style": {
+          "title": "Stil",
+          "description": "Der Stil der Sektion, erlaubt in Kombination mit der Hintergrund-Farbe Variation."
+        },
+        "backgroundColor": {
+          "title": "Hintergrund-Farbe",
+          "description": "Die Hintergrundfarbe der Sektion, erlaubt in Kombination mit Stil Variation."
+        },
+        "backgroundImage": {
+          "title": "Hintergrund-Bild",
+          "description": "Ein optionales Hintergrundbild für die Sektion."
+        },
+        "spotlight": {
+          "title": "Spotlight",
+          "description": "Ein Spotlight-Effekt, der die Sektion hervorhebt, z.B. durch eine spezielle Hintergrundfarbe oder Animation."
+        },
+        "spaceBefore": {
+          "title": "Abstand davor",
+          "description": "Der Abstand vor der Sektion, um sie vom vorherigen Inhalt abzugrenzen."
+        },
+        "spaceAfter": {
+          "title": "Abstand danach",
+          "description": "Der Abstand nach der Sektion, um sie vom nachfolgenden Inhalt abzugrenzen."
+        },
+        "inverted": {
+          "title": "Invertiert?",
+          "description": "Ob die Sektion invertiert dargestellt werden soll, z.B. mit umgekehrten Farben."
+        },
+        "headerSpacing": {
+          "title": "Header-Abstand?",
+          "description": "Soll zusätzlicher Platz für einen schwebenden Header berücksichtigt werden?"
+        },
+        "headline": {
+          "title": "Überschrift",
+          "description": "Die Überschrift der Sektion, die den Inhalt zusammenfasst und hervorhebt."
+        },
+        "content": {
+          "title": "Inhalt",
+          "description": "Einstellungen zur Darstellung des Inhalts der Sektion."
+        },
+        "components": {
+          "title": "Komponenten",
+          "description": "Die Komponenten, die in der Sektion angezeigt werden sollen."
+        },
+        "buttons": {
+          "title": "Call-to-Actions",
+          "description": "Die Call-to-Action-Buttons, die unterhalb der Sektion angezeigt werden sollen."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/section.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

@@ -4,6 +4,8 @@
   "type": "object",
   "allOf": [
     {
+      "title": "Button Gruppe",
+      "description": "Eine Gruppe von Buttons, die zusammen angezeigt werden. Es kann aus verschiedenen Größen und Anordnungen gewählt werden.",
       "type": "object",
       "properties": {
         "buttons": {

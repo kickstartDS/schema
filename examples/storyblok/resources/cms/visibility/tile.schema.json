@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/tile.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "x-cms-hidden": false
+        },
+        "sub": {
+          "x-cms-hidden": false
+        },
+        "text": {
+          "x-cms-hidden": false
+        },
+        "image": {
+          "x-cms-hidden": false
+        },
+        "button": {
+          "x-cms-hidden": false
+        },
+        "backgroundColor": {
+          "x-cms-hidden": false
+        },
+        "backgroundImage": {
+          "x-cms-hidden": false
+        },
+        "textColor": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/tile.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

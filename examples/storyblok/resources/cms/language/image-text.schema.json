@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://language.mydesignsystem.com/image-text.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "Image Text",
+      "description": "Ein Element für die Darstellung von Text und Bild, das in verschiedenen Layouts verwendet werden kann.",
+      "type": "object",
+      "properties": {
+        "text": {
+          "title": "Text",
+          "description": "Der Text, der neben dem Bild angezeigt wird."
+        },
+        "highlightText": {
+          "title": "Highlight Text?",
+          "description": "Text hervorheben, um besondere Aufmerksamkeit zu erregen."
+        },
+        "image": {
+          "title": "Bild",
+          "description": "Das Bild, das neben dem Text angezeigt wird."
+        },
+        "layout": {
+          "title": "Layout",
+          "description": "Das Layout des Image Text Elements, z.B. ob das Bild links oder rechts vom Text angezeigt wird."
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/image-text.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

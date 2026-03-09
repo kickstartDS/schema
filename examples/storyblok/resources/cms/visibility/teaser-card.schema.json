@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/teaser-card.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "x-cms-hidden": false
+        },
+        "text": {
+          "x-cms-hidden": false
+        },
+        "label": {
+          "x-cms-hidden": false
+        },
+        "layout": {
+          "x-cms-hidden": false
+        },
+        "url": {
+          "x-cms-hidden": false
+        },
+        "button": {
+          "x-cms-hidden": false
+        },
+        "image": {
+          "x-cms-hidden": false
+        },
+        "imageRatio": {
+          "x-cms-hidden": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/teaser-card.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

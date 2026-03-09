@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://visibility.mydesignsystem.com/slider.schema.json",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "autoplay": {
+          "x-cms-hidden": false
+        },
+        "nav": {
+          "x-cms-hidden": false
+        },
+        "teaseNeighbours": {
+          "x-cms-hidden": false
+        },
+        "equalHeight": {
+          "x-cms-hidden": false
+        },
+        "gap": {
+          "x-cms-hidden": true
+        },
+        "arrows": {
+          "x-cms-hidden": false
+        },
+        "variant": {
+          "x-cms-hidden": false
+        },
+        "className": {
+          "x-cms-hidden": true
+        },
+        "components": {
+          "x-cms-hidden": true
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "$ref": "http://schema.mydesignsystem.com/slider.schema.json"
+    }
+  ],
+  "additionalProperties": false
+}

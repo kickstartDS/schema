@@ -46,6 +46,7 @@ async function convertDsAgency(): Promise<void> {
           return IClassifierResult.Template;
         case 'blog-teaser':
         case 'contact':
+        case 'content-nav':
         case 'cta':
         case 'divider':
         case 'faq':

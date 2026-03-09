@@ -21,6 +21,8 @@ const typeResolutionField: string = 'type';
 const icons: Record<string, string> = {
   button: 'rectangle-horizontal',
   section: 'gallery-vertical',
+  'split-even': 'gallery-vertical',
+  'split-weighted': 'gallery-vertical',
   'tag-label': 'tag',
   contact: 'contact',
   'collapsible-box': 'unfold-vertical',

@@ -90,6 +90,16 @@ export function getSchemaRegistry({ support2019 = false }: { support2019?: boole
     schemaType: 'string',
     validate: () => true
   });
+  ajv.addKeyword({
+    keyword: 'x-cms-order',
+    schemaType: 'number',
+    validate: () => true
+  });
+  ajv.addKeyword({
+    keyword: 'x-cms-label',
+    schemaType: 'string',
+    validate: () => true
+  });
 
   return ajv;
 }
@@ -997,12 +1007,21 @@ export function clearHashingDeep(schema: JSONSchema.Interface): JSONSchema.Inter
   return schema;
 }
 
-export function toPascalCase(text: string): string {
-  return text.replace(/(^\w|-\w)/g, clearAndUpper);
+export function sortPropertiesByOrder(properties: Record<string, unknown>): [string, unknown][] {
+  return Object.entries(properties).sort(([, a], [, b]) => {
+    const orderA = (a as Record<string, unknown>)?.['x-cms-order'];
+    const orderB = (b as Record<string, unknown>)?.['x-cms-order'];
+    return (
+      (typeof orderA === 'number' ? orderA : Infinity) - (typeof orderB === 'number' ? orderB : Infinity)
+    );
+  });
 }
 
-export function clearAndUpper(text: string): string {
-  return text.replace(/-/, ' ').toUpperCase();
+export function toPascalCase(text: string): string {
+  return text
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export function err(message: string, ...objects: unknown[]): Error {

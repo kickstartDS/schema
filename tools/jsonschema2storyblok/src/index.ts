@@ -55,7 +55,7 @@ const colors: Record<string, string> = {
 /**
  *  # TODO
  *
- *  - [ ] add `pos` handling to get sensible order of fields
+ *  - [x] add `pos` handling to get sensible order of fields (via `assignPositions()` + `x-cms-order`)
  *  - [ ] check descriptions, defaults, examples and required status for all fields
  *  - [ ] fix wrong `id`s, currently all set to `0`
  *  - [ ] check required status `pos`, `max_length`, `required`, `default_value`, `description` in types
@@ -216,7 +216,7 @@ function isCmsAnnotatedSchema(schema: unknown): schema is JSONSchema.Interface &
 }
 
 function createBlokSchema(fields: IStoryblokSchemaElement[]): Record<string, IStoryblokSchemaElement> {
-  return fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+  const schema = fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
     schema[field.key] = field;
     if (field.objectFields) {
       for (const objectField of field.objectFields) {
@@ -226,10 +226,26 @@ function createBlokSchema(fields: IStoryblokSchemaElement[]): Record<string, ISt
     }
     return schema;
   }, {});
+  assignPositions(schema);
+  return schema;
+}
+
+function assignPositions(schema: Record<string, IStoryblokSchemaElement>): void {
+  Object.values(schema).forEach((field, index) => {
+    field.pos = index;
+  });
+}
+
+function resolveDisplayName(label: string, title: string, name: string): string {
+  if (label) return label;
+  if (title && title !== name) return title;
+  return toPascalCase(name);
 }
 
 function processObject({
   name,
+  title,
+  label,
   description,
   parentSchema,
   subSchema,
@@ -249,7 +265,7 @@ function processObject({
     const field: IStoryblokSchemaElement = {
       id: 0,
       pos: 0,
-      display_name: toPascalCase(name),
+      display_name: resolveDisplayName(label, title, name),
       key: name,
       type: 'bloks',
       restrict_type: '',
@@ -259,7 +275,7 @@ function processObject({
 
     const blok: IStoryblokBlock = {
       name: blokName,
-      display_name: toPascalCase(blokName),
+      display_name: resolveDisplayName(label, title, blokName),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       id: blokId++,
@@ -289,7 +305,7 @@ function processObject({
         pos: 0,
         key: name,
         type: 'bloks',
-        display_name: toPascalCase(name),
+        display_name: resolveDisplayName(label, title, name),
         objectFields: fields
       };
 
@@ -307,7 +323,7 @@ function processObject({
       const tab: IStoryblokSchemaElement = {
         id: 0,
         pos: 0,
-        display_name: toPascalCase(name),
+        display_name: resolveDisplayName(label, title, name),
         key: tabId,
         keys: [],
         type: 'tab',
@@ -333,14 +349,14 @@ function processObject({
   const bloks: IStoryblokBlock[] = [
     {
       name,
-      display_name: toPascalCase(name),
+      display_name: resolveDisplayName(label, title, name),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_root: (classification && classification === 'template') || false,
       id: blokId++,
       schema: createBlokSchema(fields),
       is_nestable: true,
-      real_name: toPascalCase(name)
+      real_name: resolveDisplayName(label, title, name)
     }
   ];
 
@@ -383,6 +399,8 @@ function processObject({
 
 function processRef({
   name,
+  title,
+  label,
   description,
   subSchema,
   fields,
@@ -398,7 +416,7 @@ function processRef({
   const field: IStoryblokSchemaElement = {
     id: 0,
     pos: 0,
-    display_name: toPascalCase(name),
+    display_name: resolveDisplayName(label, title, name),
     key: name,
     type: 'bloks',
     restrict_type: '',
@@ -410,13 +428,13 @@ function processRef({
 
   const blok: IStoryblokBlock = {
     name: blokName,
-    display_name: toPascalCase(blokName),
+    display_name: resolveDisplayName(label, title, blokName),
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     id: blokId++,
     schema: createBlokSchema(fields),
     is_nestable: true,
-    real_name: toPascalCase(blokName),
+    real_name: resolveDisplayName(label, title, blokName),
     color: colors[blokName] || '#05566a',
     icon: icons[blokName] || 'block-wallet'
   };
@@ -441,6 +459,8 @@ function processRef({
 
 function processRefArray({
   name,
+  title,
+  label,
   description,
   rootSchema,
   fields
@@ -450,7 +470,7 @@ function processRefArray({
   const field: IStoryblokSchemaElement = {
     id: 0,
     pos: 0,
-    display_name: toPascalCase(name),
+    display_name: resolveDisplayName(label, title, name),
     key: name,
     type: 'bloks',
     restrict_type: '',
@@ -467,13 +487,13 @@ function processRefArray({
 
         return {
           name: field.key,
-          display_name: toPascalCase(field.key),
+          display_name: field.display_name || toPascalCase(field.key),
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           id: blokId++,
           schema: createBlokSchema(field.objectFields),
           is_nestable: true,
-          real_name: toPascalCase(field.key),
+          real_name: field.display_name || toPascalCase(field.key),
           color: colors[field.key] || '#05566a',
           icon: icons[field.key] || 'block-wallet',
           component_group_uuid: componentGroups.components,
@@ -500,6 +520,8 @@ function processObjectArray(): IProcessFnResult<IStoryblokSchemaElement, IStoryb
 
 function processArray({
   name,
+  title,
+  label,
   arrayField
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!arrayField) throw new Error('Missing array fields in conversion');
@@ -508,7 +530,7 @@ function processArray({
     const field: IStoryblokSchemaElement = {
       id: 0,
       pos: 0,
-      display_name: toPascalCase(name),
+      display_name: resolveDisplayName(label, title, name),
       key: name,
       type: 'bloks',
       restrict_type: '',
@@ -518,13 +540,13 @@ function processArray({
 
     const blok: IStoryblokBlock = {
       name,
-      display_name: toPascalCase(name),
+      display_name: resolveDisplayName(label, title, name),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       id: blokId++,
       schema: { entry: arrayField },
       is_nestable: true,
-      real_name: toPascalCase(name),
+      real_name: resolveDisplayName(label, title, name),
       color: colors[name] || '#05566a',
       icon: icons[name] || 'block-wallet'
     };
@@ -540,6 +562,8 @@ function processArray({
 
 function processEnum({
   name,
+  title,
+  label,
   description,
   subSchema,
   options
@@ -547,7 +571,7 @@ function processEnum({
   const field: IStoryblokSchemaElement = {
     id: 0,
     pos: 0,
-    display_name: toPascalCase(name),
+    display_name: resolveDisplayName(label, title, name),
     key: name,
     type: 'option'
   };
@@ -575,6 +599,8 @@ function processConst({
 
 function processBasic({
   name,
+  title,
+  label,
   description,
   subSchema,
   rootSchema
@@ -584,7 +610,7 @@ function processBasic({
   const field: IStoryblokSchemaElement = {
     id: 0,
     pos: 0,
-    display_name: toPascalCase(name),
+    display_name: resolveDisplayName(label, title, name),
     key: name,
     type
   };

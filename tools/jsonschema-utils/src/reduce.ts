@@ -1,6 +1,6 @@
 import { type JSONSchema } from 'json-schema-typed/draft-07';
 
-import { err, getSchemaName } from './helpers.js';
+import { err, getSchemaName, sortPropertiesByOrder } from './helpers.js';
 
 export type MyAjv = import('ajv').default;
 
@@ -20,6 +20,7 @@ export interface IConvertParams {
 export interface IProcessInterface<Field> {
   name: string;
   title: string;
+  label: string;
   description: string;
   subSchema: JSONSchema.Interface;
   rootSchema: JSONSchema.Interface;
@@ -147,14 +148,15 @@ export function getSchemaReducer<
     const result = processObject({
       name,
       title,
+      label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
       description,
       subSchema: schema,
       rootSchema: schema,
       fields:
         Object.keys(schema.properties).length !== 0
-          ? Object.keys(schema.properties).reduce<FieldType[]>((acc, name) => {
+          ? sortPropertiesByOrder(schema.properties).reduce<FieldType[]>((acc, [name, prop]) => {
               if (!schema.properties) throw err(`Can't process a component without properties.`, schema);
-              const objectSchema = structuredClone(schema.properties[name] as JSONSchema.Interface);
+              const objectSchema = structuredClone(prop) as JSONSchema.Interface;
               return acc.concat(
                 buildType(name, objectSchema.title || name, objectSchema, schema, schema, knownObjects)
               );
@@ -232,21 +234,21 @@ export function getSchemaReducer<
         processRef({
           name,
           title,
+          label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
           description,
           subSchema: reffedSchema,
           rootSchema,
           parentSchema,
           fields:
             Object.keys(reffedSchema.properties).length !== 0
-              ? Object.keys(reffedSchema.properties).reduce<FieldType[]>((acc, name) => {
+              ? sortPropertiesByOrder(reffedSchema.properties).reduce<FieldType[]>((acc, [name, prop]) => {
                   if (!reffedSchema.properties)
                     throw err(
                       `Can't process a ref without properties on reffed schema, on property ${name}.`,
                       schema,
                       rootSchema.$id
                     );
-                  // console.log('maximum call stack?', reffedSchema.properties[name]);
-                  const objectSchema = structuredClone(reffedSchema.properties[name] as JSONSchema.Interface);
+                  const objectSchema = structuredClone(prop) as JSONSchema.Interface;
                   return acc.concat(
                     buildType(
                       name,
@@ -285,6 +287,7 @@ export function getSchemaReducer<
         processEnum({
           name,
           title,
+          label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
           description,
           subSchema: schema,
           rootSchema,
@@ -310,6 +313,7 @@ export function getSchemaReducer<
         processConst({
           name,
           title,
+          label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
           description,
           subSchema: schema,
           rootSchema,
@@ -334,20 +338,21 @@ export function getSchemaReducer<
         processObject({
           name,
           title,
+          label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
           description,
           subSchema: schema,
           rootSchema,
           parentSchema,
           fields:
             Object.keys(schema.properties).length !== 0
-              ? Object.keys(schema.properties).reduce<FieldType[]>((acc, name) => {
+              ? sortPropertiesByOrder(schema.properties).reduce<FieldType[]>((acc, [name, prop]) => {
                   if (!schema.properties)
                     throw err(
                       `Can't process a component without properties, on property ${name}.`,
                       schema,
                       rootSchema.$id
                     );
-                  const objectSchema = structuredClone(schema.properties[name] as JSONSchema.Interface);
+                  const objectSchema = structuredClone(prop) as JSONSchema.Interface;
                   return acc.concat(
                     buildType(
                       name,
@@ -401,6 +406,7 @@ export function getSchemaReducer<
             processRefArray({
               name,
               title,
+              label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
               description,
               subSchema: schema,
               rootSchema,
@@ -429,6 +435,7 @@ export function getSchemaReducer<
             processObjectArray({
               name,
               title,
+              label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
               description,
               subSchema: schema,
               rootSchema,
@@ -485,6 +492,7 @@ export function getSchemaReducer<
           processArray({
             name,
             title,
+            label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
             description,
             subSchema: schema,
             rootSchema,
@@ -503,6 +511,7 @@ export function getSchemaReducer<
         processBasic({
           name,
           title,
+          label: ((schema as Record<string, unknown>)['x-cms-label'] as string) || '',
           description,
           subSchema: schema,
           rootSchema,

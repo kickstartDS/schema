@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema2stackbit",
   "entries": [
     {
+      "version": "1.7.9",
+      "tag": "@kickstartds/jsonschema2stackbit_v1.7.9",
+      "date": "Tue, 10 Mar 2026 10:10:43 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.9.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.7.8",
       "tag": "@kickstartds/jsonschema2stackbit_v1.7.8",
       "date": "Mon, 28 Jul 2025 13:22:55 GMT",

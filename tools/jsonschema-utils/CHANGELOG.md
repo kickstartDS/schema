@@ -1,6 +1,13 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Mon, 28 Jul 2025 13:22:55 GMT and should not be manually modified.
+This log was last generated on Tue, 10 Mar 2026 10:10:43 GMT and should not be manually modified.
+
+## 3.9.0
+Tue, 10 Mar 2026 10:10:43 GMT
+
+### Minor changes
+
+- add ordering and better labels
 
 ## 3.8.1
 Mon, 28 Jul 2025 13:22:55 GMT

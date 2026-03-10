@@ -2,6 +2,18 @@
   "name": "@kickstartds/jsonschema-utils",
   "entries": [
     {
+      "version": "3.9.0",
+      "tag": "@kickstartds/jsonschema-utils_v3.9.0",
+      "date": "Tue, 10 Mar 2026 10:10:43 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "add ordering and better labels"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.8.1",
       "tag": "@kickstartds/jsonschema-utils_v3.8.1",
       "date": "Mon, 28 Jul 2025 13:22:55 GMT",

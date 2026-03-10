@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/storyblok-example
 
-This log was last generated on Mon, 09 Mar 2026 14:41:34 GMT and should not be manually modified.
+This log was last generated on Tue, 10 Mar 2026 10:10:43 GMT and should not be manually modified.
+
+## 2.1.3
+Tue, 10 Mar 2026 10:10:43 GMT
+
+_Version update only_
 
 ## 2.1.2
 Mon, 09 Mar 2026 14:41:34 GMT

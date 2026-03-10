@@ -2,6 +2,23 @@
   "name": "@kickstartds/jsonschema2storyblok",
   "entries": [
     {
+      "version": "1.7.0",
+      "tag": "@kickstartds/jsonschema2storyblok_v1.7.0",
+      "date": "Tue, 10 Mar 2026 10:10:43 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "add ordering and better labels"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.9.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.6.10",
       "tag": "@kickstartds/jsonschema2storyblok_v1.6.10",
       "date": "Mon, 09 Mar 2026 14:41:34 GMT",

@@ -2,13 +2,16 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { dumpYamlLens } from '@kickstartds/cambria';
 import {
   processSchemaGlob,
   processSchemaGlobs,
   getSchemaRegistry,
   getCustomSchemaIds,
   IClassifierResult,
-  getSchemaName
+  getSchemaName,
+  getSchemaForId,
+  generateLens
 } from '@kickstartds/jsonschema-utils';
 import { convert, configuration } from '@kickstartds/jsonschema2storyblok';
 import { resolve } from 'import-meta-resolve';
@@ -20,10 +23,14 @@ async function convertDsAgency(): Promise<void> {
   const customGlob = `${packagePath}/(dist|cms)/**/*.(schema|definitions|interface).json`;
 
   const ajv = getSchemaRegistry();
-  await processSchemaGlobs(['resources/cms/**/*.(schema|definitions|interface).json', customGlob], ajv, {
-    hideCmsFields: true,
-    layerOrder: ['language', 'visibility', 'cms', 'schema', 'kickstartds']
-  });
+  const allSchemaIds = await processSchemaGlobs(
+    ['resources/cms/**/*.(schema|definitions|interface).json', customGlob],
+    ajv,
+    {
+      hideCmsFields: true,
+      layerOrder: ['language', 'visibility', 'cms', 'schema', 'kickstartds']
+    }
+  );
 
   const convertedObjects = convert({
     schemaIds: [
@@ -78,6 +85,24 @@ async function convertDsAgency(): Promise<void> {
 
   const configString = configuration(convertedObjects);
   writeFileSync(`dist/agency/components.123456.json`, configString);
+
+  // Emit Cambria lenses for any component schemas that contain
+  // key-mutating annotations (currently `x-cms-group-inline`).
+  // Layered schemas appear under multiple hosts (visibility, cms, schema, ...);
+  // annotations live in the highest-priority layer that defines them. We pick
+  // the first non-empty lens per component name.
+  mkdirSync('dist/agency/lenses', { recursive: true });
+  const seen = new Set<string>();
+  for (const schemaId of allSchemaIds) {
+    const name = getSchemaName(schemaId);
+    if (!name || seen.has(name)) continue;
+    const schema = getSchemaForId(schemaId, ajv);
+    if (!schema) continue;
+    const lens = generateLens(schema);
+    if (lens.length === 0) continue;
+    seen.add(name);
+    writeFileSync(`dist/agency/lenses/${name}.lens.yml`, dumpYamlLens(lens));
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

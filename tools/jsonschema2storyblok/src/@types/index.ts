@@ -22,6 +22,7 @@ export type GenericType =
   | 'multilink'
   | 'table'
   | 'tab'
+  | 'section'
   | 'custom';
 
 export type AssetType = 'images' | 'videos';
@@ -94,6 +95,12 @@ export interface IStoryblokSchemaElement {
   section?: string;
   preview_tmpl?: string;
   preview_field?: string;
+
+  // transient grouping markers, stripped before serialization
+  group?: string;
+  groupTitle?: string;
+  groupIcon?: string;
+  inline?: string;
 }
 
 export interface IStoryblokSchemaElementOption {

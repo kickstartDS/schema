@@ -16,6 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@kickstartds/cambria": "workspace:*",
     "@kickstartds/ds-agency-premium": "^2.2.1",
     "@kickstartds/jsonschema-utils": "workspace:*",
     "@kickstartds/jsonschema2storyblok": "workspace:*",

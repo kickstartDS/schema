@@ -35,3 +35,19 @@ export function loadYamlLens(lensData: string): LensSource {
   // we could have a root op to make this consistent...
   return loadLens(rawLens);
 }
+
+const unfoldOp = (op: LensOp): { [key: string]: any } => {
+  const { op: opName, ...rest } = op as { op: string; [key: string]: any };
+  if (opName === 'in' || opName === 'map') {
+    return { [opName]: { ...rest, lens: (rest.lens as LensSource).map(unfoldOp) } };
+  }
+  return { [opName]: { ...rest } };
+};
+
+export function dumpLens(lens: LensSource): IYAMLLens {
+  return { lens: lens.map(unfoldOp) as LensSource };
+}
+
+export function dumpYamlLens(lens: LensSource): string {
+  return YAML.dump(dumpLens(lens), { noRefs: true });
+}

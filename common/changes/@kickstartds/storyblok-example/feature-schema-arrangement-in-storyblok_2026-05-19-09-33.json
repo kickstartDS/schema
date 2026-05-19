@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/storyblok-example",
+      "comment": "use new grouping and arrangement options",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/storyblok-example"
+}

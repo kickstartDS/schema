@@ -7,13 +7,17 @@
       "type": "object",
       "properties": {
         "headline": {
-          "x-cms-hidden": false
+          "x-cms-hidden": false,
+          "x-cms-group-name": "content",
+          "x-cms-group-title": "Content"
         },
         "sub": {
-          "x-cms-hidden": false
+          "x-cms-hidden": false,
+          "x-cms-group-name": "content"
         },
         "text": {
-          "x-cms-hidden": false
+          "x-cms-hidden": false,
+          "x-cms-group-name": "content"
         },
         "highlightText": {
           "x-cms-hidden": true
@@ -28,13 +32,17 @@
           "x-cms-hidden": true
         },
         "buttons": {
-          "x-cms-hidden": false
+          "x-cms-hidden": false,
+          "x-cms-group-name": "content"
         },
         "overlay": {
           "x-cms-hidden": true
         },
         "image": {
-          "x-cms-hidden": false
+          "x-cms-hidden": false,
+          "x-cms-group-name": "media",
+          "x-cms-group-title": "Media",
+          "x-cms-group-inline": true
         },
         "textPosition": {
           "x-cms-hidden": true

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema2storyblok",
+      "comment": "add grouping and arrangement options",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema2storyblok"
+}

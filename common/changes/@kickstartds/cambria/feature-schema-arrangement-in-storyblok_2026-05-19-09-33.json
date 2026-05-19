@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "add lens generation capabilities",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

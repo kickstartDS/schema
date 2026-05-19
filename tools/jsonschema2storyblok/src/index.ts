@@ -206,17 +206,59 @@ function componentsEqual(componentOne: IStoryblokBlock, componentTwo: IStoryblok
 function isCmsAnnotatedSchema(schema: unknown): schema is JSONSchema.Interface & {
   'x-cms-hidden'?: boolean;
   'x-cms-preview'?: string;
+  'x-cms-group-name'?: string;
+  'x-cms-group-title'?: string;
+  'x-cms-group-icon'?: string;
+  'x-cms-group-inline'?: boolean;
 } {
   return (
     typeof schema === 'object' &&
     schema !== null &&
     (('x-cms-hidden' in schema && schema['x-cms-hidden'] === true) ||
-      ('x-cms-preview' in schema && schema['x-cms-preview'] !== undefined))
+      ('x-cms-preview' in schema && schema['x-cms-preview'] !== undefined) ||
+      ('x-cms-group-name' in schema && schema['x-cms-group-name'] !== undefined) ||
+      ('x-cms-group-title' in schema && schema['x-cms-group-title'] !== undefined) ||
+      ('x-cms-group-icon' in schema && schema['x-cms-group-icon'] !== undefined) ||
+      ('x-cms-group-inline' in schema && schema['x-cms-group-inline'] === true))
   );
+}
+
+function applyGroupAnnotations(field: IStoryblokSchemaElement, subSchema: JSONSchema.Interface): void {
+  if (!isCmsAnnotatedSchema(subSchema)) return;
+  if (subSchema['x-cms-group-name']) {
+    field.group = subSchema['x-cms-group-name'];
+    if (subSchema['x-cms-group-title']) field.groupTitle = subSchema['x-cms-group-title'];
+    if (subSchema['x-cms-group-icon']) field.groupIcon = subSchema['x-cms-group-icon'];
+  }
 }
 
 function createBlokSchema(fields: IStoryblokSchemaElement[]): Record<string, IStoryblokSchemaElement> {
   const schema = fields.reduce<Record<string, IStoryblokSchemaElement>>((schema, field) => {
+    if (field.inline) {
+      // Inline pass: hoist children into parent with `<wrapper>__<child>` keys.
+      // The section's child keys were already prefixed `<wrapper>_<child>` in processObject;
+      // upgrade the separator to `__` and drop the section wrapper itself.
+      // Propagate the wrapper's group annotation onto each hoisted child so they
+      // can still participate in tab synthesis at the parent level.
+      const wrapperName = field.inline;
+      const childPrefix = `${wrapperName}_`;
+      if (field.objectFields) {
+        for (const objectField of field.objectFields) {
+          if (objectField.key.startsWith(childPrefix)) {
+            const childKey = objectField.key.slice(childPrefix.length);
+            objectField.key = `${wrapperName}__${childKey}`;
+          }
+          if (field.group && !objectField.group) {
+            objectField.group = field.group;
+            if (field.groupTitle) objectField.groupTitle = field.groupTitle;
+            if (field.groupIcon) objectField.groupIcon = field.groupIcon;
+          }
+          schema[objectField.key] = objectField;
+        }
+      }
+      // Drop the section wrapper itself.
+      return schema;
+    }
     schema[field.key] = field;
     if (field.objectFields) {
       for (const objectField of field.objectFields) {
@@ -226,8 +268,73 @@ function createBlokSchema(fields: IStoryblokSchemaElement[]): Record<string, ISt
     }
     return schema;
   }, {});
+  synthesizeTabs(schema);
+  stripTransientMarkers(schema);
   assignPositions(schema);
   return schema;
+}
+
+interface ITabDescriptor {
+  name: string;
+  title?: string;
+  icon?: string;
+  memberKeys: string[];
+  firstIndex: number;
+}
+
+function synthesizeTabs(schema: Record<string, IStoryblokSchemaElement>): void {
+  const tabs = new Map<string, ITabDescriptor>();
+  const entries = Object.entries(schema);
+
+  entries.forEach(([key, field], index) => {
+    if (!field.group || field.group.startsWith('INLINE__')) return;
+    const groupName = field.group;
+    let tab = tabs.get(groupName);
+    if (!tab) {
+      tab = { name: groupName, memberKeys: [], firstIndex: index };
+      tabs.set(groupName, tab);
+    }
+    if (field.groupTitle && !tab.title) tab.title = field.groupTitle;
+    if (field.groupIcon && !tab.icon) tab.icon = field.groupIcon;
+    tab.memberKeys.push(key);
+  });
+
+  if (tabs.size === 0) return;
+
+  // Rebuild record so tab elements appear at the position of their first member.
+  const rebuilt: Record<string, IStoryblokSchemaElement> = {};
+  const emittedTabs = new Set<string>();
+  entries.forEach(([key, field]) => {
+    const groupName = field.group && !field.group.startsWith('INLINE__') ? field.group : undefined;
+    if (groupName && !emittedTabs.has(groupName)) {
+      const tab = tabs.get(groupName)!;
+      const tabKey = `tab-${groupName}`;
+      rebuilt[tabKey] = {
+        id: 0,
+        pos: 0,
+        display_name: tab.title || toPascalCase(tab.name),
+        key: tabKey,
+        keys: tab.memberKeys,
+        type: 'tab'
+      };
+      if (tab.icon) rebuilt[tabKey].description = tab.icon;
+      emittedTabs.add(groupName);
+    }
+    rebuilt[key] = field;
+  });
+
+  // Replace contents of original schema in place, preserving caller reference.
+  for (const k of Object.keys(schema)) delete schema[k];
+  for (const [k, v] of Object.entries(rebuilt)) schema[k] = v;
+}
+
+function stripTransientMarkers(schema: Record<string, IStoryblokSchemaElement>): void {
+  for (const field of Object.values(schema)) {
+    delete field.group;
+    delete field.groupTitle;
+    delete field.groupIcon;
+    delete field.inline;
+  }
 }
 
 function assignPositions(schema: Record<string, IStoryblokSchemaElement>): void {
@@ -295,6 +402,7 @@ function processObject({
     }
     if (description) field.description = description;
 
+    applyGroupAnnotations(field, subSchema);
     return { field, components: [blok] };
   } else if ((parentSchema && parentSchema.type === 'object') || (parentSchema && parentSchema.$ref)) {
     if (classification === 'component' || classification === 'template' || classification === 'global') {
@@ -317,32 +425,37 @@ function processObject({
         }
       }
 
+      applyGroupAnnotations(field, subSchema);
       return { field };
     } else {
-      const tabId = `tab-${uuidv4()}`;
-      const tab: IStoryblokSchemaElement = {
+      const sectionId = `section-${uuidv4()}`;
+      const section: IStoryblokSchemaElement = {
         id: 0,
         pos: 0,
         display_name: resolveDisplayName(label, title, name),
-        key: tabId,
+        key: sectionId,
         keys: [],
-        type: 'tab',
+        type: 'section',
         objectFields: fields
       };
 
       fields.forEach((field) => {
         field.key = `${name}_${field.key}`;
-        tab.keys?.push(field.key);
+        section.keys?.push(field.key);
       });
 
       // TODO this is suspect, should expect an object here when in processObject
-      if (subSchema.default) tab.default_value = subSchema.default;
+      if (subSchema.default) section.default_value = subSchema.default;
 
-      if (description) tab.description = description;
+      if (description) section.description = description;
 
-      tab.required = subSchema.required?.includes(name) || false;
+      section.required = subSchema.required?.includes(name) || false;
 
-      return { field: tab };
+      applyGroupAnnotations(section, subSchema);
+      if (isCmsAnnotatedSchema(subSchema) && subSchema['x-cms-group-inline']) {
+        section.inline = name;
+      }
+      return { field: section };
     }
   }
 
@@ -454,6 +567,7 @@ function processRef({
 
   if (description) field.description = description;
 
+  applyGroupAnnotations(field, subSchema);
   return { field, components: [blok] };
 }
 
@@ -463,6 +577,7 @@ function processRefArray({
   label,
   description,
   rootSchema,
+  subSchema,
   fields
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   componentGroups.components ||= uuidv4();
@@ -509,6 +624,7 @@ function processRefArray({
 
   field.required = rootSchema.required?.includes(name) || false;
 
+  applyGroupAnnotations(field, subSchema);
   return { field, components: bloks };
 }
 
@@ -522,6 +638,7 @@ function processArray({
   name,
   title,
   label,
+  subSchema,
   arrayField
 }: IProcessInterface<IStoryblokSchemaElement>): IProcessFnResult<IStoryblokSchemaElement, IStoryblokBlock> {
   if (!arrayField) throw new Error('Missing array fields in conversion');
@@ -551,12 +668,14 @@ function processArray({
       icon: icons[name] || 'block-wallet'
     };
 
+    applyGroupAnnotations(field, subSchema);
     return {
       field,
       components: [blok]
     };
   }
 
+  applyGroupAnnotations(arrayField, subSchema);
   return { field: arrayField };
 }
 
@@ -588,6 +707,7 @@ function processEnum({
 
   field.required = subSchema.required?.includes(name) || false;
 
+  applyGroupAnnotations(field, subSchema);
   return { field };
 }
 
@@ -658,6 +778,7 @@ function processBasic({
 
   field.required = rootSchema.required?.includes(name) || false;
 
+  applyGroupAnnotations(field, subSchema);
   return { field };
 }
 

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "update dependencies",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

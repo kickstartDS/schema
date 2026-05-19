@@ -1,6 +1,11 @@
 # Change Log - @kickstartds/hygraph-example
 
-This log was last generated on Tue, 10 Mar 2026 10:10:43 GMT and should not be manually modified.
+This log was last generated on Tue, 19 May 2026 09:54:06 GMT and should not be manually modified.
+
+## 1.0.27
+Tue, 19 May 2026 09:54:06 GMT
+
+_Version update only_
 
 ## 1.0.26
 Tue, 10 Mar 2026 10:10:43 GMT

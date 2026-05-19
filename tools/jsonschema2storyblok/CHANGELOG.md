@@ -1,6 +1,17 @@
 # Change Log - @kickstartds/jsonschema2storyblok
 
-This log was last generated on Tue, 10 Mar 2026 10:10:43 GMT and should not be manually modified.
+This log was last generated on Tue, 19 May 2026 09:54:06 GMT and should not be manually modified.
+
+## 1.8.0
+Tue, 19 May 2026 09:54:06 GMT
+
+### Minor changes
+
+- add grouping and arrangement options
+
+### Patches
+
+- update dependencies
 
 ## 1.7.0
 Tue, 10 Mar 2026 10:10:43 GMT

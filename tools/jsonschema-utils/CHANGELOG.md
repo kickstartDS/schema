@@ -1,6 +1,17 @@
 # Change Log - @kickstartds/jsonschema-utils
 
-This log was last generated on Tue, 10 Mar 2026 10:10:43 GMT and should not be manually modified.
+This log was last generated on Tue, 19 May 2026 09:54:06 GMT and should not be manually modified.
+
+## 3.10.0
+Tue, 19 May 2026 09:54:06 GMT
+
+### Minor changes
+
+- integrate new lense capabilities
+
+### Patches
+
+- update dependencies
 
 ## 3.9.0
 Tue, 10 Mar 2026 10:10:43 GMT

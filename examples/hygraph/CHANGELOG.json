@@ -2,6 +2,21 @@
   "name": "@kickstartds/hygraph-example",
   "entries": [
     {
+      "version": "1.0.27",
+      "tag": "@kickstartds/hygraph-example_v1.0.27",
+      "date": "Tue, 19 May 2026 09:54:06 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema-utils\" to `3.10.0`"
+          },
+          {
+            "comment": "Updating dependency \"@kickstartds/jsonschema2hygraph\" to `1.0.27`"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.26",
       "tag": "@kickstartds/hygraph-example_v1.0.26",
       "date": "Tue, 10 Mar 2026 10:10:43 GMT",

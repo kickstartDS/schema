@@ -124,6 +124,161 @@ kickstartDS Component Schemas (JSON Schema Draft-07)
 
 ---
 
+## Renderer-Side Lens Consumption
+
+When a CMS converter applies **key-mutating annotations** (currently
+`x-cms-group-inline` — see [PRD-storyblok-grouping-and-inline.md](PRD-storyblok-grouping-and-inline.md)),
+the resulting CMS field layout no longer matches the original JSON Schema. To
+bridge this gap on the renderer side, `@kickstartds/jsonschema-utils` emits a
+**Cambria lens** alongside the CMS config that describes the forward transform
+from the un-annotated schema to the CMS shape. The renderer reverses this lens
+and applies it to incoming CMS payloads to recover the original component
+shape — exactly what its TypeScript types expect.
+
+### Build-time: emitting lenses
+
+A typical CMS-example build (see [examples/storyblok/src/index.ts](../examples/storyblok/src/index.ts))
+walks the registered schemas, calls `generateLens(schema)`, and writes a YAML
+sibling per component that contains key-mutating annotations:
+
+```ts
+import { dumpYamlLens } from '@kickstartds/cambria';
+import { generateLens, getSchemaForId, getSchemaName } from '@kickstartds/jsonschema-utils';
+
+const seen = new Set<string>();
+for (const schemaId of allSchemaIds) {
+  const name = getSchemaName(schemaId);
+  if (!name || seen.has(name)) continue;
+  const schema = getSchemaForId(schemaId, ajv);
+  const lens = generateLens(schema);
+  if (lens.length === 0) continue;
+  seen.add(name);
+  writeFileSync(`dist/lenses/${name}.lens.yml`, dumpYamlLens(lens));
+}
+```
+
+A component with no key-mutating annotations produces an empty lens and no
+file — the consumer treats "no lens file" as identity.
+
+### Forward lens shape (`x-cms-group-inline`)
+
+For a wrapper `image` with children `src`, `alt`, `srcMobile`, the generator
+emits:
+
+```yaml
+lens:
+  - hoist:    { host: image, name: src }
+  - rename:   { source: src, destination: image__src }
+  - hoist:    { host: image, name: alt }
+  - rename:   { source: alt, destination: image__alt }
+  - hoist:    { host: image, name: srcMobile }
+  - rename:   { source: srcMobile, destination: image__srcMobile }
+  - remove:   { name: image, type: object }
+```
+
+Every op is invertible. `reverseLens()` inverts them in reverse order, so
+applying the reverse lens to a CMS payload reconstructs the original nested
+shape.
+
+### Runtime: a Next.js + Storyblok consumer
+
+Reference setup: [kickstartDS/ruhmesmeile-storyblok-starter — packages/website](https://github.com/kickstartDS/ruhmesmeile-storyblok-starter/tree/main/packages/website).
+That project already implements story processing in
+`helpers/storyblok.ts` (asset URL rewrites, link resolution, empty-image
+cleanup, number coercion, etc.) and historically used a hand-written
+`unflatten()` helper to undo CMS-side key flattening. Replacing
+`unflatten()` with the generated lens is the intended migration target.
+
+**Minimal integration pattern**:
+
+```ts
+// helpers/lenses.ts
+import { applyLensToDoc, loadYamlLens, reverseLens, LensSource } from '@kickstartds/cambria';
+import { readFileSync, readdirSync } from 'node:fs';
+import path from 'node:path';
+
+// Build a name -> reverse lens map once at module load.
+const LENS_DIR = path.join(process.cwd(), 'cms/lenses');
+
+const reverseLenses: Record<string, LensSource> = Object.fromEntries(
+  readdirSync(LENS_DIR)
+    .filter((f) => f.endsWith('.lens.yml'))
+    .map((f) => {
+      const name = f.replace(/\.lens\.yml$/, '');
+      const forward = loadYamlLens(readFileSync(path.join(LENS_DIR, f), 'utf8'));
+      return [name, reverseLens(forward)];
+    })
+);
+
+/**
+ * Apply the reverse lens registered for `component` (if any) to `blok`.
+ * Returns the original (un-flattened) shape that the React component expects.
+ * If no lens is registered, returns `blok` unchanged.
+ */
+export function unflattenBlok<T extends { component: string }>(blok: T): T {
+  const lens = reverseLenses[blok.component];
+  if (!lens) return blok;
+  return applyLensToDoc(lens, blok) as T;
+}
+```
+
+**Wiring into the existing `storyProcessing()` traversal** (the starter walks
+the story tree with `object-traversal`'s `traverse()`):
+
+```ts
+import { traverse, TraversalCallbackContext } from 'object-traversal';
+import { unflattenBlok } from '@/helpers/lenses';
+
+export function storyProcessing(blok: Record<string, any>, preview = false) {
+  // ...existing fixups (links, assets, etc.)...
+
+  function applyLenses({ parent, key, value }: TraversalCallbackContext) {
+    if (parent && key && value && typeof value === 'object' && typeof value.component === 'string') {
+      parent[key] = unflattenBlok(value);
+    }
+  }
+
+  traverse(blok, (context) => {
+    // Run lens un-flattening first so subsequent callbacks see the
+    // nested shape that matches the React component prop types.
+    applyLenses(context);
+    removeEmptyImages(context);
+    mapStoryblokLinks(context);
+    mapStoryblokAssets(context);
+    // ...etc
+  });
+
+  return blok;
+}
+```
+
+### What lenses do — and don't — replace
+
+- **Replace**: structural key-mutating transforms (`image__src` → `image.src`),
+  array-of-objects flattening (via `map` ops the generator emits for arrays),
+  and any future annotation-driven shape changes.
+- **Do not replace**: asset URL rewriting, link/relation resolution, empty-image
+  cleanup, type coercion (`"3"` → `3`). These remain imperative concerns of the
+  story processor — they depend on the CMS's runtime payload conventions, not
+  on the schema shape.
+
+### Operational notes
+
+- **Bundling**: lenses are static YAML; ship them with the renderer (e.g.
+  copy `dist/lenses/` into `cms/lenses/` in the website package, or import via
+  a small webpack/Next.js asset rule).
+- **Versioning**: the generator is deterministic; commit the emitted YAML so
+  diffs surface in PRs when annotations change. CI can re-emit and assert
+  no-diff.
+- **Performance**: `applyLensToDoc` is O(ops × keys). For Storyblok payloads
+  (hundreds of bloks per page, tens of ops per component) the cost is
+  negligible compared to the network round-trip. Build the `reverseLenses`
+  map once at module load — don't reverse on every render.
+- **Failure mode**: a missing lens means identity, never a thrown error.
+  Renderers degrade gracefully for components without annotations.
+
+---
+
 ## Technology Stack
 
 | Category | Technologies |

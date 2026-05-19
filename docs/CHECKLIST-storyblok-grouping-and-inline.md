@@ -61,8 +61,8 @@ Tracks progress against [PRD-storyblok-grouping-and-inline.md](PRD-storyblok-gro
 
 ## Phase 4: Renderer-side documentation
 
-- [ ] Document consumer pattern in `ARCHITECTURE.md` with concrete `applyLensToDoc(reverseLens(lens), ...)` snippet
-- [ ] End-to-end example showing CMS payload → reverse lens → original schema shape
+- [x] Document consumer pattern in `ARCHITECTURE.md` with concrete `applyLensToDoc(reverseLens(lens), ...)` snippet
+- [x] End-to-end example showing CMS payload → reverse lens → original schema shape (anchored on `kickstartDS/ruhmesmeile-storyblok-starter` `helpers/storyblok.ts`, replacing the existing `unflatten()` helper)
 
 ## Phase 5 (deferred): Generalize generator
 

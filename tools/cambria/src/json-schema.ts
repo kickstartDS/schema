@@ -207,7 +207,7 @@ function findHost(schema: JSONSchema.Interface, name: string): JSONSchema.Interf
     }
   } else if (schema.properties && schema.properties[name]) {
     const maybeHost = schema.properties[name];
-    if (maybeHost !== false && maybeHost !== true) {
+    if (typeof maybeHost === 'object') {
       return maybeHost;
     }
   }

@@ -6,7 +6,11 @@ import { LensSource } from './lens-ops.js';
 // labels[].archived_at). Inferring the document's schema used to throw on it.
 const rename: LensSource = [{ op: 'rename', source: 'items', destination: 'entries' }];
 const mapTitle: LensSource = [
-  { op: 'in', name: 'issues', lens: [{ op: 'map', lens: [{ op: 'rename', source: 'title', destination: 'name' }] }] }
+  {
+    op: 'in',
+    name: 'issues',
+    lens: [{ op: 'map', lens: [{ op: 'rename', source: 'title', destination: 'name' }] }]
+  }
 ];
 
 describe('documents with null inside arrays of objects', () => {
@@ -21,7 +25,9 @@ describe('documents with null inside arrays of objects', () => {
   });
 
   it('maps over real GitHub issues', () => {
-    const output = applyLensToDoc(mapTitle, { issues: githubIssues }) as { issues: { name: string; milestone: unknown }[] };
+    const output = applyLensToDoc(mapTitle, { issues: githubIssues }) as {
+      issues: { name: string; milestone: unknown }[];
+    };
     expect(output.issues.map((issue) => issue.name)).toEqual(githubIssues.map((issue) => issue.title));
     expect(output.issues[0].milestone).toBeNull();
   });

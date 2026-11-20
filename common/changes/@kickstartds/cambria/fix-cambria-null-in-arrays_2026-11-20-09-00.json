@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "applyLensToDoc converts documents with null inside arrays of objects, such as API responses, and uses a passed schema without inferring one; json-schema-typed is a runtime dependency, so the package loads from a clean install",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

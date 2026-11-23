@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/jsonschema-utils",
+      "comment": "",
+      "type": "none"
+    }
+  ],
+  "packageName": "@kickstartds/jsonschema-utils"
+}

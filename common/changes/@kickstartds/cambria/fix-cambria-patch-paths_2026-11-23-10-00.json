@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "applyLensToPatch matches lens ops on whole path segments (plunge keeps nested paths; wrap and in leave properties alone whose names start with theirs), renames the path of remove ops, and reverses a head lens against the anyOf schema it made",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

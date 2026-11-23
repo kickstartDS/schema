@@ -176,13 +176,14 @@ function db(s: JSONSchema | undefined): JSONSchema.Interface {
   return s;
 }
 
+// a nullable schema is either a type list with null or, as `head` makes it, an anyOf with a null schema
 function supportsNull(schema: JSONSchema.Interface): boolean {
-  if (!schema.type) {
+  if (!schema.type && !schema.anyOf) {
     throw new Error("Undefined schema type not supported, can't check for null");
   }
 
   return (
-    schemaSupportsType(schema.type, TypeName.Null) ||
+    (schema.type !== undefined && schemaSupportsType(schema.type, TypeName.Null)) ||
     !!schema.anyOf?.some((subSchema) => {
       const definedSchema = db(subSchema);
 
@@ -207,7 +208,7 @@ function findHost(schema: JSONSchema.Interface, name: string): JSONSchema.Interf
     }
   } else if (schema.properties && schema.properties[name]) {
     const maybeHost = schema.properties[name];
-    if (maybeHost !== false && maybeHost !== true) {
+    if (typeof maybeHost === 'object') {
       return maybeHost;
     }
   }

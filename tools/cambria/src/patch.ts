@@ -63,52 +63,61 @@ export function applyLensToPatchOp(lensSource: LensSource, patchOp: MaybePatchOp
   }, patchOp);
 }
 
+/** A JSON Pointer's segments, escaped: `/a/b` gives `['a', 'b']`, the document root (`''`) none. */
+function segmentsOf(path: string): string[] {
+  return path === '' ? [] : path.split('/').slice(1);
+}
+
+/** The JSON Pointer for escaped segments. */
+function pathOf(segments: string[]): string {
+  return segments.map((s) => `/${s}`).join('');
+}
+
+/** A property name as a JSON Pointer segment (RFC 6901). */
+function segment(name: string): string {
+  return name.replace(/~/g, '~0').replace(/\//g, '~1');
+}
+
 function runLensOp(lensOp: LensOp, patchOp: MaybePatchOp): MaybePatchOp {
   if (patchOp === null) {
     return null;
   }
 
   switch (lensOp.op) {
-    case 'rename':
-      if (
-        // TODO: what about other JSON patch op types?
-        // (consider other parts of JSON patch: move / copy / test / remove ?)
-        (patchOp.op === 'replace' || patchOp.op === 'add') &&
-        patchOp.path.split('/')[1] === lensOp.source
-      ) {
-        const path = patchOp.path.replace(lensOp.source, lensOp.destination);
-        return { ...patchOp, path };
+    case 'rename': {
+      // every op that writes, removes or tests the property, not only add and replace
+      const [first, ...rest] = segmentsOf(patchOp.path);
+      if (first === segment(lensOp.source)) {
+        return { ...patchOp, path: pathOf([segment(lensOp.destination), ...rest]) };
       }
-
       break;
+    }
 
     case 'hoist': {
-      // leading slash needs trimming
-      const pathElements = patchOp.path.substr(1).split('/');
-      const [possibleSource, possibleDestination, ...rest] = pathElements;
-      if (possibleSource === lensOp.host && possibleDestination === lensOp.name) {
-        const path = ['', lensOp.name, ...rest].join('/');
-        return { ...patchOp, path };
+      const [possibleSource, possibleDestination, ...rest] = segmentsOf(patchOp.path);
+      if (possibleSource === segment(lensOp.host) && possibleDestination === segment(lensOp.name)) {
+        return { ...patchOp, path: pathOf([segment(lensOp.name), ...rest]) };
       }
       break;
     }
 
     case 'plunge': {
-      const pathElements = patchOp.path.substr(1).split('/');
-      const [head] = pathElements;
-      if (head === lensOp.name) {
-        const path = ['', lensOp.host, pathElements].join('/');
-        return { ...patchOp, path };
+      const segments = segmentsOf(patchOp.path);
+      if (segments[0] === segment(lensOp.name)) {
+        return { ...patchOp, path: pathOf([segment(lensOp.host), ...segments]) };
       }
       break;
     }
 
     case 'wrap': {
-      const pathComponent = new RegExp(`^/(${lensOp.name})(.*)`);
-      const match = patchOp.path.match(pathComponent);
-      if (match) {
-        const path = `/${match[1]}/0${match[2]}`;
-        if ((patchOp.op === 'add' || patchOp.op === 'replace') && patchOp.value === null && match[2] === '') {
+      const [first, ...rest] = segmentsOf(patchOp.path);
+      if (first === segment(lensOp.name)) {
+        const path = pathOf([first, '0', ...rest]);
+        if (
+          (patchOp.op === 'add' || patchOp.op === 'replace') &&
+          patchOp.value === null &&
+          rest.length === 0
+        ) {
           return { op: 'remove', path };
         }
         return { ...patchOp, path };
@@ -118,32 +127,20 @@ function runLensOp(lensOp: LensOp, patchOp: MaybePatchOp): MaybePatchOp {
 
     case 'head': {
       // break early if we're not handling a write to the array handled by this lens
-      const arrayMatch = patchOp.path.split('/')[1] === lensOp.name;
-      if (!arrayMatch) break;
+      const [first, index, ...rest] = segmentsOf(patchOp.path);
+      if (first !== segment(lensOp.name)) break;
 
       // We only care about writes to the head element, nothing else matters
-      const headMatch = patchOp.path.match(new RegExp(`^/${lensOp.name}/0(.*)`));
-      if (!headMatch) return null;
+      if (index !== '0') return null;
+      const path = pathOf([first, ...rest]);
 
       if (patchOp.op === 'add' || patchOp.op === 'replace') {
         // If the write is to the first array element, write to the scalar
-        return {
-          op: patchOp.op,
-          path: `/${lensOp.name}${headMatch[1] || ''}`,
-          value: patchOp.value
-        };
+        return { op: patchOp.op, path, value: patchOp.value };
       }
 
       if (patchOp.op === 'remove') {
-        if (headMatch[1] === '') {
-          return {
-            op: 'replace' as const,
-            path: `/${lensOp.name}${headMatch[1] || ''}`,
-            value: null
-          };
-        } else {
-          return { ...patchOp, path: `/${lensOp.name}${headMatch[1] || ''}` };
-        }
+        return rest.length === 0 ? { op: 'replace' as const, path, value: null } : { ...patchOp, path };
       }
 
       break;
@@ -156,20 +153,17 @@ function runLensOp(lensOp: LensOp, patchOp: MaybePatchOp): MaybePatchOp {
       break;
 
     case 'remove':
-      if (patchOp.path.split('/')[1] === lensOp.name) return null;
+      if (lensOp.name !== undefined && segmentsOf(patchOp.path)[0] === segment(lensOp.name)) return null;
       break;
 
     case 'in': {
       // Run the inner body in a context where the path has been narrowed down...
-      const pathComponent = new RegExp(`^/${lensOp.name}`);
-      if (patchOp.path.match(pathComponent)) {
-        const childPatch = applyLensToPatchOp(lensOp.lens, {
-          ...patchOp,
-          path: patchOp.path.replace(pathComponent, '')
-        });
+      const [first, ...rest] = segmentsOf(patchOp.path);
+      if (first === segment(lensOp.name)) {
+        const childPatch = applyLensToPatchOp(lensOp.lens, { ...patchOp, path: pathOf(rest) });
 
         if (childPatch) {
-          return { ...childPatch, path: `/${lensOp.name}${childPatch.path}` };
+          return { ...childPatch, path: `${pathOf([first])}${childPatch.path}` };
         } else {
           return null;
         }

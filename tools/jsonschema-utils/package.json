@@ -29,6 +29,11 @@
     "jsonpointer": "~5.0.1"
   },
   "devDependencies": {
+    "@kickstartds/base": "^4.1.0",
+    "@kickstartds/blog": "^4.1.0",
+    "@kickstartds/content": "^4.1.1",
+    "@kickstartds/core": "^4.1.0",
+    "@kickstartds/form": "^4.1.0",
     "@rushstack/eslint-config": "^3.2.0",
     "@rushstack/heft": "^0.50.4",
     "@rushstack/heft-jest-plugin": "~0.5.10",

@@ -5,8 +5,8 @@ import { default as path } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { defaultObjectForSchema } from '@kickstartds/cambria';
-import Ajv from 'ajv';
-import Ajv2019 from 'ajv/dist/2019.js';
+import ajvModule from 'ajv';
+import ajv2019Module from 'ajv/dist/2019.js';
 import { kebabCase, pascalCase } from 'change-case';
 import { default as glob } from 'fast-glob';
 import { resolve } from 'import-meta-resolve';
@@ -20,18 +20,18 @@ declare type MyAjv = import('ajv').default;
 declare type MyAjv2019 = import('ajv/dist/2019.js').default;
 
 const require: NodeRequire = createRequire(import.meta.url);
-const draft7MetaSchema: Ajv.AnySchemaObject = require('ajv/dist/refs/json-schema-draft-07.json');
+const draft7MetaSchema: ajvModule.AnySchemaObject = require('ajv/dist/refs/json-schema-draft-07.json');
 
 export function getSchemaRegistry({ support2019 = false }: { support2019?: boolean } = {}):
   | MyAjv
   | MyAjv2019 {
-  const ajvOptions: Ajv.Options = {
+  const ajvOptions: ajvModule.Options = {
     removeAdditional: true,
     validateSchema: true,
     schemaId: '$id',
     allErrors: true
   };
-  const ajv = support2019 ? new Ajv2019.default(ajvOptions) : new Ajv.default(ajvOptions);
+  const ajv = support2019 ? new ajv2019Module.default(ajvOptions) : new ajvModule.default(ajvOptions);
 
   if (support2019) {
     ajv.addMetaSchema(draft7MetaSchema);

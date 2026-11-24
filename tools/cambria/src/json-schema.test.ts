@@ -143,6 +143,52 @@ describe('transforming a json schema', () => {
       expect(newSchema).toEqual(v1Schema);
     });
 
+    describe('on an enum, without a type change', () => {
+      const withEnum = (gender: JSONSchema.Interface): JSONSchema.Object =>
+        ({ ...v1Schema, properties: { ...v1Schema.properties, gender } } as JSONSchema.Object);
+      const mapping: [{ [key: string]: string }, { [key: string]: string }] = [
+        { female: 'ms', male: 'mr' },
+        { ms: 'female', mr: 'male' }
+      ];
+
+      it('maps the enum and its default', () => {
+        const newSchema = updateSchema(
+          withEnum({ type: 'string', enum: ['female', 'male'], default: 'female' }),
+          [convertValue('gender', mapping)]
+        );
+
+        expect(newSchema.properties?.gender).toEqual({ type: 'string', enum: ['ms', 'mr'], default: 'ms' });
+      });
+
+      it('maps the enum back on the reversed lens', () => {
+        const forth = updateSchema(withEnum({ type: 'string', enum: ['female', 'male'] }), [
+          convertValue('gender', mapping)
+        ]);
+        const back = updateSchema(forth, [convertValue('gender', [mapping[1], mapping[0]])]);
+
+        expect(back.properties?.gender).toEqual({ type: 'string', enum: ['female', 'male'] });
+      });
+
+      it('leaves out a value without a mapping, which cannot be converted', () => {
+        const newSchema = updateSchema(withEnum({ type: 'string', enum: ['female', 'male', 'other'] }), [
+          convertValue('gender', mapping)
+        ]);
+
+        expect(newSchema.properties?.gender).toEqual({ type: 'string', enum: ['ms', 'mr'] });
+      });
+
+      it('maps the enum inside a nullable anyOf', () => {
+        const newSchema = updateSchema(
+          withEnum({ anyOf: [{ type: 'null' }, { type: 'string', enum: ['female', 'male'] }] }),
+          [convertValue('gender', mapping)]
+        );
+
+        expect(newSchema.properties?.gender).toEqual({
+          anyOf: [{ type: 'null' }, { type: 'string', enum: ['ms', 'mr'] }]
+        });
+      });
+    });
+
     it('fails when presented with invalid data', () => {
       const badData: { [key: string]: unknown } = { garbage: 'input' };
       expect(() => {

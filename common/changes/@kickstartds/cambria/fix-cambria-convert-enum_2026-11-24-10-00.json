@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@kickstartds/cambria",
+      "comment": "updateSchema maps a converted property's enum (and its default) through the convert's mapping, so the schema it computes lists the values the lens produces",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@kickstartds/cambria"
+}

@@ -500,10 +500,39 @@ function plungeProperty(schema: JSONSchema.Interface, host: string, name: string
   return schema;
 }
 
+// the values a convert can produce from an enum: each value with a mapping, through it.
+// a value without one cannot be converted (converting it throws), so it is left out.
+function convertEnum(
+  property: JSONSchema.Interface,
+  forward: { [key: string]: unknown }
+): JSONSchema.Interface {
+  if (property.anyOf) {
+    return {
+      ...property,
+      anyOf: property.anyOf.map((s) => (typeof s === 'object' ? convertEnum(s, forward) : s))
+    };
+  }
+  if (!Array.isArray(property.enum)) return property;
+  const mapped = property.enum
+    .filter((value) => Object.keys(forward).includes(String(value)))
+    .map((value) => forward[String(value)]);
+  const result = { ...property, enum: [...new Set(mapped)] } as JSONSchema.Interface;
+  if (property.default !== undefined && Object.keys(forward).includes(String(property.default))) {
+    result.default = forward[String(property.default)] as JSONSchema.Interface['default'];
+  }
+  return result;
+}
+
 function convertValue(schema: JSONSchema.Interface, lensOp: IConvertValue): JSONSchema.Interface {
   const { name, destinationType, mapping } = lensOp;
   if (!destinationType) {
-    return schema;
+    // the type stays, but an enum's values change: they are what the mapping makes of them
+    const property = name && mapping ? schema.properties?.[name] : undefined;
+    if (typeof property !== 'object') return schema;
+    return {
+      ...schema,
+      properties: { ...schema.properties, [name as string]: convertEnum(property, mapping[0]) }
+    };
   }
   if (!name) {
     throw new Error(`Missing property name in 'convert'.\nFound:\n${JSON.stringify(lensOp)}`);
